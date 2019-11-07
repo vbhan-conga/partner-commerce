@@ -1,0 +1,191 @@
+<app-detail *ngIf="order$ | async as order; else loading" [context]="(isLoggedIn$ | async) ? order : null">
+
+    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status">
+        <ng-container *ngSwitchCase="'Draft'">
+            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+            <apt-generate-document [record]="order" class="align-items-stretch d-flex"></apt-generate-document>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Generated'">
+            <button type="button" class="btn btn-link text-primary text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+            <apt-present-document [record]="order" class="align-items-stretch d-flex"></apt-present-document>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Presented'">
+            <button type="button" class="btn btn-link text-primary px-4 btn-raised" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'Pending'">
+            <ng-container *ngIf="order?.PaymentStatus !== 'Processed'">
+                <button type="button" class="btn btn-primary px-4 btn-raised" (click)="paymentDetails.makePayment()">Make Payment</button>
+                <app-payment-details [order]="order" #paymentDetails></app-payment-details>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div class="detail-header py-4">
+        <div class="d-flex align-items-center mb-2">
+            <h3 class="m-0">{{order?.Name}}</h3>
+            <span class="badge badge-info ml-3 px-3 py-1 border text-uppercase" *ngIf="order?.Status">{{order?.Status}}</span>
+            <div *ngIf="order?.Quote as quote" class="ml-auto">
+                <apt-output-field [record]="quote" field="Name" labelClass="d-none" layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
+            </div>
+        </div>
+        <app-progress
+            *ngIf="orderStatusMap[order.Status]"
+            [steps]="orderStatusSteps"
+            [currentStep]="orderStatusMap[order.Status]"
+        ></app-progress>
+    </div>
+
+    <app-detail-section [title]="'DETAILS.ORDER_SUMMARY' | translate">
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>
+                            {{'DETAILS.ORDER_SUMMARY' | translate}}
+                        </h5>
+                        <div class="row mt-4">
+                            <dl class="col-12 col-md-6">
+                                <apt-output-field [record]="order" field="CreatedDate" layout="inline" [editable]="false"></apt-output-field>
+                                <apt-output-field [record]="order.CreatedBy" field="Name" layout="inline" label="Created By" [editable]="false"></apt-output-field>
+                                <apt-output-field [record]="order" field="PrimaryContactId" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"
+                                [lookupOptions]="lookupOptions"></apt-output-field>
+                                <apt-output-field [record]="order" field="SoldToAccountId" label="SoldToAccount.Name" layout="inline" [editable]="false"
+                                    [showQuickView]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="Description" label="Order Title" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'"
+                                    [showQuickView]="true"></apt-output-field>
+                            </dl>
+                            <dl class="col-12 col-md-6">
+                                <apt-output-field [record]="order" field="ShipToAccountId" label="Ship To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="ShipToAccount.ShippingAddress" label="Ship To Address" layout="inline" [editable]="false"></apt-output-field>
+                                <apt-output-field [record]="order" field="BillToAccountId" label="Bill To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="BillToAccount.BillingAddress" label="Bill To Address" layout="inline" [editable]="false"></apt-output-field>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <apt-price-summary [record]="order" [page]="'orders'" [showStatus]="true"></apt-price-summary>
+            </div>
+        </div>
+    </app-detail-section>
+
+    <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="py-2">
+                    {{'DETAILS.LINE_ITEMS' | translate}}
+                    <button class="btn btn-sm btn-outline-primary px-4 ml-4"
+                        *ngIf="order?.Status === 'Draft' || order?.Status === 'Generated' || order?.Status === 'Presented'" [ladda]="lineItem_loader"
+                        data-style="zoom-in" data-spinner-color="black"
+                        (click)="editOrderItems(order)">{{'COMMON.EDIT' | translate}}
+                    </button>
+                </h5>
+                <table class="table table-responsive border-bottom">
+                    <tbody>
+                        <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
+                            <apt-line-item-table-row
+                            [index]="i"
+                            [parent]="item.MainLine"
+                            [options]="item.Options"
+                            [children]="item.SecondaryLines"
+                            [editableFields]="false">
+                            </apt-line-item-table-row>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </app-detail-section>
+    <!-- COMMENT SECTION     -->
+    <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="py-2 text-uppercase">
+                    {{'DETAILS.COMMENTS' | translate}} <span
+                        *ngIf="order?.Notes?.length > 0">({{order?.Notes?.length}}) </span>
+                </h5>
+                <div class="row">
+                    <ng-scrollbar class="col-12 col-md-6 border-right note-container">
+                            <ng-container *ngIf="order?.Notes?.length > 0; else emptyNotes">
+                                <div class="my-3 pb-3 pl-3" *ngFor="let note of order?.Notes">
+                                    <!-- <strong class="d-block">{{note?.Title}}</strong> -->
+                                    <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
+                                        {{'COMMON.ON' | translate }}
+                                        {{note?.CreatedDate | date:'medium'}}</div>
+                                    <div>
+                                        {{note?.Body}}
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #emptyNotes>
+                                <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                                    <i class="fa fa-4x fa-comments-o mb-2"></i>
+                                    {{'COMMON.NO_COMMENTS_TO_DISPLAY' | translate}}
+                                </div>
+                            </ng-template>
+                        </ng-scrollbar>
+                    <div class="col-12 col-md-6">
+                        <form (ngSubmit)="addComment(order.Id)">
+                            <apt-input-field [entity]="note" field="Body" rows="5"
+                                label="{{'COMMON.ADD_NEW_COMMENT' | translate }}" [(ngModel)]="note.Body" name="body"
+                                [required]="true"></apt-input-field>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-link" (click)="clear()"
+                                    type="button">{{'COMMON.CLEAR' | translate }}</button>
+                                <button class="btn btn-primary btn-raised" type="submit" [ladda]="comments_loader"
+                                    [disabled]="!note.Body">{{'COMMON.ADD_COMMENT' | translate }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-detail-section>
+
+    <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="py-2 text-uppercase">
+                    {{'DETAILS.ATTACHMENTS' | translate}}
+                    <span *ngIf="order?.Attachments?.length > 0">({{order?.Attachments?.length}})</span>
+                </h5>
+                <div class="row">
+                    <ng-scrollbar class="col-12 col-md-6 attachment-container">
+                        <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
+                            <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
+                                <div class="d-flex">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between">
+                                            <a class="text-underline" href="{{downloadAttachment(attachment.Id, order.Id)}}" target="_blank">{{attachment?.Name}}</a>
+                                            <span>{{(attachment?.BodyLength/1024).toFixed(2)}} KB</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}
+                                        <span class="pl-2">{{attachment?.CreatedBy.Name}},</span>
+                                        <span class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #emptyAttachments>
+                            <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                                <i class="fa fa-4x fa-file-o mb-2"></i>
+                                {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.NO_ATTACHMENTS' | translate}}
+                            </div>
+                        </ng-template>
+                    </ng-scrollbar>
+                </div>
+            </div>
+        </div>
+    </app-detail-section>
+</app-detail>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center pt-5">
+    <apt-dots></apt-dots>
+  </div>
+</ng-template>

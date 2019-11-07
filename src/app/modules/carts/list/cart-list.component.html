@@ -1,0 +1,117 @@
+<div *ngIf="cartList$ | async as cartList; else spinner">
+    <nav class="navbar navbar-light bg-white d-flex justify-content-between">
+        <span class="navbar-brand">
+            {{'COMMON.CARTS' | translate}}
+            <span *ngIf="cartList?.length > 0">({{cartAggregate?.total_records}})</span>
+        </span>
+        <div>
+            <button type="button" class="btn btn-primary btn-raised"
+                (click)="newCart(template)">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</button>
+        </div>
+    </nav>
+
+    <div class="card p-0 mt-3" *ngIf="currentCart$ | async as myCart">
+        <table class="table table-striped table-responsive-sm">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <apt-output-field [record]="myCart" field="Name" [editable]="false" [labelOnly]="true">
+                        </apt-output-field>
+                    </th>
+                    <th scope="col">
+                        <apt-output-field [record]="myCart" field="CreatedDate" [editable]="false" [labelOnly]="true">
+                        </apt-output-field>
+                    </th>
+                    <th scope="col">
+                        <apt-output-field [record]="myCart" field="NumberOfItems" [editable]="false" [labelOnly]="true">
+                        </apt-output-field>
+                    </th>
+                    <th scope="col">{{'COMMON.TOTAL_AMOUNT' | translate}}</th>
+                    <th scope="col" class="text-center">{{'MY_ACCOUNT.CART_LIST.IS_ACTIVE' | translate}}</th>
+                    <th scope="col">
+                        <apt-output-field [record]="myCart" field="Status" [editable]="false" [labelOnly]="true">
+                        </apt-output-field>
+                    </th>
+                    <th scope="col">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cart of cartList; let i = index;" [class.table-success]="cart.Id === myCart?.Id">
+                    <td scope="row">{{cart.Name}}</td>
+                    <td>{{cart.CreatedDate | date : 'short'}}</td>
+                    <td>{{cart.NumberOfItems || 0}}</td>
+                    <td>{{(cart | CartPricePipe | async)?.netPrice$ | async}}</td>
+                    <td class="text-center">
+
+                        <span class="oi oi-circle-check" *ngIf="cart.Id === myCart?.Id"></span>
+                    </td>
+                    <td>
+                        <span class="badge w-100" [class.badge-secondary]="cart.Status === 'New'"
+                            [class.badge-info]="cart.Status !== 'New' && cart.Status !== 'Finalized' && cart.Status !== 'Abandoned' && cart.Status !== 'Approval Required'"
+                            [class.badge-success]="cart.Status === 'Finalized'"
+                            [class.badge-warning]="cart.Status === 'Approval Required'"
+                            [class.badge-danger]="cart.Status === 'Abandoned'">{{cart.Status}}</span>
+                    </td>
+                    <td>
+                        <div dropdown container="body">
+                            <button class="btn btn-link p-0 dropdown-toggle" dropdownToggle
+                                [ladda]="cart._metadata?.state === 'processing'" data-spinner-color="black"
+                                data-style="zoom-in">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ng-container *ngIf="cart.Status !== 'Finalized'">
+                                <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu"
+                                    aria-labelledby="button-basic">
+                                    <li role="menuitem"
+                                        *ngIf="cart.Id !== myCart?.Id && (cart.Status === 'New' || cart.Status === 'Approval Required' || cart.Status === 'Ready For Finalization')">
+                                        <a class="dropdown-item" href="javascript:void(0)"
+                                            (click)="setCartActive(cart)">{{'MY_ACCOUNT.CART_LIST.SET_ACTIVE' | translate}}</a>
+                                    </li>
+                                    <li role="menuitem">
+                                        <a class="dropdown-item text-danger" href="javascript:void(0)"
+                                            (click)="deleteCart(cart)">{{'COMMON.DELETE' | translate}}</a>
+                                    </li>
+                                </ul>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-3">
+    <pagination [totalItems]="cartAggregate?.total_records" [(ngModel)]="currentPage" [itemsPerPage]="limit"
+        (pageChanged)="loadCarts($event.page)" [maxSize]="5" [firstText]="paginationButtonLabels.first"
+        [previousText]="paginationButtonLabels.previous" [nextText]="paginationButtonLabels.next"
+        [lastText]="paginationButtonLabels.last"></pagination>
+</div>
+
+<ng-template #spinner>
+    <div class="d-flex justify-content-center py-5">
+        <apt-dots></apt-dots>
+    </div>
+</ng-template>
+
+<ng-template #template>
+    <form (ngSubmit)="createCart()">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <apt-input-field placeholder="{{'COMMON.NAME' | translate}}" name="cartName" [(ngModel)]="cart.Name"
+                    field="Name" [entity]="cart"></apt-input-field>
+            </div>
+            <small class="text-danger animated fadeIn" *ngIf="message">{{message}}</small>
+        </div>
+        <div class="d-flex justify-content-end modal-footer">
+            <button class="btn btn-link" type="button"
+                (click)="modalRef.hide()">{{'COMMON.CANCEL' | translate}}</button>
+            <button class="btn btn-primary btn-raised w-25" type="submit" [ladda]="loading">{{'COMMON.SAVE' | translate}}</button>
+        </div>
+    </form>
+</ng-template>
