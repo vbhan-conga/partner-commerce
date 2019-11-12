@@ -21,12 +21,12 @@ export const environment: Configuration = {
   type: 'Salesforce',
   debounceTime: 1000,
   proxy: 'https://apttus-proxy.herokuapp.com',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
   useIndexedDB: true,
-  storefront: 'P-Commerce',
   expandDepth: 8,
 
   // Salesforce environment variables
+  storefront: '****Storefront Name****',
+  sentryDsn: '****Sentry URL****',
   organizationId: '****Salesforce Organization Id****',
   endpoint: '****Salesforce Community URL****'
 };
