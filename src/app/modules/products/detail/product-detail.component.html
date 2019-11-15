@@ -1,0 +1,155 @@
+<app-detail [title]="viewState?.product?.Name" [subtitle]="productCode" [context]="viewState?.product"
+    *ngIf="viewState$ | async as viewState; else loading">
+
+    <div class="primary-actions">
+        <form class="d-flex">
+            <div class="form-group my-0 mr-5">
+                <small class="mb-2 d-block"> {{'PRODUCT_DETAILS.STANDARD_PRICE' | translate}} </small>
+                <h5>
+                    <apt-price [record]="viewState?.product" type="list" [bundle]="true"></apt-price>
+                </h5>
+            </div>
+            <div class="form-group my-0 mr-3">
+                <small class="mb-2 d-block"> {{'COMMON.NET_PRICE' | translate}} </small>
+                <h5>
+                    <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
+                        [quantity]="quantity" [bundle]="true" [type]="'net'"></apt-price>
+                    <ng-template #productPrice>
+                        <apt-price [record]="viewState?.product" [quantity]="quantity" [bundle]="true" type="net">
+                        </apt-price>
+                    </ng-template>
+                </h5>
+            </div>
+        </form>
+    </div>
+
+    <div class="secondary-actions">
+        <!-- Simple Product Controls -->
+        <form class="d-flex justify-content-end"
+            *ngIf="!viewState?.product?.HasAttributes && !viewState?.product?.HasOptions; else complex">
+            <div class="form-group mx-3 my-0 d-flex align-items-center">
+                <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
+                <input type="number" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
+            </div>
+            <div class="d-flex align-items-center">
+                <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
+                    [configurationEnabled]="false" [quantity]="quantity"
+                    [cartItems]="(cartItems?.length > 0) ? cartItems : null" [product]="viewState?.product"
+                    [btnClass]="'btn-primary btn-raised px-3'"></apt-add-to-cart>
+            </div>
+        </form>
+
+
+        <!-- Complex Product Controls -->
+        <ng-template #complex>
+            <div class="d-flex">
+                <ng-container *ngIf="viewState?.relatedTo; else newProduct">
+                    <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="quantity"
+                        [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3'"
+                        (onAddToCart)="onAddToCart($event)" [disabled]="!configurationChanged"
+                        [label]="'Update Configuration'">
+                    </apt-add-to-cart>
+                </ng-container>
+                <ng-template #newProduct>
+                    <div class="d-flex justify-content-end">
+                        <div class="form-group mx-3 my-0 d-flex align-items-center">
+                            <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
+                            <input type="number" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
+                                [quantity]="quantity" (onAddToCart)="onAddToCart($event)"
+                                [disabled]="!configurationChanged" [cartItems]="cartItemList"
+                                [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3'">
+                            </apt-add-to-cart>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <button class="btn btn-outline-primary ml-2"
+                    *ngIf="viewState?.product?.HasAttributes || viewState?.product?.HasOptions"
+                    (click)="productConfigurationSummary.show();">Price Summary</button>
+            </div>
+        </ng-template>
+
+    </div>
+
+    <app-detail-section [title]="'PRODUCT_DETAILS.DETAILS' | translate">
+        <div class="row">
+            <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.PRODUCT_DETAIL' | translate}} </h4>
+            <div class="col-12 col-md-4">
+                <apt-product-images [product]="viewState?.product"></apt-product-images>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p [innerHTML]="viewState?.product?.Description" class="p-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-detail-section>
+
+    <app-detail-section [title]="'PRODUCT_DETAILS.CONFIGURATIONS' | translate"
+        *ngIf="viewState?.product?.HasAttributes || viewState?.product?.HasOptions">
+        <div class="row mt-4">
+            <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.CONFIGURATIONS' | translate}} </h4>
+            <div class="col-12">
+                <apt-product-configuration [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
+                    (configurationChange)="onConfigurationChange($event)" (click)="configurationChanged = true">
+                </apt-product-configuration>
+            </div>
+        </div>
+    </app-detail-section>
+
+    <app-detail-section [title]="'PRODUCT_DETAILS.SPECIFICATIONS' | translate"
+        *ngIf="viewState?.product?.ProductFeatureValues?.length > 0">
+        <div class="row mt-4">
+            <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.SPECIFICATIONS' | translate}} </h4>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <app-tab-features [product]="viewState?.product" class="animated fadeIn d-block">
+                        </app-tab-features>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-detail-section>
+
+    <app-detail-section [title]="'PRODUCT_DETAILS.ATTACHMENTS' | translate"
+        *ngIf="viewState?.product?.ProductInformation?.length > 0">
+        <div class="row mt-4">
+            <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.ATTACHMENTS' | translate}} </h4>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <app-tab-attachments [product]="viewState?.product"></app-tab-attachments>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-detail-section>
+
+
+    <ng-container *ngIf="viewState?.recommendedProducts?.length > 0">
+        <app-detail-section [title]="'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate">
+            <div class="row mt-4">
+                <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate}} </h4>
+                <div class="col-12">
+                    <!-- <apt-product-carousel [productList]="viewState?.recommendedProducts" slides="5"></apt-product-carousel> -->
+                </div>
+            </div>
+        </app-detail-section>
+    </ng-container>
+
+    <apt-product-configuration-summary [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
+        [changes]="cartItemList" [preload]="true" #productConfigurationSummary position="right">
+    </apt-product-configuration-summary>
+</app-detail>
+
+<ng-template #loading>
+    <div class="d-flex justify-content-center pt-5">
+        <apt-dots></apt-dots>
+    </div>
+</ng-template>

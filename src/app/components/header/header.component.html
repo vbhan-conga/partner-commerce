@@ -1,0 +1,159 @@
+<ng-container *ngIf="view$ | async as view">
+  <div class="navbar navbar-light bg-light border-bottom">
+    <div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        (click)="menuModal.show()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <button class="navbar-brand btn btn-link d-none d-md-inline-block" [routerLink]="['/']"
+        *ngIf="view?.storefront?.Logo; else text">
+        <img [src]="view?.storefront?.Logo | image" />
+      </button>
+      <ng-template #text>
+        <button class="navbar-brand btn btn-link" [routerLink]="['/']">{{view?.storefront?.Name}}</button>
+      </ng-template>
+    </div>
+  
+    <div class="btn-group">
+      <button class="btn btn-link" (click)="openModal(searchModal)">
+        <i class="fa fa-search fa-lg"></i>
+      </button>
+      <apt-mini-cart [manageCartLink]="'/carts/' + view?.cart?.Id"></apt-mini-cart>
+      <apt-cr-constraint-icon></apt-cr-constraint-icon>
+    </div>
+  </div>
+  
+  <ng-template #searchModal>
+    <form role="document" (ngSubmit)="doSearch()">
+      <div class="modal-header">
+        <h5 class="modal-title" id="searchModalLabel">{{'HEADER.PRODUCT_SERACH' | translate}}</h5>
+        <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <apt-spinner [large]="false" *ngIf="typeaheadLoading"></apt-spinner>
+        <input type="search" class="form-control" placeholder="{{'HEADER.ENTER_YOUR_SEARCH_TERM' | translate}}"
+          (typeaheadLoading)="typeaheadLoading = $event" (typeaheadOnSelect)="typeaheadOnSelect($event)"
+          [typeaheadItemTemplate]="typeAheadItem" [typeahead]="typeahead$" [typeaheadOptionsLimit]="5" minlength="2"
+          typeaheadWaitMs="1000" typeaheadOptionField="Name" [(ngModel)]="searchQuery" name="searchQuery" #searchBox
+          appAutoFocus autocomplete="off" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal"
+          (click)="modalRef.hide()">{{'COMMON.CANCEL' | translate}}</button>
+        <button type="button" class="btn btn-primary btn-raised" type="submit">{{'HEADER.SUBMIT' | translate}}</button>
+      </div>
+    </form>
+  </ng-template>
+  
+  <ng-template #typeAheadItem let-model="item" let-index="index" let-last="last">
+    <div class="media w-100 border-gray pb-2" [class.border-bottom]="!last">
+      <img class="mr-3 align-self-center thumbnail" [src]="model.IconId | image: true: true: model.Id"
+        [alt]="model.IconId">
+      <div class="media-body truncate">
+        <h6 class="m-0">{{model.Name}}</h6>
+        <small class="d-block">{{model.ProductCode}}</small>
+      </div>
+    </div>
+  </ng-template>
+  
+  <apt-mini-profile #profile></apt-mini-profile>
+  
+  <div bsModal #menuModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+    <div class="modal-dialog modal-lg menu">
+      <div class="modal-content py-3">
+        <div class="modal-header d-block p-0 border-bottom">
+          <div class="d-flex justify-content-between align-items-start p-2">
+            <div class="media p-2">
+              <img [src]="view?.me?.SmallPhotoUrl | image : null" class="img-circle" width="45" />
+              <div class="ml-3">
+                <ng-container *ngIf="view?.me?.Alias !== 'guest'; else guest">
+                  <h5 class="my-0">{{view?.me?.FirstName}} {{view?.me?.LastName}}</h5>
+                  <small class="d-block">{{'HEADER.LAST_LOGIN' | translate}}
+                    {{view?.me.LastLoginDate | date : 'short'}}</small>
+                </ng-container>
+                <ng-template #guest>
+                  <h5 class="my-0">{{'HEADER.GUEST_USER' | translate}}</h5>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+          <div class="list-group list-group-flush mt-3">
+            <a href="javascript:void(0)" [routerLink]="['/']" (click)="menuModal.hide()"
+              class="list-group-item list-group-item-action">
+              <span class="oi oi-home mr-4"></span>{{'HEADER.HOME' | translate}}
+            </a>
+            <a href="javascript:void(0)" [routerLink]="['/orders']" (click)="menuModal.hide()"
+              class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
+              <span class="oi oi-cog mr-4"></span>{{'HEADER.MY_ACCOUNT' | translate}}
+            </a>
+            <a href="javascript:void(0)" [routerLink]="['/assets']" (click)="menuModal.hide()"
+              class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
+              <span class="oi oi-list-rich mr-4"></span>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
+            </a>
+            <a href="javascript:void(0)" [routerLink]="['/products']" (click)="menuModal.hide()"
+              class="list-group-item list-group-item-action">
+              <span class="oi oi-grid-three-up mr-4"></span>{{'HEADER.PRODUCT_CATALOG' | translate}}
+            </a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action"
+              *ngIf="view?.me?.Alias !== 'guest'" (click)="doLogout(); menuModal.hide();">
+              <span class="oi oi-account-logout mr-4"></span>{{'HEADER.LOG_OUT' | translate}}
+            </a>
+            <a href="javascript:void(0)" class="list-group-item list-group-item-action"
+              *ngIf="view?.me?.Alias === 'guest'" (click)="profile.openModal('second')">
+              <span class="oi oi-account-login mr-4"></span>{{'HEADER.LOG_IN' | translate}}
+            </a>
+          </div>
+        </div>
+        <ng-scrollbar>
+          <div class="modal-body d-flex align-items-stretch">
+            <div class="carousel slide flex-grow-1" id="menuCarousel" data-ride="carousel" data-interval="0">
+              <div class="carousel-inner h-100">
+                <div class="carousel-item active">
+                  <ul class="list-group list-group-flush">
+                    <ng-container *ngFor="let category of view?.categoryTree">
+                      <a class="list-group-item list-group-item-action" href="#menuCarousel"
+                        (click)="goToCategory(category, view)" data-slide="next"
+                        *ngIf="category?._children?.length > 0; else direct">{{category.Name}}</a>
+                      <ng-template #direct>
+                        <a class="list-group-item list-group-item-action" (click)="menuModal.hide()"
+                          [routerLink]="['/products/category', category.Name]">{{category.Name}}</a>
+                      </ng-template>
+                    </ng-container>
+                  </ul>
+                </div>
+                <div class="carousel-item" *ngFor="let currentCategory of view?.categoryBranch">
+                  <div *ngIf="currentCategory?.Id">
+                    <div class="d-flex justify-content-between">
+                      <a href="#menuCarousel" data-slide="prev" (click)="goBack(view)">
+                        <span class="oi oi-arrow-left mr-2"></span>{{'HEADER.BACK' | translate}}
+                      </a>
+                      <a href="#menuCarousel" [routerLink]="['/products/category', currentCategory.Name]"
+                        (click)="menuModal.hide()" data-slide-to="0">{{'HEADER.SHOW_ALL' | translate}}</a>
+                    </div>
+                    <ul class="list-group list-group-flush mt-3">
+                      <ng-container *ngFor="let category of currentCategory?._children">
+                        <a class="list-group-item list-group-item-action" href="#menuCarousel"
+                          (click)="goToCategory(category, view)" data-slide="next"
+                          *ngIf="category._children && category._children.length > 0; else link">{{category.Name}}</a>
+                        <ng-template #link>
+                          <a class="list-group-item list-group-item-action" href="#menuCarousel"
+                            (click)="menuModal.hide()" [routerLink]="['/products/category', category.Name]"
+                            data-slide-to="0">{{category.Name}}</a>
+                        </ng-template>
+                      </ng-container>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-scrollbar>
+      </div>
+    </div>
+  </div>
+  
+  <apt-cr-side-menu></apt-cr-side-menu>
+</ng-container>
