@@ -1,7 +1,7 @@
-import { Configuration } from '@apttus/core';
+import {Configuration} from '@apttus/core';
+
 export const environment: Configuration = {
   production: false,
-  organizationId: '00D230000000nZM',
   defaultImageSrc: './assets/images/default.png',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
@@ -21,10 +21,13 @@ export const environment: Configuration = {
   productIdentifier: 'Id',
   type: 'Salesforce',
   debounceTime: 1000,
-  endpoint: 'https://dc3-cpqqacommunity1.cs28.force.com/pcom',
   proxy: 'https://apttus-proxy.herokuapp.com',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
   useIndexedDB: true,
+  expandDepth: 7,
+
+  // *** TODO: Replace with your Salesforce environment variables ***
   storefront: 'P-Commerce',
-  expandDepth: 7
+  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  organizationId: '00D230000000nZM',
+  endpoint: 'https://dc3-cpqqacommunity1.cs28.force.com/pcom',
 };
