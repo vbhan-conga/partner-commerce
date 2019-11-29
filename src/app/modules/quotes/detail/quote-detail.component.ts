@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectorRef } from '@angular/core';
-import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService } from '@apttus/ecommerce';
+import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService  } from '@apttus/ecommerce';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, flatMap, map, take, mergeMap, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -54,7 +54,7 @@ export class QuoteDetailComponent implements OnInit {
       );
     this.quoteLineItems$ = this.quote$.pipe(
       map(
-        quote => this.quoteItemService.groupItems(quote.QuoteLineItems)
+        quote => LineItemService.groupItems(quote.QuoteLineItems)
       )
     );
     this.order$ = this.quote$.pipe(

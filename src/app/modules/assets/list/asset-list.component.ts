@@ -243,18 +243,11 @@ export class AssetListComponent implements  OnInit, OnDestroy {
         expressionOperator: 'AND',
         sortOrder: [new ASort(this.assetService.type, 'Product.Name')],
         page: new APageInfo(12, this.page)
-      } as QueryOptions),
-      this.assetService.query({
-        groupBy: ['Product.Family'],
-        searchString: _.defaultTo(this.searchQuery, ''),
-        expressionOperator: 'AND',
-        conditions: conditions
       } as QueryOptions)
     )
     .pipe(
       take(1),
-      mergeMap(([totalAssets, assets, assetFamilies]) => {
-        this.productFamilies = _.filter(_.map(assetFamilies, asset => asset.Product.Family), value => value != null);
+      mergeMap(([totalAssets, assets]) => {
         this.totalItems = _.get(totalAssets, 'total_records', _.toString(_.size(totalAssets)));
         let childConditions = _.clone(this.conditions);
         childConditions.push(new ACondition(this.assetService.type, 'BundleAssetId', 'In', assets.map(asset => asset.Id)));

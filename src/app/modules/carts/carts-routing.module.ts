@@ -25,14 +25,12 @@ const routes: Routes = [
   // Route to land on the active cart
   {
     path: 'active',
-    component: CartDetailComponent,
-    resolve: { state: CartResolver }
+    component: CartDetailComponent
   },
   // Route to land to specific cart
   {
     path: ':id',
-    component: CartDetailComponent,
-    resolve: { state: CartResolver }
+    component: CartDetailComponent
   }
 ];
 

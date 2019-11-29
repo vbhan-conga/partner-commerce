@@ -22,7 +22,7 @@ export class CardFormComponent implements OnInit {
   }
 
 }
-
+/** @ignore */
 export interface Card {
   name: string;
   number: string;

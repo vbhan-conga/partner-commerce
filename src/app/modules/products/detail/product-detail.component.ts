@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { CartService, CartItem, UserService } from '@apttus/ecommerce';
+import { CartService, CartItem } from '@apttus/ecommerce';
 import { ProductConfigurationSummaryComponent } from '@apttus/elements';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -48,12 +48,8 @@ export class ProductDetailComponent implements OnInit {
    * isConfigurationChanged to true.
    */
   onConfigurationChange(result: any) {
-    const cartItemList: Array<CartItem> = _.first(result);
-    const disable: boolean = _.last(result);
-    if (disable) {
-      this.configurationChanged = !disable;
-    }
-    this.cartItemList = cartItemList;
+    this.cartItemList = _.first(result);
+    if (_.get(result[1],'optionChanged') || _.get(result[1],'attributeChanged')) this.configurationChanged = true;
   }
 
   /**

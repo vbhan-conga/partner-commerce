@@ -1,23 +1,27 @@
 <app-detail *ngIf="order$ | async as order; else loading" [context]="(isLoggedIn$ | async) ? order : null">
 
-    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status">
+    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status" 
+    [tooltip]="order.hasErrors ? 'Some mandatory informations are missing in the order details. Please fill to proceed.' : ''">
         <ng-container *ngSwitchCase="'Draft'">
-            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" 
+            data-style="zoom-in" [disabled]="order.hasErrors">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
             <apt-generate-document [record]="order" class="align-items-stretch d-flex"></apt-generate-document>
         </ng-container>
 
         <ng-container *ngSwitchCase="'Generated'">
-            <button type="button" class="btn btn-link text-primary text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+            <button type="button" class="btn btn-link text-primary text-primary px-4" [disabled]="order.hasErrors"
+            (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
             <apt-present-document [record]="order" class="align-items-stretch d-flex"></apt-present-document>
         </ng-container>
 
         <ng-container *ngSwitchCase="'Presented'">
-            <button type="button" class="btn btn-link text-primary px-4 btn-raised" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
+            <button type="button" class="btn btn-link text-primary px-4 btn-raised" [disabled]="order.hasErrors"
+            (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" data-style="zoom-in">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
         </ng-container>
 
         <ng-container *ngSwitchCase="'Pending'">
             <ng-container *ngIf="order?.PaymentStatus !== 'Processed'">
-                <button type="button" class="btn btn-primary px-4 btn-raised" (click)="paymentDetails.makePayment()">Make Payment</button>
+                <button type="button" class="btn btn-primary px-4 btn-raised" (click)="paymentDetails.makePayment()">{{'PAYMENT_METHOD_LABELS.MAKE_PAYMENT' | translate}}</button>
                 <app-payment-details [order]="order" #paymentDetails></app-payment-details>
             </ng-container>
         </ng-container>
@@ -46,6 +50,9 @@
                         <h5>
                             {{'DETAILS.ORDER_SUMMARY' | translate}}
                         </h5>
+                        <div>
+                            <apt-alert [record]="order"></apt-alert>
+                        </div>
                         <div class="row mt-4">
                             <dl class="col-12 col-md-6">
                                 <apt-output-field [record]="order" field="CreatedDate" layout="inline" [editable]="false"></apt-output-field>
