@@ -1,9 +1,9 @@
-import { Component, OnInit, TemplateRef, NgZone } from '@angular/core';
+import { Component, OnInit, TemplateRef, NgZone, OnDestroy } from '@angular/core';
 import { ACondition } from '@apttus/core';
 import { CartService, Cart, PriceService } from '@apttus/ecommerce';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { take, map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { take, map } from 'rxjs/operators';
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.scss']
 })
-export class CartListComponent implements OnInit {
+export class CartListComponent implements OnInit, OnDestroy {
 
   /**
    * All carts for logged in user.
@@ -46,6 +46,8 @@ export class CartListComponent implements OnInit {
     last: ''
   };
 
+  private subscriptions: Subscription[] = [];
+
   /**
    * @ignore
    */
@@ -59,7 +61,7 @@ export class CartListComponent implements OnInit {
       .pipe(
         map(cart => (_.isNil(cart)) ? new Cart() : cart)
       );
-    this.cartService.aggregate([new ACondition(Cart, 'Id', 'NotNull', null)]).pipe(take(1)).subscribe(res => this.cartAggregate = res);
+    this.subscriptions.push(this.cartService.query({conditions: [new ACondition(Cart, 'Id', 'NotNull', null)], aggregate: true}).subscribe(res => this.cartAggregate = res));
     this.loadCarts(this.currentPage);
     this.translateService.stream('PAGINATION').subscribe((val: string) => {
       this.paginationButtonLabels.first = val['FIRST'];
@@ -135,5 +137,9 @@ export class CartListComponent implements OnInit {
         });
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

@@ -1,17 +1,23 @@
 {
     "ERROR": {
-        "MIN-OPTIONS": "È necessario selezionare almeno {{valore}} opzioni.",
-        "MAX-OPTIONS": "È possibile selezionare non più di {{valore}} opzioni.",
-        "MIN-TOTAL-QUANTITY": "È necessario disporre di un totale di {{valore}} opzioni.",
-        "MAX-TOTAL-QUANTITY": "È possibile selezionare non più di un totale di {{valore}} opzioni.",
+        "OPTION_GROUP" : {
+            "ERROR" : "opzione gruppo Errori",
+            "MIN_OPTIONS": "voi dovere Selezionare a meno {{value}} opzioni.",
+            "MAX_opzioni": "voi può Selezionare non più di {{value}} opzioni.",
+            "MIN_TOTAL_QUANTITY": "La quantità minima totale è {{value}}.",
+            "MAX_TOTAL_QUANTITY": "La quantità massima totale è {{value}}."
+        },
         "UNABLE_TO_RENEW": "Si è verificato un errore rinnovo di questo asset(s)",
-        "MAX_OPTION_ERROR" : "Selezionare fino a {{valore}} opzioni",
-        "MIN_OPTION_ERROR" : "Selezionare {{valore}} opzioni",
         "CART": {
             "TOO_MANY_ATTEMPTS": "Un articolo nel tuo carrello potrebbero non essere il suo prezzo. Si prega di provare la rimozione di un elemento \/ gli elementi e provare di nuovo.",
             "SERVER_ERROR": "Oops qualcosa è andato storto.",
             "PRICE_CHANGE": "Il prezzo del carrello è stato aggiornato",
-            "PRICE_CHANGE_TOASTR_TITLE": "Aggiornamento Prezzo"
+            "PRICE_CHANGE_TOASTR_TITLE": "Aggiornamento Prezzo",
+            "VALIDATE" : "Ci sono errori nel tuo carrello.",
+            "CONSTRAINT_RULES": "Un articolo nel carrello ha violato 1 o più regole di vincolo."
+        },
+        "CART_ITEM": {
+            "VALIDATE": "Sono errori con questo articolo carrello."
         },
         "CONSTRAINT_RULE": {
             "ASSOCIATE_AND_APPLY": "Un errore dovuto al sempre le regole di vincolo per il vostro carrello."
@@ -232,7 +238,7 @@
         "UNIT_PRICE": "Prezzo Unitario",
         "START_DATE": "Data Di Inizio",
         "END_DATE": "Data Di Fine",
-        "PRODUCT_GROUP": "Gruppo prodotti <strong>{{productGroupName}}<\/strong>",
+        "PRODUCT_gruppo": "Gruppo prodotti <strong>{{productGroupName}}<\/strong>",
         "PRODUCT_FAMILY": "Famiglia di prodotti <strong>{{productFamily}}<\/strong>",
         "PRICE": "Prezzo",
         "QTY2": "Qty",
@@ -292,7 +298,8 @@
         "ON": "su",
         "CONFIRM_CHANGES": "it_IT Confirm Changes",
         "ADD_PRODUCTS": "it_IT Add Products",
-        "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products"
+        "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
+        "NO_DATA": "it_IT n/a"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",

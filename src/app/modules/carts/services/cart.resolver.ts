@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Cart, ItemGroup, CartService, CartItemService, ConstraintRuleService, Product, Quote, Order } from '@apttus/ecommerce';
+import { Cart, ItemGroup, CartService, CartItemService, ConstraintRuleService, Product, Quote, Order, LineItemService } from '@apttus/ecommerce';
 import { Observable, combineLatest, of } from 'rxjs';
 import { take, map, tap, mergeMap } from 'rxjs/operators';
 import * as _ from 'lodash';
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class CartResolver implements Resolve<any> {
       .pipe(
         map(cart => ({
             cart: cart,
-            lineItems: this.cartItemService.groupItems(_.get(cart, 'LineItems')),
+            lineItems: LineItemService.groupItems(_.get(cart, 'LineItems')),
             orderOrQuote: _.isNil(_.get(cart, 'Order')) ? _.get(cart,'Quote') : _.get(cart,'Order')
           })
         )
@@ -32,7 +33,7 @@ export class CartResolver implements Resolve<any> {
   }
 
 }
-
+/** @ignore */
 export interface ManageCartState {
   cart: Cart;
   lineItems: Array<ItemGroup>;

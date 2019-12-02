@@ -169,7 +169,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.pageTop = window.pageYOffset <= 0;
   }
 }
-
+/** @ignore */
 interface HeaderView {
   storefront: Storefront;
   categoryTree: Array<Category>;

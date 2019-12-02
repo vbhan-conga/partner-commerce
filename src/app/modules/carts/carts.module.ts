@@ -13,7 +13,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { ProductCarouselModule, ConstraintAlertModule, ProductConfigurationSummaryModule, PriceModule, PromotionModule, InputDateModule, LineItemTableRowModule, BreadcrumbModule, IconModule, TaxPopHoverModule, PriceSummaryModule, OutputFieldModule, InputFieldModule } from '@apttus/elements';
+import { ProductCarouselModule, ConstraintAlertModule, ProductConfigurationSummaryModule, PriceModule, PromotionModule, InputDateModule, LineItemTableRowModule, BreadcrumbModule, IconModule, TaxPopHoverModule, PriceSummaryModule, OutputFieldModule, InputFieldModule, AlertModule } from '@apttus/elements';
 import { TranslateModule } from '@ngx-translate/core';
 import { LaddaModule } from 'angular2-ladda';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -51,7 +51,8 @@ import { BsDropdownModule } from 'ngx-bootstrap';
     OutputFieldModule,
     LaddaModule,
     InputFieldModule,
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    AlertModule
   ]
 })
 export class CartsModule { }

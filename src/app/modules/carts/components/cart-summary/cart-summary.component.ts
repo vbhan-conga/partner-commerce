@@ -7,6 +7,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { Observable, of } from 'rxjs';
 import * as _ from 'lodash';
 import { take, flatMap } from 'rxjs/operators';
+import { SummaryState } from '../../../checkout/component/summary.component';
 
 @Component({
   selector: 'app-cart-summary',
@@ -114,11 +115,4 @@ export class CartSummaryComponent implements OnInit, OnChanges {
       this.totalEstimatedTax = ((_.get(this.cart, 'LineItems.length') > 0)) ? _.sum(taxBreakup.map(res => res.TaxAmount)) : 0;
     });
   }
-}
-
-export interface SummaryState {
-  configurationMessage: string;
-  downloadLoading: boolean;
-  requestQuoteMessage: string;
-  requestQuoteLoading: boolean;
 }

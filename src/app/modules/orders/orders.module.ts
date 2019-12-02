@@ -10,7 +10,8 @@ import {
   ButtonModule,
   InputFieldModule,
   DataFilterModule,
-  IconModule
+  IconModule,
+  AlertModule
 } from '@apttus/elements';
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrderListComponent } from './list/order-list.component';
@@ -24,6 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ComponentModule } from '../../components/component.module';
 import { LaddaModule } from 'angular2-ladda';
+import { TooltipModule } from 'ngx-bootstrap';
 
 
 @NgModule({
@@ -43,12 +45,14 @@ import { LaddaModule } from 'angular2-ladda';
     PricingModule,
     PaymentModule,
     TranslateModule.forChild(),
+    TooltipModule.forRoot(),
     NgScrollbarModule,
     ButtonModule,
     LaddaModule,
     InputFieldModule,
     DataFilterModule,
-    IconModule
+    IconModule,
+    AlertModule
   ]
 })
 export class OrdersModule { }

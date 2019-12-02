@@ -1,17 +1,23 @@
 {
     "ERROR": {
-        "MIN-OPTIONS": "fr_FR You must select at least {{value}} options.",
-        "MAX-OPTIONS": "fr_FR You can select no more than {{value}} options.",
-        "MIN-TOTAL-QUANTITY": "fr_FR You must have a total of {{value}} options.",
-        "MAX-TOTAL-QUANTITY": "fr_FR You can select no more than a total of {{value}} options.",
+        "OPTION_GROUP" : {
+            "ERROR" : "fr_FR Option Group Errors",
+            "MIN_OPTIONS": "fr_FR You must select at least {{value}} options.",
+            "MAX_OPTIONS": "fr_FR You can select no more than {{value}} options.",
+            "MIN_TOTAL_QUANTITY": "fr_FR The total minimum quantity is {{value}}.",
+            "MAX_TOTAL_QUANTITY": "fr_FR The total maximum quantity is {{value}}."
+        },
         "UNABLE_TO_RENEW": "fr_FR An error occurred renewing this asset(s)",
-        "MAX_OPTION_ERROR" : "fr_FR Select upto {{value}} option(s)",
-        "MIN_OPTION_ERROR" : "fr_FR Select {{value}} option(s)",
         "CART": {
             "TOO_MANY_ATTEMPTS": "fr_FR An item in your cart could not be priced. Please try removing an item / items and try again.",
             "SERVER_ERROR": "fr_FR Oops something went wrong.",
             "PRICE_CHANGE": "fr_FR The price of your cart has been updated",
-            "PRICE_CHANGE_TOASTR_TITLE": "fr_FR Price Update"
+            "PRICE_CHANGE_TOASTR_TITLE": "fr_FR Price Update",
+            "VALIDATE" : "fr_FR There are errors in your cart.",
+            "CONSTRAINT_RULES": "fr_FR An item in your cart violated 1 or more constraint rules."
+        },
+        "CART_ITEM": {
+            "VALIDATE": "fr_FR The are errors with this cart item."
         },
         "CONSTRAINT_RULE": {
             "ASSOCIATE_AND_APPLY": "fr_FR An error ocurred getting the constraint rules for your cart."
@@ -75,7 +81,8 @@
             "ORDER_ID": "fr_FR Order Id",
             "ORDER_DATE": "fr_FR Order Date",
             "ORDER_STATUS": "fr_FR Order Status",
-            "PRODUCT_CONFIG": "fr_FR Product Configuration"
+            "PRODUCT_CONFIG": "fr_FR Product Configuration",
+            "ORDERS_BY_STATUS": "fr_FR Orders by Status"
         },
         "CART_LIST": {
             "CREATE_NEW": "fr_FR New Cart",
@@ -211,6 +218,7 @@
         "DELETE": "fr_FR Delete",
         "EDIT": "fr_FR Edit",
         "CANCEL": "fr_FR Cancel",
+        "UPDATE": "fr_FR Update",
         "SAVE": "fr_FR Save",
         "USERNAME": "fr_FR Username",
         "PRODUCT_CATALOG": "fr_FR Product Catalog",
@@ -279,7 +287,20 @@
         "ON": "fr_FR on",
         "CONFIRM_CHANGES": "fr_FR Confirm Changes",
         "ADD_PRODUCTS": "fr_FR Add Products",
-        "ADD_INSTALLED_PRODUCTS": "fr_FR Add Installed Products"
+        "ADD_INSTALLED_PRODUCTS": "fr_FR Add Installed Products",
+        "NO_DATA": "fr_FR n/a",
+        "MY_ORDERS": "fr_FR My Orders",
+        "MY_QUOTES": "fr_FR My Quotes",
+        "MY_CARTS": "fr_FR My Carts",
+        "INSTALLED_PRODUCTS": "fr_FR Installed Products",
+        "MY_ACCOUNT_SETTINGS": "fr_FR My Account Settings",
+        "ACCOUNT": "fr_FR Account",
+        "ORDER_ID": "fr_FR Order ID",
+        "TOTAL_ORDERS": "fr_FR Total Orders",
+        "ORDER_AMOUNT_BY_STATUS": "fr_FR ORDER AMOUNT BY STATUS",
+        "CC": "fr_FR CC",
+        "VALID_EMAIL": "fr_FR you@example.com",
+        "INVALID_EMAIL_ERROR": "fr_FR Email must be a valid email address"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
@@ -385,7 +406,18 @@
             "CREDITCARD": "fr_FR Credit card",
             "DEBITCARD": "fr_FR Debit card",
             "PONUMBER": "fr_FR PO Number",
-            "PAYMENT_SubTitle": "fr Please choose your payment method"
+            "PAYMENT_SubTitle": "fr Please choose your payment method",
+            "PAYMENT_INPUT": "fr_FR Enter Credit/Debit Card Information",
+            "PAYMENT_INPUTSAVE": "fr_FR Save this card information for future payment",
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE_SubTitle": "fr_FR You will be notified the order details to your email address {{emailAddress}}",
+            "PAYNOW": "fr_FR Pay Now",
+            "Invoice_Me_Later": "fr_FR Invoice Me Later",     
+            "USE_NEW_METHOD": "fr_FR Use new credit/debit card",                        
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "fr_FR Your payment was successful and order has been placed.",
+            "ORDER_CONFIRMATION_MESSAGE": "fr_FR Your order has been placed successfully!",
+            "ORDER_NUMBER": "fr_FR Order Number :",
+            "ORDER_SUBTITLE": "fr_FR Please make the payment to complete the checkout process.",
+            "ENTER_PO_NUMBER": "fr_FR Enter a purchase order number..."
         },
         "SUBMIT_ORDER": "fr_FR Submit Order",
         "CONTINUE_SHIPPING": "fr_FR Continue Shopping",
@@ -409,7 +441,7 @@
         "LOGIN_FOR_FASTER_CHECKOUT": "fr_FR for a faster checkout experience and to get access on additional features, or you can continue as a guest.",
         "BILLING_AND_SHIPPING_INFORMATION": "fr_FR BILLING & SHIPPING INFORMATION",
         "ENTER_SHIPPING_ADDRESS": "fr_FR Please enter your shipping address.",
-        "SUCCESSFUL_ORDER_CREATION_MESSAGE": "Your order has been placed. You will be notified the order details to your email address {{emailAddress}}",
+        "SUCCESSFUL_ORDER_CREATION_MESSAGE": "fr_FR Your order has been placed. You will be notified the order details to your email address {{emailAddress}}",
         "CREATE_ORDER": "fr_FR Create Order"
     },
     "PAYMENT_CARD": {
@@ -609,6 +641,7 @@
         "PRODUCT_ID": "fr_FR Product ID: {{productCode}}"
     },
     "DETAILS": {
+        "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
         "ORDER_SUMMARY": "fr_FR ORDER SUMMARY",
         "LINE_ITEMS": "fr_FR LINE ITEMS",
         "COMMENTS": "fr_FR COMMENTS",
@@ -618,12 +651,14 @@
         "SUCCESSFUL_QUOTE_ACCEPTANCE_MESSAGE": "fr_FR You have successfully accepted the quote ({{quoteName}}) and the order has been generated for the same.",
         "GENERATED_ORDER_NUMBER": "fr_FR Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "fr_FR VIEW YOUR ORDER",
-        "GENERATE": "fr_FR Generate Order",
+        "GENERATE_ORDER": "fr_FR Generate Order",
+        "GENERATE": "fr_FR Generate",
         "TEMPLATE": "fr_FR Template",
         "FILE_FORMAT": "fr_FR File Format",
         "PRESENT": "fr_FR PRESENT",
         "PRESENT_ORDER": "fr_FR Present Order",
-        "SEND_TO": "fr_FR Send Order To"
+        "SEND_TO": "fr_FR Send Order To",
+        "MISSING_REQ_FIELDS": "fr_FR Some mandatory informations are missing in the order details. Please fill to proceed."
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "fr_FR Must select asset(s) to perform batch actions.",
@@ -654,10 +689,12 @@
         "Detail_Ending": "fr ending",
         "DEFAULT_TITLE": "fr Not Able To Delete",
         "DEFAULT_MSG": "fr Cannot delete default method",
-        "Expired_MSG": "Expired"
+        "Expired_MSG": "fr_FR Expired",
+        "MAKE_PAYMENT": "fr_FR Make Payment"
     },
     "PRICE_SUMMARY": {
-        "TAX": "fr_FR Tax ({{taxPercent}}%)"
+        "TAX": "fr_FR Tax ({{taxPercent}}%)",
+        "PAYMENT_STATUS": "fr_FR Payment Status"
     },
     "TAX": {
         "TAX_SUMMARY": "fr_FR Tax Summary",
@@ -673,5 +710,20 @@
         "ORDER_CONFIRMATION_FAILURE": "fr_FR Order could not be confirmed. Please try again.",
         "CART_CREATION_TOASTR_MESSAGE": "fr_FR A new cart has been created.",
         "PRESENT": "fr_FR Present"
+    },
+    "TABLE" : {
+        "SEARCH" : "fr_FR Search",
+        "SELECTED" : "fr_FR Selected",
+        "OF": "fr_FR of",
+        "PER_PAGE": "fr_FR per page",
+        "NO_DATA_TO_DISPLAY": "fr_FR No data to display"
+    },
+    "AOBJECTS": {
+        "PROPOSALS": "fr_FR Proposals",
+        "ORDERS": "fr_FR Orders",
+        "CARTS": "fr_FR Carts",
+        "PROPOSAL": "fr_FR Proposal",
+        "ORDER": "fr_FR Order",
+        "CART": "fr_FR Cart"
     }
 }

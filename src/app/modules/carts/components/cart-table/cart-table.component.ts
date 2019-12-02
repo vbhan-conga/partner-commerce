@@ -43,6 +43,7 @@ export class CartTableComponent implements OnChanges {
 }
 /**
  * Table items are used to hold records of matching parent child relationships for cart items based on primary and non primary line items.
+ * @ignore
  */
 interface TableCartItem {
   /**

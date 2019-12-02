@@ -1,17 +1,23 @@
 {
     "ERROR": {
-        "MIN-OPTIONS": "You must select at least {{value}} options.",
-        "MAX-OPTIONS": "You can select no more than {{value}} options.",
-        "MIN-TOTAL-QUANTITY": "You must have a total of {{value}} options.",
-        "MAX-TOTAL-QUANTITY": "You can select no more than a total of {{value}} options.",
+        "OPTION_GROUP" : {
+            "ERROR" : "Option Group Errors",
+            "MIN_OPTIONS": "You must select at least {{value}} options.",
+            "MAX_OPTIONS": "You can select no more than {{value}} options.",
+            "MIN_TOTAL_QUANTITY": "The total minimum quantity is {{value}}.",
+            "MAX_TOTAL_QUANTITY": "The total maximum quantity is {{value}}."
+        },
         "UNABLE_TO_RENEW": "An error occurred renewing this asset(s)",
-        "MAX_OPTION_ERROR" : "Select upto {{value}} option(s)",
-        "MIN_OPTION_ERROR" : "Select {{value}} option(s)",
         "CART": {
             "TOO_MANY_ATTEMPTS": "An item in your cart could not be priced. Please try removing an item / items and try again.",
             "SERVER_ERROR": "Oops something went wrong.",
             "PRICE_CHANGE": "The price of your cart has been updated",
-            "PRICE_CHANGE_TOASTR_TITLE": "Price Update"
+            "PRICE_CHANGE_TOASTR_TITLE": "Price Update",
+            "VALIDATE" : "There are errors in your cart.",
+            "CONSTRAINT_RULES": "An item in your cart violated 1 or more constraint rules."
+        },
+        "CART_ITEM": {
+            "VALIDATE": "The are errors with this cart item."
         },
         "CONSTRAINT_RULE": {
             "ASSOCIATE_AND_APPLY": "An error ocurred getting the constraint rules for your cart."
@@ -220,6 +226,7 @@
         "DELETE": "Delete",
         "EDIT": "Edit",
         "CANCEL": "Cancel",
+        "UPDATE": "Update",
         "SAVE": "Save",
         "USERNAME": "Username",
         "PRODUCT_CATALOG": "Product Catalog",
@@ -298,7 +305,20 @@
         "ON": "on",
         "CONFIRM_CHANGES": "Confirm Changes",
         "ADD_PRODUCTS": "Add Products",
-        "ADD_INSTALLED_PRODUCTS": "Add Installed Products"
+        "ADD_INSTALLED_PRODUCTS": "Add Installed Products",
+        "NO_DATA": "n/a",
+        "MY_ORDERS": "My Orders",
+        "MY_QUOTES": "My Quotes",
+        "MY_CARTS": "My Carts",
+        "INSTALLED_PRODUCTS": "Installed Products",
+        "MY_ACCOUNT_SETTINGS": "My Account Settings",
+        "ACCOUNT": "Account",
+        "ORDER_ID": "Order ID",
+        "TOTAL_ORDERS": "Total Orders",
+        "ORDER_AMOUNT_BY_STATUS": "ORDER AMOUNT BY STATUS",
+        "CC": "CC",
+        "VALID_EMAIL": "you@example.com",
+        "INVALID_EMAIL_ERROR": "Email must be a valid email address"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
@@ -416,7 +436,8 @@
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "Your payment was successful and order has been placed.",
             "ORDER_CONFIRMATION_MESSAGE": "Your order has been placed successfully!",
             "ORDER_NUMBER": "Order Number :",
-            "ORDER_SUBTITLE": "Please make the payment to complete the checkout process."
+            "ORDER_SUBTITLE": "Please make the payment to complete the checkout process.",
+            "ENTER_PO_NUMBER": "Enter a purchase order number..."
         },
         "SUBMIT_ORDER": "Submit Order",
         "CONTINUE_SHIPPING": "Continue Shopping",
@@ -656,12 +677,14 @@
         "SUCCESSFUL_QUOTE_ACCEPTANCE_MESSAGE": "You have successfully accepted the quote ({{quoteName}}) and the order has been generated for the same.",
         "GENERATED_ORDER_NUMBER": "Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "VIEW YOUR ORDER",
-        "GENERATE": "Generate Order",
+        "GENERATE_ORDER": "Generate Order",
+        "GENERATE": "Generate",
         "TEMPLATE": "Template",
         "FILE_FORMAT": "File Format",
         "PRESENT": "PRESENT",
         "PRESENT_ORDER": "Present Order",
-        "SEND_TO": "Send Order To"
+        "SEND_TO": "Send Order To",
+        "MISSING_REQ_FIELDS": "Some mandatory informations are missing in the order details. Please fill to proceed."
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "Must select asset(s) to perform batch actions.",
@@ -697,17 +720,18 @@
         "DELETE_MSG": "Your Credit/Debit card is deleted.",
         "Detail_Item1":"Your Saved Cards",
         "Detail_Item2":"Name on card",
-        "Detail_Item3":"Expires on",        
-        "Detail_Ending":"ending",   
-        "DEFAULT_TITLE":"Default Card",   
+        "Detail_Item3":"Expires on",
+        "Detail_Ending":"ending",
+        "DEFAULT_TITLE":"Default Card",
         "DEFAULT_MSG":"Cannot delete default method",
         "Expired_MSG"   :"Expired",
         "PAYMENT_SUCCESS_TITLE": "Payment Success",
-        "PAYMENT_SUCCESS_MESSAGE": "Thank you for your Payment, your transaction is successful."
-      
+        "PAYMENT_SUCCESS_MESSAGE": "Thank you for your Payment, your transaction is successful.",
+        "MAKE_PAYMENT": "Make Payment"
     },
     "PRICE_SUMMARY": {
-        "TAX": "Tax ({{taxPercent}}%)"
+        "TAX": "Tax ({{taxPercent}}%)",
+        "PAYMENT_STATUS": "Payment Status"
     },
     "TAX": {
         "TAX_SUMMARY": "Tax Summary",
@@ -735,6 +759,16 @@
     "TABLE" : {
         "SEARCH" : "Search",
         "SELECTED" : "Selected",
-        "OF": "of"
+        "OF": "of",
+        "PER_PAGE": "per page",
+        "NO_DATA_TO_DISPLAY": "No data to display"
+    },
+    "AOBJECTS": {
+        "PROPOSALS": "Proposals",
+        "ORDERS": "Orders",
+        "CARTS": "Carts",
+        "PROPOSAL": "Proposal",
+        "ORDER": "Order",
+        "CART": "Cart"
     }
 }
