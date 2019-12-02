@@ -24,9 +24,9 @@ export const environment: Configuration = {
   useIndexedDB: true,
   expandDepth: 8,
 
-  // Salesforce environment variables
-  storefront: '****Storefront Name****',
-  sentryDsn: '****Sentry URL****',
-  organizationId: '****Salesforce Organization Id****',
-  endpoint: '****Salesforce Community URL****'
+  // *** TODO: Replace with your Salesforce environment variables ***
+  storefront: 'P-Commerce',
+  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  organizationId: '00D230000000nZM',
+  endpoint: 'https://dc3-cpqqacommunity1.cs28.force.com/pcom',
 };
