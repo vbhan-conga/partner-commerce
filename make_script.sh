@@ -23,10 +23,33 @@ function npm_install {
     cd $packageJSON_Folder
     rm -rf node_modules
     LOG_INFO "NPM Install"
-    npm install --no-package-lock
+    npm install
     git config --global user.email 'DevOps-J2B-ibm@apttus.com'
     git config --global user.name 'ic-cicd'
-    npm version patch
+}
+
+function npm_version_update_patch {
+    packageJSON_Folder=${1}
+    LOG_INFO "PackageJSON Folder $packageJSON_Folder"
+    cd $packageJSON_Folder
+    LOG_INFO "Update version"
+    gulp update-version
+}
+
+function build_package {
+    packageJSON_Folder=${1}
+    packageCmd="${2}"
+    LOG_INFO "PackageJSON Folder $packageJSON_Folder"
+    cd $packageJSON_Folder
+    LOG_INFO "Packaging.."
+    LOG_INFO "Package commad: ${packageCmd}"
+    npm install typescript@3.5.3
+    npm install -g @angular/cli@7.3.9
+    if [[ ! -z "$packageCmd" ]]; then
+        $packageCmd
+    else 
+        gulp package
+    fi
 }
 
 function execute_custom_cmd {
