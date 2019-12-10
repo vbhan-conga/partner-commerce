@@ -216,7 +216,7 @@ void executeCustomBuildPackageCmd(String packageJsonFolderPath, String slackChan
     try{
         stage("Custom-Cmd-${cmdIndex}") {
             container('ic-ui-builder') {
-                sh "make build-package PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath} PACKAGE_CMD='$packageCommand'"            
+                sh "make execute-custom-cmd PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath} PACKAGE_CMD='$packageCommand'"            
             }
         }
     }
