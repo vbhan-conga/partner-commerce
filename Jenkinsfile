@@ -1,4 +1,9 @@
 pipeline {
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    }
+        
     agent none
 
     stages {
@@ -19,18 +24,18 @@ metadata:
 spec:
   containers:
   - name: ic-ui-builder
-    image: art01-ic-plat-dev.jfrog.io/ic-ui-builder:8.x
+    image: art01-ic-devops.jfrog.io/ic-ui-builder:10.x
     command:
     - cat
     tty: true
     imagePullPolicy: Always
   - name: ic-tag-builder
-    image: art01-ic-plat-dev.jfrog.io/ic-tag-builder:1.x
+    image: art01-ic-devops.jfrog.io/ic-tag-builder:1.x
     command:
     - cat
     tty: true
   - name: ic-docker-builder
-    image: art01-ic-plat-dev.jfrog.io/ic-docker-builder:17.03.0-ce
+    image: art01-ic-devops.jfrog.io/ic-docker-builder:17.03.0-ce
     command:
     - cat
     tty: true
@@ -44,7 +49,7 @@ spec:
       path: /var/run/docker.sock
       type: File
   imagePullSecrets:
-  - name: aic-artifactory-imagepullsecret
+  - name: devops-docker-secret
   """
 }
 }
@@ -56,22 +61,21 @@ spec:
                                     
                                     sh "ls -lrt"
 
-                                    ecomProps=readProperties file: propertiesPath
+                                    uiServiceProps=readProperties file: propertiesPath
 
                                     //Fetch Inputs from build.properties file
-                                    channel=ecomProps['CHANNEL']
+                                    channel=uiServiceProps['CHANNEL']
 
                                     uiCiServiceEnabled="TRUE"
-                                    uiCiServiceEnabledPropsInfo=ecomProps['AIC_UI_SERVICE_CI_ENABLED']
+                                    uiCiServiceEnabledPropsInfo=uiServiceProps['AIC_UI_SERVICE_CI_ENABLED']
                                     if(uiCiServiceEnabledPropsInfo){
                                         uiCiServiceEnabled=uiCiServiceEnabledPropsInfo.toUpperCase()
                                     }
 
                                     if( uiCiServiceEnabled == "TRUE") {
 
-                                        aicJenkinsArtifactoryCredId=ecomProps.AIC_JENKINS_ARTIFACTORY_CREDS_ID
-                                        aicJenkinsBitbucketCredId=ecomProps.AIC_JENKINS_BITBUCKET_CREDS_ID
-                                        downstreamJobsVar = ecomProps['DOWNSTREAM_JOBS']
+                                        aicJenkinsArtifactoryCredId=uiServiceProps.AIC_JENKINS_ARTIFACTORY_CREDS_ID
+                                        aicJenkinsBitbucketCredId=uiServiceProps.AIC_JENKINS_BITBUCKET_CREDS_ID
 
                                         //Check ci-skip in the last commit message
                                         ciskipResult = checkCISkip(jenkinsFilePath, channel, aicJenkinsBitbucketCredId)
@@ -83,11 +87,21 @@ spec:
                                         sendCommitIdMsgInfo(jenkinsFilePath, channel, aicJenkinsBitbucketCredId)
 
                                         //Execute npm instal in the build context path to install modules
-                                        npmInstallPath = ecomProps['AIC_UI_BUILD_CONTEXT_PATH']
+                                        npmInstallPath = uiServiceProps['AIC_UI_BUILD_CONTEXT_PATH']
                                         installNpmPackages(npmInstallPath, channel, aicJenkinsArtifactoryCredId)
-
+                                        
+                                        // Update Patch Version
+                                        updateNpmPackagePatchVersion(npmInstallPath, channel)
+                                        
                                         //Execute build package and test command
-                                        buildUiServiceCommandCount=ecomProps["AIC_UI_SERVICE_BUILD_CMD_COUNT"].toInteger()
+                                        // buildPackgeCommand="npm run build" //Default Command
+                                        // buildPackgeCommandPropsInput = uiServiceProps['AIC_UI_BUILD_PKG_CMD'].toString()
+                                        // if(buildPackgeCommandPropsInput){
+                                        //     buildPackgeCommand=buildPackgeCommandPropsInput //Override defaut command
+                                        // }
+                                        // createBuildPackage(npmInstallPath, channel, buildPackgeCommand)
+
+                                        buildUiServiceCommandCount=uiServiceProps["AIC_UI_SERVICE_BUILD_CMD_COUNT"].toInteger()
                                         def buildUiServiceCommands = []
                                         for(int i = 0;i<buildUiServiceCommandCount;i++){
                                             buildUiServiceCommands[i]=i
@@ -95,38 +109,49 @@ spec:
 
                                         buildUiServiceCommands.each { buildUiServiceCommandIndex ->
                                             buildUiServiceCommand='AIC_UI_SERVICE_BUILD_CMD_' + "${buildUiServiceCommandIndex}"
-                                            buildUiServiceCommand=ecomProps[buildUiServiceCommand]
+                                            buildUiServiceCommand=uiServiceProps[buildUiServiceCommand]
                                             executeCustomBuildPackageCmd(npmInstallPath, channel, buildUiServiceCommand, "${buildUiServiceCommandIndex}")
                                         }
 
-                                        uiServicePackageName=ecomProps["AIC_UI_SERVICE_PACAKGE_NAME"]
-                                        uiServicePackgeJsonFolderPath=ecomProps["AIC_UI_SERVICE_PACKAGEJSON_FOLDER_PATH"]
-                                        uiServicePackgePath=ecomProps["AIC_UI_SERVICE_PACKAGE_PATH"]
-
+                                        // pacakge name
+                                        uiServicePackageName=uiServiceProps['AIC_UI_SERVICE_PACAKGE_NAME']
+                                        // Folder containing package.json for a specific ui project
+                                        uiServicePackgeJsonFolderPath=uiServiceProps['AIC_UI_SERVICE_PACKAGEJSON_FOLDER_PATH']
+                                        // Folder Path to the ui pacakge that gets created in the ng build process
+                                        uiServicePackgePath=uiServiceProps['AIC_UI_SERVICE_PACKAGE_PATH']
+                                        // Create the artifactory ui package
                                         npmServicePackageVersion=createNpmPackage(uiServicePackageName, uiServicePackgeJsonFolderPath, uiServicePackgePath, channel)
+                                        // Publish the artifactory ui package on npm registry
                                         publishNpmPackage(aicJenkinsArtifactoryCredId, uiServicePackageName, npmServicePackageVersion, channel)
-                                        sendNotifications("INFO","${channel}","CICD", "Successfully Published pacakage : ${uiServicePackageName} of version : ${npmServicePackageVersion}")
 
-                                        tagEnabled=ecomProps["ENABLE_TAGGING"].toUpperCase()
+                                        sendNotifications("INFO","${channel}","CICD", "Successfully Published pacakage : ${uiServicePackageName} of version : ${npmServicePackageVersion}")
+                                        //========================================================================
+
+                                        tagEnabled=uiServiceProps["ENABLE_TAGGING"].toUpperCase()
                                         if(tagEnabled == "TRUE"){
                                             //Tag Git repo
-                                            pushUpdatedPackageJson="TRUE" 
+                                            pushUpdatedPackageJson=uiServiceProps["ENABLE_AUTOMATIC_PATCH_VERSION"].toString().toUpperCase()
                                             tagGitRepoAndPushUpdatedPackageJson(npmServicePackageVersion, aicJenkinsBitbucketCredId, channel, pushUpdatedPackageJson, npmInstallPath)
                                             sendNotifications("WARN","${channel}","CICD", "Git repo is tagged with the version ${npmServicePackageVersion}")
 
                                         }
 
-                                        uiServiceCdEnabled=ecomProps["AIC_UI_SERVICE_CD_ENABLED"].toUpperCase()
+                                        //Build and Package Deployable UI package
+                                        uiServiceCdEnabled=uiServiceProps["AIC_UI_SERVICE_CD_ENABLED"].toUpperCase()
+
                                         if(uiServiceCdEnabled == "TRUE"){
-                                            if(downstreamJobsVar) {
+                                            //downstream jobs
+                                            uiServiceDownstreamJobs=uiServiceProps['DOWNSTREAM_JOBS']
+
+                                            if(uiServiceDownstreamJobs) {
                                                 println "Triggering downstream job for deployment of package ${uiServicePackageName} of version ${npmServicePackageVersion}"
-                                                def downstreamJobs=downstreamJobsVar.split(',')
+                                                def downstreamJobs=uiServiceDownstreamJobs.split(',')
 
                                                 triggerDownStreamJobs(channel, downstreamJobs, npmServicePackageVersion, uiServicePackageName)
                                             }
-                                        } 
+                                        }
+                                        
                                         sendNotifications("INFO","${channel}","CICD", "Successfully Completed.")
-
                                         
                                     } else {
                                         //Send msg on channel that CI is disabled.
@@ -149,7 +174,9 @@ void installNpmPackages(String packageJsonFolderPath, String slackChannelName, S
         stage('NPM-Install') {
             container('ic-ui-builder') {
                 withCredentials([usernamePassword(credentialsId: "${aicJenkinsArtifactoryCredId}", passwordVariable: 'apikey', usernameVariable: 'username')]) {
-                    sh "make npm-install ARTIFACTORY_USERNAME=$username ARTIFACTORY_PASSWORD=$apikey PACKAGEJSON_FOLDERPATH=$packageJsonFolderPath"
+                    sh """
+                        make npm-install ARTIFACTORY_USERNAME=${username} ARTIFACTORY_PASSWORD=${apikey} PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath}
+                    """
                 }
             }
         }
@@ -177,12 +204,27 @@ void updateNpmPackagePatchVersion(String packageJsonFolderPath, String slackChan
     }  
 }
 
+void createBuildPackage(String packageJsonFolderPath, String slackChannelName, String packageCommand) {
+    
+    try{
+        stage('Build-Package') {                
+            container('ic-ui-builder') {
+                sh "make build-package PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath} PACKAGE_CMD='$packageCommand'"            
+            }
+        }
+    }
+    catch (error) {
+        sendNotifications("Failure","${slackChannelName}","Build-Package")
+        throw error
+    } 
+}
+
 void executeCustomBuildPackageCmd(String packageJsonFolderPath, String slackChannelName, String packageCommand, String cmdIndex) {
     
     try{
         stage("Custom-Cmd-${cmdIndex}") {
             container('ic-ui-builder') {
-                sh "make build-package PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath} PACKAGE_CMD='$packageCommand'"            
+                sh "make execute-custom-cmd PACKAGEJSON_FOLDERPATH=${packageJsonFolderPath} PACKAGE_CMD='$packageCommand'"            
             }
         }
     }
@@ -236,7 +278,7 @@ void tagGitRepoAndPushUpdatedPackageJson(String packageJsonVersion, String aicJe
         stage('Git Tag'){
             withCredentials(bindings: [sshUserPrivateKey(credentialsId: "${aicJenkinsBitbucketCredId}", keyFileVariable: 'AIC_SSH_KEY_LOCATION' )]) {
                 container('ic-tag-builder'){
-                    sh "make git-tag-and-push-package-json AIC_SSH_KEY_LOCATION=${AIC_SSH_KEY_LOCATION} PACKAGE_JSON_VERSION=${packageJsonVersion} PUSH_PACKAGE=$pushUpdatedPackageJson PACKAGE_JSON_FOLDER_PATH=$packageJsonFolderPath"
+                    sh "make git-tag-and-push-package-json AIC_SSH_KEY_LOCATION=${AIC_SSH_KEY_LOCATION} PACKAGE_JSON_VERSION=${packageJsonVersion} PUSH_PACKAGE=${pushUpdatedPackageJson} PACKAGE_JSON_FOLDER_PATH=${packageJsonFolderPath}"
                 }
             }
         }
