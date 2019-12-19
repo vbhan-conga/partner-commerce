@@ -92,6 +92,14 @@ spec:
                                         
                                         // Update Patch Version
                                         updateNpmPackagePatchVersion(npmInstallPath, channel)
+                                        
+                                        //Execute build package and test command
+                                        // buildPackgeCommand="npm run build" //Default Command
+                                        // buildPackgeCommandPropsInput = uiServiceProps['AIC_UI_BUILD_PKG_CMD'].toString()
+                                        // if(buildPackgeCommandPropsInput){
+                                        //     buildPackgeCommand=buildPackgeCommandPropsInput //Override defaut command
+                                        // }
+                                        // createBuildPackage(npmInstallPath, channel, buildPackgeCommand)
 
                                         buildUiServiceCommandCount=uiServiceProps["AIC_UI_SERVICE_BUILD_CMD_COUNT"].toInteger()
                                         def buildUiServiceCommands = []
@@ -122,7 +130,7 @@ spec:
                                         tagEnabled=uiServiceProps["ENABLE_TAGGING"].toUpperCase()
                                         if(tagEnabled == "TRUE"){
                                             //Tag Git repo
-                                            pushUpdatedPackageJson=uiServiceProps["ENABLE_AUTOMATIC_PATCH_VERSION"].toUpperCase()
+                                            pushUpdatedPackageJson=uiServiceProps["ENABLE_AUTOMATIC_PATCH_VERSION"].toString().toUpperCase()
                                             tagGitRepoAndPushUpdatedPackageJson(npmServicePackageVersion, aicJenkinsBitbucketCredId, channel, pushUpdatedPackageJson, npmInstallPath)
                                             sendNotifications("WARN","${channel}","CICD", "Git repo is tagged with the version ${npmServicePackageVersion}")
 
@@ -270,7 +278,7 @@ void tagGitRepoAndPushUpdatedPackageJson(String packageJsonVersion, String aicJe
         stage('Git Tag'){
             withCredentials(bindings: [sshUserPrivateKey(credentialsId: "${aicJenkinsBitbucketCredId}", keyFileVariable: 'AIC_SSH_KEY_LOCATION' )]) {
                 container('ic-tag-builder'){
-                    sh "make git-tag-and-push-package-json AIC_SSH_KEY_LOCATION=${AIC_SSH_KEY_LOCATION} PACKAGE_JSON_VERSION=${packageJsonVersion} PUSH_PACKAGE=$pushUpdatedPackageJson PACKAGE_JSON_FOLDER_PATH=$packageJsonFolderPath"
+                    sh "make git-tag-and-push-package-json AIC_SSH_KEY_LOCATION=${AIC_SSH_KEY_LOCATION} PACKAGE_JSON_VERSION=${packageJsonVersion} PUSH_PACKAGE=${pushUpdatedPackageJson} PACKAGE_JSON_FOLDER_PATH=${packageJsonFolderPath}"
                 }
             }
         }
