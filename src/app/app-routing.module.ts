@@ -4,6 +4,7 @@ import { LoginGuard, GuestGuard } from '@apttus/ecommerce';
 import { MainComponent } from './main.component';
 import { RouteGuard } from './services/route.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -77,7 +78,7 @@ import { ConstraintRuleGuard } from './services/constraint-rule.guard';
         ]
       }
     ], {
-      useHash: false,
+      useHash: environment.hashRouting,
       scrollPositionRestoration: 'enabled'
     })
   ],
