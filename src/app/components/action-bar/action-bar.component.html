@@ -1,7 +1,7 @@
 <div *ngIf="cart$ | async as cart" class="d-flex justify-content-between w-100 align-items-center">
   <div class="d-flex align-self-stretch">
     <div class="border-left px-3 d-flex align-items-center">
-      <apt-output-field [record]="cart" field="AccountId" label="Account" layout="inline" [showQuickView]="true" (onChange)="changeAccount($event)" #accountField>
+      <apt-output-field [record]="cart" field="AccountId" label="{{'COMMON.ACCOUNT' | translate}}" layout="inline" [showQuickView]="true" (onChange)="changeAccount($event)" #accountField>
       </apt-output-field>
     </div>
 
@@ -11,7 +11,7 @@
     </div> -->
 
     <div *ngIf="cart?.Order?.Id" class="border-left px-3 d-flex align-items-center">
-      <apt-output-field [record]="cart" field="OrderId" label="Order ID" layout="inline" [showQuickView]="true" [editable]="false"></apt-output-field>
+      <apt-output-field [record]="cart" field="OrderId" label="{{'COMMON.ORDER_ID' | translate}}" layout="inline" [showQuickView]="true" [editable]="false"></apt-output-field>
       <span class="badge badge-info ml-1">{{cart?.Order?.Status}}</span>
     </div>
 

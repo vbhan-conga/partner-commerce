@@ -29,7 +29,7 @@
             *ngIf="!viewState?.product?.HasAttributes && !viewState?.product?.HasOptions; else complex">
             <div class="form-group mx-3 my-0 d-flex align-items-center">
                 <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
-                <input type="number" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
+                <input type="number" min="1" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
             </div>
             <div class="d-flex align-items-center">
                 <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
@@ -46,21 +46,20 @@
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="quantity"
                         [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3'"
-                        (onAddToCart)="onAddToCart($event)" [disabled]="!configurationChanged"
-                        [label]="'Update Configuration'">
+                        (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'">
                     </apt-add-to-cart>
                 </ng-container>
                 <ng-template #newProduct>
                     <div class="d-flex justify-content-end">
                         <div class="form-group mx-3 my-0 d-flex align-items-center">
                             <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
-                            <input type="number" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
+                            <input type="number" min="1" class="w-75 form-control" [(ngModel)]="quantity" name="quantity" />
                         </div>
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                                 [quantity]="quantity" (onAddToCart)="onAddToCart($event)"
-                                [disabled]="!configurationChanged" [cartItems]="cartItemList"
-                                [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3'">
+                                [cartItems]="cartItemList" [product]="viewState?.product"
+                                [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
                         </div>
                     </div>
@@ -68,7 +67,7 @@
 
                 <button class="btn btn-outline-primary ml-2"
                     *ngIf="viewState?.product?.HasAttributes || viewState?.product?.HasOptions"
-                    (click)="productConfigurationSummary.show();">Price Summary</button>
+                    (click)="productConfigurationSummary.show();">{{'DETAILS.PRICE_SUMMARY' | translate}}</button>
             </div>
         </ng-template>
 
@@ -137,7 +136,7 @@
             <div class="row mt-4">
                 <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate}} </h4>
                 <div class="col-12">
-                    <!-- <apt-product-carousel [productList]="viewState?.recommendedProducts" slides="5"></apt-product-carousel> -->
+                    <apt-product-carousel [productList]="viewState?.recommendedProducts" slides="5"></apt-product-carousel>
                 </div>
             </div>
         </app-detail-section>

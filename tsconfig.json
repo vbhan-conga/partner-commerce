@@ -155,13 +155,22 @@
       "xml-js": [
         "./node_modules/xml-js"
       ],
-      "@apttus/ecommerce": [
-        "../ecommerce-core/resources/projects/apttus/ecommerce/src/public_api.ts"
-      ],
       "@apttus/core": [
         "../ecommerce-core/resources/projects/apttus/core/src/public_api.ts"
       ],
+      "@apttus/core/*": [
+        "../ecommerce-core/resources/projects/apttus/core/src/public_api.ts"
+      ],
+      "@apttus/ecommerce": [
+        "../ecommerce-core/resources/projects/apttus/ecommerce/src/public_api.ts"
+      ],
+      "@apttus/ecommerce/*": [
+        "../ecommerce-core/resources/projects/apttus/ecommerce/src/public_api.ts"
+      ],
       "@apttus/elements": [
+        "../ecommerce-core/resources/projects/apttus/elements/src/public_api.ts"
+      ],
+      "@apttus/elements/*": [
         "../ecommerce-core/resources/projects/apttus/elements/src/public_api.ts"
       ]
     }

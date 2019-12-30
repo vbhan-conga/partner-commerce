@@ -1,20 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ACondition, APageInfo, ASort, ConfigurationService, QueryOptions } from '@apttus/core';
-import { CartService, Cart, Storefront, StorefrontService, ProductService, AssetService, AssetLineItemExtended, AccountService} from '@apttus/ecommerce';
-import { Observable, combineLatest, of } from 'rxjs';
-import { take, mergeMap, map } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ACondition, AFilter, AObject } from '@apttus/core';
+import { CartService, AssetService, AssetLineItemExtended, AssetLineItem, StorefrontService, Product } from '@apttus/ecommerce';
+import { Observable, combineLatest, of, BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { AssetSelectionService, AccordionRows } from '@apttus/elements';
+import { AssetModalService, TableOptions, TableAction, ChildRecordOptions } from '@apttus/elements';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
-import { TranslateService } from '@ngx-translate/core';
+import { ClassType } from 'class-transformer/ClassTransformer';
 
 /**
-* Installed Product Layout is used to set the structure of the installed products page.
+* Asset list component is used to set the structure of the asset list page.
 *
 * @example
-* <app-installed-products-layout></app-installed-products-layout>
+* <app-asset-list></app-installed-products-layout>
 */
 @Component({
   selector: 'app-asset-list',
@@ -22,363 +22,237 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./asset-list.component.scss'],
   providers: [DatePipe]
 })
-export class AssetListComponent implements  OnInit, OnDestroy {
+export class AssetListComponent implements OnInit {
   /**
-   * The current page used by the pagination component.
+   * The view object used for rendering information in the template.
    */
-  page = 1;
-  /**
-   * Number of records per page used by the pagination component.
-   */
-  pageSize = 12;
-
-  totalItems = 0;
-
-  /**
-   * Current value of the search input to be used for finding records.
-   */
-  searchQuery: string;
-  /**
-   * Array of conditions to be used for populating search results. Initialized to filter out assets that are bundle options.
-   */
-  conditions: Array<ACondition> = [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'IsInactive', 'NotEqual', true), new ACondition(this.assetService.type, 'Product.ConfigurationType', 'NotEqual', 'Option')];
-  /**
-   * Observable array of all assets that have been selected from the asset list.
-   */
-  selectedAssets$: Observable<Array<AssetLineItemExtended>>;
-  /**
-   * Product Id from the route params.
-   */
-  _selectedProductID: string;
-
-  /**
-   * List of selected product Ids
-   */
-  newIdentifiers: Array<string>;
-
-  /**
-   * local variable used to check ABO operation
-   */
-  _isABOOperation: boolean;
-
-  /**
-   * operation from the route params.
-   */
-  operation: string;
-  /**
-   * Instance of the current cart.
-   */
-  cart: Cart;
-  /**
-  * Stores all the details about current storefront object
-  */
-  storefront$: Observable<Storefront>;
+  view$: BehaviorSubject<AssetListView> = new BehaviorSubject<AssetListView>(null);
   /**
    * Value of the days to renew filter.
    */
-  renewFilter: ACondition;
+  renewFilter: AFilter;
+  /**
+   * Value of the price type filter.
+   */
+  priceTypeFilter: AFilter;
+  /**
+   * Value of the asset action filter.
+   */
+  assetActionFilter: AFilter;
   /**
    * Value of the product family field filter.
    */
-  productFamilyFilter: ACondition;
+  productFamilyFilter: AFilter;
   /**
-   * Flag for checking if the full list is being shown or if only selected assets are being shown.
+   * Value of the advanced fitler component.
    */
-  showingFullList: boolean = true;
+  advancedFilters: Array<AFilter> = [];
   /**
-   * Total number of selected items to pass to pagination component when showing only selected assets.
+   * Default filters that will be applied to the table and chart components.
    */
-  selectedTotalItems: Array<AccordionRows>;
+  defaultFilters: Array<AFilter> = [new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'Product.ConfigurationType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true)])];
   /**
-   * Selected assets to show for the current page.
+   * Flag to pre-select items in the table component.
    */
-  selectedPageItems: Array<AccordionRows>;
+  preselectItemsInGroups: boolean = false;
   /**
-   * Array of asset line items grouped by parent / child relationship based on the filter criteria.
+   * Color palette used for the chart component styling.
    */
-  groupedAssetLineItems: Array<AccordionRows> = [];
+  colorPalette = ['#D22233', '#F2A515', '#6610f2', '#008000', '#17a2b8', '#0079CC', '#CD853F', '#6f42c1', '#20c997', '#fd7e14'];
   /**
-   * Array of asset line items grouped by parent / child relationship for the current page.
+   * Map of asset actions to their appropriate filter.
    */
-  groupedPageAssetLineItems: Array<AccordionRows> = [];
-  /**
-   * The product identifier set in the configuration file.
-   */
-  identifier: string = 'Id';
-  /**
-   * Current subscriptions in this class.
-   * @ignore
-   */
-  protected subs: Array<any> = [];
-  /** @ignore */
-  paginationButtonLabels: any = {
-    first: '',
-    previous: '',
-    next: '',
-    last: ''
+  private assetActionMap = {
+    All: null,
+    Renew: new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'PriceType', 'NotEqual', 'One Time')]),
+    Terminate: new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'PriceType', 'NotEqual', 'One Time')]),
+    'Buy More': new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'PriceType', 'Equal', 'One Time'), new ACondition(Product, 'Product.ConfigurationType', 'Equal', 'Standalone')])
   };
   /**
-   * Array of product families associated with the list of assets.
+   * Mass actions to be used with the table configuration options.
    */
-  productFamilies: Array<string> = [];
-  /**
-   * The current account id.
-   */
-  accountId: string;
-  /**
-   * Object used for managing filters that are set on the asset list.
-   */
-  priceTypeFilters = {
-    /**
-     * Filter for 'One Time' price type assets.
-     */
-    'One Time': new ACondition(this.assetService.type, 'PriceType', 'Equal', 'One Time'),
-    /**
-     * Filter for 'Recurring' price type assets.
-     */
-    Recurring: new ACondition(this.assetService.type, 'PriceType', 'Equal', 'Recurring'),
-    /**
-     * Filter for 'Usage' price type assets.
-     */
-    Usage: new ACondition(this.assetService.type, 'PriceType', 'Equal', 'Usage'),
-    /**
-     * Removes all current filters on the asset list.
-     */
-    removeFilters: () => {
-      _.remove(this.conditions, this.priceTypeFilters['One Time']);
-      _.remove(this.conditions, this.priceTypeFilters.Recurring);
-      _.remove(this.conditions, this.priceTypeFilters.Usage);
-      this.conditions = this.conditions.slice();
+  private massActions: Array<TableAction> = [
+    {
+      icon: 'fa-sync',
+      massAction: true,
+      label: 'Renew',
+      theme: 'primary',
+      validate(record: AssetLineItemExtended): boolean {
+        return record.canRenew();
+      },
+      action: (recordList: Array<AObject>): Observable<void> => {
+        this.assetModalService.openRenewModal(<AssetLineItem>recordList[0], <Array<AssetLineItem>>recordList);
+        return of(null);
+      }
     },
-    /**
-     * Adds a new filter to the list of the given type in this object.
-     * @param key {String} Key for the filter type on this object.
-     */
-    addFilter: key => {
-      this.priceTypeFilters.removeFilters();
-      this.conditions.push(this.priceTypeFilters[key]);
-      this.conditions = this.conditions.slice();
+    {
+      icon: 'fa-ban',
+      massAction: true,
+      label: 'Terminate',
+      theme: 'danger',
+      validate(record: AssetLineItemExtended): boolean {
+        return record.canTerminate();
+      },
+      action: (recordList: Array<AObject>): Observable<void> => {
+        this.assetModalService.openTerminateModal(<AssetLineItem>recordList[0], <Array<AssetLineItem>>recordList);
+        return of(null);
+      }
+    },
+    {
+      icon: 'fa-dollar-sign',
+      massAction: false,
+      label: 'Buy More',
+      theme: 'primary',
+      validate(record: AssetLineItemExtended): boolean {
+        return record.canBuyMore();
+      },
+      action: (recordList: Array<AObject>): Observable<void> => {
+        this.assetModalService.openBuyMoreModal(<AssetLineItem>recordList[0], <Array<AssetLineItem>>recordList);
+        return of(null);
+      }
+    },
+    {
+      icon: 'fa-wrench',
+      label: 'Change Configuration',
+      theme: 'primary',
+      validate(record: AssetLineItemExtended): boolean {
+        return record.canChangeConfiguration();
+      },
+      action: (recordList: Array<AObject>): Observable<void> => {
+        this.assetModalService.openChangeConfigurationModal(<AssetLineItem>recordList[0], <Array<AssetLineItem>>recordList);
+        return of(null);
+      }
     }
-  };
+  ];
 
   constructor(
     private route: ActivatedRoute,
     public assetService: AssetService,
-    private assetSelectionService: AssetSelectionService,
+    private assetModalService: AssetModalService,
     protected cartService: CartService,
     protected toastr: ToastrService,
-    private storefrontService: StorefrontService,
-    public fieldFilterServiceContext: ProductService,
-    private translateService: TranslateService,
-    private config: ConfigurationService,
-    private accountService: AccountService,
-    private productService: ProductService
-  ) {
-    this.subs.push(this.cartService.getMyCart().subscribe(cartRes => {
-      this.cart = cartRes;
-    }));
-    this.identifier = this.config.get('productIdentifier');
-  }
+    private storefrontService: StorefrontService
+  ) {}
 
   /**
    * @ignore
    */
   ngOnInit() {
-    this.subs.push(this.accountService.getCurrentAccount().subscribe(account => {
-      this.accountId = account.Id;
-      this.storefront$ = this.storefrontService.getStorefront();
-      this._selectedProductID = this.route.snapshot.params.productId;
-      this.operation = this.route.snapshot.params.operation;
-      this._isABOOperation = (this._selectedProductID != null && this._selectedProductID !== undefined && (this.operation === 'Renew' || this.operation === 'Terminate' || this.operation === 'Buy More' || this.operation === 'Change Configuration'));
-      if (this._isABOOperation) {
-        this.newIdentifiers = decodeURIComponent(this._selectedProductID).split(',');
-        this.conditions.push(new ACondition(this.assetService.type, 'ProductId', 'In', this.newIdentifiers));
-        this.assetService.getAssetLineItemForAccount(this.accountId, this.conditions, [new ASort(this.assetService.type, 'Product.Name')]).pipe(take(1)).subscribe(assets => {
-          this.newIdentifiers.forEach(identifier => {
-            this.assetSelectionService.addAssetToSelection(assets.filter(asset => asset.Product[this.identifier] === identifier)[0]);
-          });
-        });
-      }
-      this.getResults();
-    }));
-    this.assetService.query({groupBy: ['Product.Family']})
-    .pipe(take(1))
-    .subscribe(assets => {
-      this.productFamilies = _.filter(_.map(assets, asset => asset.Product.Family), value => value != null);
-    });
-    this.selectedAssets$ = this.assetSelectionService.getSelectedAssets();
-    this.subs.push(this.translateService.stream('PAGINATION').subscribe((val: string) => {
-      this.paginationButtonLabels.first = val['FIRST'];
-      this.paginationButtonLabels.previous = val['PREVIOUS'];
-      this.paginationButtonLabels.next = val['NEXT'];
-      this.paginationButtonLabels.last = val['LAST'];
-    }));
+    if (!_.isEmpty(_.get(this.route, 'snapshot.queryParams'))) {
+      this.preselectItemsInGroups = true;
+      this.assetActionFilter = this.assetActionMap[_.get(this.route, 'snapshot.queryParams.action')];
+      this.advancedFilters = [new AFilter(this.assetService.type, _.map(_.split(decodeURIComponent(_.get(this.route, 'snapshot.queryParams.productIds')), ','), id => new ACondition(this.assetService.type, 'ProductId', 'Equal', id)), null, 'OR')];
+    }
+    this.loadView();
+    // this.preselectItemsInGroups = false;
   }
   /**
-   * Gets the search results based on the current applied filters.
+   * Loads the view data.
    */
-  getResults() {
-    this.groupedPageAssetLineItems = null;
-    let conditions = _.clone(this.conditions);
-    conditions.push(new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true));
-    const aggregateQuery$ = (_.get(this, 'searchQuery.length', 0) >= 2)
-    ? this.assetService.query({
-      searchString: _.get(this, 'searchQuery'),
-      conditions: conditions,
-      expressionOperator: 'AND',
-      groupBy: ['Id']
-    } as QueryOptions).pipe(map(searchResults => {
-      return { total_records: searchResults.length };
-    }))
-    : this.assetService.query({
-      aggregate: true,
-      conditions: conditions,
-      expressionOperator: 'AND'
-    } as QueryOptions);
+  loadView() {
     combineLatest(
-      aggregateQuery$,
       this.assetService.query({
-        searchString: _.defaultTo(this.searchQuery, ''),
-        conditions: conditions,
-        expressionOperator: 'AND',
-        sortOrder: [new ASort(this.assetService.type, 'Product.Name')],
-        page: new APageInfo(12, this.page)
-      } as QueryOptions),
-      this.assetService.query({
-        groupBy: ['Product.Family'],
-        searchString: _.defaultTo(this.searchQuery, ''),
-        expressionOperator: 'AND',
-        conditions: conditions
-      } as QueryOptions)
-    )
-    .pipe(
-      take(1),
-      mergeMap(([totalAssets, assets, assetFamilies]) => {
-        this.productFamilies = _.filter(_.map(assetFamilies, asset => asset.Product.Family), value => value != null);
-        this.totalItems = _.get(totalAssets, 'total_records', _.toString(_.size(totalAssets)));
-        let childConditions = _.clone(this.conditions);
-        childConditions.push(new ACondition(this.assetService.type, 'BundleAssetId', 'In', assets.map(asset => asset.Id)));
-        childConditions.push(new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', false));
-        return combineLatest(
-          of(assets),
-          this.assetService.query({
-            conditions: childConditions,
-            expressionOperator: 'AND'
-          } as QueryOptions)
-        );
-      })
-    ).subscribe(([assets, childAssets]) => {
-      let accordionRows: Array<AccordionRows> = [];
-      assets.forEach(asset => {
-        accordionRows.push({
-          parent: asset,
-          children: _.filter(childAssets, child => {
-            return child.BundleAssetId === asset.Id;
-          })
-        });
-      });
-      this.groupedPageAssetLineItems = accordionRows;
+        aggregate: true,
+        groupBy: ['PriceType'],
+        filters: this.getFilters()
+      }),
+      this.storefrontService.getStorefront()
+    ).pipe(take(1)).subscribe(([chartData, storefront]) => {
+      this.view$.next({
+        tableOptions: {
+          groupBy: 'Product.Name',
+          filters: this.getFilters(),
+          defaultSort: {
+            column: 'Product.Name',
+            direction: 'ASC'
+          },
+          columns: [
+            { prop: 'Name' },
+            { prop: 'SellingFrequency' },
+            { prop: 'StartDate' },
+            { prop: 'EndDate' },
+            { prop: 'NetPrice' },
+            { prop: 'Quantity' },
+            { prop: 'AssetStatus' },
+            { prop: 'PriceType' }
+          ],
+          actions: _.filter(this.massActions, action => _.includes(storefront.ABO_actions, _.get(action, 'label'))),
+          childRecordOptions: {
+            filters: [new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(Product, 'Product.ConfigurationType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', false)])],
+            inCondition: new ACondition(this.assetService.type, 'BundleAssetId', 'In', []),
+            childRecordFields: ['ChargeType', 'SellingFrequency', 'StartDate', 'EndDate', 'NetPrice', 'Quantity', 'AssetStatus', 'PriceType']
+          } as ChildRecordOptions,
+          preselectItemsInGroups: this.preselectItemsInGroups
+        } as TableOptions,
+        assetType: AssetLineItemExtended,
+        colorPalette: this.colorPalette,
+        barChartData: _.isArray(chartData)
+          ? _.omit(_.mapValues(_.groupBy(chartData, 'Apttus_Config2__PriceType__c'), s => _.sumBy(s, 'total_records')), 'null')
+          : _.zipObject([_.get(chartData, 'Apttus_Config2__PriceType__c')], _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key => _.get(chartData, 'total_records'))),
+        doughnutChartData: _.isArray(chartData)
+          ? _.omit(_.mapValues(_.groupBy(chartData, 'Apttus_Config2__PriceType__c'), s => _.sumBy(s, 'SUM_NetPrice')), 'null')
+          : _.zipObject([_.get(chartData, 'Apttus_Config2__PriceType__c')], _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key => _.get(chartData, 'SUM_NetPrice'))),
+        assetActionValue: !_.isEmpty(_.get(this.route, 'snapshot.queryParams')) ? decodeURIComponent(_.get(this.route, 'snapshot.queryParams.action')) : 'All',
+        advancedFilterList: this.advancedFilters
+      } as AssetListView);
+      this.preselectItemsInGroups = false;
     });
+  }
+  /**
+   * Event handler for when the advanced filter changes.
+   * @param event The event that was fired.
+   */
+  handleAdvancedFilterChange(event: any) {
+    this.advancedFilters = event;
+    this.loadView();
   }
   /**
    * Event handler for when the days to renew filter is changed.
    * @param event The Event that was fired.
    */
-  onRenewalChange(event: ACondition) {
-    if (this.renewFilter) _.remove(this.conditions, this.renewFilter);
-    if (event.value !== null) {
-      this.renewFilter = event;
-      this.conditions.push(this.renewFilter);
-    }
-    this.page = 1;
-    this.getResults();
+  onRenewalChange(event: AFilter) {
+    this.renewFilter = event;
+    this.loadView();
   }
   /**
    * Event handler for when price type filter is changed.
    * @param event Event object that was fired.
    */
-  onPriceTypeChange(event: any) {
-    if (event) {
-      this.priceTypeFilters.addFilter(event);
-    }
-    else this.priceTypeFilters.removeFilters();
-    this.page = 1;
-    this.getResults();
+  onPriceTypeChange(event: AFilter) {
+    this.priceTypeFilter = event;
+    this.loadView();
   }
   /**
-   * Event handler for when search input is changed.
+   * Event handler for when the asset action filter changes.
+   * @param event The event that was fired.
    */
-  handleSearchChange() {
-    this.getResults();
+  onAssetActionChange(event: string) {
+    this.assetActionFilter = this.assetActionMap[event];
+    this.loadView();
   }
   /**
-   * Event handler for the pagination component when the page is changed.
-   * @param evt Event object that was fired.
+   * Event handler for when the product family filter changes.
+   * @param event The event that was fired.
    */
-  onPage(evt) {
-    this.page = evt.page;
-    if (this.showingFullList) {
-      this.getResults();
-    }
-    else {
-      this.selectedPageItems = this.getPageForSelectedList();
-    }
+  onProductFamilyChange(event: AFilter) {
+    this.productFamilyFilter = event;
+    this.loadView();
   }
   /**
-   * Event handler for showing only the selected assets in the asset list.
-   * @param event Array of asset line items that was fired on this event.
+   * Get all the currently applied filters.
    */
-  handleSelectedAmountClick(event: Array<AssetLineItemExtended>) {
-    this.selectedTotalItems = [];
-    this.assetService.getAssetLineItemForAccount(null, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option')]).pipe(take(1)).subscribe(assets => {
-      event.forEach(asset => {
-        this.selectedTotalItems.push({
-          parent: asset,
-          children: assets.filter(lineItem => {
-            return (!lineItem.IsPrimaryLine && lineItem.BundleAssetId === asset.Id);
-          })
-        });
-      });
-      this.selectedPageItems = this.getPageForSelectedList();
-      this.showingFullList = false;
-    });
-  }
-  /**
-   * Event handler for showing the full list of assets both selected and not selected.
-   */
-  handleFullListClick() {
-    this.showingFullList = true;
-    this.getResults();
-  }
-  /**
-   * Event handler for when the input select component changes. Adds or removes an ACondition to the conditions list based on what the event value is.
-   * @param event Event objec that was fired.
-   */
-  handlePicklistChange(event: any) {
-    if (this.productFamilyFilter) _.remove(this.conditions, this.productFamilyFilter);
-    if (event.length > 0) {
-      let values = [];
-      event.forEach(item => values.push(item));
-      this.productFamilyFilter = new ACondition(this.fieldFilterServiceContext.type, 'Product.Family', 'In', values);
-      this.conditions.push(this.productFamilyFilter);
-    }
-    this.getResults();
+  private getFilters() {
+    return _.concat(this.defaultFilters, this.advancedFilters, this.renewFilter, this.priceTypeFilter, this.assetActionFilter, this.productFamilyFilter);
   }
 
- /**
-  * @ignore
- */
-  ngOnDestroy() {
-    this.assetSelectionService.clearSelection();
-    this.subs.forEach(sub => sub.unsubscribe());
-  }
-  /**
-   * Gets the array of selected assets for the current page.
-   * @returns Selected assets for the current page.
-   * @ignore
-   */
-  private getPageForSelectedList(): Array<AccordionRows> {
-    return this.selectedTotalItems.slice(this.pageSize * (this.page - 1), this.pageSize * this.page);
-  }
-
+}
+/** @ignore */
+interface AssetListView {
+  tableOptions: TableOptions;
+  assetType: ClassType<AObject>;
+  colorPalette: Array<string>;
+  barChartData: Object;
+  doughnutChartData: Object;
+  assetActionValue?: string;
+  advancedFilterList?: Array<AFilter>;
 }

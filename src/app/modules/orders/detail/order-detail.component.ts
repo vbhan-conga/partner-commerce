@@ -57,7 +57,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
   comments_loader: boolean = false;
   lineItem_loader: boolean = false;
   lookupOptions: LookupOptions = {
-    primaryTextField: 'Name'
+    primaryTextField: 'Name',
+    secondaryTextField: 'Email'
   };
 
   private subscriptions: Subscription[] = [];
@@ -72,7 +73,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
     this.order$ = this.activatedRoute.params
       .pipe(
         filter(params => _.get(params, 'id') != null),
-        flatMap(params => this.orderService.get([_.get(params, 'id')])),
+        flatMap(params => this.orderService.query({
+          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
+          waitForExpansion: false
+        })),
         map(orderList => _.get(orderList, '[0]'))
       );
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -82,7 +86,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
           this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
         if (order.Status === 'Fulfilled' && _.indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
           this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
-        return this.lineItemService.groupItems(order.OrderLineItems);
+        return LineItemService.groupItems(order.OrderLineItems);
       })
     );
     this.subscriptions.push(this.accountService.getCurrentAccount().subscribe(account => {

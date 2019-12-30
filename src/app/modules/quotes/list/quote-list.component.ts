@@ -110,7 +110,7 @@ export class QuoteListComponent implements OnInit {
     this.filterList$.next(event);
   }
 }
-
+/** @ignore */
 export interface QuoteListView{
   tableOptions: TableOptions;
   total: number;
