@@ -1,4 +1,5 @@
-import { Configuration } from '@apttus/core';
+import {Configuration} from '@apttus/core';
+
 export const environment: Configuration = {
   production: false,
   defaultImageSrc: './assets/images/default.png',
