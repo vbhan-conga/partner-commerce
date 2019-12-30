@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginGuard, GuestGuard } from '@apttus/ecommerce';
+import { environment } from '../environments/environment';
 import { MainComponent } from './main.component';
 import { RouteGuard } from './services/route.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
@@ -77,7 +78,7 @@ import { ConstraintRuleGuard } from './services/constraint-rule.guard';
         ]
       }
     ], {
-      useHash: false,
+      useHash: environment.hashRouting,
       scrollPositionRestoration: 'enabled'
     })
   ],

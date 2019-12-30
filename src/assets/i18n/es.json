@@ -1,17 +1,23 @@
 {
     "ERROR": {
-        "MIN-OPTIONS": "es_MX You must select at least {{value}} options.",
-        "MAX-OPTIONS": "es_MX You can select no more than {{value}} options.",
-        "MIN-TOTAL-QUANTITY": "es_MX You must have a total of {{value}} options.",
-        "MAX-TOTAL-QUANTITY": "es_MX You can select no more than a total of {{value}} options.",
+        "OPTION_GROUP" : {
+            "ERROR" : "es_MX Option Group Errors",
+            "MIN_OPTIONS": "es_MX You must select at least {{value}} options.",
+            "MAX_OPTIONS": "es_MX You can select no more than {{value}} options.",
+            "MIN_TOTAL_QUANTITY": "es_MX The total minimum quantity is {{value}}.",
+            "MAX_TOTAL_QUANTITY": "es_MX The total maximum quantity is {{value}}."
+        },
         "UNABLE_TO_RENEW": "es_MX An error occurred renewing this asset(s)",
-        "MAX_OPTION_ERROR" : "es_MX Select upto {{value}} option(s)",
-        "MIN_OPTION_ERROR" : "es_MX Select {{value}} option(s)",
         "CART": {
             "TOO_MANY_ATTEMPTS": "es_MX An item in your cart could not be priced. Please try removing an item / items and try again.",
             "SERVER_ERROR": "es_MX Oops something went wrong.",
             "PRICE_CHANGE": "es_MX The price of your cart has been updated",
-            "PRICE_CHANGE_TOASTR_TITLE": "es_MX Price Update"
+            "PRICE_CHANGE_TOASTR_TITLE": "es_MX Price Update",
+            "VALIDATE" : "es_MX There are errors in your cart.",
+            "CONSTRAINT_RULES": "es_MX An item in your cart violated 1 or more constraint rules."
+        },
+        "CART_ITEM": {
+            "VALIDATE": "es_MX The are errors with this cart item."
         },
         "CONSTRAINT_RULE": {
             "ASSOCIATE_AND_APPLY": "es_MX An error ocurred getting the constraint rules for your cart."
@@ -20,7 +26,8 @@
             "INVALID_TOASTR_MESSAGE": "es_MX Promotion {{name}} is not applied.",
             "INVALID_TOASTR_TITLE": "es_MX Promotion Not Applied"
         },
-        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error"
+        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error",
+        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1"
     },
     "SUCCESS": {
         "TITLE": "es_MX Success",
@@ -77,7 +84,8 @@
             "ORDER_ID": "es_MX Order Id",
             "ORDER_DATE": "es_MX Order Date",
             "ORDER_STATUS": "es_MX Order Status",
-            "PRODUCT_CONFIG": "es_MX Product Configuration"
+            "PRODUCT_CONFIG": "es_MX Product Configuration",
+            "ORDERS_BY_STATUS": "es_MX Orders by Status"
         },
         "CART_LIST": {
             "CREATE_NEW": "es_MX New Cart",
@@ -213,6 +221,7 @@
         "DELETE": "es_MX Delete",
         "EDIT": "es_MX Edit",
         "CANCEL": "es_MX Cancel",
+        "UPDATE": "es_MX Update",
         "SAVE": "es_MX Save",
         "USERNAME": "es_MX Username",
         "PRODUCT_CATALOG": "es_MX Product Catalog",
@@ -272,6 +281,8 @@
         "CREATE_QUOTE": "es_MX Create Quote",
         "MANAGE_CART": "es_MX Manage Cart",
         "CHANGE_SHIPPING_ADDRESS":"es_MX Change Shipping Address",
+        "ADD_NEW_COMMENT": "es_MX Add new comment",
+        "NO_COMMENTS_TO_DISPLAY": "es_MX There has not been any comments yet",
         "CHANGE_BILLING_ADDRESS":"es_MX Change Billing Address",
         "EDIT_LINE_ITEMS": "es_MX Edit Line Items",
         "PLACE_ORDER": "es_MX CREATE ORDER",
@@ -281,7 +292,21 @@
         "ADD_COMMENT": "es_MX Add Comment",
         "CONFIRM_CHANGES": "es_MX Confirm Changes",
         "ADD_PRODUCTS": "es_MX Add Products",
-        "ADD_INSTALLED_PRODUCTS": "es_MX Add Installed Products"
+        "ADD_INSTALLED_PRODUCTS": "es_MX Add Installed Products",
+        "NO_DATA": "es_MX n/a",
+        "MY_ORDERS": "es_MX My Orders",
+        "MY_QUOTES": "es_MX My Quotes",
+        "MY_CARTS": "es_MX My Carts",
+        "INSTALLED_PRODUCTS": "es_MX Installed Products",
+        "MY_ACCOUNT_SETTINGS": "es_MX My Account Settings",
+        "ACCOUNT": "es_MX Account",
+        "ORDER_ID": "es_MX Order ID",
+        "TOTAL_ORDERS": "es_MX Total Orders",
+        "ORDER_AMOUNT_BY_STATUS": "es_MX ORDER AMOUNT BY STATUS",
+        "CC": "es_MX CC",
+        "VALID_EMAIL": "es_MX you@example.com",
+        "INVALID_EMAIL_ERROR": "es_MX Email must be a valid email address",
+        "CHECKOUT": "es_MX Checkout"
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -386,9 +411,20 @@
         "PAYMENT": {
             "PAYMENT_TITLE": "es_MX PAYMENT METHOD",
             "CREDITCARD": "es_MX Add Credit/Debit card",
+            "PAYMENT_SubTitle": "es_MX Please choose your payment method",
+            "PAYMENT_INPUT": "es_MX Enter Credit/Debit Card Information",
+            "PAYMENT_INPUTSAVE": "es_MX Save this card information for future payment",
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE_SubTitle": "es_MX You will be notified the order details to your email address {{emailAddress}}",
             "DEBITCARD": "es_MX Debit card",
             "PONUMBER": "es_MX PO Number",
-            "PAYMENT_SubTitle": "es_MX Please choose your payment method"
+            "PAYNOW": "es_MX Pay Now",
+            "Invoice_Me_Later": "es_MX Invoice Me Later",     
+            "USE_NEW_METHOD": "es_MX Use new credit/debit card",                        
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "es_MX Your payment was successful and order has been placed.",
+            "ORDER_CONFIRMATION_MESSAGE": "es_MX Your order has been placed successfully!",
+            "ORDER_NUMBER": "es_MX Order Number :",
+            "ORDER_SUBTITLE": "es_MX Please make the payment to complete the checkout process.",
+            "ENTER_PO_NUMBER": "es_MX Enter a purchase order number..."
         },
         "SUBMIT_ORDER": "es_MX Submit Order",
         "CONTINUE_SHIPPING": "es_MX Continue Shopping",
@@ -412,7 +448,7 @@
         "LOGIN_FOR_FASTER_CHECKOUT": "es_MX for a faster checkout experience and to get access on additional features, or you can continue as a guest.",
         "BILLING_AND_SHIPPING_INFORMATION": "es_MX BILLING & SHIPPING INFORMATION",
         "ENTER_SHIPPING_ADDRESS": "es_MX Please enter your shipping address.",
-        "SUCCESSFUL_ORDER_CREATION_MESSAGE": "Your order has been placed. You will be notified the order details to your email address {{emailAddress}}",
+        "SUCCESSFUL_ORDER_CREATION_MESSAGE": "es_MX Your order has been placed. You will be notified the order details to your email address {{emailAddress}}",
         "CREATE_ORDER": "es_MX Create Order"
     },
     "PAYMENT_CARD": {
@@ -571,6 +607,9 @@
             "ONE_TIME": "es_MX One Time",
             "RECURRING": "es_MX Recurring",
             "USAGE": "es_MX Usage"
+        },
+        "ASSET_ACTION_FILTER": {
+            "ASSET_ACTION": "es_MX Asset Action"
         }
     },
     "MINI_CART": {
@@ -612,6 +651,7 @@
         "PRODUCT_ID": "es_MX Product ID: {{productCode}}"
     },
     "DETAILS": {
+        "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
         "ORDER_SUMMARY": "es_MX ORDER SUMMARY",
         "LINE_ITEMS": "es_MX LINE ITEMS",
         "COMMENTS": "es_MX COMMENTS",
@@ -621,12 +661,14 @@
         "SUCCESSFUL_QUOTE_ACCEPTANCE_MESSAGE": "es_MX You have successfully accepted the quote ({{quoteName}}) and the order has been generated for the same.",
         "GENERATED_ORDER_NUMBER": "es_MX Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "es_MX VIEW YOUR ORDER",
-        "GENERATE": "es_MX Generate Order",
+        "GENERATE_ORDER": "es_MX Generate Order",
+        "GENERATE": "es_MX Generate",
         "TEMPLATE": "es_MX Template",
         "FILE_FORMAT": "es_MX File Format",
         "PRESENT": "es_MX PRESENT",
         "PRESENT_ORDER": "es_MX Present Order",
-        "SEND_TO": "es_MX Send Order To"
+        "SEND_TO": "es_MX Send Order To",
+        "MISSING_REQ_FIELDS": "es_MX Some mandatory informations are missing in the order details. Please fill to proceed."
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "es_MX Must select asset(s) to perform batch actions.",
@@ -642,7 +684,26 @@
         "SELECT_MORE_PRODUCTS_TO_TERMINATE_TOOLTIP": "es_MX Select more products to terminate."
     },
     "PRICE_SUMMARY": {
-        "TAX": "es_MX Tax ({{taxPercent}}%)"
+        "TAX": "es_MX Tax ({{taxPercent}}%)",
+        "PAYMENT_STATUS": "es_MX Payment Status"
+    },
+    "PAYMENT_METHOD_LABELS": {
+        "SUCCESS_TITLE": "es_MX Card Added",
+        "SUCCESS_MSG": "es_MX Your new Credit/Debit card is added.",
+        "ERROR_TITLE": "es_MX Card Not Added",
+        "ERROR_MSG": "es_MX Card not added due to following reason: ",
+        "DELETE_TITLE": "Card Deleted",
+        "DELETE_MSG": "es_MX Your Credit/Debit card is deleted.",
+        "Detail_Item1":"es_MX Your Saved Cards",
+        "Detail_Item2":"es_MX Name on card",
+        "Detail_Item3":"es_MX Expires on",        
+        "Detail_Ending":"es_MX ending",   
+        "DEFAULT_TITLE":"es_MX Default Card",   
+        "DEFAULT_MSG":"es_MX Cannot delete default method",
+        "Expired_MSG"   :"es_MX Expired",
+        "PAYMENT_SUCCESS_TITLE": "es_MX Payment Success",
+        "PAYMENT_SUCCESS_MESSAGE": "es_MX Thank you for your Payment, your transaction is successful.",
+        "MAKE_PAYMENT": "es_MX Make Payment"
     },
     "TAX": {
         "TAX_SUMMARY": "es_MX Tax Summary",
@@ -658,5 +719,20 @@
         "ORDER_CONFIRMATION_FAILURE": "es_MX Order could not be confirmed. Please try again.",
         "CART_CREATION_TOASTR_MESSAGE": "es_MX A new cart has been created.",
         "PRESENT": "es_MX Present"
+    },
+    "TABLE" : {
+        "SEARCH" : "es_MX Search",
+        "SELECTED" : "es_MX Selected",
+        "OF": "es_MX of",
+        "PER_PAGE": "es_MX per page",
+        "NO_DATA_TO_DISPLAY": "es_MX No data to display"
+    },
+    "AOBJECTS": {
+        "PROPOSALS": "es_MX Proposals",
+        "ORDERS": "es_MX Orders",
+        "CARTS": "es_MX Carts",
+        "PROPOSAL": "es_MX Proposal",
+        "ORDER": "es_MX Order",
+        "CART": "es_MX Cart"
     }
 }

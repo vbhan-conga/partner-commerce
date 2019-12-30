@@ -18,7 +18,7 @@
  * BROWSER POLYFILLS
  */
 
-/** IE9, IE10 and IE11 requires all of the following polyfills. **/
+// IE9, IE10 and IE11 requires all of the following polyfills. //
 import 'core-js/es/symbol';
 import 'core-js/es/object';
 import 'core-js/es/function';
@@ -40,8 +40,10 @@ import 'classlist.js';  // Run `npm install --save classlist.js`.
 /** IE10 and IE11 requires the following for the Reflect API. */
 import 'core-js/es/reflect';
 
-/** Evergreen browsers require these. **/
-// Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
+/**
+ * Evergreen browsers require these.
+ *  Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
+ */
 import 'core-js/es/reflect';
 
 import 'core-js/es/object';

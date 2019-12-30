@@ -31,7 +31,7 @@ export class RouteGuard implements CanActivate {
         return query;
     }
 }
-
+/** @ignore */
 export interface Params{
     fromFrontdoor: string;
     retURL: string;
