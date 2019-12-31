@@ -23,6 +23,7 @@ export const environment: Configuration = {
   debounceTime: 1000,
   useIndexedDB: true,
   expandDepth: 7,
+  proxy: 'https://apttus-proxy.herokuapp.com',
   hashRouting: false,
 
   // Salesforce environment variables
