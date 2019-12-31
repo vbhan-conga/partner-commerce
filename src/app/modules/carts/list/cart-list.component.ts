@@ -1,12 +1,14 @@
-import { Component, OnInit, TemplateRef, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { ACondition } from '@apttus/core';
 import { CartService, Cart, PriceService } from '@apttus/ecommerce';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
-import { take, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
+import { TableOptions, FilterOptions, TableAction } from '@apttus/elements';
+import { Operator } from '@apttus/core';
 
 /**
  * Cart list Component loads and shows all the carts for logged in user.
@@ -28,6 +30,8 @@ export class CartListComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   cart: Cart;
   cartAggregate: any;
+  cartAggregate$: Observable<any>;
+  currentCart: Cart;
   /**
    * Current page used by the pagination component. Default is 1.
    */
@@ -36,14 +40,69 @@ export class CartListComponent implements OnInit, OnDestroy {
    * Number of records per page used by the pagination component. Default is 10.
    */
   limit: number = 10;
-  /**
-   * Control over button's text/label of pagination component for Multi-Language Support
-   */
-  paginationButtonLabels: any = {
-    first: '',
-    previous: '',
-    next: '',
-    last: ''
+  /** @ignore */
+  type = Cart;
+
+  tableOptions: TableOptions = {
+    columns: [
+      {
+        prop: 'Name'
+      },
+      {
+        prop: 'CreatedDate'
+      },
+      {
+        prop: 'NumberOfItems'
+      },
+      {
+        prop: 'IsActive',
+        label: 'Is Active',
+        value:(record: Cart) => this.isCartActive(this.currentCart, record) ? of('Yes') : of('No')
+      },
+      {
+        prop: 'TotalAmount',
+        label: 'Total Amount',
+        value:(record: Cart) => this.getCartTotal(record)
+      },
+      {
+        prop: 'Status'
+      }
+    ],
+    actions: [
+      {
+        enabled: true,
+        icon: 'fa-check',
+        massAction: false,
+        label: 'Set Active',
+        theme: 'primary',
+        validate:(record: Cart) => this.canActivate(this.currentCart, record),
+        action:(recordList: Array<Cart>) => _.forEach(recordList, (cart)=> this.setCartActive(cart))
+      } as TableAction,
+      {
+        enabled: true,
+        icon: 'fa-trash',
+        massAction: true,
+        label: 'Delete',
+        theme: 'danger',
+        validate:(record: Cart) => this.canDelete(record),
+        action:(recordList: Array<Cart>) => _.forEach(recordList, (cart)=> this.deleteCart(cart))
+      } as TableAction
+    ],
+    highlightRow:(record: Cart) => of(this.isCartActive(this.currentCart, record))
+  };
+
+  filterOptions: FilterOptions = {
+    visibleFields: [
+      'CreatedDate'
+    ],
+    visibleOperators: [
+      Operator.EQUAL,
+      Operator.LESS_THAN,
+      Operator.GREATER_THAN,
+      Operator.GREATER_EQUAL,
+      Operator.LESS_EQUAL,
+      Operator.IN
+    ]
   };
 
   private subscriptions: Subscription[] = [];
@@ -51,32 +110,16 @@ export class CartListComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  constructor(private cartService: CartService, public priceService: PriceService, private modalService: BsModalService, private ngZone: NgZone, private translateService: TranslateService) { }
-
+  constructor(private cartService: CartService, public priceService: PriceService,
+      private modalService: BsModalService, private translateService: TranslateService) { }
   /**
    * @ignore
    */
   ngOnInit() {
     this.currentCart$ = this.cartService.getMyCart()
-      .pipe(
-        map(cart => (_.isNil(cart)) ? new Cart() : cart)
-      );
-    this.subscriptions.push(this.cartService.query({conditions: [new ACondition(Cart, 'Id', 'NotNull', null)], aggregate: true}).subscribe(res => this.cartAggregate = res));
-    this.loadCarts(this.currentPage);
-    this.translateService.stream('PAGINATION').subscribe((val: string) => {
-      this.paginationButtonLabels.first = val['FIRST'];
-      this.paginationButtonLabels.previous = val['PREVIOUS'];
-      this.paginationButtonLabels.next = val['NEXT'];
-      this.paginationButtonLabels.last = val['LAST'];
-    });
-  }
-
-  /**
-   * It loads all the cart of logged in user for given page number.
-   * @param page Page number to load cart list.
-   */
-  loadCarts(page) {
-    this.cartList$ = this.cartService.getMyCarts(this.limit, page);
+      .pipe(map(cart => (_.isNil(cart)) ? new Cart() : cart));
+    this.subscriptions.push(this.currentCart$.subscribe((currCart) => this.currentCart = currCart));
+    this.cartAggregate$ = this.cartService.query({ conditions: [new ACondition(Cart, 'Id', 'NotNull', null)], aggregate: true });
   }
 
   /**
@@ -94,13 +137,10 @@ export class CartListComponent implements OnInit, OnDestroy {
    * @param cart Cart to delete.
    */
   deleteCart(cart: Cart) {
-    cart._metadata = { state: 'processing' };
-    this.cartService.deleteCart(cart).subscribe(
-      res => { },
-      err => {
-        _.set(cart, '_metadata.state', 'ready');
-      }
-    );
+    this.subscriptions.push(this.cartService.deleteCart(cart).subscribe(
+      res => { _.set(cart, '_metadata.state', 'ready'); },
+      err => { _.set(cart, '_metadata.state', 'ready'); }
+    ));
   }
 
   /**
@@ -108,15 +148,10 @@ export class CartListComponent implements OnInit, OnDestroy {
    * @param cart Cart that needs to be Active.
    */
   setCartActive(cart: Cart) {
-    _.set(cart, '_metadata.state', 'processing');
-    this.cartService.setCartActive(cart).subscribe(
-      res => {
-        _.set(cart, '_metadata.state', 'ready');
-      },
-      err => {
-        _.set(cart, '_metadata.state', 'ready');
-      }
-    );
+    this.subscriptions.push(this.cartService.setCartActive(cart).subscribe(
+      res => { _.set(cart, '_metadata.state', 'ready'); },
+      err => { _.set(cart, '_metadata.state', 'ready'); }
+    ));
   }
 
   /**
@@ -137,6 +172,26 @@ export class CartListComponent implements OnInit, OnDestroy {
         });
       }
     );
+  }
+
+  /**
+   * This function returns Observable of NetPrice
+   * @param currentCart Current cart object from where we need to fetch cart total.
+   */
+  getCartTotal(currentCart: Cart) {
+    return this.priceService.getCartPrice(currentCart).pipe(mergeMap((price) => { return price.netPrice$; }));
+  }
+  /**@ignore */
+  canDelete(cartToDelete: Cart) {
+    return (cartToDelete.Status !== 'Finalized');
+  }
+  /**@ignore */
+  canActivate(currentActiveCart: Cart, rowCart: Cart) {
+    return (rowCart.Status !== 'Finalized') && (currentActiveCart.Id !== rowCart.Id);
+  }
+  /**@ignore */
+  isCartActive(currentActiveCart: Cart, rowCart: Cart) {
+    return (currentActiveCart.Id === rowCart.Id);
   }
 
   ngOnDestroy() {
