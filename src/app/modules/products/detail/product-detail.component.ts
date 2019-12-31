@@ -20,17 +20,17 @@ export class ProductDetailComponent implements OnInit {
   /**
    * Flag to detect if their is change in product configuration.
    */
-  configurationChanged = false;
+  configurationChanged: boolean = false;
 
-  quantity = 1;
+  quantity: number = 1;
   /**
    * Flag used in update configuration method
    */
-  saving = false;
+  saving: boolean = false;
   /**
    * Default term is set to 1.
    */
-  term = 1;
+  term: number = 1;
 
   /** @ignore */
   productCode: string;
@@ -49,9 +49,7 @@ export class ProductDetailComponent implements OnInit {
    */
   onConfigurationChange(result: any) {
     this.cartItemList = _.first(result);
-    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) {
-      this.configurationChanged = true;
-    }
+    if (_.get(result[1],'optionChanged') || _.get(result[1],'attributeChanged')) this.configurationChanged = true;
   }
 
   /**
@@ -68,13 +66,8 @@ export class ProductDetailComponent implements OnInit {
   onAddToCart(cartItems: Array<CartItem>): void {
     this.configurationChanged = false;
     const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option')) && _.get(i, 'LineNumber') === _.get(i, 'PrimaryLineNumber'));
-    if (!_.isNil(primaryItem)) {
+    if (!_.isNil(primaryItem))
       this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
-    }
-
-    if (this.quantity <= 0) {
-      this.quantity = 1;
-    }
   }
 
   /**

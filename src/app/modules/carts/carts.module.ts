@@ -18,7 +18,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LaddaModule } from 'angular2-ladda';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap';
-import { TableModule, ChartModule } from '@apttus/elements';
 
 @NgModule({
   declarations: [CartDetailComponent, CartListComponent, CartSummaryComponent, CartTableComponent],
@@ -53,9 +52,7 @@ import { TableModule, ChartModule } from '@apttus/elements';
     LaddaModule,
     InputFieldModule,
     PaginationModule.forRoot(),
-    AlertModule,
-    TableModule,
-    ChartModule
+    AlertModule
   ]
 })
 export class CartsModule { }

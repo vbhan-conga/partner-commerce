@@ -1,6 +1,6 @@
 {
-  "name": "apttus.ui.pcom.rc",
-  "version": "1990.0.0",
+  "name": "partner-commerce-base-template",
+  "version": "1903.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
