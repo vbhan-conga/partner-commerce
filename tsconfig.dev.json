@@ -17,164 +17,26 @@
       "dom"
     ],
     "paths": {
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ],
-      "rxjs": [
-        "./node_modules/rxjs"
-      ],
-      "rxjs/*": [
-        "./node_modules/rxjs/*"
-      ],
-      "rxjs-compat": [
-        "./node_modules/rxjs-compat"
-      ],
-      "@ngx-translate/core": [
-        "./node_modules/@ngx-translate/core"
-      ],
-      "ngx-scrollbar": [
-        "./node_modules/ngx-scrollbar"
-      ],
-      "ngx-scrollbar/*": [
-        "./node_modules/ngx-scrollbar/*"
-      ],
-      "ngx-bootstrap": [
-        "./node_modules/ngx-bootstrap"
-      ],
-      "ngx-bootstrap/*": [
-        "./node_modules/ngx-bootstrap/*"
-      ],
-      "angular2-ladda": [
-        "./node_modules/angular2-ladda"
-      ],
-      "ladda": [
-        "./node_modules/ladda"
-      ],
-      "bootstrap": [
-        "./node_modules/bootstrap"
-      ],
-      "open-iconic": [
-        "./node_modules/open-iconic"
-      ],
-      "popper.js": [
-        "./node_modules/popper.js"
-      ],
-      "ngx-gallery": [
-        "./node_modules/ngx-gallery"
-      ],
-      "jquery": [
-        "./node_modules/jquery"
-      ],
-      "moment": [
-        "./node_modules/moment"
-      ],
-      "ngx-moment": [
-        "./node_modules/ngx-moment"
-      ],
-      "ngx-toastr": [
-        "./node_modules/ngx-toastr"
-      ],
-      "class-transformer": [
-        "./node_modules/class-transformer"
-      ],
-      "class-transformer/*": [
-        "./node_modules/class-transformer/*"
-      ],
-      "reflect-metadata": [
-        "./node_modules/reflect-metadata"
-      ],
-      "animate.css": [
-        "./node_modules/animate.css"
-      ],
-      "archiver": [
-        "./node_modules/archiver"
-      ],
-      "array-to-tree": [
-        "./node_modules/array-to-tree"
-      ],
-      "arrive": [
-        "./node_modules/arrive"
-      ],
-      "bootstrap-material-design": [
-        "./node_modules/bootstrap-material-design"
-      ],
-      "chart.js": [
-        "./node_modules/chart.js"
-      ],
-      "classlist.js": [
-        "./node_modules/classlist.js"
-      ],
-      "core-js": [
-        "./node_modules/core-js"
-      ],
-      "currency-codes": [
-        "./node_modules/currency-codes"
-      ],
-      "fast-deep-equal": [
-        "./node_modules/fast-deep-equal"
-      ],
-      "fuse.js": [
-        "./node_modules/fuse.js"
-      ],
-      "hammerjs": [
-        "./node_modules/hammerjs"
-      ],
-      "inquirer": [
-        "./node_modules/inquirer"
-      ],
-      "lodash-decorators": [
-        "./node_modules/lodash-decorators"
-      ],
-      "ng2-charts": [
-        "./node_modules/ng2-charts"
-      ],
-      "ng5-slider": [
-        "./node_modules/ng5-slider"
-      ],
-      "ngx-indexed-db": [
-        "./node_modules/ngx-indexed-db"
-      ],
-      "lodash": [
-        "./node_modules/lodash"
-      ],
-      "@ng-select": [
-        "./node_modules/@ng-select"
-      ],
-      "@ng-select/*": [
-        "./node_modules/@ng-select/*"
-      ],
-      "locale-currency": [
-        "./node_modules/locale-currency"
-      ],
-      "raven-js": [
-        "./node_modules/raven-js"
-      ],
-      "jsforce/*": [
-        "./node_modules/jsforce/*"
-      ],
-      "querystring": [
-        "./node_modules/querystring"
-      ],
-      "xml-js": [
-        "./node_modules/xml-js"
-      ],
       "@apttus/core": [
-        "../ecommerce-core/resources/projects/apttus/core/src/public_api.ts"
+        "../core/resources/projects/apttus/core/src/public_api.ts"
       ],
       "@apttus/core/*": [
-        "../ecommerce-core/resources/projects/apttus/core/src/public_api.ts"
+        "../core/resources/projects/apttus/core/src/public_api.ts"
       ],
       "@apttus/ecommerce": [
-        "../ecommerce-core/resources/projects/apttus/ecommerce/src/public_api.ts"
+        "../core/resources/projects/apttus/ecommerce/src/public_api.ts"
       ],
       "@apttus/ecommerce/*": [
-        "../ecommerce-core/resources/projects/apttus/ecommerce/src/public_api.ts"
+        "../core/resources/projects/apttus/ecommerce/src/public_api.ts"
       ],
       "@apttus/elements": [
-        "../ecommerce-core/resources/projects/apttus/elements/src/public_api.ts"
+        "../core/resources/projects/apttus/elements/src/public_api.ts"
       ],
       "@apttus/elements/*": [
-        "../ecommerce-core/resources/projects/apttus/elements/src/public_api.ts"
+        "../core/resources/projects/apttus/elements/src/public_api.ts"
+      ],
+      "*": [
+        "./node_modules/*"
       ]
     }
   }
