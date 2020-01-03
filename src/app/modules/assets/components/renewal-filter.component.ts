@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { ACondition, SimpleDate } from '@apttus/core';
+import { ACondition, SimpleDate, AFilter } from '@apttus/core';
 import { AssetLineItem } from '@apttus/ecommerce';
 /**
  * Renewal filter component is used to create an asset filter on the period until renewal.
@@ -102,19 +102,26 @@ import { AssetLineItem } from '@apttus/ecommerce';
 })
 export class RenewalFilterComponent {
   /**
+   * Event emitter for the current value of this control.
+   */
+  @Output() value: EventEmitter<AFilter> = new EventEmitter<AFilter>();
+  /**
    * Map of checkbox values to AConditions used for the event emitter.
    */
   private eventMap = {
-    'all': new ACondition(AssetLineItem, 'Id', 'NotEqual', null),
-    'less30': new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(30)),
-    '30-60': new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(60)),
-    '60-90': new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(90)),
-    'more90': new ACondition(AssetLineItem, 'EndDate', 'GreaterThan', this.dateGetter(90))
+    'all': new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'Id', 'NotEqual', null)]),
+    'less30': new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(30))]),
+    '30-60': new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(60))]),
+    '60-90': new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'EndDate', 'LessEqual', this.dateGetter(90))]),
+    'more90': new AFilter(AssetLineItem, [new ACondition(AssetLineItem, 'EndDate', 'GreaterThan', this.dateGetter(90))])
   };
   /**
-   * Event emitter for the current value of this control.
+   * Event handler for when the checkbox value changes.
+   * @param event Event that was fired.
    */
-  @Output() value: EventEmitter<ACondition> = new EventEmitter<ACondition>();
+  handleCheckChange(event: any) {
+    this.value.emit(this.eventMap[event.target.value]);
+  }
   /**
    * Gets SimpleDate objects with the value set to today plus the given number of days.
    * @param days Number of days from today to get date.
@@ -122,14 +129,8 @@ export class RenewalFilterComponent {
   private dateGetter(days: number): SimpleDate {
     let today = new Date();
     today.setDate(today.getDate() + days);
-    return new SimpleDate(today);
-  }
-  /**
-   * Event handler for when the checkbox value changes.
-   * @param event Event that was fired.
-   */
-  handleCheckChange(event: any) {
-    this.value.emit(this.eventMap[event.target.value]);
+    let date = new SimpleDate(today);
+    return date;
   }
 
 }

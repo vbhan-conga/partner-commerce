@@ -11,7 +11,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
 
-import { MiniProfileModule, MiniCartModule, ConstraintIconModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule } from '@apttus/elements';
+import { MiniProfileModule, MiniCartModule, ConstraintIconModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule } from '@apttus/elements';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
@@ -39,7 +39,8 @@ import { ProgressComponent } from './progress/progress.component';
     ToastrModule.forRoot({ onActivateTick: true }),
     OutputFieldModule,
     BreadcrumbModule,
-    ButtonModule
+    ButtonModule,
+    DirectivesModule
   ],
   exports: [
     HeaderComponent,

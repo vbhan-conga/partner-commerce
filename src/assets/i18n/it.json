@@ -602,6 +602,9 @@
             "ONE_TIME": "Una Volta",
             "RECURRING": "Ricorrenti",
             "USAGE": "Utilizzo"
+        },
+        "ASSET_ACTION_FILTER": {
+            "ASSET_ACTION": "Azione Patrimoniale"
         }
     },
     "MINI_CART": {
@@ -721,5 +724,12 @@
         "ORDER_CONFIRMATION_FAILURE": "L'ordine non può essere confermato. Per favore riprova.",
         "CART_CREATION_TOASTR_MESSAGE": "È stato creato un nuovo carrello.",
         "PRESENT": "Presente"
+    },
+    "TABLE" : {
+        "SEARCH" : "Ricerca",
+        "SELECTED" : "Selezionato",
+        "OF": "Di",
+        "PER_PAGE": "Per pagina",
+        "NO_DATA_TO_DISPLAY": "Nessun dato da visualizzare"
     }
 }

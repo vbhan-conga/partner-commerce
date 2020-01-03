@@ -24,26 +24,26 @@ export class QuoteDetailComponent implements OnInit {
   hasSizeError: boolean;
   file: File;
   uploadFileList: any;
-  edit_loader: boolean = false;
-  accept_loader: boolean = false;
-  comments_loader: boolean = false;
-  attachments_loader: boolean = false;
+  edit_loader = false;
+  accept_loader = false;
+  comments_loader = false;
+  attachments_loader = false;
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private quoteService: QuoteService,
-    private noteService: NoteService,
-    private exceptionService: ExceptionService,
-    private modalService: BsModalService,
-    private orderService: OrderService,
-    private attachmentService: AttachmentService,
-    private quoteItemService: QuoteLineItemService,
-    private productInformationService: ProductInformationService,
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private userService: UserService) { }
+              private router: Router,
+              private quoteService: QuoteService,
+              private noteService: NoteService,
+              private exceptionService: ExceptionService,
+              private modalService: BsModalService,
+              private orderService: OrderService,
+              private attachmentService: AttachmentService,
+              private quoteItemService: QuoteLineItemService,
+              private productInformationService: ProductInformationService,
+              private cdr: ChangeDetectorRef,
+              private ngZone: NgZone,
+              private userService: UserService) { }
 
   ngOnInit() {
     this.quote$ = this.activatedRoute.params

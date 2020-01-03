@@ -12,9 +12,9 @@ import { take } from 'rxjs/operators';
   `,
   styles: [`.container{height: 90vh;}`]
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = false;
 
-  ngOnInit(){}
+  ngOnInit() {}
 }

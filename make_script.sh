@@ -23,10 +23,34 @@ function npm_install {
     cd $packageJSON_Folder
     rm -rf node_modules
     LOG_INFO "NPM Install"
-    npm install --no-package-lock
+    npm install
+}
+
+function npm_version_update_patch {
+    packageJSON_Folder=${1}
+    LOG_INFO "PackageJSON Folder $packageJSON_Folder"
+    cd $packageJSON_Folder
+    LOG_INFO "Update version"
     git config --global user.email 'DevOps-J2B-ibm@apttus.com'
     git config --global user.name 'ic-cicd'
     npm version patch
+    git status
+}
+
+function build_package {
+    packageJSON_Folder=${1}
+    packageCmd="${2}"
+    LOG_INFO "PackageJSON Folder $packageJSON_Folder"
+    cd $packageJSON_Folder
+    LOG_INFO "Packaging.."
+    LOG_INFO "Package commad: ${packageCmd}"
+    npm install typescript@3.5.3
+    npm install -g @angular/cli@7.3.9
+    if [[ ! -z "$packageCmd" ]]; then
+        $packageCmd
+    else 
+        gulp package
+    fi
 }
 
 function execute_custom_cmd {
@@ -89,6 +113,10 @@ function git_tag_repo_and_update_pacakge_json {
 
     AIC_TAG_NAME="${PACKAGE_JSON_VERSION}"
     PACKAGE_JSON_PATH="${PACKAGE_JSON_FOLDER_PATH}/package.json"
+    PACKAGE_LOCK_JSON_PATH="${PACKAGE_JSON_FOLDER_PATH}/package-lock.json"
+
+    test ${PACKAGE_LOCK_JSON_PATH} && echo "package.json file exists"
+    test ${PACKAGE_LOCK_JSON_PATH} && echo "packag-lock.json file exists"
 
     git config --global user.email "DevOps-J2B-ibm@apttus.com"
     git config --global user.name "ic-cicd"
@@ -101,9 +129,7 @@ function git_tag_repo_and_update_pacakge_json {
     
     #push updated package.json to the git repo head
     if [[ $PUSH_PACKAGE == "TRUE" ]]; then
-        git status
-        git add ${PACKAGE_JSON_PATH}
-        git commit -m "Updating package.json with patch version [ci skip]"
+        LOG_INFO "Pushing the updated package.json file in the origing:head"
         GIT_SSH_COMMAND="ssh  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${AIC_SSH_KEY_LOCATION}" git push origin HEAD:${branch}
     fi
     LOG_INFO "Successfully Tagged with Tag ${AIC_TAG_NAME}"

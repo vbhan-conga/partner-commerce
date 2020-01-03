@@ -26,7 +26,8 @@
             "INVALID_TOASTR_MESSAGE": "es_MX Promotion {{name}} is not applied.",
             "INVALID_TOASTR_TITLE": "es_MX Promotion Not Applied"
         },
-        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error"
+        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error",
+        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1"
     },
     "SUCCESS": {
         "TITLE": "es_MX Success",
@@ -606,6 +607,9 @@
             "ONE_TIME": "es_MX One Time",
             "RECURRING": "es_MX Recurring",
             "USAGE": "es_MX Usage"
+        },
+        "ASSET_ACTION_FILTER": {
+            "ASSET_ACTION": "es_MX Asset Action"
         }
     },
     "MINI_CART": {

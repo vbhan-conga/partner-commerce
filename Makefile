@@ -49,6 +49,14 @@ check-git-defined:
 npm-install: configure-npm
 	@source make_script.sh; npm_install $(PACKAGEJSON_FOLDERPATH)
 
+npm-version-update-patch:
+	$(call check_var_defined,$(BUILD_NUMBER),BUILD_NUMBER)
+	@source make_script.sh; npm_version_update_patch $(PACKAGEJSON_FOLDERPATH)
+
+build-package:
+	@echo "$(INFO) executing the package command: $(PACKAGE_CMD)"
+	@source make_script.sh; build_package $(PACKAGEJSON_FOLDERPATH) "$(PACKAGE_CMD)"
+
 execute-custom-cmd:
 	@echo "$(INFO) executing the custom build and package command: $(PACKAGE_CMD)"
 	@source make_script.sh; execute_custom_cmd $(PACKAGEJSON_FOLDERPATH) "$(PACKAGE_CMD)"
@@ -73,4 +81,4 @@ get-commit-info:
 
 all: npm-install npm-version-update-patch gulp-package create-npm-package publish-npm-package git-tag-and-push-package-json
 
-.PHONY: npm-install create-npm-package publish-npm-package git-tag-and-push-package-json all
+.PHONY: npm-install npm-version-update-patch build-package create-npm-package publish-npm-package git-tag-and-push-package-json all

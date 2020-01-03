@@ -26,7 +26,8 @@
             "INVALID_TOASTR_MESSAGE": "fr_FR Promotion {{name}} is not applied.",
             "INVALID_TOASTR_TITLE": "fr_FR Promotion Not Applied"
         },
-        "APPLICATION_ERROR_TOASTR_TITLE": "fr_FR Application Error"
+        "APPLICATION_ERROR_TOASTR_TITLE": "fr_FR Application Error",
+        "INVALID_QUANTITY": "fr_FR Cannot add a quantity less than 1"
     },
     "SUCCESS": {
         "TITLE": "fr_FR Success",
@@ -600,6 +601,9 @@
             "ONE_TIME": "fr_FR One Time",
             "RECURRING": "fr_FR Recurring",
             "USAGE": "fr_FR Usage"
+        },
+        "ASSET_ACTION_FILTER": {
+            "ASSET_ACTION": "fr_FR Asset Action"
         }
     },
     "MINI_CART": {

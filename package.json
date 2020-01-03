@@ -1,10 +1,11 @@
 {
-  "name": "partner-commerce-base-template",
-  "version": "1903.0.0",
+  "name": "apttus.ui.pcom.rc",
+  "version": "2001.0.0 ",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
+    "build": "ng build",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "node node_modules/@apttus/core/scripts/deploy-script.js",
@@ -23,10 +24,11 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^8.2.3",
     "@angular/service-worker": "^8.2.3",
-    "@apttus/core": "^1903.0.0",
-    "@apttus/ecommerce": "~1903.0.0",
-    "@apttus/elements": "~1903.0.0",
+    "@apttus/core": "1990.0.4",
+    "@apttus/ecommerce": "1990.0.4",
+    "@apttus/elements": "1990.0.4",
     "@fortawesome/fontawesome-free": "^5.10.1",
+    "@juggle/resize-observer": "^2.5.0",
     "@ng-select/ng-option-highlight": "0.0.2",
     "@ng-select/ng-select": "^3.0.6",
     "@ngx-translate/core": "^11.0.1",
@@ -103,7 +105,7 @@
     "tsickle": "^0.36.0",
     "tslib": "^1.10.0",
     "tslint": "~5.18.0",
-    "typescript": "^3.5.3",
+    "typescript": "3.5.3",
     "uglifyjs-folder": "^1.5.1",
     "webpack-bundle-analyzer": "^3.4.1"
   }
