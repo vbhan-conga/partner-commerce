@@ -5,7 +5,8 @@
             "MIN_OPTIONS": "fr_FR You must select at least {{value}} options.",
             "MAX_OPTIONS": "fr_FR You can select no more than {{value}} options.",
             "MIN_TOTAL_QUANTITY": "fr_FR The total minimum quantity is {{value}}.",
-            "MAX_TOTAL_QUANTITY": "fr_FR The total maximum quantity is {{value}}."
+            "MAX_TOTAL_QUANTITY": "fr_FR The total maximum quantity is {{value}}.",
+            "REQUIRED_OPTION_MISSING": "fr_FR Option(s) {{value}} is/are required."
         },
         "UNABLE_TO_RENEW": "fr_FR An error occurred renewing this asset(s)",
         "CART": {
