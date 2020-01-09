@@ -44,8 +44,8 @@ function build_package {
     cd $packageJSON_Folder
     LOG_INFO "Packaging.."
     LOG_INFO "Package commad: ${packageCmd}"
-    npm install typescript@3.5.3
-    npm install -g @angular/cli@7.3.9
+    #npm install typescript@3.5.3
+    #npm install -g @angular/cli@7.3.9
     if [[ ! -z "$packageCmd" ]]; then
         $packageCmd
     else
