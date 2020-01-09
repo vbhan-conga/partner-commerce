@@ -57,6 +57,7 @@
     "ngx-bootstrap": "^5.1.2",
     "ngx-gallery": "^5.10.0",
     "ngx-indexed-db": "^2.2.0",
+    "ngx-moment": "^3.5.0",
     "ngx-scrollbar": "^5.0.0-beta.1",
     "ngx-toastr": "^10.0.4",
     "node-sass": "^4.12.0",
