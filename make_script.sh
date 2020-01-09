@@ -5,7 +5,7 @@ function LOG_INFO()
     LOG_MESSAGE_LINE="`date +%Y-%m-%d-%H:%M:%S` [INFO]  $1"
     echo -e  $LOG_MESSAGE_LINE
 }
-  
+
 #------------------------------------------------------------------#
 # Function Name: LOG_ERROR
 # Description: This method is used for printing ERROR logs
@@ -48,7 +48,7 @@ function build_package {
     npm install -g @angular/cli@7.3.9
     if [[ ! -z "$packageCmd" ]]; then
         $packageCmd
-    else 
+    else
         gulp package
     fi
 }
@@ -78,7 +78,7 @@ function create_npm_package {
     if [[ ! -z "$packageFilesAndFolders" ]]; then
         cp -rf $packageFilesAndFolders package/
     fi
-    
+
     tar -zcvf $packageName-$npmPackageVersion.tgz package
 
     echo "PACKAGE_VERSION=$npmPackageVersion" > packageVersion.properties
@@ -92,10 +92,10 @@ function publish_npm_package {
     branch=${4}
     packageName=${5}
     packageVersion=${6}
-    
+
     artifactorySubRepo=$packageName
     localPath="$packageName-$packageVersion.tgz"
-    
+
     BRANCH_NAME=$(echo $branch| cut -d'/' -f 2)
     LOG_INFO "Artifactory Branch name is $BRANCH_NAME"
     LOG_INFO "Uploading file $localPath"
@@ -104,7 +104,7 @@ function publish_npm_package {
 }
 
 function git_tag_repo_and_update_pacakge_json {
- 
+
     AIC_SSH_KEY_LOCATION=${1}
     PACKAGE_JSON_VERSION=${2}
     branch=${3}
@@ -120,15 +120,16 @@ function git_tag_repo_and_update_pacakge_json {
 
     git config --global user.email "DevOps-J2B-ibm@apttus.com"
     git config --global user.name "ic-cicd"
-    
-    #Add tag 
+
+    #Add tag
     git tag -l ${AIC_TAG_NAME}
     git tag -a -f -m "Updated patch version [ci skip]" ${AIC_TAG_NAME}
 
     GIT_SSH_COMMAND="ssh  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${AIC_SSH_KEY_LOCATION}" git push origin ${AIC_TAG_NAME}
-    
+
     #push updated package.json to the git repo head
     if [[ $PUSH_PACKAGE == "TRUE" ]]; then
+        git commit -m "Updating package.json with patch version [ci skip]"
         LOG_INFO "Pushing the updated package.json file in the origing:head"
         GIT_SSH_COMMAND="ssh  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${AIC_SSH_KEY_LOCATION}" git push origin HEAD:${branch}
     fi
@@ -149,11 +150,11 @@ function evaluate_ci_skip {
 
     LOG_INFO "Successfully obtained the commit messages on commitid: ${COMMIT_ID_SHA}"
     LOG_INFO "commit messages : ${msg}"
-    
+
     if [[ $msg == *"$ciSkipKey"* ]]; then
         echo "CI_SKIP=TRUE" > ${PROPERTY_FILE_NAME}.properties
         LOG_INFO "returned ci skip as TRUE"
-    else 
+    else
         echo "CI_SKIP=FALSE" > ${PROPERTY_FILE_NAME}.properties
         LOG_INFO "returned ci skip as false"
     fi
@@ -172,7 +173,7 @@ function get_commit_info {
 
     LOG_INFO "Successfully obtained the commit messages on commitid: ${COMMIT_ID_SHA}"
     LOG_INFO "commit messages : ${msg}"
-    
+
     echo "$msg" > ${PROPERTY_FILE_NAME}.properties
 
 }
