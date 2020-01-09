@@ -33,7 +33,7 @@ function npm_version_update_patch {
     LOG_INFO "Update version"
     git config --global user.email 'DevOps-J2B-ibm@apttus.com'
     git config --global user.name 'ic-cicd'
-    npm version patch
+    npm version patch -m "Updated to patch version: %s with auto increment with Jenkins job. [ci skip]"
     git status
 }
 
