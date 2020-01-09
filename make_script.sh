@@ -129,7 +129,6 @@ function git_tag_repo_and_update_pacakge_json {
 
     #push updated package.json to the git repo head
     if [[ $PUSH_PACKAGE == "TRUE" ]]; then
-        git commit -m "Updating package.json with patch version [ci skip]"
         LOG_INFO "Pushing the updated package.json file in the origing:head"
         GIT_SSH_COMMAND="ssh  -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${AIC_SSH_KEY_LOCATION}" git push origin HEAD:${branch}
     fi
