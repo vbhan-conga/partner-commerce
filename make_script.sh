@@ -22,6 +22,7 @@ function npm_install {
     LOG_INFO "PackageJSON Folder $packageJSON_Folder"
     cd $packageJSON_Folder
     rm -rf node_modules
+    npm cache clean --force
     LOG_INFO "NPM Install"
     npm install
 }
