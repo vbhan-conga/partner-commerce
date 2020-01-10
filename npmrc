@@ -1,0 +1,7 @@
+registry=ARTIFACTORY_NPM_REG_URL
+_auth=ARTIFACTORY_CREDS
+email=ARTIFACTORY_EMAIL
+always-auth=true
+cache-lock-wait=30000
+cache-lock-retries=11
+cache-lock-stale=3000000
