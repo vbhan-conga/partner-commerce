@@ -1,4 +1,4 @@
-<app-detail [title]="viewState?.product?.Name" [subtitle]="productCode" [context]="viewState?.product"
+<app-detail [title]="viewState?.product?.Name" [subtitle]="viewState?.product?.ProductCode" [context]="viewState?.product"
     *ngIf="viewState$ | async as viewState; else loading">
 
     <div class="primary-actions">
@@ -75,9 +75,12 @@
 
     <app-detail-section [title]="'PRODUCT_DETAILS.DETAILS' | translate">
         <div class="row">
-            <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.PRODUCT_DETAIL' | translate}} </h4>
             <div class="col-12 col-md-4">
-                <apt-product-images [product]="viewState?.product"></apt-product-images>
+                <div class="card">
+                    <div class="card-body">
+                        <apt-product-images [product]="viewState?.product"></apt-product-images>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-md-8">
                 <div class="card">
