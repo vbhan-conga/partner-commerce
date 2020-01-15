@@ -18,5 +18,6 @@
   "initialized": true,
   "pageName": "CommunitiesLanding",
   "resourceName": "CommunitiesLanding",
-  "pageEnableCheck": true
+  "pageEnableCheck": true,
+  "project": "reference-base"
 }
