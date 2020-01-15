@@ -21,7 +21,7 @@ export const environment: Configuration = {
   productIdentifier: 'Id',
   type: 'Salesforce',
   debounceTime: 1000,
-  useIndexedDB: true,
+  useIndexedDB: false,
   expandDepth: 7,
   proxy: 'https://apttus-proxy.herokuapp.com',
   hashRouting: false,
