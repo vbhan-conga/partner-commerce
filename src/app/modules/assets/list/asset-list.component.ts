@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ACondition, AFilter, AObject, Operator } from '@apttus/core';
+import { ACondition, AFilter, AObject } from '@apttus/core';
 import { CartService, AssetService, AssetLineItemExtended, AssetLineItem, StorefrontService, Product } from '@apttus/ecommerce';
 import { Observable, combineLatest, of, BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { AssetModalService, TableOptions, TableAction, ChildRecordOptions, FilterOptions } from '@apttus/elements';
+import { AssetModalService, TableOptions, TableAction, ChildRecordOptions } from '@apttus/elements';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
@@ -14,7 +14,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 * Asset list component is used to set the structure of the asset list page.
 *
 * @example
-* <app-asset-list></app-asset-list>
+* <app-asset-list></app-installed-products-layout>
 */
 @Component({
   selector: 'app-asset-list',
@@ -44,52 +44,9 @@ export class AssetListComponent implements OnInit {
    */
   productFamilyFilter: AFilter;
   /**
-   * Value of the advanced filter component.
+   * Value of the advanced fitler component.
    */
   advancedFilters: Array<AFilter> = [];
-  /**
-   * Configuration object used to configure the data filter.
-   */
-  advancedFilterOptions: FilterOptions = {
-    visibleFieldsDependendOperators: [
-      {
-        field: 'Name',
-        operators: [Operator.CONTAINS, Operator.DOES_NOT_CONTAIN, Operator.BEGINS_WITH, Operator.EQUAL, Operator.NOT_EQUAL]
-      },
-      {
-        field: 'SellingFrequency',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.IN, Operator.NOT_IN]
-      },
-      {
-        field: 'StartDate',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.GREATER_THAN, Operator.GREATER_EQUAL, Operator.LESS_THAN, Operator.LESS_EQUAL]
-      },
-      {
-        field: 'EndDate',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.GREATER_THAN, Operator.GREATER_EQUAL, Operator.LESS_THAN, Operator.LESS_EQUAL]
-      },
-      {
-        field: 'NetPrice',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.GREATER_THAN, Operator.GREATER_EQUAL, Operator.LESS_THAN, Operator.LESS_EQUAL]
-      },
-      {
-        field: 'Quantity',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.GREATER_THAN, Operator.GREATER_EQUAL, Operator.LESS_THAN, Operator.LESS_EQUAL]
-      },
-      {
-        field: 'AssetStatus',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.IN, Operator.NOT_IN]
-      },
-      {
-        field: 'PriceType',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.IN, Operator.NOT_IN]
-      },
-      {
-        field: 'ProductId',
-        operators: [Operator.EQUAL, Operator.NOT_EQUAL, Operator.IN, Operator.NOT_IN]
-      }
-    ]
-  };
   /**
    * Default filters that will be applied to the table and chart components.
    */
@@ -187,6 +144,7 @@ export class AssetListComponent implements OnInit {
       this.advancedFilters = [new AFilter(this.assetService.type, _.map(_.split(decodeURIComponent(_.get(this.route, 'snapshot.queryParams.productIds')), ','), id => new ACondition(this.assetService.type, 'ProductId', 'Equal', id)), null, 'OR')];
     }
     this.loadView();
+    // this.preselectItemsInGroups = false;
   }
   /**
    * Loads the view data.
@@ -218,7 +176,7 @@ export class AssetListComponent implements OnInit {
             { prop: 'AssetStatus' },
             { prop: 'PriceType' }
           ],
-          actions: _.filter(this.massActions, action => _.includes(_.get(storefront, 'AssetActions'), _.get(action, 'label'))),
+          actions: _.filter(this.massActions, action => _.includes(storefront.AssetActions, _.get(action, 'label'))),
           childRecordOptions: {
             filters: [new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(Product, 'Product.ConfigurationType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', false)])],
             inCondition: new ACondition(this.assetService.type, 'BundleAssetId', 'In', []),
