@@ -182,7 +182,7 @@ export class AssetListComponent implements OnInit {
             { prop: 'AssetStatus' },
             { prop: 'PriceType' }
           ],
-          actions: _.filter(this.massActions, action => _.includes(_.get(storefront, 'ABO_actions'), _.get(action, 'label'))),
+          actions: _.filter(this.massActions, action => _.includes(_.get(storefront, 'AssetActions'), _.get(action, 'label'))),
           childRecordOptions: {
             filters: [new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(Product, 'Product.ConfigurationType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', false)])],
             inCondition: new ACondition(this.assetService.type, 'BundleAssetId', 'In', []),
