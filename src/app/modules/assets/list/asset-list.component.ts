@@ -355,7 +355,7 @@ export class AssetListComponent implements OnInit {
             ],
             actions: _.filter(this.massActions, action =>
               _.includes(
-                _.get(storefront, 'ABO_actions'),
+                _.get(storefront, 'AssetActions'),
                 _.get(action, 'label')
               )
             ),
