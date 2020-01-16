@@ -20,6 +20,7 @@ import { DetailsModule } from '../details/details.module';
 import { TabAttachmentsComponent } from './components/tab-attachments.component';
 import { TabFeaturesComponent } from './components/tab-features.component';
 import { ProductReplacementsComponent } from './components/product-replacements.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { ProductReplacementsComponent } from './components/product-replacements.
     PriceModule,
     FormsModule,
     ProductsRoutingModule,
+    RouterModule,
     ComponentModule,
     PricingModule,
     ApttusModule,

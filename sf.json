@@ -1,0 +1,23 @@
+{
+  "credentials": {
+    "username": "qa@apttus.com.dc2",
+    "password": "apttuscrm1",
+    "endpoint": "https://test.salesforce.com",
+    "enableCors": true
+  },
+  "domain": "dc2-cpqqacommunity1.cs24.force.com",
+  "network": {
+    "attributes": {
+      "type": "Network",
+      "url": "/services/data/v42.0/sobjects/Network/0DB190000000UnfGAE"
+    },
+    "Id": "0DB190000000UnfGAE",
+    "Name": "E-Commerce",
+    "UrlPathPrefix": "ecom"
+  },
+  "initialized": true,
+  "pageName": "CommunitiesLanding",
+  "resourceName": "CommunitiesLanding",
+  "pageEnableCheck": true,
+  "project": "reference-base"
+}

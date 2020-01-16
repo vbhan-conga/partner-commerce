@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
 import { CartService, CartItem } from '@apttus/ecommerce';
 import { ProductConfigurationSummaryComponent } from '@apttus/elements';
-import { Router } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
+import { take } from 'rxjs/operators';
 
 
 @Component({
@@ -37,10 +38,13 @@ export class ProductDetailComponent implements OnInit {
 
   @ViewChild('productConfigurationSummary', { static: false }) productConfigurationSummary: ProductConfigurationSummaryComponent;
 
-  constructor(private cartService: CartService, private resolver: ProductDetailsResolver, private router: Router) { }
+  constructor(private cartService: CartService, private resolver: ProductDetailsResolver, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.viewState$ = this.resolver.state();
+    this.resolver
+      .resolve(this.activatedRoute.snapshot)
+      .pipe(take(1))
+      .subscribe(() => (this.viewState$ = this.resolver.state()));
   }
 
   /**
