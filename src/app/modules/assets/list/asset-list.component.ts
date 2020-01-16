@@ -382,12 +382,7 @@ export class AssetListComponent implements OnInit {
                   )
                 ])
               ],
-              inCondition: new ACondition(
-                this.assetService.type,
-                'BundleAssetId',
-                'In',
-                []
-              ),
+              relationshipField: 'BundleAssetId',
               childRecordFields: [
                 'ChargeType',
                 'SellingFrequency',
