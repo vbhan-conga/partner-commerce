@@ -37,7 +37,7 @@ export class ActionBarComponent implements OnInit {
   }
 
   changeAccount(x){
-    return this.accountService.setAccount(x, true)
+    this.accountService.setAccount(x, true)
     .pipe(
       take(1),
       switchMap (res => {
@@ -46,10 +46,8 @@ export class ActionBarComponent implements OnInit {
           switchMap(cart => {
             cart.AccountId = _.get(res, 'Id');
             return this.cartService.update([cart]);
-          })
-        );
-      }
-    )
+          }));
+      })
     ).subscribe(
       () => {
         this.exceptionService.showSuccess('ACTION_BAR.CHANGE_ACCOUNT_MESSAGE', 'ACTION_BAR.CHANGE_ACCOUNT_TITLE');
