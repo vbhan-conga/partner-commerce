@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2001.0.27",
+  "version": "2001.0.32",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -24,9 +24,9 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^8.2.3",
     "@angular/service-worker": "^8.2.3",
-    "@apttus/core": "2001.0.9",
-    "@apttus/ecommerce": "2001.0.9",
-    "@apttus/elements": "2001.0.9",
+    "@apttus/core": "^2001.0.1",
+    "@apttus/ecommerce": "^2001.0.1",
+    "@apttus/elements": "^2001.0.1",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@juggle/resize-observer": "^2.5.0",
     "@ng-select/ng-option-highlight": "0.0.2",
