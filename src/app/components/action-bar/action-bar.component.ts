@@ -37,8 +37,20 @@ export class ActionBarComponent implements OnInit {
   }
 
   changeAccount(x){
-    this.accountService.setAccount(x, true).pipe(take(1))
-    .subscribe(
+    return this.accountService.setAccount(x, true)
+    .pipe(
+      take(1),
+      switchMap (res => {
+        return this.cartService.getMyCart().pipe(
+          take(1),
+          switchMap(cart => {
+            cart.AccountId = _.get(res, 'Id');
+            return this.cartService.update([cart]);
+          })
+        );
+      }
+    )
+    ).subscribe(
       () => {
         this.exceptionService.showSuccess('ACTION_BAR.CHANGE_ACCOUNT_MESSAGE', 'ACTION_BAR.CHANGE_ACCOUNT_TITLE');
         this.accountField.handleHidePop();
