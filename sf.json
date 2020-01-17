@@ -1,19 +1,19 @@
 {
   "credentials": {
-    "username": "qa@apttus.com.dc2",
+    "username": "qa@apttus.com.dc4",
     "password": "apttuscrm1",
     "endpoint": "https://test.salesforce.com",
     "enableCors": true
   },
-  "domain": "dc2-cpqqacommunity1.cs24.force.com",
+  "domain": "dc4-cpqqacommunity1.cs123.force.com",
   "network": {
     "attributes": {
       "type": "Network",
-      "url": "/services/data/v42.0/sobjects/Network/0DB190000000UnfGAE"
+      "url": "/services/data/v42.0/sobjects/Network/0DB23000000CahtGAC"
     },
-    "Id": "0DB190000000UnfGAE",
-    "Name": "E-Commerce",
-    "UrlPathPrefix": "ecom"
+    "Id": "0DB23000000CahtGAC",
+    "Name": "PcomDeploy",
+    "UrlPathPrefix": "pcomdeploy"
   },
   "initialized": true,
   "pageName": "CommunitiesLanding",
