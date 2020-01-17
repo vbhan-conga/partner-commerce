@@ -24,7 +24,7 @@ function npm_install {
     rm -rf node_modules
     npm cache clean --force
     LOG_INFO "NPM Install"
-    npm install
+    npm install --no-package-lock
 }
 
 function npm_version_update_patch {
