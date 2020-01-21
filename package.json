@@ -7,9 +7,7 @@
     "test": "ng test",
     "build": "ng build",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "deploy": "node node_modules/@apttus/core/scripts/deploy-script.js",
-    "setup": "node node_modules/@apttus/core/scripts/setup-script.js"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
