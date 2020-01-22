@@ -28,12 +28,7 @@ export class ActionBarComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.cart$ = this.cartService.getMyCart()
-      .pipe(
-        switchMap(cart => (_.isNil(cart)) ?
-            this.cartService.createNewCart(new Cart(), false, true) : of(cart)
-        )
-      );
+    this.cart$ = this.cartService.getMyCart();
   }
 
   changeAccount(x){
