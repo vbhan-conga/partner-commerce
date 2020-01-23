@@ -27,7 +27,7 @@ function npm_install {
     LOG_INFO "Set Registry"
     npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
-    npm install
+    npm install --no-package-lock
 }
 
 function npm_version_update_patch {
