@@ -85,7 +85,7 @@ export class CartListComponent implements OnInit, OnDestroy {
         label: 'Delete',
         theme: 'danger',
         validate:(record: Cart) => this.canDelete(record),
-        action:(recordList: Array<Cart>) => this.cartService.deleteCarts(recordList).pipe(map(res => null))
+        action:(recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
       } as TableAction
     ],
     highlightRow:(record: Cart) => of(this.isCartActive(this.currentCart, record))
