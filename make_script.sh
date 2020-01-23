@@ -22,9 +22,11 @@ function npm_install {
     LOG_INFO "PackageJSON Folder $packageJSON_Folder"
     cd $packageJSON_Folder
     rm -rf node_modules
+    LOG_INFO "Update NPM"
+    npm install -g npm
     npm cache clean --force
     LOG_INFO "NPM Install"
-    npm install --no-package-lock
+    npm install
 }
 
 function npm_version_update_patch {
