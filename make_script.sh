@@ -24,7 +24,7 @@ function npm_install {
     rm -rf node_modules
     LOG_INFO "Update NPM"
     npm install -g npm
-    npm cache clean --force
+    npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
     npm install
 }
