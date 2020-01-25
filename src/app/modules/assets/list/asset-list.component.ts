@@ -66,7 +66,7 @@ export class AssetListComponent implements OnInit {
    * Configuration object used to configure the data filter.
    */
   advancedFilterOptions: FilterOptions = {
-    visibleFieldsDependendOperators: [
+    visibleFieldsWithOperators: [
       {
         field: 'Name',
         operators: [
