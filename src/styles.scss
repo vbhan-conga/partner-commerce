@@ -184,11 +184,17 @@ popover-container.optionPopover {
     max-width: 600px;
 }
 
-typeahead-container {
+typeahead-container.dropdown-menu {
     padding-bottom: 0 !important;
-    .dropdown-item{
-        padding: 0;
-        max-width: 100% !important;
+
+    button.dropdown-item{
+        padding: 0 1.5rem;
+        max-width: 100%;
+    }
+    
+    .dropdown-item.active, .dropdown-item:active {
+        background-color: $primary;
+        color: $white;
     }
 }
 
