@@ -25,7 +25,7 @@ export const environment: Configuration = {
   expandDepth: 7,
   proxy: 'https://apttus-proxy.herokuapp.com',
   hashRouting: false,
-
+  packageNamespace: null,
   // Salesforce environment variables
   storefront: 'Partner Commerce',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
