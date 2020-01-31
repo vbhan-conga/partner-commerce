@@ -25,6 +25,7 @@ export const environment: Configuration = {
   expandDepth: 7,
   proxy: 'https://apttus-proxy.herokuapp.com',
   hashRouting: false,
+  packageNamespace: '',
 
   // Salesforce environment variables
   storefront: 'Partner Commerce',
