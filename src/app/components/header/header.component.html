@@ -83,27 +83,27 @@
           <div class="list-group list-group-flush mt-3">
             <a href="javascript:void(0)" [routerLink]="['/']" (click)="menuModal.hide()"
               class="list-group-item list-group-item-action">
-              <span class="oi oi-home mr-4"></span>{{'HEADER.HOME' | translate}}
+              <i class="fas fa-home mr-4"></i>{{'HEADER.HOME' | translate}}
             </a>
             <a href="javascript:void(0)" [routerLink]="['/orders']" (click)="menuModal.hide()"
               class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
-              <span class="oi oi-cog mr-4"></span>{{'HEADER.MY_ACCOUNT' | translate}}
+              <i class="fas fa-cog mr-4"></i>{{'HEADER.MY_ACCOUNT' | translate}}
             </a>
             <a href="javascript:void(0)" [routerLink]="['/assets']" (click)="menuModal.hide()"
               class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
-              <span class="oi oi-list-rich mr-4"></span>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
+              <i class="fas fa-list mr-4"></i>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
             </a>
             <a href="javascript:void(0)" [routerLink]="['/products']" (click)="menuModal.hide()"
               class="list-group-item list-group-item-action">
-              <span class="oi oi-grid-three-up mr-4"></span>{{'HEADER.PRODUCT_CATALOG' | translate}}
+              <i class="fas fa-th mr-4"></i>{{'HEADER.PRODUCT_CATALOG' | translate}}
             </a>
             <a href="javascript:void(0)" class="list-group-item list-group-item-action"
               *ngIf="view?.me?.Alias !== 'guest'" (click)="doLogout(); menuModal.hide();">
-              <span class="oi oi-account-logout mr-4"></span>{{'HEADER.LOG_OUT' | translate}}
+              <i class="fas fa-sign-out-alt mr-4"></i>{{'HEADER.LOG_OUT' | translate}}
             </a>
             <a href="javascript:void(0)" class="list-group-item list-group-item-action"
               *ngIf="view?.me?.Alias === 'guest'" (click)="profile.openModal('second')">
-              <span class="oi oi-account-login mr-4"></span>{{'HEADER.LOG_IN' | translate}}
+              <i class="fas fa-sign-in-alt mr-4"></i>{{'HEADER.LOG_IN' | translate}}
             </a>
           </div>
         </div>
@@ -128,7 +128,7 @@
                   <div *ngIf="currentCategory?.Id">
                     <div class="d-flex justify-content-between">
                       <a href="#menuCarousel" data-slide="prev" (click)="goBack(view)">
-                        <span class="oi oi-arrow-left mr-2"></span>{{'HEADER.BACK' | translate}}
+                        <i class="fas fa-arrow-left mr-2"></i>{{'HEADER.BACK' | translate}}
                       </a>
                       <a href="#menuCarousel" [routerLink]="['/products/category', currentCategory.Name]"
                         (click)="menuModal.hide()" data-slide-to="0">{{'HEADER.SHOW_ALL' | translate}}</a>
