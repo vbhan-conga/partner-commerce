@@ -17,7 +17,7 @@ import { ConfigurationService } from '@apttus/core';
           </div>
           <small class="d-block">{{product.ProductCode}}</small>
           <button class="btn btn-link btn btn-link p-0 mx-0 mt-2" [routerLink]="['/products', product[identifier]]">
-            <span class="oi oi-chevron-right"></span>Go To Product
+            <i class="fas fa-chevron-right"></i>Go To Product
           </button>
         </div>
       </li>
