@@ -1,11 +1,19 @@
 import { Component, OnChanges, Input, TemplateRef, ViewChild  } from '@angular/core';
-import { Cart, QuoteService, TemplateService, CartItem, Quote, ItemGroup, CartItemService, LineItemService } from '@apttus/ecommerce';
+import {
+  Cart,
+  QuoteService,
+  CartItem,
+  Quote,
+  CartItemService,
+  LineItemService,
+  Storefront,
+  StorefrontService
+} from '@apttus/ecommerce';
 import * as _ from 'lodash';
-import { PlatformService } from '@apttus/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { TranslateService } from '@ngx-translate/core';
-import {ProductConfigurationSummaryComponent} from '@apttus/elements';
+import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } from '@apttus/elements';
 
 @Component({
   selector: 'cart-summary',
@@ -27,9 +35,13 @@ import {ProductConfigurationSummaryComponent} from '@apttus/elements';
 })
 export class SummaryComponent implements OnChanges {
   @Input() cart: Cart;
+  storefront: Storefront = null;
   @ViewChild('confirmationTemplate', { static: false }) confirmationTemplate: TemplateRef<any>;
   @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   configSummaryModal: ProductConfigurationSummaryComponent;
+  @ViewChild(ConfigurationSummaryComponent, { static: false })
+  cmsConfigSummaryModal: ConfigurationSummaryComponent;
+
 
   state: SummaryState;
   modalRef: BsModalRef;
@@ -48,13 +60,19 @@ export class SummaryComponent implements OnChanges {
     return count;
   }
 
-  constructor(private quoteService: QuoteService, private cartItemService: CartItemService, private modalService: BsModalService, private translate: TranslateService) {
+  constructor(private quoteService: QuoteService,
+              private cartItemService: CartItemService,
+              private modalService: BsModalService,
+              private translate: TranslateService,
+              private storefrontService: StorefrontService) {
     this.state = {
       configurationMessage: null,
       downloadLoading: false,
       requestQuoteMessage: null,
       requestQuoteLoading: false
     };
+
+    this.storefrontService.getStorefront().subscribe(s => this.storefront = s);
   }
 
   ngOnChanges() {
@@ -84,7 +102,14 @@ export class SummaryComponent implements OnChanges {
 
   openModal(lineItem: CartItem) {
     this.lineItem = lineItem;
-    setTimeout(() => this.configSummaryModal.show());
+    setTimeout(() => {
+      const modal = this.configSummaryModal || this.cmsConfigSummaryModal;
+
+      if (!modal)
+        return;
+
+      modal.show();
+    });
     // this.modalRef = this.modalService.show(template);
   }
 }
