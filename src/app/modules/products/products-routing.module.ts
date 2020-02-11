@@ -14,6 +14,7 @@ const routes: Routes = [
   {
     path: ':id',
     component: ProductDetailComponent,
+    resolve: { state: ProductDetailsResolver }
   },
   {
     path: 'category/:categoryName',
