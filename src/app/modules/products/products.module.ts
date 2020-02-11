@@ -4,7 +4,22 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ComponentModule } from '../../components/component.module';
 
 import { PricingModule } from '@apttus/ecommerce';
-import { IconModule, BreadcrumbModule, ProductCardModule, FilterModule, InputFieldModule, ButtonModule, InputSelectModule, ProductCarouselModule, ProductConfigurationModule, ProductConfigurationSummaryModule, ProductImagesModule, PriceModule, InputDateModule } from '@apttus/elements';
+import {
+  IconModule,
+  BreadcrumbModule,
+  ProductCardModule,
+  FilterModule,
+  InputFieldModule,
+  ButtonModule,
+  InputSelectModule,
+  ProductCarouselModule,
+  ProductConfigurationModule,
+  ProductConfigurationSummaryModule,
+  ProductImagesModule,
+  PriceModule,
+  InputDateModule,
+  ConfigurationModule
+} from '@apttus/elements';
 
 
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -29,6 +44,7 @@ import { RouterModule } from '@angular/router';
     ProductCarouselModule,
     ProductConfigurationModule,
     ProductConfigurationSummaryModule,
+    ConfigurationModule,
     IconModule,
     ButtonModule,
     ProductImagesModule,
