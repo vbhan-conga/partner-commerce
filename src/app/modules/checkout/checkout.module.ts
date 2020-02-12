@@ -12,9 +12,9 @@ import {
   BreadcrumbModule,
   PriceSummaryModule,
   InputFieldModule,
+  CmsModule,
   ConfigurationModule
 } from '@apttus/elements';
-// import { ComponentModule } from '../../components/component.module';
 import { CardFormComponent } from './component/card-form/card-form.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -49,6 +49,7 @@ import { ComponentModule } from '../../components/component.module';
     PriceSummaryModule,
     InputFieldModule,
     LaddaModule,
+    CmsModule,
     ConfigurationModule
   ],
   declarations: [CheckoutComponent, SummaryComponent, CardFormComponent]
