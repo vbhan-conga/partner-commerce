@@ -6,8 +6,7 @@ import {
   Quote,
   CartItemService,
   LineItemService,
-  Storefront,
-  StorefrontService
+  CmsService
 } from '@apttus/ecommerce';
 import * as _ from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -35,7 +34,7 @@ import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } f
 })
 export class SummaryComponent implements OnChanges {
   @Input() cart: Cart;
-  storefront: Storefront = null;
+  isCmsEnabled = null;
   @ViewChild('confirmationTemplate', { static: false }) confirmationTemplate: TemplateRef<any>;
   @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   configSummaryModal: ProductConfigurationSummaryComponent;
@@ -64,7 +63,7 @@ export class SummaryComponent implements OnChanges {
               private cartItemService: CartItemService,
               private modalService: BsModalService,
               private translate: TranslateService,
-              private storefrontService: StorefrontService) {
+              private cmsService: CmsService) {
     this.state = {
       configurationMessage: null,
       downloadLoading: false,
@@ -72,7 +71,7 @@ export class SummaryComponent implements OnChanges {
       requestQuoteLoading: false
     };
 
-    this.storefrontService.getStorefront().subscribe(s => this.storefront = s);
+    this.cmsService.isCmsEnabled().subscribe(s => this.isCmsEnabled = s);
   }
 
   ngOnChanges() {

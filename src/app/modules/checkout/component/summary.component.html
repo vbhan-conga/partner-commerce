@@ -69,13 +69,13 @@
 </ng-template>-->
 
 <apt-product-configuration-summary
-  *ngIf="lineItem && storefront && !storefront.CMS_Enabled"
+  *ngIf="lineItem && isCmsEnabled !== null && !isCmsEnabled"
   [product]="lineItem.Product"
   [relatedTo]="lineItem">
 </apt-product-configuration-summary>
 
 <apt-cms-configuration-summary
-  *ngIf="lineItem && storefront && storefront.CMS_Enabled"
+  *ngIf="lineItem && isCmsEnabled !== null && isCmsEnabled"
   [product]="lineItem.Product"
   [relatedTo]="lineItem">
 </apt-cms-configuration-summary>
