@@ -4,8 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutComponent } from './layout/checkout.component';
 import { SummaryComponent } from './component/summary.component';
-import { ProductConfigurationSummaryModule,PaymentComponentModule, OutputFieldModule, MiniProfileModule, BreadcrumbModule, PriceSummaryModule, InputFieldModule } from '@apttus/elements';
-// import { ComponentModule } from '../../components/component.module';
+import {
+  ProductConfigurationSummaryModule,
+  PaymentComponentModule,
+  OutputFieldModule,
+  MiniProfileModule,
+  BreadcrumbModule,
+  PriceSummaryModule,
+  InputFieldModule,
+  CmsModule,
+  ConfigurationModule
+} from '@apttus/elements';
 import { CardFormComponent } from './component/card-form/card-form.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -39,7 +48,9 @@ import { ComponentModule } from '../../components/component.module';
     BreadcrumbModule,
     PriceSummaryModule,
     InputFieldModule,
-    LaddaModule
+    LaddaModule,
+    CmsModule,
+    ConfigurationModule
   ],
   declarations: [CheckoutComponent, SummaryComponent, CardFormComponent]
 })
