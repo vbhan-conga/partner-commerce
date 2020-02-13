@@ -6,7 +6,7 @@ import {
   Quote,
   CartItemService,
   LineItemService,
-  CmsService
+  StorefrontService
 } from '@apttus/ecommerce';
 import * as _ from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -63,7 +63,7 @@ export class SummaryComponent implements OnChanges {
               private cartItemService: CartItemService,
               private modalService: BsModalService,
               private translate: TranslateService,
-              private cmsService: CmsService) {
+              private storefrontService: StorefrontService) {
     this.state = {
       configurationMessage: null,
       downloadLoading: false,
@@ -71,7 +71,7 @@ export class SummaryComponent implements OnChanges {
       requestQuoteLoading: false
     };
 
-    this.cmsService.isCmsEnabled().subscribe(s => this.isCmsEnabled = s);
+    this.storefrontService.isCmsEnabled().subscribe(s => this.isCmsEnabled = s);
   }
 
   ngOnChanges() {

@@ -6,7 +6,7 @@ import {
   ProductService,
   CartItemService,
   ConstraintRuleService,
-  CmsService
+  StorefrontService
 } from '@apttus/ecommerce';
 import { Observable, zip, BehaviorSubject, Subscription } from 'rxjs';
 import { take, map, tap, filter } from 'rxjs/operators';
@@ -27,7 +27,7 @@ export class ProductDetailsResolver implements Resolve<any> {
               private crService: ConstraintRuleService,
               private router: Router,
               private http: HttpClient,
-              private cmsService: CmsService) { }
+              private storefrontService: StorefrontService) { }
 
 
   state(): BehaviorSubject<ProductDetailsState> {
@@ -46,7 +46,7 @@ export class ProductDetailsResolver implements Resolve<any> {
         skipCache: true
       }),
       this.crService.getRecommendationsForProducts([_.get(routeParams, 'params.id')]),
-      this.cmsService.isCmsEnabled()
+      this.storefrontService.isCmsEnabled()
     ).pipe(
       map(([productList, cartitemList, rProductList, isCmsEnabled]) => {
         return {
