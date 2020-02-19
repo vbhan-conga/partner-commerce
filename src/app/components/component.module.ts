@@ -7,11 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { ApttusModule } from '@apttus/core';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PricingModule } from '@apttus/ecommerce';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
 
-import { MiniProfileModule, MiniCartModule, ConstraintIconModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule } from '@apttus/elements';
+import { MiniProfileModule, MiniCartModule, ConstraintIconModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule, ConstraintRuleModule } from '@apttus/elements';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
@@ -25,7 +24,6 @@ import { ProgressComponent } from './progress/progress.component';
     ConstraintIconModule,
     ConstraintSideMenuModule,
     BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
     TypeaheadModule.forRoot(),
     LaddaModule,
     RouterModule,
@@ -40,14 +38,16 @@ import { ProgressComponent } from './progress/progress.component';
     OutputFieldModule,
     BreadcrumbModule,
     ButtonModule,
-    DirectivesModule
+    DirectivesModule,
+    ConstraintRuleModule
   ],
   exports: [
     HeaderComponent,
     LaddaModule,
     ToastrModule,
     ActionBarComponent,
-    ProgressComponent
+    ProgressComponent,
+    ConstraintRuleModule
   ],
   declarations: [
     HeaderComponent,

@@ -13,7 +13,15 @@
     </div>
     
     <!-- Table component rendering list of carts with applicable actions and pagination -->
-    <apt-table #table [type]="view.type" [options]="view.tableOptions"></apt-table>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <apt-table #table [type]="view.type" [options]="view.tableOptions"></apt-table>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Spinner dots while data is loading -->
     <ng-template #spinner>
