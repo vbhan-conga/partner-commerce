@@ -62,7 +62,7 @@ export class CartSummaryComponent implements OnInit, OnChanges {
     this.storefront$ = this.storefrontService.getStorefront();
 
     this.storefront$.subscribe(store => {
-      if (store.EnableTaxCalculations)
+      if (_.get(store, 'EnableTaxCalculations', false))
         this.calculateTotalTax();
     });
   }

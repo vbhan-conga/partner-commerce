@@ -68,6 +68,10 @@ export class ProductDetailComponent implements OnInit {
     const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option')) && _.get(i, 'LineNumber') === _.get(i, 'PrimaryLineNumber'));
     if (!_.isNil(primaryItem))
       this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
+
+    if(this.quantity <= 0) {
+        this.quantity = 1;
+    }
   }
 
   /**
