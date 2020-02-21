@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoginGuard, GuestGuard } from '@apttus/ecommerce';
+import { environment } from '../environments/environment';
 import { MainComponent } from './main.component';
 import { RouteGuard } from './services/route.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
-import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -61,7 +61,6 @@ import { environment } from '../environments/environment';
               },
               {
                 path: 'assets',
-                canActivate: [LoginGuard],
                 loadChildren: () => import('./modules/assets/assets.module').then(m => m.AssetsModule),
                 data: { title: 'Assets' }
               },
@@ -72,6 +71,10 @@ import { environment } from '../environments/environment';
               {
                 path: 'user',
                 loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
+              },
+              {
+                path: '**',
+                redirectTo: ''
               }
             ]
           }

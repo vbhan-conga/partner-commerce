@@ -5,7 +5,8 @@
             "MIN_OPTIONS": "voi dovere Selezionare a meno {{value}} opzioni.",
             "MAX_opzioni": "voi può Selezionare non più di {{value}} opzioni.",
             "MIN_TOTAL_QUANTITY": "La quantità minima totale è {{value}}.",
-            "MAX_TOTAL_QUANTITY": "La quantità massima totale è {{value}}."
+            "MAX_TOTAL_QUANTITY": "La quantità massima totale è {{value}}.",
+            "REQUIRED_OPTION_MISSING": "Opzioni(s) {{value}} è/siamo necessario."
         },
         "UNABLE_TO_RENEW": "Si è verificato un errore rinnovo di questo asset(s)",
         "CART": {

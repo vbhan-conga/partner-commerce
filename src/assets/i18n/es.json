@@ -5,7 +5,8 @@
             "MIN_OPTIONS": "es_MX You must select at least {{value}} options.",
             "MAX_OPTIONS": "es_MX You can select no more than {{value}} options.",
             "MIN_TOTAL_QUANTITY": "es_MX The total minimum quantity is {{value}}.",
-            "MAX_TOTAL_QUANTITY": "es_MX The total maximum quantity is {{value}}."
+            "MAX_TOTAL_QUANTITY": "es_MX The total maximum quantity is {{value}}.",
+            "REQUIRED_OPTION_MISSING": "es_MX Option(s) {{value}} is/are required."
         },
         "UNABLE_TO_RENEW": "es_MX An error occurred renewing this asset(s)",
         "CART": {
@@ -26,7 +27,8 @@
             "INVALID_TOASTR_MESSAGE": "es_MX Promotion {{name}} is not applied.",
             "INVALID_TOASTR_TITLE": "es_MX Promotion Not Applied"
         },
-        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error"
+        "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error",
+        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1"
     },
     "SUCCESS": {
         "TITLE": "es_MX Success",
@@ -305,7 +307,11 @@
         "CC": "es_MX CC",
         "VALID_EMAIL": "es_MX you@example.com",
         "INVALID_EMAIL_ERROR": "es_MX Email must be a valid email address",
-        "CHECKOUT": "es_MX Checkout"
+        "CHECKOUT": "es_MX Checkout",
+        "ALL": "es_MX All",
+        "CHANGES_ONLY": "es_MX Changes Only",
+        "OPTION_TOTAL": "es_MX Option Total",
+        "ITEMIZED_OPTIONS": "es_MX Itemized Options"
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",

@@ -1,12 +1,11 @@
 import { Component, OnInit, TemplateRef, NgZone, OnDestroy } from '@angular/core';
-import { ACondition } from '@apttus/core';
 import { CartService, Cart, PriceService } from '@apttus/ecommerce';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Observable, Subscription } from 'rxjs';
-import * as _ from 'lodash';
+import { Observable, Subscription, combineLatest, of } from 'rxjs';
+import { get, set } from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
-import { take, map } from 'rxjs/operators';
+import { take, map, switchMap } from 'rxjs/operators';
 
 /**
  * Cart list Component loads and shows all the carts for logged in user.
@@ -18,16 +17,11 @@ import { take, map } from 'rxjs/operators';
 })
 export class CartListComponent implements OnInit, OnDestroy {
 
-  /**
-   * All carts for logged in user.
-   */
-  cartList$: Observable<Array<Cart>>;
-  currentCart$: Observable<Cart>;
   modalRef: BsModalRef;
   message: string;
   loading: boolean = false;
   cart: Cart;
-  cartAggregate: any;
+  view$: Observable<CartListView>;
   /**
    * Current page used by the pagination component. Default is 1.
    */
@@ -57,26 +51,45 @@ export class CartListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnInit() {
-    this.currentCart$ = this.cartService.getMyCart()
-      .pipe(
-        map(cart => (_.isNil(cart)) ? new Cart() : cart)
-      );
-    this.subscriptions.push(this.cartService.query({conditions: [new ACondition(Cart, 'Id', 'NotNull', null)], aggregate: true}).subscribe(res => this.cartAggregate = res));
-    this.loadCarts(this.currentPage);
-    this.translateService.stream('PAGINATION').subscribe((val: string) => {
+    this.loadView();
+    this.subscriptions.push(this.translateService.stream('PAGINATION').subscribe((val: string) => {
       this.paginationButtonLabels.first = val['FIRST'];
       this.paginationButtonLabels.previous = val['PREVIOUS'];
       this.paginationButtonLabels.next = val['NEXT'];
       this.paginationButtonLabels.last = val['LAST'];
-    });
+    }));
   }
-
-  /**
-   * It loads all the cart of logged in user for given page number.
-   * @param page Page number to load cart list.
-   */
-  loadCarts(page) {
-    this.cartList$ = this.cartService.getMyCarts(this.limit, page);
+  /** @ignore */
+  loadView() {
+    this.view$ = combineLatest(
+      this.cartService.getMyCart(),
+      this.cartService.getMyCarts(this.limit, this.currentPage),
+    ).pipe(
+      switchMap(([currentCart, cartList]) => {
+        return combineLatest(
+          of(currentCart),
+          of(cartList),
+          this.cartService.query({
+            aggregate: true,
+            skipCache: true
+          })
+        );
+      }),
+      map(([currentCart, cartList, aggregate]) => {
+        return {
+          currentCart: currentCart,
+          cartList: cartList,
+          totalCarts: get(aggregate, 'total_records')
+        } as CartListView;
+      })
+    );
+  }
+  /** @ignore */
+  loadCarts(event: any) {
+    if (get(event, 'page') !== this.currentPage) {
+      this.currentPage = get(event, 'page');
+      this.loadView();
+    }
   }
 
   /**
@@ -95,10 +108,10 @@ export class CartListComponent implements OnInit, OnDestroy {
    */
   deleteCart(cart: Cart) {
     cart._metadata = { state: 'processing' };
-    this.cartService.deleteCart(cart).subscribe(
+    this.cartService.deleteCart(cart).pipe(take(1)).subscribe(
       res => { },
       err => {
-        _.set(cart, '_metadata.state', 'ready');
+        set(cart, '_metadata.state', 'ready');
       }
     );
   }
@@ -108,13 +121,13 @@ export class CartListComponent implements OnInit, OnDestroy {
    * @param cart Cart that needs to be Active.
    */
   setCartActive(cart: Cart) {
-    _.set(cart, '_metadata.state', 'processing');
-    this.cartService.setCartActive(cart).subscribe(
+    set(cart, '_metadata.state', 'processing');
+    this.cartService.setCartActive(cart).pipe(take(1)).subscribe(
       res => {
-        _.set(cart, '_metadata.state', 'ready');
+        set(cart, '_metadata.state', 'ready');
       },
       err => {
-        _.set(cart, '_metadata.state', 'ready');
+        set(cart, '_metadata.state', 'ready');
       }
     );
   }
@@ -125,14 +138,16 @@ export class CartListComponent implements OnInit, OnDestroy {
   createCart() {
     this.loading = true;
     this.currentPage = 1;
-    this.cartService.createNewCart(this.cart).subscribe(
+    this.cartService.createNewCart(this.cart).pipe(take(1)).subscribe(
       res => {
         this.loading = false;
         this.modalRef.hide();
+        this.setCartActive(this.cart);
+        this.loadView();
       },
       err => {
         this.loading = false;
-        this.translateService.stream('MY_ACCOUNT.CART_LIST.CART_CREATION_FAILED').subscribe((val: string) => {
+        this.translateService.get('MY_ACCOUNT.CART_LIST.CART_CREATION_FAILED').pipe(take(1)).subscribe((val: string) => {
           this.message = val;
         });
       }
@@ -142,4 +157,11 @@ export class CartListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
+}
+
+/** @ignore */
+interface CartListView {
+  currentCart: Cart;
+  cartList: Array<Cart>;
+  totalCarts: number;
 }

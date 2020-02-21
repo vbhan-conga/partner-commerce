@@ -5,7 +5,8 @@
             "MIN_OPTIONS": "You must select at least {{value}} options.",
             "MAX_OPTIONS": "You can select no more than {{value}} options.",
             "MIN_TOTAL_QUANTITY": "The total minimum quantity is {{value}}.",
-            "MAX_TOTAL_QUANTITY": "The total maximum quantity is {{value}}."
+            "MAX_TOTAL_QUANTITY": "The total maximum quantity is {{value}}.",
+            "REQUIRED_OPTION_MISSING": "Option(s) {{value}} is/are required."
         },
         "UNABLE_TO_RENEW": "An error occurred renewing this asset(s)",
         "CART": {
@@ -26,7 +27,8 @@
             "INVALID_TOASTR_MESSAGE": "Promotion {{name}} is not applied.",
             "INVALID_TOASTR_TITLE": "Promotion Not Applied"
         },
-        "APPLICATION_ERROR_TOASTR_TITLE": "Application Error"
+        "APPLICATION_ERROR_TOASTR_TITLE": "Application Error",
+        "INVALID_QUANTITY": "Cannot add a quantity less than 1"
     },
     "SUCCESS": {
         "TITLE": "Success",
@@ -318,7 +320,11 @@
         "ORDER_AMOUNT_BY_STATUS": "ORDER AMOUNT BY STATUS",
         "CC": "CC",
         "VALID_EMAIL": "you@example.com",
-        "INVALID_EMAIL_ERROR": "Email must be a valid email address"
+        "INVALID_EMAIL_ERROR": "Email must be a valid email address",
+        "ALL": "All",
+        "CHANGES_ONLY": "Changes Only",
+        "OPTION_TOTAL": "Option Total",
+        "ITEMIZED_OPTIONS": "Itemized Options"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
