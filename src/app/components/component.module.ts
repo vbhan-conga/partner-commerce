@@ -10,7 +10,7 @@ import { PricingModule } from '@apttus/ecommerce';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { ToastrModule } from 'ngx-toastr';
 
-import { MiniProfileModule, MiniCartModule, ConstraintIconModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule, ConstraintRuleModule } from '@apttus/elements';
+import { MiniProfileModule, MiniCartModule, ConstraintSideMenuModule, IconModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule, ConstraintRuleModule } from '@apttus/elements';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
@@ -21,7 +21,7 @@ import { ProgressComponent } from './progress/progress.component';
     CommonModule,
     MiniProfileModule,
     MiniCartModule,
-    ConstraintIconModule,
+    ConstraintRuleModule,
     ConstraintSideMenuModule,
     BsDropdownModule.forRoot(),
     TypeaheadModule.forRoot(),
