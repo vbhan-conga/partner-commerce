@@ -15,6 +15,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ProgressComponent } from './progress/progress.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ProgressComponent } from './progress/progress.component';
     ConstraintSideMenuModule,
     BsDropdownModule.forRoot(),
     TypeaheadModule.forRoot(),
+    ModalModule.forRoot(),
     LaddaModule,
     RouterModule,
     FormsModule,
