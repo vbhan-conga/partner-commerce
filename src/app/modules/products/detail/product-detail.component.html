@@ -110,6 +110,7 @@
                 </apt-product-configuration>
 
                 <apt-cms-product-configuration
+                  [productId]="viewState?.product.Id"
                   *ngIf="viewState?.isCmsEnabled">
                 </apt-cms-product-configuration>
             </div>
