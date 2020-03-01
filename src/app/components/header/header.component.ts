@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   keyupEvent: any;
 
   view$: BehaviorSubject<HeaderView> = new BehaviorSubject<HeaderView>(null);
-
+  categoryView$: Observable<CategoryView>;
   subscription: Subscription;
 
   constructor(private categoryService: CategoryService,
@@ -66,23 +66,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.categoryView$ = this.categoryService.getCategoryTree()
+      .pipe(
+        map(categoryTree => ({
+          categoryTree: categoryTree,
+          categoryBranch: _.map(categoryTree, (c) => {
+            const depth = this.getDepth(c);
+            return new Array<any>(depth);
+          })
+        }))
+      );
+
     this.subscription = combineLatest(
       this.storefrontService.getStorefront()
-      , this.categoryService.getCategoryTree()
       , this.contactService.getMyContact()
       , this.userService.me()
       , this.storefrontService.describe(null, 'DefaultLocale', true)
       , this.cartService.getMyCart()
     ).pipe(
-      map(([storefront, categoryTree, contact, user, localeFields, activeCart]) => {
+      map(([storefront, contact, user, localeFields, activeCart]) => {
         user.SmallPhotoUrl = this.userService.configurationService.get('endpoint') + user.SmallPhotoUrl.substring(user.SmallPhotoUrl.indexOf('/profilephoto'));
         return {
           storefront: storefront,
-          categoryTree: categoryTree,
-          categoryBranch: _.map(categoryTree, (c) => {
-            const depth = this.getDepth(c);
-            return new Array<any>(depth);
-          }),
           contact: contact,
           me: user,
           cart: activeCart
@@ -172,9 +178,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 /** @ignore */
 interface HeaderView {
   storefront: Storefront;
-  categoryTree: Array<Category>;
-  categoryBranch: Array<Category>;
   contact: Contact;
   me: User;
   cart: Cart;
+}
+
+interface CategoryView{
+  categoryTree: Array<Category>;
+  categoryBranch: Array<Category>;
 }
