@@ -91,7 +91,7 @@
                         (click)="editOrderItems(order)">{{'COMMON.EDIT' | translate}}
                     </button>
                 </h5>
-                <table class="table table-responsive border-bottom">
+                <table class="table table-responsive">
                     <tbody>
                         <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
                             <apt-line-item-table-row
