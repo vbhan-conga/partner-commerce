@@ -12,7 +12,7 @@ export const environment: Configuration = {
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 5,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
@@ -27,8 +27,8 @@ export const environment: Configuration = {
   hashRouting: false,
 
   // Salesforce environment variables
-  storefront: 'Partner Commerce',
+  storefront: 'P-Commerce',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
   organizationId: '00D3I0000008n7g',
-  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
+  endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
 };
