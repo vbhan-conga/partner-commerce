@@ -70,6 +70,7 @@
     "convert-units": "^2.3.4",
     "cpx": "^1.5.0",
     "faker": "^4.1.0",
+    "husky": "^4.2.3",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "js-beautify": "^1.10.2",
@@ -91,5 +92,10 @@
     "typescript": "3.5.3",
     "uglifyjs-folder": "^1.5.2",
     "webpack-bundle-analyzer": "^3.4.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
   }
 }
