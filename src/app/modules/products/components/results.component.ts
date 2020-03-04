@@ -40,14 +40,14 @@ import { TranslateService } from '@ngx-translate/core';
             [class.disabled]="view == 'grid'"
             [attr.disabled]="view == 'grid'"
             (click)="onViewChange.emit('grid')">
-          <span class="oi oi-grid-two-up"></span>
+          <i class="fas fa-grip-vertical"></i>
         </a>
         <a href="javascript:void(0)"
             class="btn btn-link btn-sm py-0"
             [class.disabled]="view == 'list'"
             [attr.disabled]="view == 'list'"
             (click)="onViewChange.emit('list')">
-          <span class="oi oi-list"></span>
+          <i class="fas fa-list-ul"></i>
         </a>
       </div>
     </div>

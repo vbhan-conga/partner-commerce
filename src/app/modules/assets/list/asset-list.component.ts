@@ -152,9 +152,7 @@ export class AssetListComponent implements OnInit {
         field: 'ProductId',
         operators: [
           Operator.EQUAL,
-          Operator.NOT_EQUAL,
-          Operator.IN,
-          Operator.NOT_IN
+          Operator.NOT_EQUAL
         ]
       }
     ]

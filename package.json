@@ -1,11 +1,11 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2001.0.65",
+  "version": "2001.0.70",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "ng build --prod",
+    "build": "ng build --configuration=dc1",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"
@@ -23,9 +23,9 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^8.2.3",
     "@angular/service-worker": "^8.2.3",
-    "@apttus/core": "^2001.0.50",
-    "@apttus/ecommerce": "^2001.0.50",
-    "@apttus/elements": "^2001.0.50",
+    "@apttus/core": "^2001.0.57",
+    "@apttus/ecommerce": "^2001.0.57",
+    "@apttus/elements": "^2001.0.57",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@ng-select/ng-option-highlight": "0.0.4",
     "@ng-select/ng-select": "^3.0.6",
@@ -70,6 +70,7 @@
     "convert-units": "^2.3.4",
     "cpx": "^1.5.0",
     "faker": "^4.1.0",
+    "husky": "^4.2.3",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "js-beautify": "^1.10.2",
@@ -91,5 +92,10 @@
     "typescript": "3.5.3",
     "uglifyjs-folder": "^1.5.2",
     "webpack-bundle-analyzer": "^3.4.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
   }
 }

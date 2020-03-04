@@ -1,4 +1,4 @@
-<app-detail *ngIf="order$ | async as order; else loading" [context]="(isLoggedIn$ | async) ? order : null">
+<app-detail *ngIf="order$ | async as order; else loading" [context]="order">
 
     <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status" 
     [tooltip]="order.hasErrors ? 'Some mandatory informations are missing in the order details. Please fill to proceed.' : ''">
@@ -91,7 +91,7 @@
                         (click)="editOrderItems(order)">{{'COMMON.EDIT' | translate}}
                     </button>
                 </h5>
-                <table class="table table-responsive border-bottom">
+                <table class="table table-responsive">
                     <tbody>
                         <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
                             <apt-line-item-table-row

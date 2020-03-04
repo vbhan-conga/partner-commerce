@@ -8,7 +8,7 @@ import { PriceTypeFilterComponent } from './components/price-type-filter.compone
 import { FormsModule } from '@angular/forms';
 import { ApttusModule } from '@apttus/core';
 import { PricingModule } from '@apttus/ecommerce';
-import { FilterModule, AssetListModule, InputSelectModule, ButtonModule, BreadcrumbModule, TableModule, ChartModule, DataFilterModule } from '@apttus/elements';
+import { FilterModule, AssetListModule, InputSelectModule, ButtonModule, BreadcrumbModule, TableModule, ChartModule, DataFilterModule, ConstraintRuleModule } from '@apttus/elements';
 import { PaginationModule, BsDatepickerModule, AccordionModule } from 'ngx-bootstrap';
 import { ComponentModule } from '../../components/component.module';
 import { ProductFamilyFilterComponent } from './components/product-family-filter.component';
@@ -33,7 +33,8 @@ import { AssetActionFilterComponent } from './components/asset-action-filter.com
     PaginationModule.forRoot(),
     BsDatepickerModule.forRoot(),
     AccordionModule.forRoot(),
-    ButtonModule
+    ButtonModule,
+    ConstraintRuleModule
   ],
   declarations: [
     AssetListComponent,
