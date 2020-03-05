@@ -60,7 +60,7 @@ import { ConstraintRuleGuard } from './services/constraint-rule.guard';
                 canActivate: [RouteGuard, ConstraintRuleGuard]
               },
               {
-                path: 'assets',
+                path: 'asset-list',
                 loadChildren: () => import('./modules/assets/assets.module').then(m => m.AssetsModule),
                 data: { title: 'Assets' }
               },

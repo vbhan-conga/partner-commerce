@@ -89,7 +89,7 @@
               class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
               <span class="oi oi-cog mr-4"></span>{{'HEADER.MY_ACCOUNT' | translate}}
             </a>
-            <a href="javascript:void(0)" [routerLink]="['/assets']" (click)="menuModal.hide()"
+            <a href="javascript:void(0)" [routerLink]="['/asset-list']" (click)="menuModal.hide()"
               class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
               <span class="oi oi-list-rich mr-4"></span>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
             </a>
