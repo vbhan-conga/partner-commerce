@@ -1,3 +1,9 @@
+@import "variables";
+
 .quoteBadge {
   line-height: unset;
+}
+
+.ActionBar {
+  height: $navbar-brand-height / 1.5;
 }

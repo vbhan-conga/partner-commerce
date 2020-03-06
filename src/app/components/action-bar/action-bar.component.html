@@ -1,4 +1,4 @@
-<div *ngIf="cart$ | async as cart" class="d-flex justify-content-between w-100 align-items-center">
+<div *ngIf="cart$ | async as cart" class="d-flex justify-content-between w-100 align-items-center ActionBar">
   <div class="d-flex align-self-stretch">
     <div class="border-left px-3 d-flex align-items-center">
       <apt-output-field [record]="cart" field="AccountId" label="{{'COMMON.ACCOUNT' | translate}}" layout="inline" [showQuickView]="true" (onChange)="changeAccount($event)" #accountField>
