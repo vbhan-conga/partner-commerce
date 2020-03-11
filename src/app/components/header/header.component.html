@@ -83,7 +83,7 @@
                     <ng-container *ngFor="let category of categoryView?.categoryTree">
                       <a class="list-group-item list-group-item-action" href="#menuCarousel"
                         (click)="goToCategory(category, view)" data-slide="next"
-                        *ngIf="category?._children?.length > 0; else direct">{{category.Name}}</a>
+                        *ngIf="category?.Children?.length > 0; else direct">{{category.Name}}</a>
                       <ng-template #direct>
                         <a class="list-group-item list-group-item-action" (click)="menuModal.hide()"
                           [routerLink]="['/products/category', category.Name]">{{category.Name}}</a>
@@ -101,10 +101,10 @@
                         (click)="menuModal.hide()" data-slide-to="0">{{'HEADER.SHOW_ALL' | translate}}</a>
                     </div>
                     <ul class="list-group list-group-flush mt-3">
-                      <ng-container *ngFor="let category of currentCategory?._children">
+                      <ng-container *ngFor="let category of currentCategory?.Children">
                         <a class="list-group-item list-group-item-action" href="#menuCarousel"
                           (click)="goToCategory(category, view)" data-slide="next"
-                          *ngIf="category._children && category._children.length > 0; else link">{{category.Name}}</a>
+                          *ngIf="category.Children && category.Children.length > 0; else link">{{category.Name}}</a>
                         <ng-template #link>
                           <a class="list-group-item list-group-item-action" href="#menuCarousel"
                             (click)="menuModal.hide()" [routerLink]="['/products/category', category.Name]"
