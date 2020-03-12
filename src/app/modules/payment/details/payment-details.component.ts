@@ -140,8 +140,8 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
       this.paymentTransaction.CustomerEmailAddress = _.get(this.order.PrimaryContact, 'Email');
       this.paymentTransaction.CustomerAddressLine1 = _.get(this.order.BillToAccount, 'BillingStreet');
       this.paymentTransaction.CustomerAddressCity = _.get(this.order.BillToAccount, 'BillingCity');
-      this.paymentTransaction.CustomerAddressStateCode = _.get(this.order.BillToAccount, 'BillingState');
-      this.paymentTransaction.CustomerAddressCountryCode = _.get(this.order.BillToAccount, 'Country_Code');
+      this.paymentTransaction.CustomerAddressStateCode = _.get(this.order.BillToAccount, 'BillingAddress.stateCode');
+      this.paymentTransaction.CustomerAddressCountryCode = _.get(this.order.BillToAccount, 'BillingAddress.countryCode');
       this.paymentTransaction.CustomerAddressPostalCode = _.get(this.order.BillToAccount, 'BillingAddress.postalCode');
       this.paymentTransaction.CustomerBillingAccountName = _.get(this.order.BillToAccount, 'Name');
       this.paymentTransaction.CustomerBillingAccountID = _.get(this.order.BillToAccount, 'Id');
