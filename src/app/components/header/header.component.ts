@@ -81,8 +81,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getDepth(obj) {
     let depth = 0;
-    if (obj._children) {
-      obj._children.forEach(d => {
+    if (obj.Children) {
+      obj.Children.forEach(d => {
         const tmpDepth = this.getDepth(d);
         if (tmpDepth > depth) {
           depth = tmpDepth;
