@@ -140,11 +140,11 @@ export class CartListComponent implements OnInit {
   }
   /**@ignore */
   canActivate(currentActiveCart: Cart, rowCart: Cart) {
-    return (rowCart.Status !== 'Finalized') && (currentActiveCart.Id !== rowCart.Id);
+    return (rowCart.Status !== 'Finalized') && (_.get(currentActiveCart, 'Id') !== _.get(rowCart, 'Id'));
   }
   /**@ignore */
   isCartActive(currentActiveCart: Cart, rowCart: Cart) {
-    return (currentActiveCart.Id === rowCart.Id);
+    return (_.get(currentActiveCart, 'Id') === _.get(rowCart, 'Id'));
   }
 
 }
