@@ -1,50 +1,55 @@
-<!-- Total Carts and Add new Cart action button -->
-<div class="card">
-    <nav class="navbar navbar-light bg-white d-flex justify-content-between">
-        <div *ngIf="cartAggregate$ | async as cartAgg; else spinner">
+<ng-container *ngTemplateOutlet="cartList; context: { view: view$ | async }"></ng-container>
+
+<ng-template #cartList let-view="view">
+    <!-- Total Carts and Add new Cart action button -->
+    <div class="card">
+        <nav class="navbar navbar-light bg-white d-flex justify-content-between">
             <span class="navbar-brand">
                 {{'COMMON.CARTS' | translate}}
-                <span *ngIf="cartAgg?.total_records > 0">({{cartAgg?.total_records}})</span>
             </span>
-        </div>
-        <div>
             <button type="button" class="btn btn-primary btn-raised"
                 (click)="newCart(template)">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</button>
-        </div>
-    </nav>
-</div>
-
-<!-- Table component rendering list of carts with applicable actions and pagination -->
-<div class="card p-0 mt-3" *ngIf="currentCart$ | async as myCart">
-    <apt-table [type]="type" [options]="tableOptions"></apt-table>
-</div>
-
-<!-- Spinner dots while data is loading -->
-<ng-template #spinner>
-    <apt-dots></apt-dots>
-</ng-template>
-
-<!-- Template for creating new cart -->
-<ng-template #template>
-    <form (ngSubmit)="createCart()">
-        <div class="modal-header">
-            <h4 class="modal-title pull-left">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</h4>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="mb-3">
-                <apt-input-field placeholder="{{'COMMON.NAME' | translate}}" name="cartName" [(ngModel)]="cart.Name"
-                    field="Name" [entity]="cart"></apt-input-field>
+        </nav>
+    </div>
+    
+    <!-- Table component rendering list of carts with applicable actions and pagination -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <apt-table #table [type]="view.type" [options]="view.tableOptions"></apt-table>
+                </div>
             </div>
-            <small class="text-danger animated fadeIn" *ngIf="message">{{message}}</small>
         </div>
-        <div class="d-flex justify-content-end modal-footer">
-            <button class="btn btn-link" type="button"
-                (click)="modalRef.hide()">{{'COMMON.CANCEL' | translate}}</button>
-            <button class="btn btn-primary btn-raised w-25" type="submit"
-                [ladda]="loading">{{'COMMON.SAVE' | translate}}</button>
-        </div>
-    </form>
+    </div>
+    
+    <!-- Spinner dots while data is loading -->
+    <ng-template #spinner>
+        <apt-dots></apt-dots>
+    </ng-template>
+    
+    <!-- Template for creating new cart -->
+    <ng-template #template>
+        <form (ngSubmit)="createCart()">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <apt-input-field placeholder="{{'COMMON.NAME' | translate}}" name="cartName" [(ngModel)]="cart.Name"
+                        field="Name" [entity]="cart"></apt-input-field>
+                </div>
+                <small class="text-danger animated fadeIn" *ngIf="message">{{message}}</small>
+            </div>
+            <div class="d-flex justify-content-end modal-footer">
+                <button class="btn btn-link" type="button"
+                    (click)="modalRef.hide()">{{'COMMON.CANCEL' | translate}}</button>
+                <button class="btn btn-primary btn-raised w-25" type="submit"
+                    [ladda]="loading">{{'COMMON.SAVE' | translate}}</button>
+            </div>
+        </form>
+    </ng-template>
 </ng-template>

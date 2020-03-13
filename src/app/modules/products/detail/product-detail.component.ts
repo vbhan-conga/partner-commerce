@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } from '@apttus/elements';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { CartService, CartItem } from '@apttus/ecommerce';
-import { ProductConfigurationSummaryComponent } from '@apttus/elements';
-import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
+import { CartService, CartItem, Storefront } from '@apttus/ecommerce';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
 import { take } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-product-detail',
@@ -16,6 +15,7 @@ import { take } from 'rxjs/operators';
 export class ProductDetailComponent implements OnInit {
 
   cartItemList: Array<CartItem>;
+
   viewState$: BehaviorSubject<ProductDetailsState>;
 
   /**
@@ -24,10 +24,12 @@ export class ProductDetailComponent implements OnInit {
   configurationChanged = false;
 
   quantity = 1;
+
   /**
    * Flag used in update configuration method
    */
   saving = false;
+
   /**
    * Default term is set to 1.
    */
@@ -36,9 +38,16 @@ export class ProductDetailComponent implements OnInit {
   /** @ignore */
   productCode: string;
 
-  @ViewChild('productConfigurationSummary', { static: false }) productConfigurationSummary: ProductConfigurationSummaryComponent;
+  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
+  configSummaryModal: ProductConfigurationSummaryComponent;
 
-  constructor(private cartService: CartService, private resolver: ProductDetailsResolver, private router: Router, private activatedRoute: ActivatedRoute) { }
+  @ViewChild(ConfigurationSummaryComponent, { static: false })
+  cmsConfigSummaryModal: ConfigurationSummaryComponent;
+
+  constructor(private cartService: CartService,
+              private resolver: ProductDetailsResolver,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.resolver
@@ -91,4 +100,12 @@ export class ProductDetailComponent implements OnInit {
     this.cartService.updateCartItems([cartItem]);
   }
 
+  showSummary() {
+    const modal = this.configSummaryModal || this.cmsConfigSummaryModal;
+
+    if (!modal)
+      return;
+
+    modal.show();
+  }
 }

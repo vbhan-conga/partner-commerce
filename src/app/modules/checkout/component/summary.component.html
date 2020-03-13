@@ -69,10 +69,16 @@
 </ng-template>-->
 
 <apt-product-configuration-summary
-  *ngIf="lineItem"
+  *ngIf="lineItem && isCmsEnabled !== null && !isCmsEnabled"
   [product]="lineItem.Product"
   [relatedTo]="lineItem">
 </apt-product-configuration-summary>
+
+<apt-cms-configuration-summary
+  *ngIf="lineItem && isCmsEnabled !== null && isCmsEnabled"
+  [product]="lineItem.Product"
+  [relatedTo]="lineItem">
+</apt-cms-configuration-summary>
 
 <ng-template #confirmationTemplate>
   <div class="modal-header">
@@ -82,7 +88,7 @@
     </button>
   </div>
   <div class="modal-body d-flex justify-content-center align-items-center confirmation py-5">
-    <span class="oi oi-check circle"></span>
+    <i class="far fa-check-circle"></i>
   </div>
   <div class="modal-footer d-flex justify-content-center flex-wrap flex-md-nowrap">
     <button class="btn btn-secondary d-block w-100 m-2" [routerLink]="['/']" (click)="confirmationModal.hide()"> {{ 'CART.CART_SUMMARY.CONTINUE_SHOPPING' | translate }} </button>

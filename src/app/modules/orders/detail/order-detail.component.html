@@ -1,4 +1,4 @@
-<app-detail *ngIf="order$ | async as order; else loading" [context]="(isLoggedIn$ | async) ? order : null">
+<app-detail *ngIf="order$ | async as order; else loading" [context]="order">
 
     <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status" 
     [tooltip]="order.hasErrors ? 'Some mandatory informations are missing in the order details. Please fill to proceed.' : ''">
@@ -58,14 +58,14 @@
                                 <apt-output-field [record]="order" field="CreatedDate" layout="inline" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="order.CreatedBy" field="Name" layout="inline" label="Created By" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="order" field="PrimaryContactId" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"
-                                [lookupOptions]="lookupOptions"></apt-output-field>
+                                [lookupOptions]="lookupOptions" [required]="true"></apt-output-field>
                                 <apt-output-field [record]="order" field="SoldToAccountId" label="SoldToAccount.Name" layout="inline" [editable]="false"
                                     [showQuickView]="true"></apt-output-field>
                                 <apt-output-field [record]="order" field="Description" label="Order Title" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'"
                                     [showQuickView]="true"></apt-output-field>
                             </dl>
                             <dl class="col-12 col-md-6">
-                                <apt-output-field [record]="order" field="ShipToAccountId" label="Ship To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="ShipToAccountId" label="Ship To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true" [required]="true"></apt-output-field>
                                 <apt-output-field [record]="order" field="ShipToAccount.ShippingAddress" label="Ship To Address" layout="inline" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="order" field="BillToAccountId" label="Bill To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"></apt-output-field>
                                 <apt-output-field [record]="order" field="BillToAccount.BillingAddress" label="Bill To Address" layout="inline" [editable]="false"></apt-output-field>
@@ -91,7 +91,7 @@
                         (click)="editOrderItems(order)">{{'COMMON.EDIT' | translate}}
                     </button>
                 </h5>
-                <table class="table table-responsive border-bottom">
+                <table class="table table-responsive">
                     <tbody>
                         <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
                             <apt-line-item-table-row

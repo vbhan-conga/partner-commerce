@@ -151,6 +151,9 @@ apt-breadcrumb{
     display: block;
     border-bottom: 1px solid $info;
     background-color: $light;
+    &>nav>div {
+        height: $navbar-brand-height / 1.5;
+    }
 }
 
 ngx-gallery{

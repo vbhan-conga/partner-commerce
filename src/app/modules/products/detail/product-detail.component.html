@@ -1,6 +1,10 @@
 <app-detail [title]="viewState?.product?.Name" [subtitle]="viewState?.product?.ProductCode" [context]="viewState?.product"
     *ngIf="viewState$ | async as viewState; else loading">
 
+    <div class="constraintAlerts">
+        <apt-constraint-rule-alert></apt-constraint-rule-alert>
+    </div>
+
     <div class="primary-actions">
         <form class="d-flex">
             <div class="form-group my-0 mr-5">
@@ -35,7 +39,7 @@
                 <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
                     [configurationEnabled]="false" [quantity]="quantity"
                     [cartItems]="(cartItems?.length > 0) ? cartItems : null" [product]="viewState?.product"
-                    [btnClass]="'btn-primary btn-raised px-3'"></apt-add-to-cart>
+                    [btnClass]="'btn-primary btn-raised px-3 py-2'"></apt-add-to-cart>
             </div>
         </form>
 
@@ -45,7 +49,7 @@
             <div class="d-flex">
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="quantity"
-                        [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3'"
+                        [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'"
                         (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'">
                     </apt-add-to-cart>
                 </ng-container>
@@ -67,7 +71,7 @@
 
                 <button class="btn btn-outline-primary ml-2"
                     *ngIf="viewState?.product?.HasAttributes || viewState?.product?.HasOptions"
-                    (click)="productConfigurationSummary.show();">{{'DETAILS.PRICE_SUMMARY' | translate}}</button>
+                    (click)="showSummary();">{{'DETAILS.PRICE_SUMMARY' | translate}}</button>
             </div>
         </ng-template>
 
@@ -97,9 +101,18 @@
         <div class="row mt-4">
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.CONFIGURATIONS' | translate}} </h4>
             <div class="col-12">
-                <apt-product-configuration [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
-                    (configurationChange)="onConfigurationChange($event)" (click)="configurationChanged = true">
+                <apt-product-configuration
+                  *ngIf="!viewState?.isCmsEnabled"
+                  [product]="viewState?.product"
+                  [relatedTo]="viewState?.relatedTo"
+                  (configurationChange)="onConfigurationChange($event)"
+                  (click)="configurationChanged = true">
                 </apt-product-configuration>
+
+                <apt-cms-product-configuration
+                  [productId]="viewState?.product.Id"
+                  *ngIf="viewState?.isCmsEnabled">
+                </apt-cms-product-configuration>
             </div>
         </div>
     </app-detail-section>
@@ -145,9 +158,25 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
-        [changes]="cartItemList" [preload]="true" #productConfigurationSummary position="right">
+    <apt-product-configuration-summary
+        *ngIf="!viewState?.isCmsEnabled"
+        [product]="viewState?.product"
+        [relatedTo]="viewState?.relatedTo"
+        [changes]="cartItemList"
+        [preload]="true"
+        position="right"
+        #productConfigurationSummary>
     </apt-product-configuration-summary>
+
+    <apt-cms-configuration-summary
+        *ngIf="viewState?.isCmsEnabled"
+        [product]="viewState?.product"
+        [relatedTo]="viewState?.relatedTo"
+        [changes]="cartItemList"
+        [preload]="true"
+        position="right"
+        #cmsProductConfigurationSummary>
+    </apt-cms-configuration-summary>
 </app-detail>
 
 <ng-template #loading>
