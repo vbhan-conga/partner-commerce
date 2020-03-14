@@ -30,7 +30,6 @@
     "@ng-select/ng-option-highlight": "0.0.4",
     "@ng-select/ng-select": "^3.0.6",
     "@ngx-translate/core": "^11.0.1",
-    "@popperjs/core": "^2.0.0",
     "angular2-ladda": "^2.0.2",
     "bootstrap": "^4.4.1",
     "bootstrap-material-design": "git+https://github.com/FezVrasta/bootstrap-material-design.git#master",

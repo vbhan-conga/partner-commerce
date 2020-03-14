@@ -71,23 +71,17 @@ export class OrderListComponent implements OnInit {
   constructor(private orderService: OrderService, private cartService: CartService) { }
 
   ngOnInit() {
-    this.view$ = combineLatest(
-      this.cartService.getMyCart(),
-      this.filterList$
-    )
-    .pipe(
-      switchMap(([cart, filterList]) => {
-        return combineLatest(
-          of(cart),
+
+    this.view$ = this.filterList$
+      .pipe(
+        switchMap(vilterList => 
           this.orderService.query({
             aggregate: true,
             groupBy: ['Status'],
             filters: this.filterList$.value
-          })
-        );
-      }),
-      map(([cart, data]) => {
-        return {
+          })  
+        ),
+        map(data => ({
           tableOptions: _.clone(_.assign(this.tableOptions, {filters: this.filterList$.value})),
           total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
           totalAmount: _.get(data, 'SUM_OrderAmount', _.sumBy(data, 'SUM_OrderAmount')),
@@ -97,9 +91,8 @@ export class OrderListComponent implements OnInit {
           orderAmountByStatus: _.isArray(data)
             ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Config2__Status__c'), s => _.sumBy(s, 'SUM_OrderAmount')), 'null')
             : _.zipObject([_.get(data, 'Apttus_Config2__Status__c')], _.map([_.get(data, 'Apttus_Config2__Status__c')], key => _.get(data, 'SUM_OrderAmount')))
-        } as OrderListView;
-      })
-    );
+        }))
+      );
   }
 
   handleFilterListChange(event: any) {
