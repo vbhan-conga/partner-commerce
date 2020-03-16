@@ -182,7 +182,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
       })
     ).pipe(take(1)).subscribe(cart => {
       this.lineItem_loader = false;
-      this.router.navigate(['/carts', cart.Id])
+      this.router.navigate(['/carts', 'active'])
       .then(result => this.lineItem_loader = false)
       .catch(error => {
         this.exceptionService.showError(error);
