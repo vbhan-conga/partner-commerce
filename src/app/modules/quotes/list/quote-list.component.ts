@@ -39,7 +39,7 @@ export class QuoteListComponent implements OnInit {
         prop: 'AccountId'
       },
       {
-        prop: 'Grand_Total'
+        prop: 'Total_Quote_Amount'
       },
       {
         prop: 'ExpectedStartDate'
@@ -69,7 +69,7 @@ export class QuoteListComponent implements OnInit {
           this.quoteService.query({
             aggregate: true,
             groupBy: ['Approval_Stage', 'RFP_Response_Due_Date'],
-            filters: this.filterList$.value
+            filters: filterList
           })
         );
       }),
@@ -77,7 +77,10 @@ export class QuoteListComponent implements OnInit {
         return {
           tableOptions: _.clone(_.assign(this.tableOptions, {filters: this.filterList$.value})),
           total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
-          totalAmount: _.get(data, 'SUM_Grand_Total', _.sumBy(data, 'SUM_Grand_Total')),
+          totalAmount: _.get(data, 'SUM_Total_Quote_Amount', _.sumBy(data, 'SUM_Total_Quote_Amount')),
+          amountsByStatus: _.isArray(data)
+          ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => _.sumBy(s, 'SUM_Total_Quote_Amount')), 'null')
+          : _.zipObject([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], _.map([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], key => _.get(data, 'SUM_Grand_Total'))),
           quotesByStatus: _.isArray(data)
             ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => _.sumBy(s, 'total_records')), 'null')
             : _.zipObject([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], _.map([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], key => _.get(data, 'total_records'))),
