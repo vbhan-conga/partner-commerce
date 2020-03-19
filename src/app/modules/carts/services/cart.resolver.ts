@@ -21,7 +21,7 @@ export class CartResolver implements Resolve<any> {
         map(cart => ({
             cart: cart,
             lineItems: LineItemService.groupItems(_.get(cart, 'LineItems')),
-            orderOrQuote: _.isNil(_.get(cart, 'Order')) ? _.get(cart,'Quote') : _.get(cart,'Order')
+            orderOrQuote: _.isNil(_.get(cart, 'Order')) ? _.get(cart,'Proposald') : _.get(cart,'Order')
           })
         )
       );

@@ -1,11 +1,11 @@
 <ng-container *ngIf="view$ | async as view">
-  <div class="navbar navbar-light bg-light border-bottom">
+  <div class="fixed-top navbar navbar-light bg-light border-bottom">
     <div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         (click)="menuModal.show()">
         <span class="navbar-toggler-icon"></span>
       </button>
-  
+
       <button class="navbar-brand btn btn-link d-none d-md-inline-block" [routerLink]="['/']"
         *ngIf="view?.storefront?.Logo; else text">
         <img [src]="view?.storefront?.Logo | image" />
@@ -14,20 +14,20 @@
         <button class="navbar-brand btn btn-link" [routerLink]="['/']">{{view?.storefront?.Name}}</button>
       </ng-template>
     </div>
-  
+
     <div class="btn-group">
       <apt-product-search></apt-product-search>
       <apt-mini-cart [manageCartLink]="'/carts/' + view?.cart?.Id"></apt-mini-cart>
       <apt-cr-constraint-icon></apt-cr-constraint-icon>
     </div>
   </div>
-  
-  
-  
-  
-  
+
+
+
+
+
   <apt-mini-profile #profile></apt-mini-profile>
-  
+
   <div bsModal #menuModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
     <div class="modal-dialog modal-lg menu">
       <div class="modal-content py-3">
@@ -121,6 +121,6 @@
       </div>
     </div>
   </div>
-  
+
   <apt-cr-side-menu></apt-cr-side-menu>
 </ng-container>

@@ -92,7 +92,7 @@ export class CartSummaryComponent implements OnInit, OnChanges {
     //   )
     //   .subscribe(()  => {
     //     this.loading = false;
-    //     this.router.navigate(['/Proposals', this.cart.Quote.Id]);
+    //     this.router.navigate(['/Proposals', this.cart.Proposald.Id]);
     //     this.discardChangesModal.hide();
     //   });
   }

@@ -6,6 +6,7 @@
     height: $navbar-brand-height;
     transition: margin 300ms;
     transition: height 300ms;
+    z-index: 1031;
     &.top{
         margin-top: 0px;
         box-shadow: 0 1px 3px rgba(50, 50, 50, 0.4);
@@ -27,7 +28,7 @@
     }
     margin: 0;
     padding: 0 1rem;
-    
+
 }
 .navbar-brand>img{
     transition: .45s;
