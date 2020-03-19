@@ -1,6 +1,6 @@
 <div class="d-block border-bottom table-responsive">
   <h4>
-    <span *ngIf="cart.Quote?.Id; else manageCart">{{cart.Quote.Name}} / {{'COMMON.EDIT_LINE_ITEMS' | translate }}</span>
+    <span *ngIf="cart.Proposald?.Id; else manageCart">{{cart.Proposald.Name}} / {{'COMMON.EDIT_LINE_ITEMS' | translate }}</span>
     <ng-template #manageCart>
       <span>{{'MANAGE_CART.CART_TABLE.ITEMS_IN_YOURCART' | translate }}</span>
     </ng-template>
