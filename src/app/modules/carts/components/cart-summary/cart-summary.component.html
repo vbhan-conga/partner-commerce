@@ -1,7 +1,7 @@
 <div class="card animated fadeIn" *ngIf="cart">
   <div class="card-header">
-    <h5 class="card-title mb-0" *ngIf="!cart.Quote?.Id">{{'MANAGE_CART.CART_SUMMARY.CART_SUMMARY_TITLE' | translate }}</h5>
-    <h5 class="card-title mb-0" *ngIf="cart.Quote?.Id">{{'DETAILS.PRICE_SUMMARY' | translate }}</h5>
+    <h5 class="card-title mb-0" *ngIf="!cart.Proposald?.Id">{{'MANAGE_CART.CART_SUMMARY.CART_SUMMARY_TITLE' | translate }}</h5>
+    <h5 class="card-title mb-0" *ngIf="cart.Proposald?.Id">{{'DETAILS.PRICE_SUMMARY' | translate }}</h5>
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-between">
@@ -33,7 +33,7 @@
       </span>
     </div>
     <hr class="mt-2 mb-3" />
-    <!-- <div class="d-flex justify-content-end" *ngIf="!cart.Quote?.Id">
+    <!-- <div class="d-flex justify-content-end" *ngIf="!cart.Proposald?.Id">
         <button *ngIf="(isLoggedIn$ | async) && (storefront$ | async)?.EnableRequestQuote" class="btn btn-link"
           [routerLink]="['/Proposals/create']" [ladda]="cart?._state === 'pending'" data-style="zoom-in"
           [disabled]="!cart?.LineItems || cart?.LineItems?.length === 0 || hasErrors === true">
@@ -45,7 +45,7 @@
         </button>
     </div>
      -->
-    <!-- <div class="d-flex justify-content-end" *ngIf="cart.Quote?.Id">
+    <!-- <div class="d-flex justify-content-end" *ngIf="cart.Proposald?.Id">
       <button class="btn btn-link mr-2" (click)="openDiscardChageModals()"  [ladda]="cart?._state === 'pending'" data-style="zoom-in"
       [disabled]="!cart?.LineItems || cart?.LineItems?.length === 0 || hasErrors === true">
         {{'MANAGE_CART.CART_SUMMARY.DISCARD_CHANGES' | translate }}
