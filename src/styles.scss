@@ -22,13 +22,13 @@ button.chevron:before, button.minus:before{
 }
 /**
  * Reset anchor and button decoration
- */ 
+ */
 a:hover, a:focus, a:active, button.btn-link:focus, button.btn-link:active, button.btn-link:hover{
     text-decoration: none;
 }
 /**
  * Button styles
- */ 
+ */
 button{
     .btn:not(.btn-link){
         text-transform: uppercase;
@@ -55,8 +55,8 @@ button{
         margin-right: .8rem;
     }
     &.chevron[aria-expanded="false"]:before{
-        content: "\f0da"; 
-        margin-right: .8rem;  
+        content: "\f0da";
+        margin-right: .8rem;
     }
     &.minus[aria-expanded="true"]:before{
         content: "\f068";
@@ -64,7 +64,7 @@ button{
         margin-right: 5px;
     }
     &.minus[aria-expanded="false"]:before{
-        content: "\f067";   
+        content: "\f067";
         font-size: smaller;
         margin-right: 5px;
     }
@@ -77,11 +77,13 @@ button{
 /**
  * Add margin to the main section to accomodate header
  */
-//  main{
-//     margin-top: $navbar-brand-height / 2;
-//     min-height: calc(100vh - #{$navbar-brand-height});
-//  }
+//main{
+//   margin-top: $navbar-brand-height / 2;
+//   min-height: calc(100vh - #{$navbar-brand-height});
+//}
+
 main{
+    margin-top: $navbar-brand-height + $breadcrumb-height;
     max-width: 100vw;
     overflow-x: hidden;
 }
@@ -98,7 +100,7 @@ main{
 
 /**
  * Dropdown fixes
- */ 
+ */
 .dropdown-toggle::after{
     display: none;
 }
@@ -151,8 +153,14 @@ apt-breadcrumb{
     display: block;
     border-bottom: 1px solid $info;
     background-color: $light;
+    top: 0;
+    z-index: 1031;
+    position: fixed;
+    width: 100%;
+    margin-top: $navbar-brand-height;
+
     &>nav>div {
-        height: $navbar-brand-height / 1.5;
+        height: $breadcrumb-height;
     }
 }
 
@@ -194,7 +202,7 @@ typeahead-container.dropdown-menu {
         padding: 0 1.5rem;
         max-width: 100%;
     }
-    
+
     .dropdown-item.active, .dropdown-item:active {
         background-color: $primary;
         color: $white;
