@@ -108,18 +108,6 @@ export class QuoteDetailComponent implements OnInit {
     );
   }
 
-  editQuoteItems(quoteId: string) {
-    this.edit_loader = true;
-    this.quoteService.convertQuoteToCart(quoteId).pipe(take(1)).subscribe(res => {
-      this.edit_loader = false;
-      this.router.navigate(['/cart']);
-    },
-      err => {
-        this.exceptionService.showError(err),
-          this.edit_loader = false;
-      });
-  }
-
   /**
    * @ignore
    */
