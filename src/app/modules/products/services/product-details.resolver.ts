@@ -40,7 +40,7 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.productService.get([_.get(routeParams, 'params.id')]),
+      this.productService.fetch(_.get(routeParams, 'params.id')),
       this.cartItemService.query({
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [_.get(routeParams, 'params.cartItem')])],
         skipCache: true
@@ -48,9 +48,9 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.crService.getRecommendationsForProducts([_.get(routeParams, 'params.id')]),
       this.storefrontService.isCmsEnabled()
     ).pipe(
-      map(([productList, cartitemList, rProductList, isCmsEnabled]) => {
+      map(([product, cartitemList, rProductList, isCmsEnabled]) => {
         return {
-          product: _.first(productList),
+          product: product as Product,
           recommendedProducts: rProductList,
           relatedTo: _.first(cartitemList),
           isCmsEnabled: isCmsEnabled
