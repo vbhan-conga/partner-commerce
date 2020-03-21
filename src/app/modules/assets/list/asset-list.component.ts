@@ -357,6 +357,13 @@ export class AssetListComponent implements OnInit {
                 _.get(action, 'label')
               )
             ),
+            actionValue: !_.isEmpty(
+              _.get(this.route, 'snapshot.queryParams')
+            )
+              ? decodeURIComponent(
+                  _.get(this.route, 'snapshot.queryParams.action')
+                )
+              : 'All',
             childRecordOptions: {
               filters: [
                 new AFilter(this.assetService.type, [
