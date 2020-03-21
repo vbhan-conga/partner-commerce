@@ -75,7 +75,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
         filter(params => _.get(params, 'id') != null),
         flatMap(params => this.orderService.query({
           conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
-          waitForExpansion: false
+          waitForExpansion: false,
+          skipCache: true
         })),
         map(orderList => _.get(orderList, '[0]'))
       );

@@ -6,6 +6,7 @@
         <nav class="navbar navbar-light bg-white d-flex justify-content-between">
             <span class="navbar-brand">
                 {{'COMMON.CARTS' | translate}}
+                <span *ngIf="view?.totalCarts">({{view?.totalCarts}})</span>
             </span>
             <button type="button" class="btn btn-primary btn-raised"
                 (click)="newCart(template)">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</button>
@@ -17,7 +18,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <apt-table #table [type]="view.type" [options]="view.tableOptions"></apt-table>
+                    <apt-table #table [type]="type" [options]="view?.tableOptions"></apt-table>
                 </div>
             </div>
         </div>
