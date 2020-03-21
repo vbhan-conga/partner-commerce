@@ -21,7 +21,7 @@ export const environment: Configuration = {
   type: 'Salesforce',
   debounceTime: 1000,
   proxy: 'https://apttus-proxy.herokuapp.com',
-  useIndexedDB: true,
+  useIndexedDB: false,
   expandDepth: 8,
   hashRouting: true,
   packageNamespace: 'Apttus_WebStore',
