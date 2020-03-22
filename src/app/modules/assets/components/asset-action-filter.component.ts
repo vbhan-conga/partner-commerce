@@ -76,6 +76,23 @@ import { AFilter } from '@apttus/core';
               </label>
             </div>
           </li>
+          <li>
+            <div class="custom-control custom-radio">
+              <input
+                #changeConfiguration
+                type="radio"
+                id="changeConfiguration"
+                class="custom-control-input"
+                name="assetAction"
+                value="Change Configuration"
+                (change)="handleChange($event)"
+                [checked]="value === 'Change Configuration'"
+              >
+              <label class="custom-control-label" for="buyMore">
+                {{'COMMON.CHANGE_CONFIGURATION' | translate}}
+              </label>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
