@@ -36,10 +36,10 @@ export class QuoteListComponent implements OnInit {
         prop: 'PriceListId'
       },
       {
-        prop: 'AccountId'
+        prop: '_AccountId'
       },
       {
-        prop: 'Total_Quote_Amount'
+        prop: 'Grand_Total'
       },
       {
         prop: 'ExpectedStartDate'
