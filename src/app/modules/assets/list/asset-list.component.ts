@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ACondition, AFilter, AObject, Operator } from '@apttus/core';
 import {
   CartService,
@@ -6,9 +6,10 @@ import {
   AssetLineItemExtended,
   AssetLineItem,
   StorefrontService,
-  Product
+  Product,
+  Cart
 } from '@apttus/ecommerce';
-import { Observable, combineLatest, of, BehaviorSubject } from 'rxjs';
+import { Observable, combineLatest, of, BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
 import {
@@ -35,13 +36,16 @@ import { ClassType } from 'class-transformer/ClassTransformer';
   styleUrls: ['./asset-list.component.scss'],
   providers: [DatePipe]
 })
-export class AssetListComponent implements OnInit {
+export class AssetListComponent implements OnInit, OnDestroy {
   /**
    * The view object used for rendering information in the template.
    */
   view$: BehaviorSubject<AssetListView> = new BehaviorSubject<AssetListView>(
     null
   );
+
+  subscription: Subscription;
+
   /**
    * Value of the days to renew filter.
    */
@@ -210,76 +214,17 @@ export class AssetListComponent implements OnInit {
         'Equal',
         'Standalone'
       )
+    ]),
+    'Change Configuration': new AFilter(this.assetService.type, [
+      new ACondition(this.assetService.type, 'AssetStatus', 'NotEqual', 'Cancelled'),
+      new ACondition(
+        Product,
+        'Product.ConfigurationType',
+        'Equal',
+        'Bundle'
+      )
     ])
   };
-  /**
-   * Mass actions to be used with the table configuration options.
-   */
-  private massActions: Array<TableAction> = [
-    {
-      icon: 'fa-sync',
-      massAction: true,
-      label: 'Renew',
-      theme: 'primary',
-      validate(record: AssetLineItemExtended): boolean {
-        return record.canRenew();
-      },
-      action: (recordList: Array<AObject>): Observable<void> => {
-        this.assetModalService.openRenewModal(
-          <AssetLineItem>recordList[0],
-          <Array<AssetLineItem>>recordList
-        );
-        return of(null);
-      }
-    },
-    {
-      icon: 'fa-ban',
-      massAction: true,
-      label: 'Terminate',
-      theme: 'danger',
-      validate(record: AssetLineItemExtended): boolean {
-        return record.canTerminate();
-      },
-      action: (recordList: Array<AObject>): Observable<void> => {
-        this.assetModalService.openTerminateModal(
-          <AssetLineItem>recordList[0],
-          <Array<AssetLineItem>>recordList
-        );
-        return of(null);
-      }
-    },
-    {
-      icon: 'fa-dollar-sign',
-      massAction: false,
-      label: 'Buy More',
-      theme: 'primary',
-      validate(record: AssetLineItemExtended): boolean {
-        return record.canBuyMore();
-      },
-      action: (recordList: Array<AObject>): Observable<void> => {
-        this.assetModalService.openBuyMoreModal(
-          <AssetLineItem>recordList[0],
-          <Array<AssetLineItem>>recordList
-        );
-        return of(null);
-      }
-    },
-    {
-      icon: 'fa-wrench',
-      label: 'Change Configuration',
-      theme: 'primary',
-      validate(record: AssetLineItemExtended): boolean {
-        return record.canChangeConfiguration();
-      },
-      action: (recordList: Array<AObject>): Observable<void> => {
-        this.assetModalService.openChangeConfigurationModal(
-          <AssetLineItem>recordList[0],
-          <Array<AssetLineItem>>recordList
-        );
-        return of(null);
-      }
-    }
-  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -294,6 +239,8 @@ export class AssetListComponent implements OnInit {
    * @ignore
    */
   ngOnInit() {
+
+
     if (!_.isEmpty(_.get(this.route, 'snapshot.queryParams'))) {
       this.preselectItemsInGroups = true;
       this.assetActionFilter = this.assetActionMap[
@@ -319,20 +266,27 @@ export class AssetListComponent implements OnInit {
     }
     this.loadView();
   }
+
+  ngOnDestroy(){
+    if(this.subscription)
+      this.subscription.unsubscribe();
+  }
+
   /**
    * Loads the view data.
    */
   loadView() {
-    combineLatest(
+    this.ngOnDestroy();
+    this.subscription = combineLatest(
       this.assetService.query({
         aggregate: true,
         groupBy: ['PriceType'],
         filters: this.getFilters()
       }),
-      this.storefrontService.getStorefront()
+      this.storefrontService.getStorefront(),
+      this.cartService.getMyCart()
     )
-      .pipe(take(1))
-      .subscribe(([chartData, storefront]) => {
+      .subscribe(([chartData, storefront, cart]) => {
         this.view$.next({
           tableOptions: {
             groupBy: 'Product.Name',
@@ -351,12 +305,19 @@ export class AssetListComponent implements OnInit {
               { prop: 'AssetStatus' },
               { prop: 'PriceType' }
             ],
-            actions: _.filter(this.massActions, action =>
+            actions: _.filter(this.getMassActions(cart), action =>
               _.includes(
                 _.get(storefront, 'AssetActions'),
                 _.get(action, 'label')
               )
             ),
+            actionValue: !_.isEmpty(
+              _.get(this.route, 'snapshot.queryParams')
+            )
+              ? decodeURIComponent(
+                  _.get(this.route, 'snapshot.queryParams.action')
+                )
+              : 'All',
             childRecordOptions: {
               filters: [
                 new AFilter(this.assetService.type, [
@@ -488,6 +449,74 @@ export class AssetListComponent implements OnInit {
       this.assetActionFilter,
       this.productFamilyFilter
     );
+  }
+
+  private getMassActions(cart: Cart): Array<TableAction>{
+    return [
+      {
+        icon: 'fa-sync',
+        massAction: true,
+        label: 'Renew',
+        theme: 'primary',
+        validate(record: AssetLineItemExtended): boolean {
+          return record.canRenew() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+        },
+        action: (recordList: Array<AObject>): Observable<void> => {
+          this.assetModalService.openRenewModal(
+            <AssetLineItem>recordList[0],
+            <Array<AssetLineItem>>recordList
+          );
+          return of(null);
+        }
+      },
+      {
+        icon: 'fa-ban',
+        massAction: true,
+        label: 'Terminate',
+        theme: 'danger',
+        validate(record: AssetLineItemExtended): boolean {
+          return record.canTerminate() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+        },
+        action: (recordList: Array<AObject>): Observable<void> => {
+          this.assetModalService.openTerminateModal(
+            <AssetLineItem>recordList[0],
+            <Array<AssetLineItem>>recordList
+          );
+          return of(null);
+        }
+      },
+      {
+        icon: 'fa-dollar-sign',
+        massAction: false,
+        label: 'Buy More',
+        theme: 'primary',
+        validate(record: AssetLineItemExtended): boolean {
+          return record.canBuyMore() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+        },
+        action: (recordList: Array<AObject>): Observable<void> => {
+          this.assetModalService.openBuyMoreModal(
+            <AssetLineItem>recordList[0],
+            <Array<AssetLineItem>>recordList
+          );
+          return of(null);
+        }
+      },
+      {
+        icon: 'fa-wrench',
+        label: 'Change Configuration',
+        theme: 'primary',
+        validate(record: AssetLineItemExtended): boolean {
+          return record.canChangeConfiguration() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+        },
+        action: (recordList: Array<AObject>): Observable<void> => {
+          this.assetModalService.openChangeConfigurationModal(
+            <AssetLineItem>recordList[0],
+            <Array<AssetLineItem>>recordList
+          );
+          return of(null);
+        }
+      }
+    ];
   }
 }
 /** @ignore */
