@@ -257,11 +257,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   onBillToChange() {
-    this.billToAccount$ = this.accountService.get([this.order.BillToAccountId]).pipe(map(res => res[0]));
+    this.billToAccount$ = this.accountService.get([this.order.BillToAccountId]).pipe(map(res => this.order.BillToAccount = res[0]));
   }
 
   onShipToChange() {
-    this.shipToAccount$ = this.accountService.get([this.order.ShipToAccountId]).pipe(map(res => res[0]));
+    this.shipToAccount$ = this.accountService.get([this.order.ShipToAccountId]).pipe(map(res => this.order.ShipToAccount = res[0]));
   }
 
   onPrimaryContactChange() {
