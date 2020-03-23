@@ -39,7 +39,10 @@ export class QuoteListComponent implements OnInit {
         prop: '_AccountId'
       },
       {
-        prop: 'Grand_Total'
+        prop: 'Grand_Total',
+        value: (record) => {
+          return this.currencyPipe.transform(_.get(_.find(_.get(record, 'ProposalSummaryGroups'), {LineType : 'Grand Total'}), 'NetPrice'));
+        }
       },
       {
         prop: 'ExpectedStartDate'
@@ -50,7 +53,8 @@ export class QuoteListComponent implements OnInit {
       {
         prop: 'LastModifiedDate'
       }
-    ]
+    ],
+    children : ['ProposalSummaryGroups']
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);
