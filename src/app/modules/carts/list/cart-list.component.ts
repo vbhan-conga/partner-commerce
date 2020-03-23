@@ -94,7 +94,8 @@ export class CartListComponent implements OnInit {
                 action:(recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
               } as TableAction
             ],
-            highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record))
+            highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record)),
+            children: ['SummaryGroups']
           },
           totalCarts: _.get(cartList, 'total_records'),
           type: Cart

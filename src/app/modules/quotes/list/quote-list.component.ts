@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Quote, QuoteService, CartService } from '@apttus/ecommerce';
+import { Quote, QuoteService, CartService, LocalCurrencyPipe } from '@apttus/ecommerce';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -39,7 +39,10 @@ export class QuoteListComponent implements OnInit {
         prop: '_AccountId'
       },
       {
-        prop: 'Grand_Total'
+        prop: 'Grand_Total',
+        value: (record) => {
+          return this.currencyPipe.transform(_.get(_.find(_.get(record, 'ProposalSummaryGroups'), {LineType : 'Grand Total'}), 'NetPrice'));
+        }
       },
       {
         prop: 'ExpectedStartDate'
@@ -50,12 +53,13 @@ export class QuoteListComponent implements OnInit {
       {
         prop: 'LastModifiedDate'
       }
-    ]
+    ],
+    children : ['ProposalSummaryGroups']
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);
 
-  constructor(private quoteService: QuoteService, private cartService: CartService) { }
+  constructor(private quoteService: QuoteService, private cartService: CartService, private currencyPipe: LocalCurrencyPipe) { }
 
   ngOnInit() {
     this.aggregateData$ = combineLatest(
