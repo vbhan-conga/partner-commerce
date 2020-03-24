@@ -38,19 +38,17 @@
                 </div>
                 <div class="card-body">
                     <apt-chart [data]="aggregateData.quotesByDueDate" [type]="'doughnut'" [legendPosition]="'right'"
+                        [amountsByStatus]="aggregateData?.amountsByStatus"
                         [colorPalette]="colorPalette" [centerText]="aggregateData.total">
                     </apt-chart>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Table with grid and all the filter options-->
     <div class="row mt-3">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <apt-table [type]="type" [options]="aggregateData.tableOptions"></apt-table>
-                </div>
-            </div>
+            <apt-table [type]="type" [options]="aggregateData.tableOptions"></apt-table>
         </div>
     </div>
 </ng-container>
