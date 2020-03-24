@@ -32,7 +32,7 @@ export class ProductFamilyFilterComponent implements OnInit {
     this.assetService.query({groupBy: ['Product.Family']})
     .pipe(take(1))
     .subscribe(assets => {
-      this.productFamilies = _.filter(_.map(assets, asset => asset.Product.Family), value => value != null);
+      this.productFamilies = _.filter(_.map(assets, asset => asset.Family), value => value != null);
     });
   }
 
