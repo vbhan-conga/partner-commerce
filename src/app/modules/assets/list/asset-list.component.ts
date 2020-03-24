@@ -173,7 +173,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
         'NotEqual',
         'Option'
       ),
-      new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true)
+      new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true),
+      new ACondition(this.assetService.type, 'AssetStatus', 'Equal', 'Activated')
     ])
   ];
   /**
