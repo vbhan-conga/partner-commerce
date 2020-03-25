@@ -145,7 +145,8 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
       this.paymentTransaction.CustomerAddressPostalCode = _.get(this.order.BillToAccount, 'BillingAddress.postalCode');
       this.paymentTransaction.CustomerBillingAccountName = _.get(this.order.BillToAccount, 'Name');
       this.paymentTransaction.CustomerBillingAccountID = _.get(this.order.BillToAccount, 'Id');
-      this.paymentTransaction.OrderAmount =  _.toString(_.defaultTo(this.order.OrderAmount, 0));
+      // Rounding off the string amount to 2 decimal places as cybersource doesn't allow higher numeric scale on order amount.
+      this.paymentTransaction.OrderAmount =  _.toString(_.round(parseFloat(this.order.OrderAmount), 2));
       this.paymentTransaction.OrderName = _.get(this.order, 'Name') ;
       this.paymentTransaction.OrderGeneratedID = _.get(this.order, 'Id');
       this.paymentTransaction.isUserLoggedIn = true;
