@@ -48,7 +48,11 @@
     <!-- Table with grid and all the filter options-->
     <div class="row mt-3">
         <div class="col-12">
-            <apt-table [type]="type" [options]="aggregateData.tableOptions"></apt-table>
+            <div class="card">
+                <div class="card-body">
+                    <apt-table [type]="type" [options]="aggregateData.tableOptions"></apt-table>
+                </div>
+            </div>
         </div>
     </div>
 </ng-container>
