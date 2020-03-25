@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Quote, QuoteService, CartService, LocalCurrencyPipe } from '@apttus/ecommerce';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { map, switchMap } from 'rxjs/operators';
 import { TableOptions } from '@apttus/elements';
-import { AFilter, ACondition } from '@apttus/core';
+import { AFilter } from '@apttus/core';
 
 @Component({
   selector: 'app-quote-list',
@@ -41,7 +41,7 @@ export class QuoteListComponent implements OnInit {
       {
         prop: 'Grand_Total',
         value: (record) => {
-          return this.currencyPipe.transform(_.get(_.find(_.get(record, 'ProposalSummaryGroups'), {LineType : 'Grand Total'}), 'NetPrice'));
+          return this.currencyPipe.transform(_.get(_.find(_.get(record, 'ProposalSummaryGroups'), {LineType : 'Grand Total'}), 'NetPrice')); 
         }
       },
       {
@@ -63,28 +63,27 @@ export class QuoteListComponent implements OnInit {
 
   ngOnInit() {
     this.aggregateData$ = combineLatest(
-      this.cartService.getMyCart(),
       this.filterList$
     )
     .pipe(
-      switchMap(([cart, filterList]) => {
+      switchMap(([filterList]) => {
         return combineLatest(
-          of(cart),
           this.quoteService.query({
             aggregate: true,
             groupBy: ['Approval_Stage', 'RFP_Response_Due_Date'],
             filters: filterList
-          })
+          }),
+          this.quoteService.getGrandTotalByApprovalStage()
         );
       }),
-      map(([cart, data]) => {
+      map(([data, totalByStage]) => {
         return {
           tableOptions: _.clone(_.assign(this.tableOptions, {filters: this.filterList$.value})),
           total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
-          totalAmount: _.get(data, 'SUM_Total_Quote_Amount', _.sumBy(data, 'SUM_Total_Quote_Amount')),
-          amountsByStatus: _.isArray(data)
-          ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => _.sumBy(s, 'SUM_Total_Quote_Amount')), 'null')
-          : _.zipObject([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], _.map([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], key => _.get(data, 'SUM_Grand_Total'))),
+          totalAmount: _.get(data, 'SUM_Grand_Total', _.sumBy(data, 'SUM_Grand_Total')),
+          amountsByStatus: _.isArray(totalByStage)
+          ? _.omit(_.mapValues(_.groupBy(totalByStage, 'Stage'), s => _.sumBy(s, 'NetPrice')), 'null')
+          : _.zipObject([_.get(totalByStage, 'Stage')], _.map([_.get(totalByStage, 'Stage')], key => _.get(totalByStage, 'NetPrice'))),
           quotesByStatus: _.isArray(data)
             ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => _.sumBy(s, 'total_records')), 'null')
             : _.zipObject([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], _.map([_.get(data, 'Apttus_Proposal__Approval_Stage__c')], key => _.get(data, 'total_records'))),
