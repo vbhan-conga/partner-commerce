@@ -80,7 +80,7 @@ export class QuoteListComponent implements OnInit {
         return {
           tableOptions: _.clone(_.assign(this.tableOptions, {filters: this.filterList$.value})),
           total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
-          totalAmount: _.get(data, 'SUM_Grand_Total', _.sumBy(data, 'SUM_Grand_Total')),
+          totalAmount: _.get(totalByStage, 'NetPrice', _.sumBy(totalByStage, 'NetPrice')),
           amountsByStatus: _.isArray(totalByStage)
           ? _.omit(_.mapValues(_.groupBy(totalByStage, 'Stage'), s => _.sumBy(s, 'NetPrice')), 'null')
           : _.zipObject([_.get(totalByStage, 'Stage')], _.map([_.get(totalByStage, 'Stage')], key => _.get(totalByStage, 'NetPrice'))),
