@@ -79,7 +79,7 @@ export class QuoteListComponent implements OnInit {
             this.quoteService.getGrandTotalByApprovalStage()
           );
         }),
-        map(([cart, data, totalByStage]) => {
+        map(([account, data, totalByStage]) => {
           return {
             tableOptions: _.clone(_.assign(this.tableOptions, { filters: this.filterList$.value })),
             total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
