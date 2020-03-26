@@ -52,8 +52,7 @@ export class QuoteDetailComponent implements OnInit {
         filter(params => _.get(params, 'id') != null),
         mergeMap(params => this.quoteService.query({
           conditions: [new ACondition(this.quoteService.type, 'Id', 'In', [_.get(params, 'id')])],
-          waitForExpansion: false,
-          skipCache: true
+          waitForExpansion: false
         })),
         map(quoteList => {
           return _.get(quoteList, '[0]');
