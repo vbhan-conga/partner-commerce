@@ -208,7 +208,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
       new ACondition(AssetLineItem, 'PriceType', 'NotEqual', 'One Time')
     ]),
     'Buy More': new AFilter(this.assetService.type, [
-      new ACondition(this.assetService.type, 'PriceType', 'Equal', 'One Time'),
       new ACondition(
         Product,
         'Product.ConfigurationType',
