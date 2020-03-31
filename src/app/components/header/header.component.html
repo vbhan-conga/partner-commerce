@@ -1,4 +1,4 @@
-<ng-container *ngIf="view$ | async as view">
+<ng-container *ngIf="view$ | async as view; else loading">
   <div class="fixed-top navbar navbar-light bg-light border-bottom">
     <div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -21,10 +21,6 @@
       <apt-cr-constraint-icon></apt-cr-constraint-icon>
     </div>
   </div>
-
-
-
-
 
   <apt-mini-profile #profile></apt-mini-profile>
 
@@ -124,3 +120,7 @@
 
   <apt-cr-side-menu></apt-cr-side-menu>
 </ng-container>
+
+<ng-template #loading>
+  <div class="fixed-top navbar navbar-light bg-light border-bottom"></div>
+</ng-template>
