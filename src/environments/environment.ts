@@ -1,36 +1,33 @@
 import { Configuration } from '@apttus/core';
-
 export const environment: Configuration = {
-  production: false,
+  production: true,
   defaultImageSrc: './assets/images/default.png',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
-  enableErrorLogging: true,
-  enableErrorReporting: true,
+  enableErrorLogging: false,
+  enableErrorReporting: false,
   enableMultiCurrency: false,
   enableQueryLogs: true,
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
-  bufferTime: 10,
-  maxBufferSize: 10,
+  bufferTime: 500,
+  maxBufferSize: 1,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
   encryptResponse: false,
-  cartRetryLimit: 10,
+  cartRetryLimit: 3,
   productIdentifier: 'Id',
   type: 'Salesforce',
   debounceTime: 1000,
-  useIndexedDB: false,
-  expandDepth: 7,
   proxy: 'https://apttus-proxy.herokuapp.com',
-  hashRouting: false,
-
-  // Salesforce environment variables
-  storefront: 'Partner Commerce',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  useIndexedDB: true,
+  expandDepth: 8,
+  hashRouting: true,
+  packageNamespace: 'Apttus_WebStore',
+  // *** TODO: Replace with Salesforce environment variables ***
+  storefront: 'P-Commerce',
   organizationId: '00D3I0000008n7g',
-  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
-  // endpoint: 'https://dc1-cpqqacommunity1.cs2.force.com/ecom',
-  // packageNamespace: 'Apttus_WebStore'
+  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  endpoint: 'https://dc1-cpqqacommunity1.cs2.force.com/pcom'
 };
