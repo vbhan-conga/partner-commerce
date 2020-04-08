@@ -5,14 +5,13 @@ import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutComponent } from './layout/checkout.component';
 import { SummaryComponent } from './component/summary.component';
 import {
-  ProductConfigurationSummaryModule,
+  ConfigurationSummaryModule,
   PaymentComponentModule,
   OutputFieldModule,
   MiniProfileModule,
   BreadcrumbModule,
   PriceSummaryModule,
   InputFieldModule,
-  CmsModule,
   ConfigurationModule
 } from '@apttus/elements';
 import { CardFormComponent } from './component/card-form/card-form.component';
@@ -32,7 +31,7 @@ import { ComponentModule } from '../../components/component.module';
     CheckoutRoutingModule,
     FormsModule,
     ComponentModule,
-    ProductConfigurationSummaryModule,
+    ConfigurationSummaryModule,
     PriceModule,
     IconModule,
     TabsModule.forRoot(),
@@ -49,7 +48,6 @@ import { ComponentModule } from '../../components/component.module';
     PriceSummaryModule,
     InputFieldModule,
     LaddaModule,
-    CmsModule,
     ConfigurationModule
   ],
   declarations: [CheckoutComponent, SummaryComponent, CardFormComponent]

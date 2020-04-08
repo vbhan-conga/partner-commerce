@@ -1,6 +1,6 @@
 <app-detail [title]="viewState?.product?.Name" [subtitle]="viewState?.product?.ProductCode" [context]="viewState?.product"
     *ngIf="viewState$ | async as viewState; else loading">
-    
+
     <div class="primary-actions">
         <form class="d-flex">
             <div class="form-group my-0 mr-5">
@@ -168,7 +168,7 @@
 
     <apt-cms-configuration-summary
         *ngIf="viewState?.isCmsEnabled"
-        [product]="viewState?.product"
+        [productId]="viewState?.product.Id"
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
         [preload]="true"

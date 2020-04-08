@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } from '@apttus/elements';
+import { ProductConfigurationSummaryComponent, CmsConfigurationSummaryComponent } from '@apttus/elements';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
 import { CartService, CartItem, Storefront } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -41,8 +41,8 @@ export class ProductDetailComponent implements OnInit {
   @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   configSummaryModal: ProductConfigurationSummaryComponent;
 
-  @ViewChild(ConfigurationSummaryComponent, { static: false })
-  cmsConfigSummaryModal: ConfigurationSummaryComponent;
+  @ViewChild(CmsConfigurationSummaryComponent, { static: false })
+  cmsConfigSummaryModal: CmsConfigurationSummaryComponent;
 
   constructor(private cartService: CartService,
               private resolver: ProductDetailsResolver,

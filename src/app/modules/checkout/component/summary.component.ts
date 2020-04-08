@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } from '@apttus/elements';
+import { ProductConfigurationSummaryComponent, CmsConfigurationSummaryComponent } from '@apttus/elements';
 
 @Component({
   selector: 'cart-summary',
@@ -38,8 +38,8 @@ export class SummaryComponent implements OnChanges {
   @ViewChild('confirmationTemplate', { static: false }) confirmationTemplate: TemplateRef<any>;
   @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   configSummaryModal: ProductConfigurationSummaryComponent;
-  @ViewChild(ConfigurationSummaryComponent, { static: false })
-  cmsConfigSummaryModal: ConfigurationSummaryComponent;
+  @ViewChild(CmsConfigurationSummaryComponent, { static: false })
+  cmsConfigSummaryModal: CmsConfigurationSummaryComponent;
 
 
   state: SummaryState;
