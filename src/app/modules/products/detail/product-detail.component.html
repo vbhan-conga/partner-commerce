@@ -1,5 +1,9 @@
 <app-detail [title]="viewState?.product?.Name" [subtitle]="viewState?.product?.ProductCode" [context]="viewState?.product"
     *ngIf="viewState$ | async as viewState; else loading">
+
+    <div class="constraintAlerts">
+        <apt-constraint-rule-alert></apt-constraint-rule-alert>
+    </div>
     
     <div class="primary-actions">
         <form class="d-flex">
