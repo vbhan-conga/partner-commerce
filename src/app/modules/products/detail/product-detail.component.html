@@ -47,7 +47,7 @@
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="quantity"
                         [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'"
-                        (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'" [aboEnabled]="false" [isCmsEnabled]="viewState?.isCmsEnabled">
+                        (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'" [aboEnabled]="false">
                     </apt-add-to-cart>
                 </ng-container>
                 <ng-template #newProduct>
@@ -61,7 +61,6 @@
                                 [quantity]="quantity" (onAddToCart)="onAddToCart($event)"
                                 [cartItems]="cartItemList" [product]="viewState?.product"
                                 [aboEnabled]="false"
-                                [isCmsEnabled]="viewState?.isCmsEnabled"
                                 [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
                         </div>
