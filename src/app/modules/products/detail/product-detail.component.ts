@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductConfigurationSummaryComponent, CmsConfigurationSummaryComponent } from '@apttus/elements';
-import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { CartService, CartItem, Storefront } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CartService, CartItem } from '@apttus/ecommerce';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash';
 import { take } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { ConfigurationSummaryWrapperComponent } from '@apttus/elements';
+import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
 
 @Component({
   selector: 'app-product-detail',
@@ -38,11 +38,8 @@ export class ProductDetailComponent implements OnInit {
   /** @ignore */
   productCode: string;
 
-  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
-  configSummaryModal: ProductConfigurationSummaryComponent;
-
-  @ViewChild(CmsConfigurationSummaryComponent, { static: false })
-  cmsConfigSummaryModal: CmsConfigurationSummaryComponent;
+  @ViewChild(ConfigurationSummaryWrapperComponent, { static: false })
+  configSummaryModal: ConfigurationSummaryWrapperComponent;
 
   constructor(private cartService: CartService,
               private resolver: ProductDetailsResolver,
@@ -101,11 +98,6 @@ export class ProductDetailComponent implements OnInit {
   }
 
   showSummary() {
-    const modal = this.configSummaryModal || this.cmsConfigSummaryModal;
-
-    if (!modal)
-      return;
-
-    modal.show();
+    this.configSummaryModal.show();
   }
 }

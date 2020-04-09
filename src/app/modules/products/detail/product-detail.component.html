@@ -34,7 +34,7 @@
             <div class="d-flex align-items-center">
                 <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
                     [configurationEnabled]="false" [quantity]="quantity"
-                    [aboEnabled]="false" 
+                    [aboEnabled]="false"
                     [cartItems]="(cartItems?.length > 0) ? cartItems : null" [product]="viewState?.product"
                     [btnClass]="'btn-primary btn-raised px-3 py-2'"></apt-add-to-cart>
             </div>
@@ -158,25 +158,14 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary
-        *ngIf="!viewState?.isCmsEnabled"
+    <apt-configuration-summary-wrapper
         [product]="viewState?.product"
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
         [preload]="true"
         position="right"
-        #productConfigurationSummary>
-    </apt-product-configuration-summary>
-
-    <apt-cms-configuration-summary
-        *ngIf="viewState?.isCmsEnabled"
-        [productId]="viewState?.product.Id"
-        [relatedTo]="viewState?.relatedTo"
-        [changes]="cartItemList"
-        [preload]="true"
-        position="right"
-        #cmsProductConfigurationSummary>
-    </apt-cms-configuration-summary>
+        #configSummary>
+    </apt-configuration-summary-wrapper>
 </app-detail>
 
 <ng-template #loading>

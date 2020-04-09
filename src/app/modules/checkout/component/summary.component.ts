@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { TranslateService } from '@ngx-translate/core';
-import { ProductConfigurationSummaryComponent, CmsConfigurationSummaryComponent } from '@apttus/elements';
+import { ConfigurationSummaryWrapperComponent } from '@apttus/elements';
 
 @Component({
   selector: 'cart-summary',
@@ -33,20 +33,27 @@ import { ProductConfigurationSummaryComponent, CmsConfigurationSummaryComponent 
   `]
 })
 export class SummaryComponent implements OnChanges {
-  @Input() cart: Cart;
-  isCmsEnabled = null;
-  @ViewChild('confirmationTemplate', { static: false }) confirmationTemplate: TemplateRef<any>;
-  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
-  configSummaryModal: ProductConfigurationSummaryComponent;
-  @ViewChild(CmsConfigurationSummaryComponent, { static: false })
-  cmsConfigSummaryModal: CmsConfigurationSummaryComponent;
+  @Input()
+  cart: Cart;
 
+  isCmsEnabled = null;
+
+  @ViewChild('confirmationTemplate', { static: false })
+  confirmationTemplate: TemplateRef<any>;
+
+  @ViewChild(ConfigurationSummaryWrapperComponent, { static: false })
+  summaryModal: ConfigurationSummaryWrapperComponent;
 
   state: SummaryState;
+
   modalRef: BsModalRef;
+
   lineItem: CartItem;
+
   confirmationModal: BsModalRef;
+
   generatedQuote: Quote;
+
   /** @ignore */
   generatedQuoteName: string;
 
@@ -101,15 +108,10 @@ export class SummaryComponent implements OnChanges {
 
   openModal(lineItem: CartItem) {
     this.lineItem = lineItem;
+
     setTimeout(() => {
-      const modal = this.configSummaryModal || this.cmsConfigSummaryModal;
-
-      if (!modal)
-        return;
-
-      modal.show();
+     this.summaryModal.show();
     });
-    // this.modalRef = this.modalService.show(template);
   }
 }
 /** @ignore */
