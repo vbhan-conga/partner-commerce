@@ -14,11 +14,10 @@ import {
   InputSelectModule,
   ProductCarouselModule,
   ProductConfigurationModule,
-  ProductConfigurationSummaryModule,
+  ConfigurationSummaryModule,
   ProductImagesModule,
   PriceModule,
   InputDateModule,
-  CmsModule,
   ConfigurationModule,
   ConstraintRuleModule
 } from '@apttus/elements';
@@ -45,8 +44,7 @@ import { RouterModule } from '@angular/router';
     BreadcrumbModule,
     ProductCarouselModule,
     ProductConfigurationModule,
-    ProductConfigurationSummaryModule,
-    CmsModule,
+    ConfigurationSummaryModule,
     ConfigurationModule,
     IconModule,
     ButtonModule,

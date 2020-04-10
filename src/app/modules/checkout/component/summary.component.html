@@ -68,17 +68,11 @@
     </div>
 </ng-template>-->
 
-<apt-product-configuration-summary
+<apt-configuration-summary-wrapper
   *ngIf="lineItem && isCmsEnabled !== null && !isCmsEnabled"
   [product]="lineItem.Product"
   [relatedTo]="lineItem">
-</apt-product-configuration-summary>
-
-<apt-cms-configuration-summary
-  *ngIf="lineItem && isCmsEnabled !== null && isCmsEnabled"
-  [product]="lineItem.Product"
-  [relatedTo]="lineItem">
-</apt-cms-configuration-summary>
+</apt-configuration-summary-wrapper>
 
 <ng-template #confirmationTemplate>
   <div class="modal-header">
