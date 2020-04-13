@@ -8,7 +8,7 @@ import {
   InputDateModule,
   PriceModule,
   PromotionModule,
-  ProductConfigurationSummaryModule
+  ConfigurationSummaryModule
 } from '@apttus/elements';
 
 import { DetailsLayoutComponent } from './layout/details-layout.component';
@@ -37,7 +37,7 @@ import { ComponentModule } from '../../components/component.module';
     PromotionModule,
     PricingModule,
     TranslateModule.forChild(),
-    ProductConfigurationSummaryModule,
+    ConfigurationSummaryModule,
     FormsModule,
     InputFieldModule,
     DatepickerModule.forRoot(),
