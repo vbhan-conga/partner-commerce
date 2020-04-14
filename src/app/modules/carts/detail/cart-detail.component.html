@@ -1,13 +1,12 @@
 <ng-container *ngIf="view$ | async as view; else loadingTemplate">
-    <apt-breadcrumb [sobject]="view?.cart?.Quote" [label]="'COMMON.EDIT_LINE_ITEMS' | translate"
-        *ngIf="view?.cart?.Quote?.Id; else cartBreadcrumb">
+    <apt-breadcrumb [sobject]="view?.cart?.Proposald" [label]="'COMMON.EDIT_LINE_ITEMS' | translate"
+        *ngIf="view?.cart?.Proposald?.Id; else cartBreadcrumb">
         <app-action-bar></app-action-bar>
     </apt-breadcrumb>
     <ng-template #cartBreadcrumb>
         <apt-breadcrumb [label]="'COMMON.MANAGE_CART' | translate">
             <app-action-bar></app-action-bar>
         </apt-breadcrumb>
-        <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </ng-template>
 
 
@@ -33,6 +32,7 @@
                     </button>
                 </div>
             </div>
+            <apt-cr-constraint-alert [detailPageAlert]='false'></apt-cr-constraint-alert>
             <div class="row">
                 <div class="col-12 col-md-8 mb-4">
                     <div class="d-block border-bottom card">

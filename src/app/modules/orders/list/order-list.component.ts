@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService, Order, CartService } from '@apttus/ecommerce';
+import { OrderService, Order, CartService, AccountService } from '@apttus/ecommerce';
 import * as _ from 'lodash';
 import { combineLatest, of, Observable, BehaviorSubject } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
@@ -68,27 +68,27 @@ export class OrderListComponent implements OnInit {
     ]
   };
 
-  constructor(private orderService: OrderService, private cartService: CartService) { }
+  constructor(private orderService: OrderService, private cartService: CartService, private accountService: AccountService) { }
 
   ngOnInit() {
+
     this.view$ = combineLatest(
-      this.cartService.getMyCart(),
+      this.accountService.getCurrentAccount(),
       this.filterList$
     )
-    .pipe(
-      switchMap(([cart, filterList]) => {
-        return combineLatest(
-          of(cart),
-          this.orderService.query({
-            aggregate: true,
-            groupBy: ['Status'],
-            filters: this.filterList$.value
-          })
-        );
-      }),
-      map(([cart, data]) => {
-        return {
-          tableOptions: _.clone(_.assign(this.tableOptions, {filters: this.filterList$.value})),
+      .pipe(
+        switchMap(([account, filterList]) => {
+          return combineLatest(
+            of(account),
+            this.orderService.query({
+              aggregate: true,
+              groupBy: ['Status'],
+              filters: this.filterList$.value
+            })
+          );
+        }),
+        map(([account, data]) => ({
+          tableOptions: _.clone(_.assign(this.tableOptions, { filters: this.filterList$.value })),
           total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
           totalAmount: _.get(data, 'SUM_OrderAmount', _.sumBy(data, 'SUM_OrderAmount')),
           ordersByStatus: _.isArray(data)
@@ -97,9 +97,8 @@ export class OrderListComponent implements OnInit {
           orderAmountByStatus: _.isArray(data)
             ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Config2__Status__c'), s => _.sumBy(s, 'SUM_OrderAmount')), 'null')
             : _.zipObject([_.get(data, 'Apttus_Config2__Status__c')], _.map([_.get(data, 'Apttus_Config2__Status__c')], key => _.get(data, 'SUM_OrderAmount')))
-        } as OrderListView;
-      })
-    );
+        }))
+      );
   }
 
   handleFilterListChange(event: any) {
@@ -109,7 +108,7 @@ export class OrderListComponent implements OnInit {
 }
 
 /** @ignore */
-interface OrderListView{
+interface OrderListView {
   tableOptions: TableOptions;
   total: number;
   totalAmount: number;

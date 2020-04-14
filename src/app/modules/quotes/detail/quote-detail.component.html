@@ -34,7 +34,7 @@
                                 <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'">
                                 </apt-output-field>
-                                <apt-output-field [record]="quote" field="PrimaryContactId" layout="inline"
+                                <apt-output-field [record]="quote" field="_PrimaryContactId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
                                     [showQuickView]="true"></apt-output-field>
                                 <apt-output-field [record]="quote" field="AccountId" label="Account Name"
@@ -67,10 +67,6 @@
             <div class="card-body">
                 <h5 class="py-2">
                     {{'DETAILS.LINE_ITEMS' | translate}}
-                    <button class="btn btn-sm btn-outline-primary px-4 ml-4"
-                        *ngIf="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'" [ladda]="edit_loader"
-                        data-style="zoom-in" data-spinner-color="black"
-                        (click)="editQuoteItems(quote.Id)">{{'COMMON.EDIT' | translate}}</button>
                 </h5>
                 <table class="table table-responsive border-bottom">
                     <tbody>

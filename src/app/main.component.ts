@@ -11,7 +11,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styles: [
     `
       main{
-        min-height: calc(100vh - 64px);
+        min-height: calc(100vh - 108px);
         display: flex;
         flex-direction: column;
       }

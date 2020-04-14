@@ -40,9 +40,14 @@ export class CartListComponent implements OnInit {
   }
   /** @ignore */
   loadView() {
-    this.view$ = this.cartService.getMyCart()
-    .pipe(
-      map((currentCart) => {
+    this.view$ = combineLatest(
+      this.cartService.getMyCart(),
+      this.cartService.query({
+        aggregate: true,
+        skipCache: true
+      })
+    ).pipe(
+      map(([currentCart, cartList]) => {
         return {
           tableOptions: {
             columns: [
@@ -89,8 +94,10 @@ export class CartListComponent implements OnInit {
                 action:(recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
               } as TableAction
             ],
-            highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record))
+            highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record)),
+            children: ['SummaryGroups']
           },
+          totalCarts: _.get(cartList, 'total_records'),
           type: Cart
         } as CartListView;
       })
@@ -140,11 +147,11 @@ export class CartListComponent implements OnInit {
   }
   /**@ignore */
   canActivate(currentActiveCart: Cart, rowCart: Cart) {
-    return (rowCart.Status !== 'Finalized') && (currentActiveCart.Id !== rowCart.Id);
+    return (rowCart.Status !== 'Finalized') && (_.get(currentActiveCart, 'Id') !== _.get(rowCart, 'Id'));
   }
   /**@ignore */
   isCartActive(currentActiveCart: Cart, rowCart: Cart) {
-    return (currentActiveCart.Id === rowCart.Id);
+    return (_.get(currentActiveCart, 'Id') === _.get(rowCart, 'Id'));
   }
 
 }
@@ -152,4 +159,5 @@ export class CartListComponent implements OnInit {
 interface CartListView {
   tableOptions: TableOptions;
   type: ClassType<AObject>;
+  totalCarts: number;
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectorRef } from '@angular/core';
-import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService  } from '@apttus/ecommerce';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService } from '@apttus/ecommerce';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, flatMap, map, take, mergeMap, tap } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -12,7 +12,8 @@ import { ACondition } from '@apttus/core';
 @Component({
   selector: 'app-quote-details',
   templateUrl: './quote-detail.component.html',
-  styleUrls: ['./quote-detail.component.scss']
+  styleUrls: ['./quote-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuoteDetailComponent implements OnInit {
   quote$: Observable<Quote>;
@@ -32,25 +33,30 @@ export class QuoteDetailComponent implements OnInit {
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private quoteService: QuoteService,
-              private noteService: NoteService,
-              private exceptionService: ExceptionService,
-              private modalService: BsModalService,
-              private orderService: OrderService,
-              private attachmentService: AttachmentService,
-              private quoteItemService: QuoteLineItemService,
-              private productInformationService: ProductInformationService,
-              private cdr: ChangeDetectorRef,
-              private ngZone: NgZone,
-              private userService: UserService) { }
+    private router: Router,
+    private quoteService: QuoteService,
+    private noteService: NoteService,
+    private exceptionService: ExceptionService,
+    private modalService: BsModalService,
+    private orderService: OrderService,
+    private attachmentService: AttachmentService,
+    private quoteItemService: QuoteLineItemService,
+    private productInformationService: ProductInformationService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private userService: UserService) { }
 
   ngOnInit() {
     this.quote$ = this.activatedRoute.params
       .pipe(
         filter(params => _.get(params, 'id') != null),
-        flatMap(params => this.quoteService.get([_.get(params, 'id')])),
-        map(_.first)
+        mergeMap(params => this.quoteService.query({
+          conditions: [new ACondition(this.quoteService.type, 'Id', 'In', [_.get(params, 'id')])],
+          waitForExpansion: false
+        })),
+        map(quoteList => {
+          return _.get(quoteList, '[0]');
+        })
       );
     this.quoteLineItems$ = this.quote$.pipe(
       map(
@@ -106,18 +112,6 @@ export class QuoteDetailComponent implements OnInit {
         this.accept_loader = false;
       }
     );
-  }
-
-  editQuoteItems(quoteId: string) {
-    this.edit_loader = true;
-    this.quoteService.convertQuoteToCart(quoteId).pipe(take(1)).subscribe(res => {
-      this.edit_loader = false;
-      this.router.navigate(['/cart']);
-    },
-      err => {
-        this.exceptionService.showError(err),
-          this.edit_loader = false;
-      });
   }
 
   /**
