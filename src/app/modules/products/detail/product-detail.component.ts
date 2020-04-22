@@ -42,9 +42,9 @@ export class ProductDetailComponent implements OnInit {
   configSummaryModal: ConfigurationSummaryWrapperComponent;
 
   constructor(private cartService: CartService,
-              private resolver: ProductDetailsResolver,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+    private resolver: ProductDetailsResolver,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.resolver
@@ -59,7 +59,8 @@ export class ProductDetailComponent implements OnInit {
    */
   onConfigurationChange(result: any) {
     this.cartItemList = _.first(result);
-    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) {
+    if ((_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) ||
+      (_.get(this.viewState$, 'isCmsEnabled') && _.get(this.viewState$, 'relatedTo'))) {
       this.configurationChanged = true;
     }
   }
