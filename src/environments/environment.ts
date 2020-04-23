@@ -27,10 +27,10 @@ export const environment: Configuration = {
   hashRouting: false,
 
   // Salesforce environment variables
-  storefront: 'Partner Commerce',
+  storefront: 'P-Commerce',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  organizationId: '00D3I0000008n7g',
-  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
+  organizationId: '00D3I0000008mFM',
+  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
   // endpoint: 'https://dc1-cpqqacommunity1.cs2.force.com/ecom',
   // packageNamespace: 'Apttus_WebStore'
 };
