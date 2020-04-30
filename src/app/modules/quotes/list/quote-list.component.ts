@@ -54,7 +54,8 @@ export class QuoteListComponent implements OnInit {
         prop: 'LastModifiedDate'
       }
     ],
-    children: ['ProposalSummaryGroups']
+    children: ['ProposalSummaryGroups'],
+    fields: ['Account.Name, PriceList.Name']
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);
