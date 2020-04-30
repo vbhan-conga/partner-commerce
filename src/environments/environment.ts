@@ -26,6 +26,6 @@ export const environment: Configuration = {
   hashRouting: false,
 
   // Salesforce environment variables
-  storefront: 'Partner Commerce',
-  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
+  storefront: 'P-Commerce',
+  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
 };
