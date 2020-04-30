@@ -23,14 +23,9 @@ export const environment: Configuration = {
   debounceTime: 1000,
   useIndexedDB: false,
   expandDepth: 7,
-  proxy: 'https://apttus-proxy.herokuapp.com',
   hashRouting: false,
 
   // Salesforce environment variables
-  storefront: 'P-Commerce',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  organizationId: '00D3I0000008mFM',
-  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
-  // endpoint: 'https://dc1-cpqqacommunity1.cs2.force.com/ecom',
-  // packageNamespace: 'Apttus_WebStore'
+  storefront: 'Partner Commerce',
+  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
 };
