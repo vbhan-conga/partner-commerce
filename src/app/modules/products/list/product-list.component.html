@@ -1,7 +1,7 @@
 <apt-breadcrumb [sobject]="category" [label]="(!category) ? ('HEADER.PRODUCT_CATALOG' | translate) : category?.Label">
     <app-action-bar></app-action-bar>
 </apt-breadcrumb>
-
+<apt-constraint-rule-alert></apt-constraint-rule-alert>
 <div class="container-fluid py-4" id="top" *ngIf="searchResults$ | async as searchResults; else loading">
     <div class="d-flex justify-content-end mb-2">
         <apt-installed-products></apt-installed-products>

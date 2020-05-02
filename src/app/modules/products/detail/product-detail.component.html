@@ -1,5 +1,9 @@
 <app-detail [title]="viewState?.product?.Name" [subtitle]="viewState?.product?.ProductCode" [context]="viewState?.product"
     *ngIf="viewState$ | async as viewState; else loading">
+
+    <div class="constraintAlerts">
+        <apt-constraint-rule-alert></apt-constraint-rule-alert>
+    </div>
     
     <div class="primary-actions">
         <form class="d-flex">
@@ -99,6 +103,7 @@
         <div class="row mt-4">
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.CONFIGURATIONS' | translate}} </h4>
             <div class="col-12">
+                <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
                 <apt-product-configuration
                   *ngIf="!viewState?.isCmsEnabled"
                   [product]="viewState?.product"
@@ -109,7 +114,9 @@
 
                 <apt-cms-product-configuration
                   [productId]="viewState?.product.Id"
-                  *ngIf="viewState?.isCmsEnabled">
+                  [relatedTo]="viewState?.relatedTo"
+                  *ngIf="viewState?.isCmsEnabled"
+                  (configurationChange)="onConfigurationChange($event)">
                 </apt-cms-product-configuration>
             </div>
         </div>
@@ -156,25 +163,14 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary
-        *ngIf="!viewState?.isCmsEnabled"
+    <apt-configuration-summary-wrapper
         [product]="viewState?.product"
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
         [preload]="true"
         position="right"
-        #productConfigurationSummary>
-    </apt-product-configuration-summary>
-
-    <apt-cms-configuration-summary
-        *ngIf="viewState?.isCmsEnabled"
-        [product]="viewState?.product"
-        [relatedTo]="viewState?.relatedTo"
-        [changes]="cartItemList"
-        [preload]="true"
-        position="right"
-        #cmsProductConfigurationSummary>
-    </apt-cms-configuration-summary>
+        #configSummary>
+    </apt-configuration-summary-wrapper>
 </app-detail>
 
 <ng-template #loading>

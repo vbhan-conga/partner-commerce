@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { ApiService, ACondition } from '@apttus/core';
 import {
   Product,
   CartItem,
@@ -11,8 +13,6 @@ import {
 import { Observable, zip, BehaviorSubject, Subscription } from 'rxjs';
 import { take, map, tap, filter } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { HttpClient } from '@angular/common/http';
-import { ACondition } from '@apttus/core';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,8 @@ export class ProductDetailsResolver implements Resolve<any> {
 
   private subscription: Subscription;
 
-  constructor(private productService: ProductService,
+  constructor(private apiService: ApiService,
+              private productService: ProductService,
               private cartItemService: CartItemService,
               private crService: ConstraintRuleService,
               private router: Router,
@@ -40,7 +41,7 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.productService.fetch(_.get(routeParams, 'params.id')),
+      this.apiService.get(`/products/${_.get(routeParams, 'params.id')}?cacheStrategy=performance`),
       this.cartItemService.query({
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [_.get(routeParams, 'params.cartItem')])],
         skipCache: true

@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductConfigurationSummaryComponent, ConfigurationSummaryComponent } from '@apttus/elements';
-import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { CartService, CartItem, Storefront } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CartService, CartItem } from '@apttus/ecommerce';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash';
 import { take } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { ConfigurationSummaryWrapperComponent } from '@apttus/elements';
+import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
 
 @Component({
   selector: 'app-product-detail',
@@ -38,16 +38,13 @@ export class ProductDetailComponent implements OnInit {
   /** @ignore */
   productCode: string;
 
-  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
-  configSummaryModal: ProductConfigurationSummaryComponent;
-
-  @ViewChild(ConfigurationSummaryComponent, { static: false })
-  cmsConfigSummaryModal: ConfigurationSummaryComponent;
+  @ViewChild(ConfigurationSummaryWrapperComponent, { static: false })
+  configSummaryModal: ConfigurationSummaryWrapperComponent;
 
   constructor(private cartService: CartService,
-              private resolver: ProductDetailsResolver,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+    private resolver: ProductDetailsResolver,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.resolver
@@ -62,7 +59,8 @@ export class ProductDetailComponent implements OnInit {
    */
   onConfigurationChange(result: any) {
     this.cartItemList = _.first(result);
-    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) {
+    if ((_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) ||
+      (_.get(this.viewState$, 'isCmsEnabled') && _.get(this.viewState$, 'relatedTo'))) {
       this.configurationChanged = true;
     }
   }
@@ -101,11 +99,6 @@ export class ProductDetailComponent implements OnInit {
   }
 
   showSummary() {
-    const modal = this.configSummaryModal || this.cmsConfigSummaryModal;
-
-    if (!modal)
-      return;
-
-    modal.show();
+    this.configSummaryModal.show();
   }
 }
