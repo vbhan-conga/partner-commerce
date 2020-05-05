@@ -28,7 +28,7 @@ export const environment: Configuration = {
   packageNamespace: 'Apttus_WebStore',
   // Salesforce environment variables
   storefront: 'P-Commerce',
-  organizationId: '00D7A0000009Nmd',
+  organizationId: '00D7A0000009Tnl',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
   endpoint: 'https://dc6-cpqqacommunity1.cs44.force.com/pcom'
 
