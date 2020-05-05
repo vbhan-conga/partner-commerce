@@ -41,7 +41,7 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.apiService.get(`/products/${_.get(routeParams, 'params.id')}?cacheStrategy=performance`),
+      this.apiService.get(`/products/${_.get(routeParams, 'params.id')}?cacheStrategy=performance`, Product),
       this.cartItemService.query({
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [_.get(routeParams, 'params.cartItem')])],
         skipCache: true
@@ -51,7 +51,7 @@ export class ProductDetailsResolver implements Resolve<any> {
     ).pipe(
       map(([product, cartitemList, rProductList, isCmsEnabled]) => {
         return {
-          product: product as Product,
+          product: product,
           recommendedProducts: rProductList,
           relatedTo: _.first(cartitemList),
           isCmsEnabled: isCmsEnabled
