@@ -302,7 +302,11 @@
         "ORDER_AMOUNT_BY_STATUS": "fr_FR ORDER AMOUNT BY STATUS",
         "CC": "fr_FR CC",
         "VALID_EMAIL": "fr_FR you@example.com",
-        "INVALID_EMAIL_ERROR": "fr_FR Email must be a valid email address"
+        "INVALID_EMAIL_ERROR": "fr_FR Email must be a valid email address",
+        "ALL": "fr_FR All",
+        "CHANGES_ONLY": "fr_FR Changes Only",
+        "OPTION_TOTAL": "fr_FR Option Total",
+        "ITEMIZED_OPTIONS": "fr_FR Itemized Options"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
@@ -318,7 +322,7 @@
         "THANK_YOU": "fr_FR Thank You",
         "QUOTE_REQUEST": "fr_FR Quote Request",
         "QUOTE_CONFIRMATION_MSG": "fr_FR Your quote has been send for review and assigned to the seller {{Sellername}}. The Expected Response Date is {{RFP_value}}",
-        "QUOTE_CONFIRMATION_Update_MSG": "fr_FR Your updated quote has been send for review and assigned to the seller {{Sellername}}. The Expected Response Date is {{RFP_value}}",        
+        "QUOTE_CONFIRMATION_Update_MSG": "fr_FR Your updated quote has been send for review and assigned to the seller {{Sellername}}. The Expected Response Date is {{RFP_value}}",
         "QUOTE_CONFIRMATION_NO": "fr_FR Your Quote Number is :",
         "REVIEW_YOUR_QUOTE": "fr_FR REVIEW YOUR QUOTE"
     },
@@ -413,8 +417,8 @@
             "PAYMENT_INPUTSAVE": "fr_FR Save this card information for future payment",
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE_SubTitle": "fr_FR You will be notified the order details to your email address {{emailAddress}}",
             "PAYNOW": "fr_FR Pay Now",
-            "Invoice_Me_Later": "fr_FR Invoice Me Later",     
-            "USE_NEW_METHOD": "fr_FR Use new credit/debit card",                        
+            "Invoice_Me_Later": "fr_FR Invoice Me Later",
+            "USE_NEW_METHOD": "fr_FR Use new credit/debit card",
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "fr_FR Your payment was successful and order has been placed.",
             "ORDER_CONFIRMATION_MESSAGE": "fr_FR Your order has been placed successfully!",
             "ORDER_NUMBER": "fr_FR Order Number :",

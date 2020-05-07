@@ -97,7 +97,7 @@
             "CART_CREATION_FAILED": "es_MX Could not create cart. Please contact your administrator."
         },
         "ADDRESS_BOOK": {
-            "NEW_ADDRESS": "es_MX New Address",   
+            "NEW_ADDRESS": "es_MX New Address",
             "SET_AS_DEFAULT": "es_MX Set as Default",
             "SAVE_FAILED": "es_MX Failed to save address. Please contact your administrator."
         },
@@ -307,7 +307,11 @@
         "CC": "es_MX CC",
         "VALID_EMAIL": "es_MX you@example.com",
         "INVALID_EMAIL_ERROR": "es_MX Email must be a valid email address",
-        "CHECKOUT": "es_MX Checkout"
+        "CHECKOUT": "es_MX Checkout",
+        "ALL": "es_MX All",
+        "CHANGES_ONLY": "es_MX Changes Only",
+        "OPTION_TOTAL": "es_MX Option Total",
+        "ITEMIZED_OPTIONS": "es_MX Itemized Options"
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -419,8 +423,8 @@
             "DEBITCARD": "es_MX Debit card",
             "PONUMBER": "es_MX PO Number",
             "PAYNOW": "es_MX Pay Now",
-            "Invoice_Me_Later": "es_MX Invoice Me Later",     
-            "USE_NEW_METHOD": "es_MX Use new credit/debit card",                        
+            "Invoice_Me_Later": "es_MX Invoice Me Later",
+            "USE_NEW_METHOD": "es_MX Use new credit/debit card",
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "es_MX Your payment was successful and order has been placed.",
             "ORDER_CONFIRMATION_MESSAGE": "es_MX Your order has been placed successfully!",
             "ORDER_NUMBER": "es_MX Order Number :",
@@ -697,9 +701,9 @@
         "DELETE_MSG": "es_MX Your Credit/Debit card is deleted.",
         "Detail_Item1":"es_MX Your Saved Cards",
         "Detail_Item2":"es_MX Name on card",
-        "Detail_Item3":"es_MX Expires on",        
-        "Detail_Ending":"es_MX ending",   
-        "DEFAULT_TITLE":"es_MX Default Card",   
+        "Detail_Item3":"es_MX Expires on",
+        "Detail_Ending":"es_MX ending",
+        "DEFAULT_TITLE":"es_MX Default Card",
         "DEFAULT_MSG":"es_MX Cannot delete default method",
         "Expired_MSG"   :"es_MX Expired",
         "PAYMENT_SUCCESS_TITLE": "es_MX Payment Success",
