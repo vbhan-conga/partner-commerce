@@ -69,8 +69,8 @@
 </ng-template>-->
 
 <apt-configuration-summary-wrapper
-  *ngIf="lineItem && isCmsEnabled !== null && !isCmsEnabled"
-  [product]="lineItem.Product"
+  *ngIf="lineItem"
+  [product]="lineItem.Product.Id"
   [relatedTo]="lineItem">
 </apt-configuration-summary-wrapper>
 
