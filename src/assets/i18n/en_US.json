@@ -321,7 +321,11 @@
         "ORDER_AMOUNT_BY_STATUS": "ORDER AMOUNT BY STATUS",
         "CC": "CC",
         "VALID_EMAIL": "you@example.com",
-        "INVALID_EMAIL_ERROR": "Email must be a valid email address"
+        "INVALID_EMAIL_ERROR": "Email must be a valid email address",
+        "ALL": "All",
+        "CHANGES_ONLY": "Changes Only",
+        "OPTION_TOTAL": "Option Total",
+        "ITEMIZED_OPTIONS": "Itemized Options"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
@@ -428,14 +432,14 @@
         "SAVE_INFO": "Save this information for next time",
         "PAYMENT": {
             "PAYMENT_INPUT": "Enter Credit/Debit Card Information",
-            "PAYMENT_INPUTSAVE": "Save this card information for future payment",            
+            "PAYMENT_INPUTSAVE": "Save this card information for future payment",
             "PAYMENT_TITLE": "MAKE PAYMENT",
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE_SubTitle": "You will be notified the order details to your email address {{emailAddress}}",
             "DEBITCARD": "Debit card",
             "PONUMBER": "PO Number",
             "PAYNOW": "Pay Now",
-            "Invoice_Me_Later": "Invoice Me Later",     
-            "USE_NEW_METHOD": "Use new credit/debit card",                        
+            "Invoice_Me_Later": "Invoice Me Later",
+            "USE_NEW_METHOD": "Use new credit/debit card",
             "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "Your payment was successful and order has been placed.",
             "ORDER_CONFIRMATION_MESSAGE": "Your order has been placed successfully!",
             "ORDER_NUMBER": "Order Number :",
