@@ -206,6 +206,8 @@
         "LAST": "es_MX Last"
     },
     "COMMON": {
+        "ADD": "es_MX Add",
+        "REMOVE": "es_MX Remove",
         "FIELD": "es_MX Field",
         "OPERATOR": "es_MX Operator",
         "VALUE": "es_MX Value",
@@ -351,7 +353,10 @@
     },
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "es_MX View Details",
-        "MESSAGES_FOUND": "es_MX messages found."
+        "MESSAGES_FOUND": "es_MX messages found.",
+        "NUM_OF_ERRORS": "es_MX {{amount}} erros found.",
+        "NUM_OF_WARNINGS": "es_MX {{amount}} warnings found.",
+        "NUM_OF_INFO_MESSAGES": "es_MX {{amount}} information messages found."
     },
     "CONSTRAINT_MODAL": {
         "PRODUCTS_INCLUDED_HEADING": "es_MX Product(s) Included",
@@ -389,12 +394,19 @@
         "PRODUCT_OPTION_GROUP_MESSAGE": "es_MX Product Option Group <strong></strong> option(s) <span>{{message}}</span> <strong>{{productName}}</strong>"
     },
     "CONSTRAINT_SIDE_MENU": {
+        "VALIDATION_MESSAGES": "es_MX Validation Messages",
         "MESSAGES": "es_MX messages",
         "OPTIONS": "es_MX Option(s)",
         "DESELECT_OPTION": "es_MX Deselect Option",
         "SELECT_OPTION": "es_MX Select Option",
         "CHANGE_CONFIGURATION": "es_MX Change Configuration",
-        "REMOVE_FROM_CART": "es_MX Remove from Cart"
+        "REMOVE_FROM_CART": "es_MX Remove from Cart",
+        "NUM_OF_ERRORS.ONE": "es_MX {{amount}} Error",
+        "NUM_OF_ERRORS.PLURAL": "es_MX {{amount}} Errors",
+        "NUM_OF_WARNINGS.ONE": "es_MX {{amount}} Warning",
+        "NUM_OF_WARNINGS.PLURAL": "es_MX {{amount}} Warnings",
+        "NUM_OF_INFO_MESSAGES.ONE": "es_MX {{amount}} Information Message",
+        "NUM_OF_INFO_MESSAGES.PLURAL": "es_MX {{amount}} Information Messages"
     },
     "DEPENDENT_PICKLIST": {
         "CHOOSE": "es_MX Choose"

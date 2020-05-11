@@ -204,6 +204,8 @@
         "LAST": "fr_FR Last"
     },
     "COMMON": {
+        "ADD": "fr_FR Add",
+        "REMOVE": "fr_FR Remove",
         "FIELD": "fr_FR Field",
         "OPERATOR": "fr_FR Operator",
         "VALUE": "fr_FR Value",
@@ -345,7 +347,10 @@
     },
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "fr_FR View Details",
-        "MESSAGES_FOUND": "fr_FR messages found."
+        "MESSAGES_FOUND": "fr_FR messages found.",
+        "NUM_OF_ERRORS": "fr_FR {{amount}} erros found.",
+        "NUM_OF_WARNINGS": "fr_FR {{amount}} warnings found.",
+        "NUM_OF_INFO_MESSAGES": "fr_FR {{amount}} information messages found."
     },
     "CONSTRAINT_MODAL": {
         "PRODUCTS_INCLUDED_HEADING": "fr_FR Product(s) Included",
@@ -383,12 +388,19 @@
         "PRODUCT_OPTION_GROUP_MESSAGE": "fr_FR Product Option Group <strong></strong> option(s) <span>{{message}}</span> <strong>{{productName}}</strong>"
     },
     "CONSTRAINT_SIDE_MENU": {
+        "VALIDATION_MESSAGES": "fr_FR Validation Messages",
         "MESSAGES": "fr_FR messages",
         "OPTIONS": "fr_FR Option(s)",
         "DESELECT_OPTION": "fr_FR Deselect Option",
         "SELECT_OPTION": "fr_FR Select Option",
         "CHANGE_CONFIGURATION": "fr_FR Change Configuration",
-        "REMOVE_FROM_CART": "fr_FR Remove from Cart"
+        "REMOVE_FROM_CART": "fr_FR Remove from Cart",
+        "NUM_OF_ERRORS.ONE": "fr_FR {{amount}} Error",
+        "NUM_OF_ERRORS.PLURAL": "fr_FR {{amount}} Errors",
+        "NUM_OF_WARNINGS.ONE": "fr_FR {{amount}} Warning",
+        "NUM_OF_WARNINGS.PLURAL": "fr_FR {{amount}} Warnings",
+        "NUM_OF_INFO_MESSAGES.ONE": "fr_FR {{amount}} Information Message",
+        "NUM_OF_INFO_MESSAGES.PLURAL": "fr_FR {{amount}} Information Messages"
     },
     "DEPENDENT_PICKLIST": {
         "CHOOSE": "fr_FR Choose"
