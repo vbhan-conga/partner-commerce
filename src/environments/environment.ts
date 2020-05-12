@@ -26,17 +26,6 @@ export const environment: Configuration = {
   hashRouting: false,
 
   // Salesforce environment variables
-  // storefront: 'P-Commerce',
-  // sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  // organizationId: '00D3I0000008mFM',
-  // endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
-  storefront: 'Partner Commerce',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  organizationId: '00DG0000000iqtB',
-  endpoint: 'https://apttusdc-developer-edition.na134.force.com/partner'
-  // packageNamespace: 'Apttus_WebStore',
-  // storefront: 'P-Commerce',
-  // organizationId: '00D3I0000008n7g',
-  // sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  // endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
+  storefront: 'P-Commerce',
+  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
 };
