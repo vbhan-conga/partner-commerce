@@ -212,6 +212,8 @@
         "LAST": "Last"
     },
     "COMMON": {
+        "ADD": "Add",
+        "REMOVE": "Remove",
         "FIELD": "Field",
         "OPERATOR": "Operator",
         "VALUE": "Value",
@@ -368,7 +370,10 @@
     },
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "View Details",
-        "MESSAGES_FOUND": "messages found."
+        "MESSAGES_FOUND": "messages found.",
+        "NUM_OF_ERRORS": "{{amount}} erros found.",
+        "NUM_OF_WARNINGS": "{{amount}} warnings found.",
+        "NUM_OF_INFO_MESSAGES": "{{amount}} information messages found."
     },
     "CONSTRAINT_MODAL": {
         "PRODUCTS_INCLUDED_HEADING": "Product(s) Included",
@@ -406,12 +411,19 @@
         "PRODUCT_OPTION_GROUP_MESSAGE": "Product Option Group <strong></strong> option(s) <span>{{message}}</span> <strong>{{productName}}</strong>"
     },
     "CONSTRAINT_SIDE_MENU": {
+        "VALIDATION_MESSAGES": "Validation Messages",
         "MESSAGES": "messages",
         "OPTIONS": "Option(s)",
         "DESELECT_OPTION": "Deselect Option",
         "SELECT_OPTION": "Select Option",
         "CHANGE_CONFIGURATION": "Change Configuration",
-        "REMOVE_FROM_CART": "Remove from Cart"
+        "REMOVE_FROM_CART": "Remove from Cart",
+        "NUM_OF_ERRORS.ONE": "{{amount}} Error",
+        "NUM_OF_ERRORS.PLURAL": "{{amount}} Errors",
+        "NUM_OF_WARNINGS.ONE": "{{amount}} Warning",
+        "NUM_OF_WARNINGS.PLURAL": "{{amount}} Warnings",
+        "NUM_OF_INFO_MESSAGES.ONE": "{{amount}} Information Message",
+        "NUM_OF_INFO_MESSAGES.PLURAL": "{{amount}} Information Messages"
     },
     "DEPENDENT_PICKLIST": {
         "CHOOSE": "Choose"

@@ -204,6 +204,8 @@
         "LAST": "Ultimo"
     },
     "COMMON": {
+        "ADD": "Inserisci",
+        "REMOVE": "Rimuovere",
         "FIELD": "Campo",
         "OPERATOR": "Operatore",
         "VALUE": "Valore",
@@ -342,7 +344,10 @@
     },
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "Visualizza Dettagli",
-        "MESSAGES_FOUND": "messaggi trovati."
+        "MESSAGES_FOUND": "messaggi trovati.",
+        "NUM_OF_ERRORS": "{{amount}} errori trovati.",
+        "NUM_OF_WARNINGS": "{{amount}} avvertimenti trovati.",
+        "NUM_OF_INFO_MESSAGES": "{{amount}} messaggi informativi trovati."
     },
     "CONSTRAINT_MODAL": {
         "PRODUCTS_INCLUDED_HEADING": "Prodotto(s) Incluso",
@@ -380,12 +385,19 @@
         "PRODUCT_OPTION_GROUP_MESSAGE": "Tipo di prodotto del Gruppo <strong><\/strong> opzione(s) <span>{{messaggio}}<\/span> <strong>{{productName}}<\/strong>"
     },
     "CONSTRAINT_SIDE_MENU": {
+        "VALIDATION_MESSAGES": "Messaggi di convalida",
         "MESSAGES": "messaggi",
         "OPTIONS": "Opzione(s)",
         "DESELECT_OPTION": "Deselezionare L'Opzione",
         "SELECT_OPTION": "Selezionare L'Opzione",
         "CHANGE_CONFIGURATION": "Modificare La Configurazione",
-        "REMOVE_FROM_CART": "Rimuovi dal Carrello"
+        "REMOVE_FROM_CART": "Rimuovi dal Carrello",
+        "NUM_OF_ERRORS.ONE": "{{amount}} Errore",
+        "NUM_OF_ERRORS.PLURAL": "{{amount}} Errori",
+        "NUM_OF_WARNINGS.ONE": "{{amount}} Avvertimento",
+        "NUM_OF_WARNINGS.PLURAL": "{{amount}} Avvertenze",
+        "NUM_OF_INFO_MESSAGES.ONE": "{{amount}} Messaggio Informativo",
+        "NUM_OF_INFO_MESSAGES.PLURAL": "{{amount}} Messaggi Informativi"
     },
     "DEPENDENT_PICKLIST": {
         "CHOOSE": "Scegliere"
