@@ -1,11 +1,11 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2002.0.20",
+  "version": "2002.0.26",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "ng build --configuration=dc4",
+    "build": "ng build --configuration=dc5",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"
