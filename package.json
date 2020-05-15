@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2002.0.35",
+  "version": "2002.0.36",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
