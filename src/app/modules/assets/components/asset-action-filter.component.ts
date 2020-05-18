@@ -88,7 +88,7 @@ import { AFilter } from '@apttus/core';
                 (change)="handleChange($event)"
                 [checked]="value === 'Change Configuration'"
               >
-              <label class="custom-control-label" for="buyMore">
+              <label class="custom-control-label" for="changeConfiguration">
                 {{'COMMON.CHANGE_CONFIGURATION' | translate}}
               </label>
             </div>
