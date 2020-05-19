@@ -16,7 +16,7 @@ export const environment: Configuration = {
   subqueryLimit: 10,
   disableCache: false,
   encryptResponse: false,
-  cartRetryLimit: 3,
+  cartRetryLimit: 10,
   productIdentifier: 'Id',
   type: 'Salesforce',
   debounceTime: 1000,
