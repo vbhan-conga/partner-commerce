@@ -23,7 +23,7 @@ export const environment: Configuration = {
   proxy: 'https://apttus-proxy.herokuapp.com',
   useIndexedDB: true,
   expandDepth: 8,
-  hashRouting: false,
+  hashRouting: true,
   packageNamespace: 'Apttus_WebStore',
   // Salesforce environment variables
   storefront: 'P-Commerce',
