@@ -74,10 +74,10 @@
                     <apt-promotion class="mt-3" [cart]="view?.cart"></apt-promotion>
                 </div>
             </div>
-            <div class="row mt-4" *ngIf="productList$ | async as productList">
+            <div class="row mt-4" *ngIf="view?.productList">
                 <div class="col-12">
                     <h4 class="mb-3 text-muted"> {{ 'COMMON.YOU_MAY_ALSO_LIKE' | translate }} </h4>
-                    <apt-product-carousel [productList]="productList"></apt-product-carousel>
+                    <apt-product-carousel [productList]="view?.productList"></apt-product-carousel>
                 </div>
             </div>
         </div>
