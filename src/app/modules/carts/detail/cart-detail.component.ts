@@ -24,8 +24,6 @@ export class CartDetailComponent implements OnInit {
    */
   view$: Observable<ManageCartState>;
 
-  productList$: Observable<Array<Product>>;
-
   constructor(private crService: ConstraintRuleService, private cartService: CartService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
