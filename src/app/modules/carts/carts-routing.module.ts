@@ -8,7 +8,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardViewComponent } from '../dashboard/view/dashboard-view.component';
 import { CartListComponent } from './list/cart-list.component';
 import { CartDetailComponent } from './detail/cart-detail.component';
-import { CartResolver } from './services/cart.resolver';
 
 const routes: Routes = [
   // route to land on the cart list page

@@ -4,7 +4,7 @@
     <div class="constraintAlerts">
         <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </div>
-    
+
     <div class="primary-actions">
         <form class="d-flex">
             <div class="form-group my-0 mr-5">
@@ -168,6 +168,7 @@
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
         [preload]="true"
+        [config]="true"
         position="right"
         #configSummary>
     </apt-configuration-summary-wrapper>
