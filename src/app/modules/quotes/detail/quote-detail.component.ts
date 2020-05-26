@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService } from '@apttus/ecommerce';
+import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService, Attachment } from '@apttus/ecommerce';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, flatMap, map, take, mergeMap, tap } from 'rxjs/operators';
+import { filter, flatMap, map, take, mergeMap, tap, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { ExceptionService } from '@apttus/elements';
@@ -29,6 +29,8 @@ export class QuoteDetailComponent implements OnInit {
   accept_loader = false;
   comments_loader = false;
   attachments_loader = false;
+  attachmentList = new Array<Attachment>();
+  noteList = new Array<Note>();
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
@@ -60,7 +62,11 @@ export class QuoteDetailComponent implements OnInit {
       );
     this.quoteLineItems$ = this.quote$.pipe(
       map(
-        quote => LineItemService.groupItems(quote.QuoteLineItems)
+        quote => {
+          this.noteList = _.get(quote, 'Notes') ? _.get(quote, 'Notes') : new Array<Note>();
+          this.attachmentList = _.get(quote, 'Attachments') ? _.get(quote, 'Attachments') : new Array<Attachment>();
+          return LineItemService.groupItems(quote.QuoteLineItems);
+        }
       )
     );
     this.order$ = this.quote$.pipe(
@@ -78,13 +84,21 @@ export class QuoteDetailComponent implements OnInit {
     }
     this.noteService.create([this.note])
       .subscribe(r => {
+        this.noteService.query({
+            conditions: [new ACondition(this.noteService.type, 'Id', 'In', (_.get(_.first(r), 'Id')))],
+            waitForExpansion: false
+          }).subscribe(comment => {
+            if(comment && comment.length > 0)
+              this.noteList.push(comment[0]);
+          });
         this.clear();
         this.comments_loader = false;
+        this.cdr.detectChanges();
       },
-        err => {
-          this.exceptionService.showError(err);
-          this.comments_loader = false;
-        });
+      err => {
+        this.exceptionService.showError(err);
+        this.comments_loader = false;
+    });
   }
 
   clear() {
@@ -181,14 +195,22 @@ export class QuoteDetailComponent implements OnInit {
    */
   uploadAttachment(parentId: string) {
     this.attachments_loader = true;
-    this.attachmentService.uploadAttachment(this.file, parentId).pipe(take(1)).subscribe(res => {
-      this.attachments_loader = false;
-      this.clearFiles();
-      this.cdr.detectChanges();
-    }, err => {
-      this.clearFiles();
-      this.exceptionService.showError(err);
-    });
+    this.attachmentService.uploadAttachment(this.file, parentId)
+    .pipe(
+      switchMap((res) =>
+        this.attachmentService.query({
+            conditions: [new ACondition(this.attachmentService.type, 'ParentId', 'In', parentId)]
+        })), take(1))
+      .subscribe(documentList => {
+        if(documentList.length > 0)
+          this.attachmentList.push(_.first(documentList));
+        this.attachments_loader = false;
+        this.clearFiles();
+        this.cdr.detectChanges();
+      }, err => {
+          this.clearFiles();
+          this.exceptionService.showError(err);
+      });
   }
 
   /**
