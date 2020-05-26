@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { UserService, QuoteService, Quote, Order, OrderService, QuoteLineItem, Note, NoteService, AttachmentService, ProductInformationService, ItemGroup, QuoteLineItemService, LineItemService, Attachment } from '@apttus/ecommerce';
-import { ActivatedRoute, Router } from '@angular/router';
-import { filter, flatMap, map, take, mergeMap, tap, switchMap } from 'rxjs/operators';
+import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
+  ProductInformationService, ItemGroup, LineItemService, Attachment } from '@apttus/ecommerce';
+import { ActivatedRoute } from '@angular/router';
+import { filter, map, take, mergeMap, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { ExceptionService } from '@apttus/elements';
@@ -35,14 +36,12 @@ export class QuoteDetailComponent implements OnInit {
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
     private quoteService: QuoteService,
     private noteService: NoteService,
     private exceptionService: ExceptionService,
     private modalService: BsModalService,
     private orderService: OrderService,
     private attachmentService: AttachmentService,
-    private quoteItemService: QuoteLineItemService,
     private productInformationService: ProductInformationService,
     private cdr: ChangeDetectorRef,
     private ngZone: NgZone,
