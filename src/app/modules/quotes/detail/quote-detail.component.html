@@ -86,7 +86,7 @@
     </app-detail-section>
 
     <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="noteList$ | async as noteList; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.COMMENTS' | translate}} <span *ngIf="noteList?.length > 0">({{noteList?.length}})</span>
@@ -131,7 +131,7 @@
     </app-detail-section>
 
     <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="attachmentList$ | async as attachmentList; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.ATTACHMENTS' | translate}} <span

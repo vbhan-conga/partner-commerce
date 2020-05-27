@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
   ProductInformationService, ItemGroup, LineItemService, Attachment } from '@apttus/ecommerce';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
 import { ExceptionService } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
@@ -16,7 +16,7 @@ import { ACondition } from '@apttus/core';
   styleUrls: ['./quote-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuoteDetailComponent implements OnInit {
+export class QuoteDetailComponent implements OnInit, OnDestroy {
   quote$: Observable<Quote>;
   quoteLineItems$: Observable<Array<ItemGroup>>;
   order$: Observable<Order>;
@@ -30,8 +30,9 @@ export class QuoteDetailComponent implements OnInit {
   accept_loader = false;
   comments_loader = false;
   attachments_loader = false;
-  attachmentList = new Array<Attachment>();
-  noteList = new Array<Note>();
+  attachmentList$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
+  noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
+  notesSubscription: Subscription;
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
@@ -61,16 +62,22 @@ export class QuoteDetailComponent implements OnInit {
       );
     this.quoteLineItems$ = this.quote$.pipe(
       map(
-        quote => {
-          this.noteList = _.get(quote, 'Notes') ? _.get(quote, 'Notes') : new Array<Note>();
-          this.attachmentList = _.get(quote, 'Attachments') ? _.get(quote, 'Attachments') : new Array<Attachment>();
-          return LineItemService.groupItems(quote.QuoteLineItems);
-        }
+        quote => LineItemService.groupItems(quote.QuoteLineItems)
       )
     );
     this.order$ = this.quote$.pipe(
       mergeMap(quote => this.orderService.getOrderByQuote(_.get(quote, 'Id')))
     );
+    this.getNotes();
+    this.getAttachments();
+  }
+
+  getNotes() {
+    this.ngOnDestroy();
+    this.activatedRoute.params
+    .pipe(
+      switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
+    ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
   }
 
   addComment(quoteId: string) {
@@ -83,16 +90,9 @@ export class QuoteDetailComponent implements OnInit {
     }
     this.noteService.create([this.note])
       .subscribe(r => {
-        this.noteService.query({
-            conditions: [new ACondition(this.noteService.type, 'Id', 'In', (_.get(_.first(r), 'Id')))],
-            waitForExpansion: false
-          }).subscribe(comment => {
-            if(comment && comment.length > 0)
-              this.noteList.push(comment[0]);
-          });
+        this.getNotes();
         this.clear();
         this.comments_loader = false;
-        this.cdr.detectChanges();
       },
       err => {
         this.exceptionService.showError(err);
@@ -189,27 +189,28 @@ export class QuoteDetailComponent implements OnInit {
     this.uploadFileList = null;
   }
 
+  getAttachments() {
+    this.ngOnDestroy();
+    this.activatedRoute.params
+    .pipe(
+      switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
+    ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
+  }
+
   /**
    * @ignore
    */
   uploadAttachment(parentId: string) {
     this.attachments_loader = true;
-    this.attachmentService.uploadAttachment(this.file, parentId)
-    .pipe(
-      switchMap((res) =>
-        this.attachmentService.query({
-            conditions: [new ACondition(this.attachmentService.type, 'ParentId', 'In', parentId)]
-        })), take(1))
-      .subscribe(documentList => {
-        if(documentList.length > 0)
-          this.attachmentList.push(_.first(documentList));
-        this.attachments_loader = false;
-        this.clearFiles();
-        this.cdr.detectChanges();
-      }, err => {
-          this.clearFiles();
-          this.exceptionService.showError(err);
-      });
+    this.attachmentService.uploadAttachment(this.file, parentId).pipe(take(1)).subscribe(res => {
+      this.getAttachments();
+      this.attachments_loader = false;
+      this.clearFiles();
+      this.cdr.detectChanges();
+    }, err => {
+      this.clearFiles();
+      this.exceptionService.showError(err);
+    });
   }
 
   /**
@@ -231,5 +232,13 @@ export class QuoteDetailComponent implements OnInit {
     this.quoteService.where([new ACondition(Quote, 'Id', 'In', this.activatedRoute.snapshot.params.id)], 'AND', null, null, null, null, true).subscribe(res => {
       this.quote$ = of(res[0]);
     });
+  }
+
+  /**
+   * @ignore
+   */
+  ngOnDestroy() {
+    if(this.notesSubscription)
+      this.notesSubscription.unsubscribe();
   }
 }
