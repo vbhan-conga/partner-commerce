@@ -59,7 +59,7 @@ export class ProductDetailComponent implements OnInit {
    */
   onConfigurationChange(result: any) {
     this.cartItemList = _.first(result);
-    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged')) {
+    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged') || (_.isBoolean(result[1])) && result[1]) {
       this.configurationChanged = true;
     }
   }
