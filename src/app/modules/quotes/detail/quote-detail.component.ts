@@ -75,7 +75,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
 
   getNotes() {
     if(this.notesSubscription) this.notesSubscription.unsubscribe();
-    this.activatedRoute.params
+    this.notesSubscription = this.activatedRoute.params
     .pipe(
       switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
     ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
