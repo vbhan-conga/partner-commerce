@@ -32,23 +32,23 @@
                                 <apt-output-field [record]="quote.CreatedBy" field="Name" label="Created By" layout="inline"
                                     [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
-                                    [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'">
+                                    [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'" (onChange)="refreshQuote($event, quote, 'RFP_Response_Due_Date')">
                                 </apt-output-field>
                                 <apt-output-field [record]="quote" field="_PrimaryContactId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                    [showQuickView]="true"></apt-output-field>
+                                    [showQuickView]="true" (onChange)="refreshQuote($event, quote, '_PrimaryContactId')"></apt-output-field>
                                 <apt-output-field [record]="quote" field="AccountId" label="Account Name"
                                     layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
                             </dl>
                             <dl class="col-12 col-md-6">
                                 <apt-output-field [record]="quote" field="ShipToAccountId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                    label="Ship To Account" [showQuickView]="true"></apt-output-field>
+                                    label="Ship To Account" [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'ShipToAccountId')"></apt-output-field>
                                 <apt-output-field [record]="quote" field="ShipToAccount.ShippingAddress" label="Ship To Address"
                                     layout="inline" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="quote" field="BillToAccountId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                    label="Bill To Account" [showQuickView]="true"></apt-output-field>
+                                    label="Bill To Account" [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'BillToAccountId')"></apt-output-field>
                                 <apt-output-field [record]="quote" field="BillToAccount.BillingAddress" label="Bill To Address"
                                     layout="inline" [editable]="false"></apt-output-field>
                             </dl>
