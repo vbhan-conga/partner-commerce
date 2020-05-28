@@ -641,7 +641,9 @@
         "TROUBLE_LOGGINGIN": "Avendo problemi di accesso?",
         "USERNAME_ARE_IN_EMAIL": "Nome utente nella forma di un indirizzo email.",
         "PASSWORDS_ARE_CASESENSITIVE": "Le password sono case sensitive.",
-        "TO_RESET_PASSWORD_ENTER_USERNAME": "Per reimpostare la tua password, inserisci il tuo nome utente."
+        "TO_RESET_PASSWORD_ENTER_USERNAME": "Per reimpostare la tua password, inserisci il tuo nome utente.",
+        "LICENSE_REQUIRED": "it_IT User you are trying to login with does not have required license. Contact your administrator.",
+        "INVALID_PASSWORD": "it_IT Please check your username and password. If you still can't log in, contact your administrator."
     },
     "MODAL": {
         "RENEWAL_END_DATE": "Rinnovo Data Di Fine",

@@ -86,15 +86,15 @@
     </app-detail-section>
 
     <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="noteList$ | async as noteList; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
-                    {{'DETAILS.COMMENTS' | translate}} <span *ngIf="quote?.Notes?.length > 0">({{quote?.Notes?.length}})</span>
+                    {{'DETAILS.COMMENTS' | translate}} <span *ngIf="noteList?.length > 0">({{noteList?.length}})</span>
                 </h5>
                 <div class="row">
                     <ng-scrollbar class="col-12 col-md-6 border-right note-container" track="horizontal">
-                        <ng-container *ngIf="quote?.Notes?.length > 0; else emptyNotes">
-                            <div class="my-3 pb-3" *ngFor="let note of quote?.Notes">
+                        <ng-container *ngIf="noteList?.length > 0; else emptyNotes">
+                            <div class="my-3 pb-3" *ngFor="let note of noteList">
                                 <!-- <strong class="d-block">{{note?.Title}}</strong> -->
                                 <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
                                     {{'COMMON.ON' | translate }}
@@ -131,17 +131,17 @@
     </app-detail-section>
 
     <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="attachmentList$ | async as attachmentList; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.ATTACHMENTS' | translate}} <span
-                        *ngIf="quote?.Attachments?.length > 0">({{quote?.Attachments?.length}})</span>
+                        *ngIf="attachmentList?.length > 0">({{attachmentList?.length}})</span>
                 </h5>
 
                 <div class="row">
                     <ng-scrollbar class="col-12 col-md-6 border-right attachment-container">
-                        <ng-container *ngIf="quote?.Attachments?.length > 0; else emptyAttachments">
-                            <div class="mb-2 hide-hscroll" *ngFor="let attachment of quote?.Attachments">
+                        <ng-container *ngIf="attachmentList?.length > 0; else emptyAttachments">
+                            <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachmentList">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="d-flex justify-content-between"><a class="text-underline"
