@@ -33,6 +33,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   attachmentList$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
   notesSubscription: Subscription;
+  attachemntSubscription: Subscription;
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
@@ -73,7 +74,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   getNotes() {
-    this.ngOnDestroy();
+    if(this.notesSubscription) this.notesSubscription.unsubscribe();
     this.activatedRoute.params
     .pipe(
       switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
@@ -190,8 +191,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   getAttachments() {
-    this.ngOnDestroy();
-    this.activatedRoute.params
+    if(this.attachemntSubscription) this.attachemntSubscription.unsubscribe();
+    this.attachemntSubscription = this.activatedRoute.params
     .pipe(
       switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
     ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
@@ -240,5 +241,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if(this.notesSubscription)
       this.notesSubscription.unsubscribe();
+    if(this.attachemntSubscription)
+      this.attachemntSubscription.unsubscribe();
   }
 }
