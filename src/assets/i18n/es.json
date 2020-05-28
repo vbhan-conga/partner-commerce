@@ -635,7 +635,9 @@
         "TROUBLE_LOGGINGIN": "es_MX Having trouble logging in?",
         "USERNAME_ARE_IN_EMAIL": "es_MX Usernames are in the form of an email address.",
         "PASSWORDS_ARE_CASESENSITIVE": "es_MX Passwords are case sensitive.",
-        "TO_RESET_PASSWORD_ENTER_USERNAME": "es_MX To reset your password, enter your username."
+        "TO_RESET_PASSWORD_ENTER_USERNAME": "es_MX To reset your password, enter your username.",
+        "LICENSE_REQUIRED": "es_MX User you are trying to login with does not have required license. Contact your administrator.",
+        "INVALID_PASSWORD": "es_MX Please check your username and password. If you still can't log in, contact your administrator."
     },
     "MODAL": {
         "RENEWAL_END_DATE": "es_MX Renewal End Date",
