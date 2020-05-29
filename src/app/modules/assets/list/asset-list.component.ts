@@ -10,14 +10,14 @@ import {
   Cart
 } from '@apttus/ecommerce';
 import { Observable, combineLatest, of, BehaviorSubject, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
 import {
   AssetModalService,
   TableOptions,
   TableAction,
   ChildRecordOptions,
-  FilterOptions
+  FilterOptions,
+  CheckState
 } from '@apttus/elements';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -216,7 +216,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
       )
     ]),
     'Change Configuration': new AFilter(this.assetService.type, [
-      new ACondition(this.assetService.type, 'AssetStatus', 'NotEqual', 'Cancelled')], [
+      new ACondition(this.assetService.type, 'AssetStatus', 'NotEqual', 'Cancelled'),
+      new ACondition(AssetLineItem, 'PriceType', 'NotEqual', 'One Time')], [
       new AFilter(this.assetService.type, [
         new ACondition(Product,
           'Product.ConfigurationType',
@@ -245,8 +246,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnInit() {
-
-
     if (!_.isEmpty(_.get(this.route, 'snapshot.queryParams'))) {
       this.preselectItemsInGroups = true;
       this.assetActionFilter = this.assetActionMap[
@@ -298,7 +297,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
             groupBy: 'Product.Name',
             filters: this.getFilters(),
             defaultSort: {
-              column: 'Product.Name',
+              column: 'CreatedDate',
               direction: 'ASC'
             },
             columns: [
@@ -352,7 +351,13 @@ export class AssetListComponent implements OnInit, OnDestroy {
                 'PriceType'
               ]
             } as ChildRecordOptions,
-            preselectItemsInGroups: this.preselectItemsInGroups
+            preselectItemsInGroups: this.preselectItemsInGroups,
+            selectItemsInGroupFunc: (recordData => {
+              _.forEach(_.values(_.groupBy(recordData, 'Product.Name')), v => {
+                const recentAsset = _.last(_.filter(v, x => !_.isEmpty(x.get('actions'))));
+                if (recentAsset) recentAsset.set('state', CheckState.CHECKED);
+              });
+            })
           } as TableOptions,
           assetType: AssetLineItemExtended,
           colorPalette: this.colorPalette,
