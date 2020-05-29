@@ -31,6 +31,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   updateUser() {
+    if (this.userSubscription) this.userSubscription.unsubscribe();
     this.userSubscription = this.userService.update([this.user$.value]).subscribe((res: Array<User>) => {
       const updatedUser = cloneDeep(first(res));
       this.user$.next(updatedUser);
