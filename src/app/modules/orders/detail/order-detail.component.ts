@@ -88,9 +88,14 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     if(this.orderSubscription) this.orderSubscription.unsubscribe();
     this.orderSubscription = this.activatedRoute.params
       .pipe(
-        switchMap(params => this.orderService.getOrder(_.get(params, 'id')))
-      ).subscribe((order: Array<Order>) => {
-        this.order$.next(order[0]);
+        filter(params => _.get(params, 'id') != null),
+        flatMap(params => this.orderService.query({
+          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
+          waitForExpansion: false
+        })),
+        map(orderList => _.get(orderList, '[0]'))
+      ).subscribe(result => {
+        this.order$.next(result);
         this.orderLineItems$ = this.order$.pipe(
           map(order => {
             if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
