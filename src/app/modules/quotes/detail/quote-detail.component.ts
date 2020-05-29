@@ -17,7 +17,7 @@ import { ACondition } from '@apttus/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuoteDetailComponent implements OnInit, OnDestroy {
-  quote$: Observable<Quote>;
+  quote$: BehaviorSubject<Quote> = new BehaviorSubject<Quote>(null);
   quoteLineItems$: Observable<Array<ItemGroup>>;
   order$: Observable<Order>;
   note: Note = new Note();
@@ -34,6 +34,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
   notesSubscription: Subscription;
   attachemntSubscription: Subscription;
+  quoteSubscription: Subscription;
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
@@ -50,27 +51,44 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     private userService: UserService) { }
 
   ngOnInit() {
-    this.quote$ = this.activatedRoute.params
-      .pipe(
-        filter(params => _.get(params, 'id') != null),
-        mergeMap(params => this.quoteService.query({
+    this.getQuote();
+  }
+
+  getQuote() {
+    this.ngOnDestroy();
+    if(this.quoteSubscription) this.quoteSubscription.unsubscribe();
+    this.quoteSubscription = this.activatedRoute.params
+    .pipe(
+      filter(params => _.get(params, 'id') != null),
+      mergeMap(params => {
+        return this.quoteService.query({
           conditions: [new ACondition(this.quoteService.type, 'Id', 'In', [_.get(params, 'id')])],
           waitForExpansion: false
-        })),
-        map(quoteList => {
-          return _.get(quoteList, '[0]');
-        })
+        });
+      }),
+      map(quoteList => {
+        return _.get(quoteList, '[0]');
+      })
+    ).subscribe(result => {
+      this.quote$.next(result);
+      this.quoteLineItems$ = this.quote$.pipe(
+        map(
+          quote => LineItemService.groupItems(quote.QuoteLineItems)
+        )
       );
-    this.quoteLineItems$ = this.quote$.pipe(
-      map(
-        quote => LineItemService.groupItems(quote.QuoteLineItems)
-      )
-    );
-    this.order$ = this.quote$.pipe(
-      mergeMap(quote => this.orderService.getOrderByQuote(_.get(quote, 'Id')))
-    );
+      this.order$ = this.quote$.pipe(
+        mergeMap(quote => this.orderService.getOrderByQuote(_.get(quote, 'Id')))
+      );
+    });
     this.getNotes();
     this.getAttachments();
+  }
+
+  refreshQuote(fieldValue, quote, fieldName) {
+    _.set(quote, fieldName, fieldValue);
+    this.quoteService.update([quote]).subscribe(r => {
+      this.getQuote();
+    });
   }
 
   getNotes() {
@@ -231,7 +249,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   closeModal() {
     this.intimationModal.hide();
     this.quoteService.where([new ACondition(Quote, 'Id', 'In', this.activatedRoute.snapshot.params.id)], 'AND', null, null, null, null, true).subscribe(res => {
-      this.quote$ = of(res[0]);
+      this.quote$.next(res[0]);
     });
   }
 
@@ -243,5 +261,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       this.notesSubscription.unsubscribe();
     if(this.attachemntSubscription)
       this.attachemntSubscription.unsubscribe();
+    if(this.quoteSubscription)
+      this.quoteSubscription.unsubscribe();
   }
 }
