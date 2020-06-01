@@ -14,7 +14,6 @@ import {
 import { Observable, zip, BehaviorSubject, Subscription } from 'rxjs';
 import { take, map, tap, filter, switchMap } from 'rxjs/operators';
 import { isNil, get, first } from 'lodash';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +61,7 @@ export class ProductDetailsResolver implements Resolve<any> {
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
           isCmsEnabled: isCmsEnabled,
-          quantity: _.get(first(cartitemList), 'Quantity', 1)
+          quantity: get(first(cartitemList), 'Quantity', 1)
         };
       })
     ).subscribe(r => this.subject.next(r));
