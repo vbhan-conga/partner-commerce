@@ -645,7 +645,9 @@
         "TROUBLE_LOGGINGIN": "fr_FR Having trouble logging in?",
         "USERNAME_ARE_IN_EMAIL": "fr_FR Usernames are in the form of an email address.",
         "PASSWORDS_ARE_CASESENSITIVE": "fr_FR Passwords are case sensitive.",
-        "TO_RESET_PASSWORD_ENTER_USERNAME": "fr_FR To reset your password, enter your username."
+        "TO_RESET_PASSWORD_ENTER_USERNAME": "fr_FR To reset your password, enter your username.",
+        "LICENSE_REQUIRED": "fr_FR User you are trying to login with does not have required license. Contact your administrator.",
+        "INVALID_PASSWORD": "fr_FR Please check your username and password. If you still can't log in, contact your administrator."
     },
     "MODAL": {
         "RENEWAL_END_DATE": "fr_FR Renewal End Date",

@@ -97,7 +97,7 @@ export class CartListComponent implements OnInit {
             highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record)),
             children: ['SummaryGroups']
           },
-          totalCarts: _.get(cartList, 'total_records'),
+          totalCarts: _.get(_.first(cartList), 'total_records'),
           type: Cart
         } as CartListView;
       })

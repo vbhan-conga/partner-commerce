@@ -5,7 +5,7 @@
         <ng-container *ngSwitchCase="'Draft'">
             <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" 
             data-style="zoom-in" [disabled]="order.hasErrors">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
-            <apt-generate-document [record]="order" class="align-items-stretch d-flex"></apt-generate-document>
+            <apt-generate-document [record]="order" class="align-items-stretch d-flex" (onStatusUpdate)="getOrder()"></apt-generate-document>
         </ng-container>
 
         <ng-container *ngSwitchCase="'Generated'">
@@ -58,16 +58,16 @@
                                 <apt-output-field [record]="order" field="CreatedDate" layout="inline" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="order.CreatedBy" field="Name" layout="inline" label="Created By" [editable]="false"></apt-output-field>
                                 <apt-output-field [record]="order" field="PrimaryContactId" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"
-                                [lookupOptions]="lookupOptions" [required]="true"></apt-output-field>
+                                [lookupOptions]="lookupOptions" [required]="true" (onChange)="refreshOrder($event, order, 'PrimaryContactId')"></apt-output-field>
                                 <apt-output-field [record]="order" field="SoldToAccountId" label="SoldToAccount.Name" layout="inline" [editable]="false"
                                     [showQuickView]="true"></apt-output-field>
                                 <apt-output-field [record]="order" field="Description" label="Order Title" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'"
-                                    [showQuickView]="true"></apt-output-field>
+                                    [showQuickView]="true" (onChange)="refreshOrder($event, order, 'Description')"></apt-output-field>
                             </dl>
                             <dl class="col-12 col-md-6">
-                                <apt-output-field [record]="order" field="ShipToAccountId" label="Ship To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true" [required]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="ShipToAccountId" label="Ship To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true" [required]="true" (onChange)="refreshOrder($event, order, 'ShipToAccountId')"></apt-output-field>
                                 <apt-output-field [record]="order" field="ShipToAccount.ShippingAddress" label="Ship To Address" layout="inline" [editable]="false"></apt-output-field>
-                                <apt-output-field [record]="order" field="BillToAccountId" label="Bill To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true"></apt-output-field>
+                                <apt-output-field [record]="order" field="BillToAccountId" label="Bill To Account" layout="inline" [editable]="orderStatusMap[order.Status] === 'Draft' || orderStatusMap[order.Status] === 'Generated' || orderStatusMap[order.Status] === 'Presented'" [showQuickView]="true" (onChange)="refreshOrder($event, order, 'BillToAccountId')"></apt-output-field>
                                 <apt-output-field [record]="order" field="BillToAccount.BillingAddress" label="Bill To Address" layout="inline" [editable]="false"></apt-output-field>
                             </dl>
                         </div>
