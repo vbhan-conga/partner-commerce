@@ -310,6 +310,18 @@ export class AssetListComponent implements OnInit, OnDestroy {
               { prop: 'AssetStatus' },
               { prop: 'PriceType' }
             ],
+            fields: [
+              'Id',
+              'Name',
+              'SellingFrequency',
+              'StartDate',
+              'EndDate',
+              'NetPrice',
+              'Quantity',
+              'AssetStatus',
+              'PriceType',
+              'Product.Name'
+            ],
             actions: _.filter(this.getMassActions(cart), action =>
               _.includes(
                 _.get(storefront, 'AssetActions'),
