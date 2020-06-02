@@ -49,7 +49,18 @@ export class OrderListComponent implements OnInit {
         prop: 'ActivatedDate'
       }
     ],
-    fields: ['BillToAccount.Name', 'ShipToAccount.Name', 'PriceList.Name']
+    fields: [
+      'Id',
+      'Name',
+      'Description',
+      'Status',
+      'BillToAccount.Name',
+      'ShipToAccount.Name',
+      'PriceList.Name',
+      'OrderAmount',
+      'CreatedDate',
+      'ActivatedDate'
+    ]
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);

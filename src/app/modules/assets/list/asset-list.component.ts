@@ -490,7 +490,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Renew',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => item.AssetLineItem.Id === record.Id).length > 0);
+          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openRenewModal(
@@ -506,7 +506,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Terminate',
         theme: 'danger',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => item.AssetLineItem.Id === record.Id).length > 0);
+          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openTerminateModal(
@@ -522,7 +522,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Buy More',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canBuyMore() && !(_.filter(_.get(cart, 'LineItems'), (item) => item.AssetLineItem.Id === record.Id).length > 0);
+          return record.canBuyMore() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openBuyMoreModal(
@@ -537,7 +537,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Change Configuration',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canChangeConfiguration() && !(_.filter(_.get(cart, 'LineItems'), (item) => item.AssetLineItem.Id === record.Id).length > 0);
+          return record.canChangeConfiguration() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openChangeConfigurationModal(
