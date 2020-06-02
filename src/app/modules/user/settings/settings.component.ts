@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService, AccountService, User, Account } from '@apttus/ecommerce';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-
-import { first, cloneDeep } from 'lodash';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { cloneDeep } from 'lodash';
+import { ExceptionService } from '@apttus/elements';
 
 /**
  * Loads user and account specific settings.
@@ -12,33 +13,28 @@ import { first, cloneDeep } from 'lodash';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit, OnDestroy {
+export class SettingsComponent implements OnInit {
 
-  user$: BehaviorSubject<User> = new BehaviorSubject<User>({} as User);
+  user$: Observable<User>;
+
   account$: Observable<Account>;
 
-  userSubscription: Subscription = null;
-
   /** @ignore */
-  constructor(private userService: UserService, private accountService: AccountService) { }
+  constructor(private userService: UserService,
+              private accountService: AccountService,
+              private exceptionService: ExceptionService) {
+  }
 
   /** @ignore */
   ngOnInit() {
-    this.userSubscription = this.userService.me().subscribe(res => {
-      this.user$.next(res);
-    });
+    this.user$ = this.userService.me().pipe(map(user => cloneDeep(user)));
     this.account$ = this.accountService.getMyAccount();
   }
 
-  updateUser() {
-    if (this.userSubscription) this.userSubscription.unsubscribe();
-    this.userSubscription = this.userService.update([this.user$.value]).subscribe((res: Array<User>) => {
-      const updatedUser = cloneDeep(first(res));
-      this.user$.next(updatedUser);
+  updateUser(user: User) {
+    this.userService.updateCurrentUser(user).subscribe(() => {
+    }, err => {
+      this.exceptionService.showError(err);
     });
-  }
-
-  ngOnDestroy() {
-    if (this.userSubscription) this.userSubscription.unsubscribe();
   }
 }

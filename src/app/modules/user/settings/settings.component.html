@@ -14,30 +14,15 @@
           <span>{{'MY_ACCOUNT.SETTING.USER_INFO' | translate}}</span>
         </h5>
         <dl class="mt-4" *ngIf="user$ | async as user">
-          <dd>
-            <apt-output-field [record]="user" field="FirstName" [layout]="'inline'" (onChange)="updateUser()">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="user" field="FirstName" [layout]="'inline'" (onChange)="updateUser(user)"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="user" field="LastName" [layout]="'inline'" (onChange)="updateUser()">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="user" field="LastName" [layout]="'inline'" (onChange)="updateUser(user)"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="user" field="Email" [layout]="'inline'" (onChange)="updateUser()">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="user" field="Email" [layout]="'inline'" (onChange)="updateUser(user)"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="user" field="Username" [layout]="'inline'" (onChange)="updateUser()">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="user" field="Username" [layout]="'inline'" (onChange)="updateUser(user)"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="user" field="LocaleSidKey" [layout]="'inline'" (onChange)="updateUser()">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="user" field="LocaleSidKey" [layout]="'inline'" (onChange)="updateUser(user)"></apt-output-field></dd>
         </dl>
       </div>
     </div>

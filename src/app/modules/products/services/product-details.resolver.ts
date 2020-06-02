@@ -61,7 +61,7 @@ export class ProductDetailsResolver implements Resolve<any> {
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
           isCmsEnabled: isCmsEnabled,
-          quantity: _.get(first(cartitemList), 'Quantity', 1)
+          quantity: get(first(cartitemList), 'Quantity', 1)
         };
       })
     ).subscribe(r => this.subject.next(r));
