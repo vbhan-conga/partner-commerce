@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, flatMap, map, switchMap } from 'rxjs/operators';
@@ -69,7 +69,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private exceptionService: ExceptionService, private noteService: NoteService,
     private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
     private accountService: AccountService, private cartService: CartService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -95,7 +96,9 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         })),
         map(orderList => _.get(orderList, '[0]'))
       ).subscribe(result => {
-        this.order$.next(result);
+        this.ngZone.run(() => {
+          this.order$.next(result);
+        });
         this.orderLineItems$ = this.order$.pipe(
           map(order => {
             if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
