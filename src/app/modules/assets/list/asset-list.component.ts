@@ -216,7 +216,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
       )
     ]),
     'Change Configuration': new AFilter(this.assetService.type, [
-      new ACondition(this.assetService.type, 'AssetStatus', 'NotEqual', 'Cancelled')], [
+      new ACondition(this.assetService.type, 'AssetStatus', 'NotEqual', 'Cancelled'),
+      new ACondition(AssetLineItem, 'PriceType', 'NotEqual', 'One Time')], [
       new AFilter(this.assetService.type, [
         new ACondition(Product,
           'Product.ConfigurationType',
