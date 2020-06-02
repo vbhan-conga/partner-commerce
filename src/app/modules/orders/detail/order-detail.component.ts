@@ -119,6 +119,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     });
   }
 
+  updateOrder(order) {
+    this.order$.next(_.cloneDeep(order));
+  }
+
   /**
    * @ignore
    */
