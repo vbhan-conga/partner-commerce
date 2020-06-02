@@ -58,7 +58,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   lineItem_loader: boolean = false;
   lookupOptions: LookupOptions = {
     primaryTextField: 'Name',
-    secondaryTextField: 'Email'
+    secondaryTextField: 'Email',
+    fieldList: ['Name', 'Id', 'Email']
   };
 
   private subscriptions: Subscription[] = [];
@@ -116,6 +117,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     this.orderService.update([order]).subscribe(r => {
       this.getOrder();
     });
+  }
+
+  updateOrder(order) {
+    this.order$.next(_.cloneDeep(order));
   }
 
   /**

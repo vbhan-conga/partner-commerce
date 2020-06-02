@@ -22,7 +22,7 @@
         <ng-container *ngSwitchCase="'Pending'">
             <ng-container *ngIf="order?.PaymentStatus !== 'Processed'">
                 <button type="button" class="btn btn-primary px-4 btn-raised" (click)="paymentDetails.makePayment()">{{'PAYMENT_METHOD_LABELS.MAKE_PAYMENT' | translate}}</button>
-                <app-payment-details [order]="order" #paymentDetails></app-payment-details>
+                <app-payment-details [order]="order" (onPaymentProcessed)="updateOrder(order)" #paymentDetails></app-payment-details>
             </ng-container>
         </ng-container>
     </div>
