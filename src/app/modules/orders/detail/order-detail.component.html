@@ -1,9 +1,9 @@
 <app-detail *ngIf="order$ | async as order; else loading" [context]="order">
 
-    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status" 
+    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status"
     [tooltip]="order.hasErrors ? 'Some mandatory informations are missing in the order details. Please fill to proceed.' : ''">
         <ng-container *ngSwitchCase="'Draft'">
-            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" 
+            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading"
             data-style="zoom-in" [disabled]="order.hasErrors">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
             <apt-generate-document [record]="order" class="align-items-stretch d-flex" (onStatusUpdate)="getOrder()"></apt-generate-document>
         </ng-container>
@@ -107,8 +107,8 @@
             </div>
         </div>
     </app-detail-section>
-    <!-- COMMENT SECTION     -->
-    <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
+
+    <!--<app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
@@ -119,7 +119,6 @@
                     <ng-scrollbar class="col-12 col-md-6 border-right note-container">
                             <ng-container *ngIf="order?.Notes?.length > 0; else emptyNotes">
                                 <div class="my-3 pb-3 pl-3" *ngFor="let note of order?.Notes">
-                                    <!-- <strong class="d-block">{{note?.Title}}</strong> -->
                                     <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
                                         {{'COMMON.ON' | translate }}
                                         {{note?.CreatedDate | date:'medium'}}</div>
@@ -188,7 +187,7 @@
                 </div>
             </div>
         </div>
-    </app-detail-section>
+    </app-detail-section>-->
 </app-detail>
 
 <ng-template #loading>
