@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, TemplateRef, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { PaymentTransaction, Order, UserService, OrderService } from '@apttus/ecommerce';
 import { ConfigurationService } from '@apttus/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -47,6 +47,8 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
   modalRef: BsModalRef;
   currentUserLocale: string;
   pricingSummaryType: 'checkout' | 'paymentForOrder' | '' = 'checkout';
+
+  @Output() onPaymentProcessed: EventEmitter<any> = new EventEmitter<any>();
 
   private subscriptions: Array<Subscription> = [];
   private modalConfig = {
@@ -110,14 +112,15 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
       this.translate.stream(['PAYMENT_METHOD_LABELS.ERROR_MSG', 'PAYMENT_METHOD_LABELS.ERROR_TITLE']).subscribe((val: string) => {
         this.toastr.error(val['PAYMENT_METHOD_LABELS.ERROR_MSG'] + paymentStatus, val['PAYMENT_METHOD_LABELS.ERROR_TITLE']);
       });
-       this.order.PaymentStatus = 'Error';
+      this.order.PaymentStatus = 'Error';
     }
     else {
       this.translate.stream(['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_TITLE', 'PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_MESSAGE']).subscribe((val: string) => {
         this.toastr.success(val['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_MESSAGE'], val['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_TITLE']);
       });
-      this.order.PaymentStatus = 'Processed';
+      this.order.PaymentStatus = 'Processed'; 
     }
+    this.onPaymentProcessed.emit();
     this.loading = false;
     this.modalRef.hide();
     this.isPaymentCompleted = true;
