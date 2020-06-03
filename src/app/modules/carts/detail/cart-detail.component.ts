@@ -24,13 +24,13 @@ export class CartDetailComponent implements OnInit {
    */
   view$: Observable<ManageCartState>;
 
-  productList$: Observable<Array<Product>>;
+  productList: Array<Product> = [];
 
   constructor(private crService: ConstraintRuleService, private resolver: CartResolver) { }
 
   ngOnInit() {
     this.view$ = this.resolver.state();
-    this.productList$ = this.crService.getRecommendationsForCart();
+    this.crService.getRecommendationsForCart().subscribe(res => this.productList = res );
   }
 
   trackById(index, record): string {
