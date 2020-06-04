@@ -74,6 +74,7 @@ export class CartListComponent implements OnInit {
                 prop: 'Status'
               }
             ],
+            lookups: [],
             actions: [
               {
                 enabled: true,

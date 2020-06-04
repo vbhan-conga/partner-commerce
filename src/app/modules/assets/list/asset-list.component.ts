@@ -50,22 +50,27 @@ export class AssetListComponent implements OnInit, OnDestroy {
    * Value of the days to renew filter.
    */
   renewFilter: AFilter;
+
   /**
    * Value of the price type filter.
    */
   priceTypeFilter: AFilter;
+
   /**
    * Value of the asset action filter.
    */
   assetActionFilter: AFilter;
+
   /**
    * Value of the product family field filter.
    */
   productFamilyFilter: AFilter;
+
   /**
    * Value of the advanced filter component.
    */
   advancedFilters: Array<AFilter> = [];
+
   /**
    * Configuration object used to configure the data filter.
    */
@@ -161,6 +166,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
       }
     ]
   };
+
   /**
    * Default filters that will be applied to the table and chart components.
    */
@@ -177,10 +183,12 @@ export class AssetListComponent implements OnInit, OnDestroy {
       new ACondition(this.assetService.type, 'AssetStatus', 'Equal', 'Activated')
     ])
   ];
+
   /**
    * Flag to pre-select items in the table component.
    */
   preselectItemsInGroups: boolean = false;
+
   /**
    * Color palette used for the chart component styling.
    */
@@ -196,6 +204,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     '#20c997',
     '#fd7e14'
   ];
+
   /**
    * Map of asset actions to their appropriate filter.
    */
@@ -250,7 +259,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
       this.preselectItemsInGroups = true;
       this.assetActionFilter = this.assetActionMap[
         _.get(this.route, 'snapshot.queryParams.action')
-      ];
+        ];
       this.advancedFilters = [
         new AFilter(
           this.assetService.type,
@@ -272,8 +281,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.loadView();
   }
 
-  ngOnDestroy(){
-    if(this.subscription)
+  ngOnDestroy() {
+    if (this.subscription)
       this.subscription.unsubscribe();
   }
 
@@ -309,6 +318,19 @@ export class AssetListComponent implements OnInit, OnDestroy {
               { prop: 'Quantity' },
               { prop: 'AssetStatus' },
               { prop: 'PriceType' }
+            ],
+            lookups: [
+              {
+                field: 'AttributeValueId'
+              },
+              {
+                field: 'ProductId',
+                children: [
+                  {
+                    field: 'AssetLineItems'
+                  }
+                ]
+              }
             ],
             actions: _.filter(this.getMassActions(cart), action =>
               _.includes(
@@ -362,44 +384,45 @@ export class AssetListComponent implements OnInit, OnDestroy {
           colorPalette: this.colorPalette,
           barChartData: _.isArray(chartData)
             ? _.omit(
-                _.mapValues(
-                  _.groupBy(chartData, 'Apttus_Config2__PriceType__c'),
-                  s => _.sumBy(s, 'total_records')
-                ),
-                'null'
-              )
-            : _.zipObject(
-                [_.get(chartData, 'Apttus_Config2__PriceType__c')],
-                _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key =>
-                  _.get(chartData, 'total_records')
-                )
+              _.mapValues(
+                _.groupBy(chartData, 'Apttus_Config2__PriceType__c'),
+                s => _.sumBy(s, 'total_records')
               ),
+              'null'
+            )
+            : _.zipObject(
+              [_.get(chartData, 'Apttus_Config2__PriceType__c')],
+              _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key =>
+                _.get(chartData, 'total_records')
+              )
+            ),
           doughnutChartData: _.isArray(chartData)
             ? _.omit(
-                _.mapValues(
-                  _.groupBy(chartData, 'Apttus_Config2__PriceType__c'),
-                  s => _.sumBy(s, 'SUM_NetPrice')
-                ),
-                'null'
-              )
-            : _.zipObject(
-                [_.get(chartData, 'Apttus_Config2__PriceType__c')],
-                _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key =>
-                  _.get(chartData, 'SUM_NetPrice')
-                )
+              _.mapValues(
+                _.groupBy(chartData, 'Apttus_Config2__PriceType__c'),
+                s => _.sumBy(s, 'SUM_NetPrice')
               ),
+              'null'
+            )
+            : _.zipObject(
+              [_.get(chartData, 'Apttus_Config2__PriceType__c')],
+              _.map([_.get(chartData, 'Apttus_Config2__PriceType__c')], key =>
+                _.get(chartData, 'SUM_NetPrice')
+              )
+            ),
           assetActionValue: !_.isEmpty(
             _.get(this.route, 'snapshot.queryParams')
           )
             ? decodeURIComponent(
-                _.get(this.route, 'snapshot.queryParams.action')
-              )
+              _.get(this.route, 'snapshot.queryParams.action')
+            )
             : 'All',
           advancedFilterList: this.advancedFilters
         } as AssetListView);
         this.preselectItemsInGroups = false;
       });
   }
+
   /**
    * Event handler for when the advanced filter changes.
    * @param event The event that was fired.
@@ -408,6 +431,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.advancedFilters = event;
     this.loadView();
   }
+
   /**
    * Event handler for when the days to renew filter is changed.
    * @param event The Event that was fired.
@@ -416,6 +440,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.renewFilter = event;
     this.loadView();
   }
+
   /**
    * Event handler for when price type filter is changed.
    * @param event Event object that was fired.
@@ -424,6 +449,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.priceTypeFilter = event;
     this.loadView();
   }
+
   /**
    * Event handler for when the asset action filter changes.
    * @param event The event that was fired.
@@ -432,6 +458,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.assetActionFilter = this.assetActionMap[event];
     this.loadView();
   }
+
   /**
    * Event handler for when the product family filter changes.
    * @param event The event that was fired.
@@ -440,6 +467,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     this.productFamilyFilter = event;
     this.loadView();
   }
+
   /**
    * Get all the currently applied filters.
    */
@@ -454,7 +482,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getMassActions(cart: Cart): Array<TableAction>{
+  private getMassActions(cart: Cart): Array<TableAction> {
     return [
       {
         icon: 'fa-sync',
@@ -462,7 +490,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Renew',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  record.Id).length > 0);
+          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openRenewModal(
@@ -478,7 +506,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Terminate',
         theme: 'danger',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  record.Id).length > 0);
+          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openTerminateModal(
@@ -494,7 +522,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Buy More',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canBuyMore() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  record.Id).length > 0);
+          return record.canBuyMore() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openBuyMoreModal(
@@ -509,7 +537,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Change Configuration',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canChangeConfiguration() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  record.Id).length > 0);
+          return record.canChangeConfiguration() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openChangeConfigurationModal(
@@ -522,6 +550,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
     ];
   }
 }
+
 /** @ignore */
 interface AssetListView {
   tableOptions: TableOptions;
