@@ -378,7 +378,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
                 const recentAsset = _.last(_.filter(v, x => !_.isEmpty(x.get('actions'))));
                 if (recentAsset) recentAsset.set('state', CheckState.CHECKED);
               });
-            }) : null
+            }) : null,
+            disableLink: true
           } as TableOptions,
           assetType: AssetLineItemExtended,
           colorPalette: this.colorPalette,
