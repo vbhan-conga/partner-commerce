@@ -17,7 +17,8 @@ import {
   TableOptions,
   TableAction,
   ChildRecordOptions,
-  FilterOptions
+  FilterOptions,
+  CheckState
 } from '@apttus/elements';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -299,7 +300,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
             groupBy: 'Product.Name',
             filters: this.getFilters(),
             defaultSort: {
-              column: 'Product.Name',
+              column: 'CreatedDate',
               direction: 'ASC'
             },
             columns: [
@@ -353,7 +354,12 @@ export class AssetListComponent implements OnInit, OnDestroy {
                 'PriceType'
               ]
             } as ChildRecordOptions,
-            preselectItemsInGroups: this.preselectItemsInGroups
+            selectItemsInGroupFunc: this.preselectItemsInGroups ? (recordData => {
+              _.forEach(_.values(_.groupBy(recordData, 'Product.Name')), v => {
+                const recentAsset = _.last(_.filter(v, x => !_.isEmpty(x.get('actions'))));
+                if (recentAsset) recentAsset.set('state', CheckState.CHECKED);
+              });
+            }) : null
           } as TableOptions,
           assetType: AssetLineItemExtended,
           colorPalette: this.colorPalette,
