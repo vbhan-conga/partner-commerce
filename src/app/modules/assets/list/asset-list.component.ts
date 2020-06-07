@@ -17,7 +17,8 @@ import {
   TableOptions,
   TableAction,
   ChildRecordOptions,
-  FilterOptions
+  FilterOptions,
+  CheckState
 } from '@apttus/elements';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -299,7 +300,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
             groupBy: 'Product.Name',
             filters: this.getFilters(),
             defaultSort: {
-              column: 'Product.Name',
+              column: 'CreatedDate',
               direction: 'ASC'
             },
             columns: [
@@ -353,7 +354,12 @@ export class AssetListComponent implements OnInit, OnDestroy {
                 'PriceType'
               ]
             } as ChildRecordOptions,
-            preselectItemsInGroups: this.preselectItemsInGroups
+            selectItemsInGroupFunc: this.preselectItemsInGroups ? (recordData => {
+              _.forEach(_.values(_.groupBy(recordData, 'Product.Name')), v => {
+                const recentAsset = _.last(_.filter(v, x => !_.isEmpty(x.get('actions'))));
+                if (recentAsset) recentAsset.set('state', CheckState.CHECKED);
+              });
+            }) : null
           } as TableOptions,
           assetType: AssetLineItemExtended,
           colorPalette: this.colorPalette,
@@ -459,7 +465,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Renew',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canRenew() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  _.get(record, 'Id')).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openRenewModal(
@@ -475,7 +481,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Terminate',
         theme: 'danger',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canTerminate() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  _.get(record, 'Id')).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openTerminateModal(
@@ -491,7 +497,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Buy More',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canBuyMore() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+          return record.canBuyMore() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  _.get(record, 'Id')).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openBuyMoreModal(
@@ -506,7 +512,7 @@ export class AssetListComponent implements OnInit, OnDestroy {
         label: 'Change Configuration',
         theme: 'primary',
         validate(record: AssetLineItemExtended): boolean {
-          return record.canChangeConfiguration() && !_.includes(_.map(_.get(cart, 'LineItems'), 'ProductId'), _.get(record, 'ProductId'));
+          return record.canChangeConfiguration() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') ===  _.get(record, 'Id')).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openChangeConfigurationModal(
