@@ -192,8 +192,8 @@ void updateNpmPackagePatchVersion(String packageJsonFolderPath, String slackChan
     try {
         stage('Update-Version') {
             container('ic-ui-builder') {
-                sh "git config --global user.email 'DevOps-J2B-ibm@apttus.com'"
-                sh "git config --global user.name 'ic-cicd'"
+                sh "git config --global user.email 'apttusengrxuser@apttus.com'"
+                sh "git config --global user.name 'github-cicd-id'"
                 sh "make npm-version-update-patch PACKAGEJSON_FOLDERPATH=$packageJsonFolderPath"
             }
         }

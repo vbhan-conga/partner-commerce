@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, flatMap, map, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart  } from '@apttus/ecommerce';
@@ -14,14 +14,14 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./order-detail.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class OrderDetailComponent implements OnInit, OnDestroy {
+export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   /**
    * Observable instance of an Order.
    */
-  order$: Observable<Order>;
+  order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
   orderLineItems$: Observable<Array<ItemGroup>>;
-
+  
   /**
     * Boolean observable to check if user is logged in.
     */
@@ -58,37 +58,24 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
   lineItem_loader: boolean = false;
   lookupOptions: LookupOptions = {
     primaryTextField: 'Name',
-    secondaryTextField: 'Email'
+    secondaryTextField: 'Email',
+    fieldList: ['Name', 'Id', 'Email']
   };
 
   private subscriptions: Subscription[] = [];
+  orderSubscription: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute, private orderService: OrderService,
     private userService: UserService, private productInformationService: ProductInformationService,
     private exceptionService: ExceptionService, private noteService: NoteService,
     private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
-    private accountService: AccountService, private cartService: CartService) { }
+    private accountService: AccountService, private cartService: CartService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
-    this.order$ = this.activatedRoute.params
-      .pipe(
-        filter(params => _.get(params, 'id') != null),
-        flatMap(params => this.orderService.query({
-          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
-          waitForExpansion: false
-        })),
-        map(orderList => _.get(orderList, '[0]'))
-      );
     this.isLoggedIn$ = this.userService.isLoggedIn();
-    this.orderLineItems$ = this.order$.pipe(
-      map(order => {
-        if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
-          this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
-        if (order.Status === 'Fulfilled' && _.indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
-          this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
-        return LineItemService.groupItems(order.OrderLineItems);
-      })
-    );
+    this.getOrder();
     this.subscriptions.push(this.accountService.getCurrentAccount().subscribe(account => {
       // Setting lookup options for primary contact field
       this.lookupOptions.conditions = [new ACondition(Contact, 'AccountId', 'Equal', _.get(account, 'Id'))];
@@ -97,6 +84,43 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
       this.lookupOptions.sortOrder = null;
       this.lookupOptions.page = new APageInfo(10);
     }));
+  }
+
+  getOrder() {
+    if(this.orderSubscription) this.orderSubscription.unsubscribe();
+    this.orderSubscription = this.activatedRoute.params
+      .pipe(
+        filter(params => _.get(params, 'id') != null),
+        flatMap(params => this.orderService.query({
+          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
+          waitForExpansion: false
+        })),
+        map(orderList => _.get(orderList, '[0]'))
+      ).subscribe(result => {
+        this.ngZone.run(() => {
+          this.order$.next(result);
+        });
+        this.orderLineItems$ = this.order$.pipe(
+          map(order => {
+            if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
+              this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
+            if (order.Status === 'Fulfilled' && _.indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
+              this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
+            return LineItemService.groupItems(order.OrderLineItems);
+          })
+        );
+      });
+  }
+
+  refreshOrder(fieldValue, order, fieldName) {
+    _.set(order, fieldName, fieldValue);
+    this.orderService.update([order]).subscribe(r => {
+      this.getOrder();
+    });
+  }
+
+  updateOrder(order) {
+    this.order$.next(_.cloneDeep(order));
   }
 
   /**
@@ -127,6 +151,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
       if (res) {
         this.exceptionService.showSuccess('ACTION_BAR.ORDER_CONFIRMATION_TOASTR_MESSAGE', 'ACTION_BAR.ORDER_CONFIRMATION_TOASTR_TITLE');
         this.emailService.orderStatusChangeNotification('CustomerOrderEmailNotificationsTemplate', orderId, primaryContactId).pipe(take(1)).subscribe();
+        this.getOrder();
       }
       else
         this.exceptionService.showError('ACTION_BAR.ORDER_CONFIRMATION_FAILURE');
@@ -203,5 +228,12 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    if(this.orderSubscription)
+      this.orderSubscription.unsubscribe();
   }
+
+  ngAfterViewChecked(){
+    this.cdr.detectChanges();
+  }
+ 
 }
