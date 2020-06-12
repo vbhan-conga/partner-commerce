@@ -54,6 +54,14 @@ export class QuoteListComponent implements OnInit {
         prop: 'LastModifiedDate'
       }
     ],
+    lookups: [
+      {
+        field: 'PriceListId'
+      },
+      {
+        field: 'Account'
+      }
+    ],
     children: ['ProposalSummaryGroups']
   };
 
