@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService, AccountService, User, Account } from '@apttus/ecommerce';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

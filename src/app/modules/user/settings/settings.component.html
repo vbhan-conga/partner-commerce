@@ -32,19 +32,11 @@
       <div class="card-body">
         <h5 class="card-title mb-3">{{'MY_ACCOUNT.SETTING.ACCOUNT_INFO' | translate}}</h5>
         <dl class="mt-4" *ngIf="account$ | async as account">
-          <dd>
-            <apt-output-field [record]="account" field="Name" [layout]="'inline'" [editable]="false"></apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="account" field="Name" [layout]="'inline'" [editable]="false"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="account" field="ShippingAddress" [layout]="'inline'" [editable]="false">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="account" field="ShippingAddress" [layout]="'inline'" [editable]="false"></apt-output-field></dd>
 
-          <dd>
-            <apt-output-field [record]="account" field="Phone" [layout]="'inline'" [editable]="false">
-            </apt-output-field>
-          </dd>
+          <dd><apt-output-field [record]="account" field="Phone" [layout]="'inline'" [editable]="false"></apt-output-field></dd>
         </dl>
       </div>
     </div>
