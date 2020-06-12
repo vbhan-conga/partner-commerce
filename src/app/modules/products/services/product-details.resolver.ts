@@ -52,15 +52,13 @@ export class ProductDetailsResolver implements Resolve<any> {
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [get(routeParams, 'params.cartItem')])],
         skipCache: true
       }),
-      this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')]),
-      this.storefrontService.isCmsEnabled()
+      this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')])
     ).pipe(
-      map(([product, cartitemList, rProductList, isCmsEnabled]) => {
+      map(([product, cartitemList, rProductList]) => {
         return {
           product: product,
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
-          isCmsEnabled: isCmsEnabled,
           quantity: get(first(cartitemList), 'Quantity', 1)
         };
       })
@@ -91,10 +89,6 @@ export interface ProductDetailsState {
    * The CartItem related to this product.
    */
   relatedTo: CartItem;
-  /**
-   * True if CMS Enabled.
-   */
-  isCmsEnabled: boolean;
   /**
    * Quantity to set to child components
    */

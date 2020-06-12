@@ -4,7 +4,7 @@ import { CartService, CartItem } from '@apttus/ecommerce';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { ConfigurationSummaryWrapperComponent } from '@apttus/elements';
+import { ProductConfigurationSummaryComponent } from '@apttus/elements';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
 
 @Component({
@@ -38,8 +38,8 @@ export class ProductDetailComponent implements OnInit {
   /** @ignore */
   productCode: string;
 
-  @ViewChild(ConfigurationSummaryWrapperComponent, { static: false })
-  configSummaryModal: ConfigurationSummaryWrapperComponent;
+  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
+  configSummaryModal: ProductConfigurationSummaryComponent;
 
   constructor(private cartService: CartService,
     private resolver: ProductDetailsResolver,
