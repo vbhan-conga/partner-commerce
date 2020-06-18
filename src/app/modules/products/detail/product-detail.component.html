@@ -95,7 +95,7 @@
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.CONFIGURATIONS' | translate}} </h4>
             <div class="col-12">
                 <apt-product-configuration [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
-                    (configurationChange)="onConfigurationChange($event)" (click)="configurationChanged = true">
+                    (configurationChange)="onConfigurationChange($event)">
                 </apt-product-configuration>
             </div>
         </div>
