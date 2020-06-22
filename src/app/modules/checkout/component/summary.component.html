@@ -68,11 +68,11 @@
     </div>
 </ng-template>-->
 
-<apt-configuration-summary-wrapper
+<apt-product-configuration-summary
   *ngIf="lineItem"
   [product]="lineItem.Product.Id"
   [relatedTo]="lineItem">
-</apt-configuration-summary-wrapper>
+</apt-product-configuration-summary>
 
 <ng-template #confirmationTemplate>
   <div class="modal-header">

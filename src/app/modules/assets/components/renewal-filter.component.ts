@@ -98,6 +98,12 @@ import { AssetLineItem } from '@apttus/ecommerce';
       font-size: smaller;
       line-height: 24px;
     }
+    .custom-control-label:before {
+      top: -2px;
+    }
+    .custom-control-label:after {
+      top: -2px;
+    }
   `]
 })
 export class RenewalFilterComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, flatMap, map, switchMap } from 'rxjs/operators';
@@ -58,7 +58,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   lineItem_loader: boolean = false;
   lookupOptions: LookupOptions = {
     primaryTextField: 'Name',
-    secondaryTextField: 'Email'
+    secondaryTextField: 'Email',
+    fieldList: ['Name', 'Id', 'Email']
   };
 
   private subscriptions: Subscription[] = [];
@@ -69,7 +70,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private exceptionService: ExceptionService, private noteService: NoteService,
     private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
     private accountService: AccountService, private cartService: CartService,
-    private cdr: ChangeDetectorRef) { }
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -88,9 +90,16 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     if(this.orderSubscription) this.orderSubscription.unsubscribe();
     this.orderSubscription = this.activatedRoute.params
       .pipe(
-        switchMap(params => this.orderService.getOrder(_.get(params, 'id')))
-      ).subscribe((order: Array<Order>) => {
-        this.order$.next(order[0]);
+        filter(params => _.get(params, 'id') != null),
+        flatMap(params => this.orderService.query({
+          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
+          waitForExpansion: false
+        })),
+        map(orderList => _.get(orderList, '[0]'))
+      ).subscribe(result => {
+        this.ngZone.run(() => {
+          this.order$.next(result);
+        });
         this.orderLineItems$ = this.order$.pipe(
           map(order => {
             if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
@@ -108,6 +117,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     this.orderService.update([order]).subscribe(r => {
       this.getOrder();
     });
+  }
+
+  updateOrder(order) {
+    this.order$.next(_.cloneDeep(order));
   }
 
   /**
