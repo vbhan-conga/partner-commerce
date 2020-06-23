@@ -43,16 +43,20 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.productService.get([get(routeParams, 'params.id')]),
+      this.productService.get([get(routeParams, 'params.id')])
+      .pipe(
+        switchMap(data => this.translatorService.translateData(data)),
+        map(first)
+      ),
       this.cartItemService.query({
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [get(routeParams, 'params.cartItem')])],
         skipCache: true
       }),
       this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')])
     ).pipe(
-      map(([productList, cartitemList, rProductList]) => {
+      map(([product, cartitemList, rProductList]) => {
         return {
-          product: first(productList),
+          product: product as Product,
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
           quantity: get(first(cartitemList), 'Quantity', 1)
