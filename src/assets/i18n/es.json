@@ -637,6 +637,7 @@
     "MINI_PROFILE": {
         "LOGIN": "es_MX Login",
         "ENTER_USERNAME": "es_MX Enter Username",
+        "PLEASE_ENTER_USERNAME": "es_MX Please enter your username",
         "PASSWORD": "es_MX Password",
         "REMEMBER_ME": "es_MX Remember Me",
         "FORGOT_PASSWORD": "es_MX Forgot Password",
