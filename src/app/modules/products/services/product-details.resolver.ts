@@ -42,9 +42,9 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.productService.fetch(get(routeParams, 'params.id'))
+      this.productService.get([get(routeParams, 'params.id')])
       .pipe(
-        switchMap(data => this.translatorService.translateData(new Array(data))),
+        switchMap(data => this.translatorService.translateData(data)),
         map(res => first(res))
       ),
       this.cartItemService.query({
