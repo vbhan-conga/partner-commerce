@@ -630,6 +630,7 @@
     "MINI_PROFILE": {
         "LOGIN": "fr_FR Login",
         "ENTER_USERNAME": "fr_FR Enter Username",
+        "PLEASE_ENTER_USERNAME": "fr_FR Please enter your username",
         "PASSWORD": "fr_FR Password",
         "REMEMBER_ME": "fr_FR Remember Me",
         "FORGOT_PASSWORD": "fr_FR Forgot Password",
