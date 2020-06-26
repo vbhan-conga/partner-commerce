@@ -10,21 +10,21 @@ export const environment: Configuration = {
   enableQueryLogs: false,
   enablePerformanceLogs: false,
   defaultCurrency: 'USD',
-  bufferTime: 50,
+  bufferTime: 10,
   maxBufferSize: 10,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
   encryptResponse: false,
-  cartRetryLimit: 6,
+  cartRetryLimit: 5,
   productIdentifier: 'Id',
   type: 'Salesforce',
   debounceTime: 1000,
-  useIndexedDB: false,
+  useIndexedDB: true,
   expandDepth: 8,
   hashRouting: true,
   packageNamespace: 'Apttus_WebStore',
-  // *** TODO: Replace with Salesforce environment variables ***
+  // Salesforce environment variables
   storefront: 'Partner Commerce',
   endpoint: null
 };
