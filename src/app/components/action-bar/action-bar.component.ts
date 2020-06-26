@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CartService, Cart, AccountService } from '@apttus/ecommerce';
-import { Observable, of } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { first } from 'lodash';
 import { ExceptionService } from '@apttus/elements';
 import { OutputFieldComponent } from '@apttus/elements';
 import { Router } from '@angular/router';
@@ -28,7 +28,14 @@ export class ActionBarComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.cart$ = this.cartService.getMyCart();
+    this.cart$ = this.cartService.getMyCart()
+    .pipe(
+      switchMap(cart => combineLatest(of(cart), this.accountService.getAccountById(cart.AccountId))),
+      map(([cart, account]) => {
+        cart.Account = first(account);
+        return cart;
+      })
+    );
   }
 
   changeAccount(x){
