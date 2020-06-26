@@ -369,7 +369,7 @@
         "PRODUCTS_EXCLUSION": "<strong>I seguenti prodotti <\/strong> sono esclusi con il prodotto <strong> {{productName}}<\/strong>.",
         "AUTO_INCLUDED_OPTIONS": "Auto Incluso Opzioni",
         "AUTO_INCLUSION_OF_OPTIONS": "Al di sotto di opzione(s) sono auto incluso con l'opzione <strong> {{productName}}<\/strong>.",
-        "OPTIONS_HEADING": "Opzioni / Excluded Options",
+        "OPTIONS_HEADING": "Opzioni Incluse / Esclusione",
         "INCLUDED_OPTIONS_HEADING": "Opzioni Incluse/ Esclusione",
         "AT_LEAST": "Almeno",
         "OPTION": "Opzione",
