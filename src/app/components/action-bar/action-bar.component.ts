@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CartService, Cart, AccountService } from '@apttus/ecommerce';
-import { Observable, of, combineLatest } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
-import { first } from 'lodash';
 import { ExceptionService } from '@apttus/elements';
 import { OutputFieldComponent } from '@apttus/elements';
 import { Router } from '@angular/router';
