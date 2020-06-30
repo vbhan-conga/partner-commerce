@@ -34,9 +34,9 @@
                                 <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'">
                                 </apt-output-field>
-                                <apt-output-field [record]="quote" field="_PrimaryContactId" layout="inline"
+                                <apt-output-field [record]="quote" field="Primary_ContactId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                    [showQuickView]="true"></apt-output-field>
+                                    [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'Primary_ContactId')"></apt-output-field>
                                 <apt-output-field [record]="quote" field="AccountId" label="Account Name"
                                     layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
                             </dl>
