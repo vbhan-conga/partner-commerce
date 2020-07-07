@@ -5,7 +5,7 @@ import { ApiService, ACondition } from '@apttus/core';
 import {
   Product,
   CartItem,
-  ProductService,
+  ProductOptionService,
   CartItemService,
   ConstraintRuleService,
   StorefrontService,
@@ -24,7 +24,7 @@ export class ProductDetailsResolver implements Resolve<any> {
   private subscription: Subscription;
 
   constructor(private apiService: ApiService,
-    private productService: ProductService,
+    private productOptionService: ProductOptionService,
     private cartItemService: CartItemService,
     private crService: ConstraintRuleService,
     private router: Router,
@@ -43,7 +43,7 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.productService.get([get(routeParams, 'params.id')])
+      this.productOptionService.get([get(routeParams, 'params.id')])
       .pipe(
         switchMap(data => this.translatorService.translateData(data)),
         map(first)
