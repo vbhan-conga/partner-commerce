@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
+import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { filter, flatMap, map, switchMap } from 'rxjs/operators';
-import * as _ from 'lodash';
-import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart  } from '@apttus/ecommerce';
+import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter } from 'lodash';
+import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart, QuoteService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter } from '@apttus/core';
 import { take } from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
    */
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
   orderLineItems$: Observable<Array<ItemGroup>>;
-  
+
   /**
     * Boolean observable to check if user is logged in.
     */
@@ -70,7 +70,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private exceptionService: ExceptionService, private noteService: NoteService,
     private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
     private accountService: AccountService, private cartService: CartService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef, private quoteService: QuoteService,
     private ngZone: NgZone) { }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     this.getOrder();
     this.subscriptions.push(this.accountService.getCurrentAccount().subscribe(account => {
       // Setting lookup options for primary contact field
-      this.lookupOptions.conditions = [new ACondition(Contact, 'AccountId', 'Equal', _.get(account, 'Id'))];
+      this.lookupOptions.conditions = [new ACondition(Contact, 'AccountId', 'Equal', get(account, 'Id'))];
       this.lookupOptions.expressionOperator = 'AND';
       this.lookupOptions.filters = null;
       this.lookupOptions.sortOrder = null;
@@ -90,22 +90,27 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     if(this.orderSubscription) this.orderSubscription.unsubscribe();
     this.orderSubscription = this.activatedRoute.params
       .pipe(
-        filter(params => _.get(params, 'id') != null),
+        filter(params => get(params, 'id') != null),
         flatMap(params => this.orderService.query({
-          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
+          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [get(params, 'id')])],
           waitForExpansion: false
         })),
-        map(orderList => _.get(orderList, '[0]'))
+        map(orderList => get(orderList, '[0]')),
+        switchMap((order: Order) => combineLatest(of(order), this.quoteService.get([order.Proposal.Id]))),
+        map(([order, quote]) => {
+          order.Proposal = first(quote);
+          return order;
+        })
       ).subscribe(result => {
         this.ngZone.run(() => {
           this.order$.next(result);
         });
         this.orderLineItems$ = this.order$.pipe(
           map(order => {
-            if (order.Status === 'Partially Fulfilled' && _.indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
-              this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
-            if (order.Status === 'Fulfilled' && _.indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
-              this.orderStatusSteps[_.indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
+            if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
+              this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
+            if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
+              this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
             return LineItemService.groupItems(order.OrderLineItems);
           })
         );
@@ -113,21 +118,21 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   refreshOrder(fieldValue, order, fieldName) {
-    _.set(order, fieldName, fieldValue);
+    set(order, fieldName, fieldValue);
     this.orderService.update([order]).subscribe(r => {
       this.getOrder();
     });
   }
 
   updateOrder(order) {
-    this.order$.next(_.cloneDeep(order));
+    this.order$.next(cloneDeep(order));
   }
 
   /**
    * @ignore
    */
   getTotalPromotions(order: Order): number {
-    return ((_.get(order, 'OrderLineItems.length') > 0)) ? _.sum(_.get(order, 'OrderLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
+    return ((get(order, 'OrderLineItems.length') > 0)) ? sum(get(order, 'OrderLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
 
   /**
@@ -160,10 +165,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   addComment(orderId: string) {
     this.comments_loader = true;
-    _.set(this.note, 'ParentId', orderId);
-    _.set(this.note, 'OwnerId', _.get(this.userService.me(), 'Id'));
+    set(this.note, 'ParentId', orderId);
+    set(this.note, 'OwnerId', get(this.userService.me(), 'Id'));
     if (!this.note.Title) {
-      _.set(this.note, 'Title', 'Notes Title');
+      set(this.note, 'Title', 'Notes Title');
     }
     this.noteService.create([this.note])
       .subscribe(r => {
@@ -196,10 +201,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         .pipe(take(1)) as Observable<Array<Cart>>;
       }),
       switchMap(carts => {
-        if (!_.isEmpty(_.filter(carts, cart => cart.Status === 'New'))) {
+        if (!isEmpty(rfilter(carts, cart => cart.Status === 'New'))) {
           return this.cartService.setCartActive(
-              _.first(
-                _.filter(carts, cart => cart.Status === 'New')
+              first(
+                rfilter(carts, cart => cart.Status === 'New')
               )
             );
         }
@@ -221,9 +226,9 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   clear() {
-    _.set(this.note, 'Body', null);
-    _.set(this.note, 'Title', null);
-    _.set(this.note, 'Id', null);
+    set(this.note, 'Body', null);
+    set(this.note, 'Title', null);
+    set(this.note, 'Id', null);
   }
 
   ngOnDestroy() {
@@ -235,5 +240,5 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   ngAfterViewChecked(){
     this.cdr.detectChanges();
   }
- 
+
 }
