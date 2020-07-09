@@ -1,6 +1,6 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CartService, CartItem } from '@apttus/ecommerce';
+import { CartService, CartItem, BundleProduct } from '@apttus/ecommerce';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -15,6 +15,7 @@ import { ProductDetailsState, ProductDetailsResolver } from '../services/product
 export class ProductDetailComponent implements OnInit {
 
   cartItemList: Array<CartItem>;
+  product: BundleProduct;
 
   viewState$: BehaviorSubject<ProductDetailsState>;
 
@@ -58,10 +59,9 @@ export class ProductDetailComponent implements OnInit {
    * isConfigurationChanged to true.
    */
   onConfigurationChange(result: any) {
-    this.cartItemList = _.first(result);
-    if (_.get(result[1], 'optionChanged') || _.get(result[1], 'attributeChanged') || (_.isBoolean(result[1])) && result[1]) {
-      this.configurationChanged = true;
-    }
+    this.product = _.first(result);
+    this.cartItemList = result[1];
+    if (_.get(_.last(result), 'optionChanged') || _.get(_.last(result), 'attributeChanged')) this.configurationChanged = true;
   }
 
   /**
