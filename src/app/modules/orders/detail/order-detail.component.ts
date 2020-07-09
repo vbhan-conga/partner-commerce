@@ -96,7 +96,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           waitForExpansion: false
         })),
         map(orderList => get(orderList, '[0]')),
-        switchMap((order: Order) => combineLatest(of(order), this.quoteService.get([order.Proposal.Id]))),
+        switchMap((order: Order) => combineLatest(of(order), get(order,'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
         map(([order, quote]) => {
           order.Proposal = first(quote);
           return order;
