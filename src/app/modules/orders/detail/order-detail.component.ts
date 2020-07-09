@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, combineLatest, of } from 'rxjs';
 import { filter, flatMap, map, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart  } from '@apttus/ecommerce';
+import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart, QuoteService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter } from '@apttus/core';
 import { take } from 'rxjs/operators';
@@ -67,7 +67,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
     private userService: UserService, private productInformationService: ProductInformationService,
     private exceptionService: ExceptionService, private noteService: NoteService,
     private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
-    private accountService: AccountService, private cartService: CartService) { }
+    private accountService: AccountService, private quoteService: QuoteService, private cartService: CartService) { }
 
   ngOnInit() {
     this.order$ = this.activatedRoute.params
@@ -77,7 +77,12 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
           conditions: [new ACondition(this.orderService.type, 'Id', 'In', [_.get(params, 'id')])],
           waitForExpansion: false
         })),
-        map(orderList => _.get(orderList, '[0]'))
+        map(orderList => _.get(orderList, '[0]')),
+        switchMap((order: Order) => combineLatest(of(order), _.get(order,'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
+        map(([order, quote]) => {
+          order.Proposal = _.first(quote);
+          return order;
+        })
       );
     this.isLoggedIn$ = this.userService.isLoggedIn();
     this.orderLineItems$ = this.order$.pipe(
