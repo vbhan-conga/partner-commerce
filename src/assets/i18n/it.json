@@ -613,6 +613,7 @@
     "MINI_PROFILE": {
         "LOGIN": "Login",
         "ENTER_USERNAME": "Immettere Il Nome Utente",
+        "PLEASE_ENTER_USERNAME": "Per favore inserisci il tuo cognome",
         "PASSWORD": "Password",
         "REMEMBER_ME": "Ricordati Di Me",
         "FORGOT_PASSWORD": "Hai Dimenticato La Password?",
