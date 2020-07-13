@@ -17,7 +17,8 @@ app-order-detail {
       }
     }
     .note-container, .attachment-container{
-      height: 35vh;
+      height: auto;
+      max-height: 56vh;
     }
   }
 }

@@ -31,8 +31,8 @@
         <div class="d-flex align-items-center mb-2">
             <h3 class="m-0">{{order?.Name}}</h3>
             <span class="badge badge-info ml-3 px-3 py-1 border text-uppercase" *ngIf="order?.Status">{{order?.Status}}</span>
-            <div *ngIf="order?.Quote as quote" class="ml-auto">
-                <apt-output-field [record]="quote" field="Name" labelClass="d-none" layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
+            <div *ngIf="order?.Proposal as proposal" class="ml-auto">
+                <apt-output-field [record]="proposal" field="Name" labelClass="d-none" layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
             </div>
         </div>
         <app-progress
@@ -116,7 +116,8 @@
                         *ngIf="order?.Notes?.length > 0">({{order?.Notes?.length}}) </span>
                 </h5>
                 <div class="row">
-                    <ng-scrollbar class="col-12 col-md-6 border-right note-container">
+                    <div class="col-12 col-md-6 border-right note-container">
+                        <ng-scrollbar >
                             <ng-container *ngIf="order?.Notes?.length > 0; else emptyNotes">
                                 <div class="my-3 pb-3 pl-3" *ngFor="let note of order?.Notes">
                                     <!-- <strong class="d-block">{{note?.Title}}</strong> -->
@@ -135,6 +136,7 @@
                                 </div>
                             </ng-template>
                         </ng-scrollbar>
+                    </div>
                     <div class="col-12 col-md-6">
                         <form (ngSubmit)="addComment(order.Id)">
                             <apt-input-field [entity]="note" field="Body" rows="5"
@@ -161,30 +163,32 @@
                     <span *ngIf="order?.Attachments?.length > 0">({{order?.Attachments?.length}})</span>
                 </h5>
                 <div class="row">
-                    <ng-scrollbar class="col-12 col-md-6 attachment-container">
-                        <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
-                            <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
-                                <div class="d-flex">
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between">
-                                            <a class="text-underline" href="{{downloadAttachment(attachment.Id, order.Id)}}" target="_blank">{{attachment?.Name}}</a>
-                                            <span>{{(attachment?.BodyLength/1024).toFixed(2)}} KB</span>
+                    <div class="col-12 col-md-6 attachment-container">
+                        <ng-scrollbar>
+                            <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
+                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
+                                    <div class="d-flex">
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between">
+                                                <a class="text-underline" href="{{downloadAttachment(attachment.Id, order.Id)}}" target="_blank">{{attachment?.Name}}</a>
+                                                <span>{{(attachment?.BodyLength/1024).toFixed(2)}} KB</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}
+                                            <span class="pl-2">{{attachment?.CreatedBy?.Name}},</span>
+                                            <span class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}
-                                        <span class="pl-2">{{attachment?.CreatedBy?.Name}},</span>
-                                        <span class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span>
-                                    </div>
                                 </div>
-                            </div>
-                        </ng-container>
-                        <ng-template #emptyAttachments>
-                            <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
-                                <i class="fa fa-4x fa-file-o mb-2"></i>
-                                {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.NO_ATTACHMENTS' | translate}}
-                            </div>
-                        </ng-template>
-                    </ng-scrollbar>
+                            </ng-container>
+                            <ng-template #emptyAttachments>
+                                <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                                    <i class="fa fa-4x fa-file-o mb-2"></i>
+                                    {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.NO_ATTACHMENTS' | translate}}
+                                </div>
+                            </ng-template>
+                        </ng-scrollbar>
+                    </div>
                 </div>
             </div>
         </div>
