@@ -34,9 +34,9 @@
                                 <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'" (onChange)="refreshQuote($event, quote, 'RFP_Response_Due_Date')">
                                 </apt-output-field>
-                                <apt-output-field [record]="quote" field="_PrimaryContactId" layout="inline"
+                                <apt-output-field [record]="quote" field="Primary_ContactId" layout="inline"
                                     [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                    [showQuickView]="true" (onChange)="refreshQuote($event, quote, '_PrimaryContactId')"></apt-output-field>
+                                    [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'Primary_ContactId')"></apt-output-field>
                                 <apt-output-field [record]="quote" field="AccountId" label="Account Name"
                                     layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
                             </dl>
@@ -92,25 +92,27 @@
                     {{'DETAILS.COMMENTS' | translate}} <span *ngIf="noteList?.length > 0">({{noteList?.length}})</span>
                 </h5>
                 <div class="row">
-                    <ng-scrollbar class="col-12 col-md-6 border-right note-container" track="horizontal">
-                        <ng-container *ngIf="noteList?.length > 0; else emptyNotes">
-                            <div class="my-3 pb-3" *ngFor="let note of noteList">
-                                <!-- <strong class="d-block">{{note?.Title}}</strong> -->
-                                <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
-                                    {{'COMMON.ON' | translate }}
-                                    {{note?.CreatedDate | date:'medium'}}</div>
-                                <div>
-                                    {{note?.Body}}
+                    <div class="col-12 col-md-6 border-right note-container">
+                        <ng-scrollbar>
+                            <ng-container *ngIf="noteList?.length > 0; else emptyNotes">
+                                <div class="my-3 pb-3" *ngFor="let note of noteList">
+                                    <!-- <strong class="d-block">{{note?.Title}}</strong> -->
+                                    <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
+                                        {{'COMMON.ON' | translate }}
+                                        {{note?.CreatedDate | date:'medium'}}</div>
+                                    <div>
+                                        {{note?.Body}}
+                                    </div>
                                 </div>
-                            </div>
-                        </ng-container>
-                        <ng-template #emptyNotes>
-                            <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
-                                <i class="fa fa-4x fa-comments-o mb-2"></i>
-                                {{'COMMON.NO_COMMENTS_TO_DISPLAY' | translate}}
-                            </div>
-                        </ng-template>
-                    </ng-scrollbar>
+                            </ng-container>
+                            <ng-template #emptyNotes>
+                                <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                                    <i class="fa fa-4x fa-comments-o mb-2"></i>
+                                    {{'COMMON.NO_COMMENTS_TO_DISPLAY' | translate}}
+                                </div>
+                            </ng-template>
+                        </ng-scrollbar>
+                    </div>
                     <div class="col-12 col-md-6">
                         <form (ngSubmit)="addComment(quote.Id)">
                             <!-- <apt-input-field [entity]="note" field="Title" [(ngModel)]="note.Title" name="title" [required]="true" [placeholder]="'Note Title'"></apt-input-field> -->
@@ -139,29 +141,31 @@
                 </h5>
 
                 <div class="row">
-                    <ng-scrollbar class="col-12 col-md-6 border-right attachment-container">
-                        <ng-container *ngIf="attachmentList?.length > 0; else emptyAttachments">
-                            <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachmentList">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between"><a class="text-underline"
-                                                href="{{downloadAttachment(attachment.Id, quote.Id)}}"
-                                                target="_blank">{{attachment?.Name}}</a><span>{{(attachment?.BodyLength/1024).toFixed(2)}}
-                                                KB</span></div>
+                    <div class="col-12 col-md-6 border-right attachment-container">
+                        <ng-scrollbar>
+                            <ng-container *ngIf="attachmentList?.length > 0; else emptyAttachments">
+                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachmentList">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-between"><a class="text-underline"
+                                                    href="{{downloadAttachment(attachment.Id, quote.Id)}}"
+                                                    target="_blank">{{attachment?.Name}}</a><span>{{(attachment?.BodyLength/1024).toFixed(2)}}
+                                                    KB</span></div>
+                                        </div>
+                                        <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}<span
+                                                class="pl-2">{{attachment?.CreatedBy.Name}},</span><span
+                                                class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span></div>
                                     </div>
-                                    <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}<span
-                                            class="pl-2">{{attachment?.CreatedBy.Name}},</span><span
-                                            class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span></div>
                                 </div>
-                            </div>
-                        </ng-container>
-                        <ng-template #emptyAttachments>
-                            <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
-                                <i class="fa fa-4x fa-file-o mb-2"></i>
-                                {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.NO_ATTACHMENTS' | translate}}
-                            </div>
-                        </ng-template>
-                    </ng-scrollbar>
+                            </ng-container>
+                            <ng-template #emptyAttachments>
+                                <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                                    <i class="fa fa-4x fa-file-o mb-2"></i>
+                                    {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.NO_ATTACHMENTS' | translate}}
+                                </div>
+                            </ng-template>
+                        </ng-scrollbar>
+                    </div>
                     <div class="col-12 col-md-6">
                         <form (ngSubmit)="uploadAttachment(quote.Id)">
                             <label class="font-weight-bold">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.TITLE' | translate}}</label>

@@ -39,7 +39,7 @@
                 <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
                     [configurationEnabled]="false" [quantity]="viewState.quantity"
                     [aboEnabled]="false"
-                    [cartItems]="(cartItems?.length > 0) ? cartItems : null" [product]="viewState?.product"
+                    [cartItems]="(cartItemList?.length > 0) ? cartItemList : null" [product]="product ? product: viewState?.product"
                     [btnClass]="'btn-primary btn-raised px-3 py-2'"></apt-add-to-cart>
             </div>
         </form>
@@ -50,7 +50,7 @@
             <div class="d-flex">
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="viewState.quantity"
-                        [cartItems]="cartItemList" [product]="viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'"
+                        [cartItems]="cartItemList" [product]="product ? product: viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'"
                         (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'" [aboEnabled]="false">
                     </apt-add-to-cart>
                 </ng-container>
@@ -63,7 +63,7 @@
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                                 [quantity]="viewState.quantity" (onAddToCart)="onAddToCart($event)"
-                                [cartItems]="cartItemList" [product]="viewState?.product"
+                                [cartItems]="cartItemList" [product]="product ? product: viewState?.product"
                                 [aboEnabled]="false"
                                 [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
@@ -105,19 +105,11 @@
             <div class="col-12">
                 <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
                 <apt-product-configuration
-                  *ngIf="!viewState?.isCmsEnabled"
                   [product]="viewState?.product"
                   [relatedTo]="viewState?.relatedTo"
                   (configurationChange)="onConfigurationChange($event)"
                   (click)="configurationChanged = true">
                 </apt-product-configuration>
-
-                <apt-cms-product-configuration
-                  [productId]="viewState?.product.Id"
-                  [relatedTo]="viewState?.relatedTo"
-                  *ngIf="viewState?.isCmsEnabled"
-                  (configurationChange)="onConfigurationChange($event)">
-                </apt-cms-product-configuration>
             </div>
         </div>
     </app-detail-section>
@@ -163,15 +155,14 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-configuration-summary-wrapper
+    <apt-product-configuration-summary
         [product]="viewState?.product"
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
         [preload]="true"
-        [config]="true"
         position="right"
         #configSummary>
-    </apt-configuration-summary-wrapper>
+    </apt-product-configuration-summary>
 </app-detail>
 
 <ng-template #loading>

@@ -5,7 +5,7 @@ import { ApiService, ACondition } from '@apttus/core';
 import {
   Product,
   CartItem,
-  ProductService,
+  ProductOptionService,
   CartItemService,
   ConstraintRuleService,
   StorefrontService,
@@ -24,7 +24,7 @@ export class ProductDetailsResolver implements Resolve<any> {
   private subscription: Subscription;
 
   constructor(private apiService: ApiService,
-    private productService: ProductService,
+    private productOptionService: ProductOptionService,
     private cartItemService: CartItemService,
     private crService: ConstraintRuleService,
     private router: Router,
@@ -43,24 +43,22 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.apiService.get(`/products/${get(routeParams, 'params.id')}?cacheStrategy=performance`, Product)
-        .pipe(
-          switchMap(data => this.translatorService.translateData(new Array(data))),
-          map(res => first(res))
-        ),
+      this.productOptionService.get([get(routeParams, 'params.id')])
+      .pipe(
+        switchMap(data => this.translatorService.translateData(data)),
+        map(first)
+      ),
       this.cartItemService.query({
         conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [get(routeParams, 'params.cartItem')])],
         skipCache: true
       }),
-      this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')]),
-      this.storefrontService.isCmsEnabled()
+      this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')])
     ).pipe(
-      map(([product, cartitemList, rProductList, isCmsEnabled]) => {
+      map(([product, cartitemList, rProductList]) => {
         return {
-          product: product,
+          product: product as Product,
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
-          isCmsEnabled: isCmsEnabled,
           quantity: get(first(cartitemList), 'Quantity', 1)
         };
       })
@@ -91,10 +89,6 @@ export interface ProductDetailsState {
    * The CartItem related to this product.
    */
   relatedTo: CartItem;
-  /**
-   * True if CMS Enabled.
-   */
-  isCmsEnabled: boolean;
   /**
    * Quantity to set to child components
    */
