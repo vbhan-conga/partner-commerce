@@ -63,13 +63,13 @@ export class CartListComponent implements OnInit {
               {
                 prop: 'IsActive',
                 label: 'Is Active',
-                notSortable: true,
+                sortable: true,
                 value:(record: Cart) => this.isCartActive(currentCart, record) ? of('Yes') : of('No')
               },
               {
                 prop: 'TotalAmount',
                 label: 'Total Amount',
-                notSortable: true,
+                sortable: true,
                 value:(record: Cart) => this.getCartTotal(record)
               },
               {
