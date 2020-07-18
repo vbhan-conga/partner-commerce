@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
-import { ExceptionService } from '@apttus/elements';
+import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { ACondition } from '@apttus/core';
@@ -37,6 +37,12 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   quoteSubscription: Subscription;
 
   @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
+
+  lookupOptions: LookupOptions = {
+    primaryTextField: 'Name',
+    secondaryTextField: 'Email',
+    fieldList: ['Id', 'Name', 'Email']
+  };
 
   constructor(private activatedRoute: ActivatedRoute,
     private quoteService: QuoteService,
