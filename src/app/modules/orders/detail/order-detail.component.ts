@@ -21,6 +21,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
    */
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
   orderLineItems$: Observable<Array<ItemGroup>>;
+  noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
+  noteSubscription: Subscription;
 
   /**
     * Boolean observable to check if user is logged in.
@@ -115,6 +117,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           })
         );
       });
+      this.getNotes();
   }
 
   refreshOrder(fieldValue, order, fieldName) {
@@ -126,6 +129,21 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   updateOrder(order) {
     this.order$.next(cloneDeep(order));
+  }
+
+  /**
+   * @ignore
+   */
+  getNotes() {
+    if(this.noteSubscription) this.noteSubscription.unsubscribe();
+    this.noteSubscription = this.activatedRoute.params
+    .pipe(
+      switchMap(params => this.noteService.getNotes(get(params, 'id')))
+    ).subscribe(
+      (notes: Array<Note>) => this.noteList$.next(notes),
+      err => console.log('Error ', err)
+      );
+    this.subscriptions.push(this.noteSubscription);
   }
 
   /**
@@ -172,6 +190,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     }
     this.noteService.create([this.note])
       .subscribe(r => {
+        this.getNotes();
         this.clear();
         this.comments_loader = false;
       },

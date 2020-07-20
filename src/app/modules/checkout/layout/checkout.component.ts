@@ -119,7 +119,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   pricingSummaryType: 'checkout' | 'paymentForOrder' | '' = 'checkout';
   breadcrumbs;
   lookupOptions: LookupOptions = {
-    primaryTextField: 'Name'
+    primaryTextField: 'Name',
+    secondaryTextField: 'Email',
+    fieldList: ['Id', 'Name', 'Email']
   };
 
   private subscriptions: Subscription[] = [];
