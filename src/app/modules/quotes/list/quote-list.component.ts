@@ -61,6 +61,21 @@ export class QuoteListComponent implements OnInit {
       },
       {
         field: 'PriceListId'
+      },
+      {
+        field: 'Opportunity'
+      }, 
+      {
+        field: 'Primary_Contact'
+      }, 
+      {
+        field: 'BillToAccountId'
+      },
+      {
+        field: 'ShipToAccountId'
+      }, 
+      {
+        field: 'Owner'
       }
     ]
   };
