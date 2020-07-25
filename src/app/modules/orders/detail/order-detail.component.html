@@ -109,17 +109,17 @@
     </app-detail-section>
     <!-- COMMENT SECTION     -->
     <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="noteList$ | async as noteList; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.COMMENTS' | translate}} <span
-                        *ngIf="order?.Notes?.length > 0">({{order?.Notes?.length}}) </span>
+                        *ngIf="noteList?.length > 0">({{noteList?.length}}) </span>
                 </h5>
                 <div class="row">
                     <div class="col-12 col-md-6 border-right note-container">
                         <ng-scrollbar >
-                            <ng-container *ngIf="order?.Notes?.length > 0; else emptyNotes">
-                                <div class="my-3 pb-3 pl-3" *ngFor="let note of order?.Notes">
+                            <ng-container *ngIf="noteList?.length > 0; else emptyNotes">
+                                <div class="my-3 pb-3 pl-3" *ngFor="let note of noteList">
                                     <!-- <strong class="d-block">{{note?.Title}}</strong> -->
                                     <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong>
                                         {{'COMMON.ON' | translate }}
