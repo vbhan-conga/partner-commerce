@@ -532,7 +532,7 @@
             "DISCARD_CHANGES_TITLE": "Discard your changes",
             "DISCARD_CHANGES_Message": "All your changes will be lost.",
             "DISCARD_CHANGES_CONFIRMATION": "Do you want to discard your changes and go back to the details page?",
-            "DISCARD_CHANGES": "Yes, DISCARD CHANGES"
+            "DISCARD_CHANGES": "YES, DISCARD CHANGES"
         }
     },
     "JUMBORTON": {
