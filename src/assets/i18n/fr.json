@@ -508,7 +508,7 @@
             "DISCARD_CHANGES_TITLE": "fr_FR Discard your changes",
             "DISCARD_CHANGES_Message": "fr_FR All yur changes will be lost.",
             "DISCARD_CHANGES_CONFIRMATION": "fr_FR Do you want to discard your changes and go back to the details page?",
-            "DISCARD_CHANGES": "fr_FR YES, DISCARD CHANGES"
+            "DISCARD_CHANGES": "fr_FR Yes, DISCARD CHANGES"
         }
     },
     "JUMBORTON": {
