@@ -371,7 +371,7 @@
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "View Details",
         "MESSAGES_FOUND": "messages found.",
-        "NUM_OF_ERRORS": "{{amount}} erros found.",
+        "NUM_OF_ERRORS": "{{amount}} errors found.",
         "NUM_OF_WARNINGS": "{{amount}} warnings found.",
         "NUM_OF_INFO_MESSAGES": "{{amount}} information messages found."
     },
