@@ -287,7 +287,7 @@
         "EDIT_LINE_ITEMS": "fr_FR Edit Line Items",
         "UPLOAD": "fr_FR Upload",
         "ADD_COMMENT": "fr_FR Add Comment",
-        "PLACE_ORDER": "fr_FR CREATE ORDER",
+        "PLACE_ORDER": "fr_FR Create Order",
         "ON": "fr_FR on",
         "CONFIRM_CHANGES": "fr_FR Confirm Changes",
         "ADD_PRODUCTS": "fr_FR Add Products",
@@ -508,7 +508,7 @@
             "DISCARD_CHANGES_TITLE": "fr_FR Discard your changes",
             "DISCARD_CHANGES_Message": "fr_FR All yur changes will be lost.",
             "DISCARD_CHANGES_CONFIRMATION": "fr_FR Do you want to discard your changes and go back to the details page?",
-            "DISCARD_CHANGES": "fr_FR Yes, DISCARD CHANGES"
+            "DISCARD_CHANGES": "fr_FR YES, DISCARD CHANGES"
         }
     },
     "JUMBORTON": {

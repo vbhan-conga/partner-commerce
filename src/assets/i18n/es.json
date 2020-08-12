@@ -288,7 +288,7 @@
         "NO_COMMENTS_TO_DISPLAY": "es_MX There has not been any comments yet",
         "CHANGE_BILLING_ADDRESS":"es_MX Change Billing Address",
         "EDIT_LINE_ITEMS": "es_MX Edit Line Items",
-        "PLACE_ORDER": "es_MX CREATE ORDER",
+        "PLACE_ORDER": "es_MX Create Order",
         "ON": "es_MX on",
         "UPLOAD": "es_MX Upload",
         "CLEAR": "es_MX Clear",
@@ -514,7 +514,7 @@
             "DISCARD_CHANGES_TITLE":"es_MX Discard your changes",
             "DISCARD_CHANGES_Message": "es_MX All yur changes will be lost.",
             "DISCARD_CHANGES_CONFIRMATION": "es_MX Do you want to discard your changes and go back to the details page?",
-            "DISCARD_CHANGES": "es_MX Yes, DISCARD CHANGES"
+            "DISCARD_CHANGES": "es_MX YES, DISCARD CHANGES"
         }
     },
     "JUMBORTON": {
