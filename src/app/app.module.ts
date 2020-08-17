@@ -12,6 +12,7 @@ import { MainComponent } from './main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigureGuard } from './services/configure.guard';
 import { RouteGuard } from './services/route.guard';
+import { AboGuard } from './services/aboGuard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
 
 // Locale data
@@ -40,7 +41,7 @@ registerLocaleData(localeIt, 'it-IT', localeItExtras);
     ApttusModalModule,
     IconModule
   ],
-  providers: [RouteGuard, ConstraintRuleGuard, ConfigureGuard],
+  providers: [RouteGuard, ConstraintRuleGuard, ConfigureGuard, AboGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
