@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
-import { CartService, Cart, AccountService, OrderService } from '@apttus/ecommerce';
+import { CartService, Cart, AccountService, OrderService, CategoryService } from '@apttus/ecommerce';
 import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
 import { ExceptionService } from '@apttus/elements';
@@ -26,6 +26,7 @@ export class ActionBarComponent implements OnInit {
     private accountService: AccountService,
     private exceptionService: ExceptionService,
     private orderService: OrderService,
+    private categoryService: CategoryService,
     private router: Router) { }
 
   ngOnInit() {
@@ -45,6 +46,7 @@ export class ActionBarComponent implements OnInit {
       () => {
         this.exceptionService.showSuccess('ACTION_BAR.CHANGE_ACCOUNT_MESSAGE', 'ACTION_BAR.CHANGE_ACCOUNT_TITLE');
         this.accountField.handleHidePop();
+        this.categoryService.refresh();
       }
     );
   }
