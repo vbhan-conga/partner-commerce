@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { CartService, CartItem, Storefront, StorefrontService, BundleProduct } from '@apttus/ecommerce';
+import { ConfigurationService } from '@apttus/core';
+import { CartService, CartItem, Storefront, StorefrontService, BundleProduct, Cart } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -39,26 +40,32 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** @ignore */
     productCode: string;
 
+    private endpoint: string;
+
 
     @ViewChild(ProductConfigurationSummaryComponent, { static: false })
     configSummaryModal: ProductConfigurationSummaryComponent;
     subscription: Subscription;
 
     constructor(private cartService: CartService,
-                private resolver: ProductDetailsResolver,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                private productConfigurationService: ProductConfigurationService) { }
+        private resolver: ProductDetailsResolver,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private storefrontService: StorefrontService,
+        private productConfigurationService: ProductConfigurationService,
+        private configurationService: ConfigurationService) {
+        this.endpoint = this.configurationService.endpoint();
+    }
 
     ngOnInit() {
-      this.resolver
-      .resolve(this.activatedRoute.snapshot)
-      .pipe(take(1))
-      .subscribe(() => (this.viewState$ = this.resolver.state()));
+        this.resolver
+            .resolve(this.activatedRoute.snapshot)
+            .pipe(take(1))
+            .subscribe(() => (this.viewState$ = this.resolver.state()));
         this.subscription = this.productConfigurationService.configurationChange.subscribe(response => {
             this.product = response.product;
             this.cartItemList = response.itemList;
-            if (_.get(response.configurationFlags,'optionChanged') || _.get(response.configurationFlags,'attributeChanged')) this.configurationChanged = true;
+            if (_.get(response.configurationFlags, 'optionChanged') || _.get(response.configurationFlags, 'attributeChanged')) this.configurationChanged = true;
         });
     }
 
@@ -84,14 +91,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    changeProductQuantity(newQty: any){
-        if(this.cartItemList && this.cartItemList.length > 0)
+    changeProductQuantity(newQty: any) {
+        if (this.cartItemList && this.cartItemList.length > 0)
             _.forEach(this.cartItemList, c => {
-                if(c.LineType === 'Product/Service') c.Quantity = newQty;
+                if (c.LineType === 'Product/Service') c.Quantity = newQty;
                 this.productConfigurationService.changeProductQuantity(newQty);
             });
     }
 
+    openConfigWindow(product: BundleProduct, childCart: Cart, relatedTo?: CartItem) {
+        const url = relatedTo ? `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${childCart.BusinessObjectId}/steps/options/lines/${relatedTo.PrimaryLineNumber}/configure` : `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${childCart.BusinessObjectId}/products/${product.Id}/configure`;
+        window.open(url, 'soWin', 'fullscreen=yes,titlebar=no,toolbar=no,menubar=no,location=no,scrollbars=no,status=no,height=800,width=1250');
+    }
     /**
      * Changes the quantity of the cart item passed to this method.
      *
@@ -103,10 +114,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     showSummary() {
-      this.configSummaryModal.show();
+        this.configSummaryModal.show();
     }
 
-    ngOnDestroy(){
-        if(this.subscription) this.subscription.unsubscribe();
+    ngOnDestroy() {
+        if (this.subscription) this.subscription.unsubscribe();
     }
 }
