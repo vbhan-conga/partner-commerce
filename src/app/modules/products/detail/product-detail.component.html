@@ -51,11 +51,10 @@
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <button class="btn btn-outline-primary ml-2 mx-3"
                         *ngIf="viewState?.storefront?.ConfigurationLayout === 'Embedded' && (viewState?.product?.HasAttributes || viewState?.product?.HasOptions)"
-                        (click)="openConfigWindow(viewState?.product, viewState?.childCart, viewState?.relatedTo);">Configure
+                        (click)="openConfigWindow(viewState?.product, viewState?.relatedTo);">Configure
                         Product</button>
-
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
-                        [quantity]="viewState.quantity" [cartItems]="cartItemList"
+                        [quantity]="viewState.quantity" [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
                         [product]="product ? product: viewState?.product"
                         [btnClass]="'btn-primary btn-raised px-3 py-2'" (onAddToCart)="onAddToCart($event)"
                         [label]="'Update Configuration'" [aboEnabled]="false">
@@ -66,7 +65,7 @@
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-outline-primary ml-2 mx-3"
                             *ngIf="viewState?.storefront?.ConfigurationLayout === 'Embedded' && (viewState?.product?.HasAttributes || viewState?.product?.HasOptions)"
-                            (click)="openConfigWindow(viewState?.product, viewState?.childCart, viewState?.relatedTo);">Configure
+                            (click)="openConfigWindow(viewState?.product, viewState?.relatedTo);">Configure
                             Product</button>
                         <div class="form-group mx-3 my-0 d-flex align-items-center">
                             <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
@@ -76,7 +75,7 @@
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                                 [quantity]="viewState.quantity" (onAddToCart)="onAddToCart($event)"
-                                [cartItems]="cartItemList" [product]="product ? product: viewState?.product"
+                                [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList" [product]="product ? product: viewState?.product"
                                 [aboEnabled]="false" [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
                         </div>

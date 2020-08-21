@@ -59,14 +59,13 @@ export class ProductDetailsResolver implements Resolve<any> {
       this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')]),
       this.storefrontService.getStorefront()
     ).pipe(
-      mergeMap(([product, cartitemList, rProductList, storefront]) => combineLatest(of([product, cartitemList, rProductList, storefront]), this.cartService.childCart(get(first(cartitemList), 'LineNumber')))),
-      map(([[product, cartitemList, rProductList, storefront], childCart]) => {
+      mergeMap(([product, cartitemList, rProductList, storefront]) => combineLatest(of([product, cartitemList, rProductList, storefront]))),
+      map(([[product, cartitemList, rProductList, storefront]]) => {
         return {
           product: product as Product,
           recommendedProducts: rProductList,
           relatedTo: first(cartitemList),
           quantity: get(first(cartitemList), 'Quantity', 1),
-          childCart: childCart,
           storefront: storefront
         };
       })
@@ -101,10 +100,6 @@ export interface ProductDetailsState {
    * Quantity to set to child components
    */
   quantity: number;
-  /**
- * The Child cart.
- */
-  childCart: Cart;
   /**
    * storefront object
    */

@@ -40,12 +40,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** @ignore */
     productCode: string;
 
+    /**@ignore */
+    relatedTo: CartItem;
+    configWindow: any;
     private endpoint: string;
 
 
     @ViewChild(ProductConfigurationSummaryComponent, { static: false })
     configSummaryModal: ProductConfigurationSummaryComponent;
-    subscription: Subscription;
+    subscriptions: Array<Subscription> = [];
 
     constructor(private cartService: CartService,
         private resolver: ProductDetailsResolver,
@@ -61,12 +64,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.resolver
             .resolve(this.activatedRoute.snapshot)
             .pipe(take(1))
-            .subscribe(() => (this.viewState$ = this.resolver.state()));
-        this.subscription = this.productConfigurationService.configurationChange.subscribe(response => {
+            .subscribe(() => {
+                this.viewState$ = this.resolver.state();
+                this.relatedTo = this.viewState$.value.relatedTo;
+            });
+        this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
             this.product = response.product;
             this.cartItemList = response.itemList;
             if (_.get(response.configurationFlags, 'optionChanged') || _.get(response.configurationFlags, 'attributeChanged')) this.configurationChanged = true;
-        });
+        }));
     }
 
     /**
@@ -81,8 +87,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     onAddToCart(cartItems: Array<CartItem>): void {
+        if(this.configWindow) this.configWindow.close();
         this.configurationChanged = false;
-        const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option')));
+        if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
+        const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option'))) as CartItem;
+        this.relatedTo = primaryItem;
         if (!_.isNil(primaryItem) && (_.get(primaryItem, 'Product.HasOptions') || _.get(primaryItem, 'Product.HasAttributes'))) {
             this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
         }
@@ -99,10 +108,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             });
     }
 
-    openConfigWindow(product: BundleProduct, childCart: Cart, relatedTo?: CartItem) {
-        const url = relatedTo ? `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${childCart.BusinessObjectId}/steps/options/lines/${relatedTo.PrimaryLineNumber}/configure` : `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${childCart.BusinessObjectId}/products/${product.Id}/configure`;
-        window.open(url, 'soWin', 'fullscreen=yes,titlebar=no,toolbar=no,menubar=no,location=no,scrollbars=no,status=no,height=800,width=1250');
+    openConfigWindow(product: BundleProduct, relatedTo?: CartItem) {
+        this.subscriptions.push(this.cartService.childCart(_.get(relatedTo, 'LineNumber')).subscribe(res => {
+            const url = relatedTo ? `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${res.BusinessObjectId}/steps/options/lines/${relatedTo.PrimaryLineNumber}/configure` : `${this.endpoint}/apex/Apttus_Config2__Cart#!/flows/ngcpq/businessObjects/${res.BusinessObjectId}/products/${product.Id}/configure`;
+            this.configWindow = window.open(url, 'soWin', 'fullscreen=yes,titlebar=no,toolbar=no,menubar=no,location=no,scrollbars=no,status=no,height=800,width=1250');
+        }));
     }
+
+
     /**
      * Changes the quantity of the cart item passed to this method.
      *
@@ -118,6 +131,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.subscription) this.subscription.unsubscribe();
+        _.forEach(this.subscriptions, (item) => item.unsubscribe());
     }
 }
