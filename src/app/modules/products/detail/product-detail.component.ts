@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { CartService, CartItem, Storefront, StorefrontService, BundleProduct } from '@apttus/ecommerce';
+import { ConfigurationService } from '@apttus/core';
+import { CartService, CartItem, Storefront, StorefrontService, BundleProduct, Cart } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
@@ -39,27 +40,37 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** @ignore */
     productCode: string;
 
+    /**@ignore */
+    relatedTo: CartItem;
+    private endpoint: string;
+
 
     @ViewChild(ProductConfigurationSummaryComponent, { static: false })
     configSummaryModal: ProductConfigurationSummaryComponent;
-    subscription: Subscription;
+    subscriptions: Array<Subscription> = [];
 
     constructor(private cartService: CartService,
-                private resolver: ProductDetailsResolver,
-                private router: Router,
-                private activatedRoute: ActivatedRoute,
-                private productConfigurationService: ProductConfigurationService) { }
+        private resolver: ProductDetailsResolver,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private storefrontService: StorefrontService,
+        private productConfigurationService: ProductConfigurationService,
+        private configurationService: ConfigurationService) {
+    }
 
     ngOnInit() {
-      this.resolver
-      .resolve(this.activatedRoute.snapshot)
-      .pipe(take(1))
-      .subscribe(() => (this.viewState$ = this.resolver.state()));
-        this.subscription = this.productConfigurationService.configurationChange.subscribe(response => {
+        this.resolver
+            .resolve(this.activatedRoute.snapshot)
+            .pipe(take(1))
+            .subscribe(() => {
+                this.viewState$ = this.resolver.state();
+                this.relatedTo = this.viewState$.value.relatedTo;
+            });
+        this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
             this.product = response.product;
             this.cartItemList = response.itemList;
-            if (_.get(response.configurationFlags,'optionChanged') || _.get(response.configurationFlags,'attributeChanged')) this.configurationChanged = true;
-        });
+            if (_.get(response.configurationFlags, 'optionChanged') || _.get(response.configurationFlags, 'attributeChanged')) this.configurationChanged = true;
+        }));
     }
 
     /**
@@ -74,8 +85,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     onAddToCart(cartItems: Array<CartItem>): void {
+        if(this.productConfigurationService.configWindow) this.productConfigurationService.configWindow.close();
         this.configurationChanged = false;
-        const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option')));
+        if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
+        const primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option'))) as CartItem;
+        this.relatedTo = primaryItem;
         if (!_.isNil(primaryItem) && (_.get(primaryItem, 'Product.HasOptions') || _.get(primaryItem, 'Product.HasAttributes'))) {
             this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
         }
@@ -84,13 +98,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    changeProductQuantity(newQty: any){
-        if(this.cartItemList && this.cartItemList.length > 0)
+    changeProductQuantity(newQty: any) {
+        if (this.cartItemList && this.cartItemList.length > 0)
             _.forEach(this.cartItemList, c => {
-                if(c.LineType === 'Product/Service') c.Quantity = newQty;
+                if (c.LineType === 'Product/Service') c.Quantity = newQty;
                 this.productConfigurationService.changeProductQuantity(newQty);
             });
     }
+
+    openConfigWindow(product: BundleProduct, relatedTo?: CartItem) {
+        this.productConfigurationService.openConfigWindow(product, relatedTo);
+    }
+
 
     /**
      * Changes the quantity of the cart item passed to this method.
@@ -103,10 +122,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     showSummary() {
-      this.configSummaryModal.show();
+        this.configSummaryModal.show();
     }
 
-    ngOnDestroy(){
-        if(this.subscription) this.subscription.unsubscribe();
+    ngOnDestroy() {
+        _.forEach(this.subscriptions, (item) => item.unsubscribe());
     }
 }
