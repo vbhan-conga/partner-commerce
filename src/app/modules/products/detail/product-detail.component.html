@@ -83,7 +83,7 @@
                 </ng-template>
 
                 <button class="btn btn-outline-primary ml-2"
-                    *ngIf="viewState?.product?.HasAttributes || viewState?.product?.HasOptions"
+                    *ngIf="viewState?.storefront?.ConfigurationLayout !== 'Embedded' && (viewState?.product?.HasAttributes || viewState?.product?.HasOptions)"
                     (click)="showSummary();">{{'DETAILS.PRICE_SUMMARY' | translate}}</button>
             </div>
         </ng-template>
