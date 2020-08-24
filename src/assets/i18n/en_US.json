@@ -305,8 +305,8 @@
         "ADD_COMMENT": "Add Comment",
         "CREATE_QUOTE": "Create Quote",
         "DEFALUT_COMMENT": "There has not been any comments yet",
-        "PLACE_ORDER": "CREATE ORDER",
-        "PLACE_ORDER_PAY": "CREATE ORDER & PAY",
+        "PLACE_ORDER": "Create Order",
+        "PLACE_ORDER_PAY": "Create Order & Pay",
         "ON": "on",
         "CONFIRM_CHANGES": "Confirm Changes",
         "ADD_PRODUCTS": "Add Products",
@@ -532,7 +532,7 @@
             "DISCARD_CHANGES_TITLE": "Discard your changes",
             "DISCARD_CHANGES_Message": "All your changes will be lost.",
             "DISCARD_CHANGES_CONFIRMATION": "Do you want to discard your changes and go back to the details page?",
-            "DISCARD_CHANGES": "Yes, DISCARD CHANGES"
+            "DISCARD_CHANGES": "YES, DISCARD CHANGES"
         }
     },
     "JUMBORTON": {
