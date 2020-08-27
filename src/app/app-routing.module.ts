@@ -5,7 +5,7 @@ import { environment } from '../environments/environment';
 import { MainComponent } from './main.component';
 import { RouteGuard } from './services/route.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
-import { AboGuard } from './services/aboGuard';
+import { AboGuard } from './services/abo.guard';
 
 @NgModule({
   imports: [

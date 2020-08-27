@@ -12,7 +12,7 @@ import { MainComponent } from './main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigureGuard } from './services/configure.guard';
 import { RouteGuard } from './services/route.guard';
-import { AboGuard } from './services/aboGuard';
+import { AboGuard } from './services/abo.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
 
 // Locale data
