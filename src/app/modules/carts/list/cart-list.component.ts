@@ -1,14 +1,15 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { AObject } from '@apttus/core';
-import { CartService, Cart, PriceService } from '@apttus/ecommerce';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { Observable, of, combineLatest } from 'rxjs';
-import * as _ from 'lodash';
+import { ClassType } from 'class-transformer/ClassTransformer';
 import { TranslateService } from '@ngx-translate/core';
 import { map, mergeMap, take } from 'rxjs/operators';
+import * as _ from 'lodash';
+
+import { AObject, ACondition, AFilter } from '@apttus/core';
+import { CartService, Cart, PriceService } from '@apttus/ecommerce';
 import { TableOptions, TableAction } from '@apttus/elements';
-import { ClassType } from 'class-transformer/ClassTransformer';
 
 /**
  * Cart list Component loads and shows all the carts for logged in user.
@@ -31,7 +32,7 @@ export class CartListComponent implements OnInit {
    * @ignore
    */
   constructor(private cartService: CartService, public priceService: PriceService,
-      private modalService: BsModalService, private translateService: TranslateService) { }
+    private modalService: BsModalService, private translateService: TranslateService) { }
   /**
    * @ignore
    */
@@ -44,7 +45,8 @@ export class CartListComponent implements OnInit {
       this.cartService.getMyCart(),
       this.cartService.query({
         aggregate: true,
-        skipCache: true
+        skipCache: true,
+        filters: this.getFilters()
       })
     ).pipe(
       map(([currentCart, cartList]) => {
@@ -64,13 +66,13 @@ export class CartListComponent implements OnInit {
                 prop: 'IsActive',
                 label: 'Is Active',
                 sortable: false,
-                value:(record: Cart) => this.isCartActive(currentCart, record) ? of('Yes') : of('No')
+                value: (record: Cart) => this.isCartActive(currentCart, record) ? of('Yes') : of('No')
               },
               {
                 prop: 'TotalAmount',
                 label: 'Total Amount',
                 sortable: false,
-                value:(record: Cart) => this.getCartTotal(record)
+                value: (record: Cart) => this.getCartTotal(record)
               },
               {
                 prop: 'Status'
@@ -84,8 +86,8 @@ export class CartListComponent implements OnInit {
                 massAction: false,
                 label: 'Set Active',
                 theme: 'primary',
-                validate:(record: Cart) => this.canActivate(currentCart, record),
-                action:(recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList)).pipe(map(cart => null))
+                validate: (record: Cart) => this.canActivate(currentCart, record),
+                action: (recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList)).pipe(map(cart => null))
               } as TableAction,
               {
                 enabled: true,
@@ -93,12 +95,13 @@ export class CartListComponent implements OnInit {
                 massAction: true,
                 label: 'Delete',
                 theme: 'danger',
-                validate:(record: Cart) => this.canDelete(record),
-                action:(recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
+                validate: (record: Cart) => this.canDelete(record),
+                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
               } as TableAction
             ],
-            highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record)),
-            children: ['SummaryGroups']
+            highlightRow: (record: Cart) => of(this.isCartActive(currentCart, record)),
+            children: ['SummaryGroups'],
+            filters: this.getFilters()
           },
           totalCarts: _.get(_.first(cartList), 'total_records'),
           type: Cart
@@ -155,6 +158,13 @@ export class CartListComponent implements OnInit {
   /**@ignore */
   isCartActive(currentActiveCart: Cart, rowCart: Cart) {
     return (_.get(currentActiveCart, 'Id') === _.get(rowCart, 'Id'));
+  }
+  /**@ignore */
+  getFilters(): Array<AFilter> {
+    return new Array(new AFilter(this.cartService.type, [
+      new ACondition(this.cartService.type, 'ParentConfigurationId', 'Equal', null),
+      new ACondition(this.cartService.type, 'Status', 'NotEqual', 'Saved')
+    ]));
   }
 
 }

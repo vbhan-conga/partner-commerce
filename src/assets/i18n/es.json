@@ -354,7 +354,7 @@
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "es_MX View Details",
         "MESSAGES_FOUND": "es_MX messages found.",
-        "NUM_OF_ERRORS": "es_MX {{amount}} erros found.",
+        "NUM_OF_ERRORS": "es_MX {{amount}} errors found.",
         "NUM_OF_WARNINGS": "es_MX {{amount}} warnings found.",
         "NUM_OF_INFO_MESSAGES": "es_MX {{amount}} information messages found."
     },

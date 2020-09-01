@@ -348,7 +348,7 @@
     "CONSTRAINT_ALERT": {
         "VIEW_DETAILS": "fr_FR View Details",
         "MESSAGES_FOUND": "fr_FR messages found.",
-        "NUM_OF_ERRORS": "fr_FR {{amount}} erros found.",
+        "NUM_OF_ERRORS": "fr_FR {{amount}} errors found.",
         "NUM_OF_WARNINGS": "fr_FR {{amount}} warnings found.",
         "NUM_OF_INFO_MESSAGES": "fr_FR {{amount}} information messages found."
     },
