@@ -1,4 +1,4 @@
-@import "~bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/functions";
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -937,3 +937,20 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 // Promotion
 
 $promo-input-font-size:             0.75rem;
+
+// error-messages
+
+$danger-cr-color:                   #6d121b;
+$danger-cr-bg-color:                #f6d3d6;
+$info-cr-color:                     #004300;
+$info-cr-bg-color:                  #cce6cc;
+$info-cr-border-color:              #33AA33;
+$warning-cr-color:                  #7e560b;
+$warning-cr-bg-color:               #fcedd0;
+
+$light-blue-hover:                  #f5faff;
+$light-blue-highlighed:             #ebf5ff;
+$select-drop-border-color:          #aaaaaa;
+
+$dark-grey:                         #080707;
+
