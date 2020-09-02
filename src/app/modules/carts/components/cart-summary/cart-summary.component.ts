@@ -21,7 +21,7 @@ import { SummaryState } from '../../../checkout/component/summary.component';
 
 export class CartSummaryComponent implements OnInit, OnChanges {
   @Input() cart: Cart;
-  @ViewChild('discardChangesTemplate', { static: false }) discardChangesTemplate: TemplateRef<any>;
+  @ViewChild('discardChangesTemplate') discardChangesTemplate: TemplateRef<any>;
   loading:boolean = false;
   discardChangesModal: BsModalRef;
   _cart: Cart;
@@ -38,7 +38,7 @@ export class CartSummaryComponent implements OnInit, OnChanges {
   totalPromotions: number = 0;
   storefront$: Observable<Storefront>;
   /** @ignore */
-  @ViewChild('confirmationTemplate', { static: false }) confirmationTemplate: TemplateRef<any>;
+  @ViewChild('confirmationTemplate') confirmationTemplate: TemplateRef<any>;
   /** tax related local properties */
   showTaxPopUp: boolean = false;
   taxItems: Array<TaxBreakup>;
