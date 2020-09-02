@@ -78,21 +78,12 @@ md-tabs md-ink-bar {
   background-color: #0047bb; }
 
 md-tabs .md-tab {
-  color: #93A1AA; }
-
-md-tabs .md-tab.md-active {
-  color: #323232; }
-
-.md-tab {
+  color: #93A1AA;
   font-size: 0.875rem;
   font-weight: 400; }
 
-.product-option__name > label {
-  line-height: 1.5;
-  color: #323232;
-  padding-top: 0;
-  font-weight: 600;
-  font-size: 0.88rem; }
+md-tabs .md-tab.md-active {
+  color: #323232; }
 
 .main-configure-product h2 {
   font-size: 1.54rem;
@@ -122,19 +113,15 @@ md-tabs .md-tab.md-active {
   margin: auto 5px; }
   .sub-group .main-configure-product__product-option .product-option__title {
     border-bottom: 1px solid #DEDEDE !important; }
-
-.main-configure-product__product-option:first-child {
-  overflow: visible;
-  padding: 0rem .5rem;
-  border: 1px solid #DEDEDE;
-  margin: 0px 10px; }
+  .sub-group .main-configure-product__product-option:first-child {
+    overflow: visible;
+    padding: 0rem .5rem;
+    border: 1px solid #DEDEDE;
+    margin: 0px 10px; }
 
 .main-configure-product__product-option-row {
   padding: 0.5rem 0.5rem; }
-
-.main-configure-product__product-option-row:nth-child(2n+2) {
-  background-color: transparent; }
-  .main-configure-product__product-option-row:nth-child(2n+2) .main-configure-product__product-option-row:nth-child(2n+1) {
+  .main-configure-product__product-option-row:nth-child(2n+2), .main-configure-product__product-option-row:nth-child(2n+1) {
     background-color: transparent; }
 
 .main-configure-product__product-option-container div.product-option__price {
@@ -149,8 +136,15 @@ md-tabs .md-tab.md-active {
   border-radius: 0px;
   text-align: center; }
 
+.product-option__name > label {
+  line-height: 1.5;
+  color: #323232;
+  padding-top: 0;
+  font-weight: 600;
+  font-size: 0.88rem; }
+
 .product-option__name .checkbox-override, .product-option__name .radio-override {
-  margin-top: 0.2px; }
+  margin-top: 0.3rem; }
 
 .checkbox-override label {
   background: #CCCCCC;
@@ -210,6 +204,14 @@ label.product-attribute__name {
     background-color: #fff; }
   .layout--rightcol .sidebar--configure-product .configure-product__price-name, .layout--rightcol .sidebar--configure-product .configure-product__price-value {
     font-size: .875rem; }
+  .layout--rightcol .sidebar--configure-product .configure-product__product-options .configure-product__product-options-row, .layout--rightcol .sidebar--configure-product .configure-product__product-options .configure-product__product-price {
+    font-size: 0.88rem;
+    color: #323232; }
+  .layout--rightcol .sidebar--configure-product a.configure-product__group-name, .layout--rightcol .sidebar--configure-product a.configure-product__subgroup-name {
+    color: #323232;
+    font-weight: bolder;
+    font-size: 0.88rem;
+    text-decoration: none; }
 
 .error.error--critical {
   border: 0px;
@@ -292,21 +294,10 @@ constraint-dialog .modal-dialog {
   color: #323232;
   font-weight: 400; }
 
-.layout--rightcol .sidebar--configure-product a.configure-product__group-name, .layout--rightcol .sidebar--configure-product a.configure-product__subgroup-name {
-  color: #323232;
-  font-weight: bolder;
-  font-size: 0.88rem;
-  text-decoration: none; }
-
 .summary-opt-group {
   padding: .2rem 0; }
-
-.summary-opt-group:first-child {
-  border-top: 1px solid #323232; }
-
-.layout--rightcol .sidebar--configure-product .configure-product__product-options .configure-product__product-options-row, .layout--rightcol .sidebar--configure-product .configure-product__product-options .configure-product__product-price {
-  font-size: 0.88rem;
-  color: #323232; }
+  .summary-opt-group:first-child {
+    border-top: 1px solid #323232; }
 
 .option-group-expand-collapse-enabled {
   color: #323232; }
