@@ -20,7 +20,7 @@ import { map } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   
-  @ViewChild('profile') profile: MiniProfileComponent;
+  @ViewChild('profile', { static: false }) profile: MiniProfileComponent;
   
 
   index: number = 0;

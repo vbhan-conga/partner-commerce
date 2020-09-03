@@ -36,7 +36,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   attachemntSubscription: Subscription;
   quoteSubscription: Subscription;
 
-  @ViewChild('intimationTemplate') intimationTemplate: TemplateRef<any>;
+  @ViewChild('intimationTemplate', { static: false }) intimationTemplate: TemplateRef<any>;
 
   lookupOptions: LookupOptions = {
     primaryTextField: 'Name',

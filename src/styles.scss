@@ -1,12 +1,10 @@
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-$roboto-font-path: '~roboto-fontface/fonts';
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/v4-shims";
 @import '~ngx-bootstrap/datepicker/bs-datepicker.css';
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-regular";
 
 // Required
 @import "variables";
