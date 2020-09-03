@@ -35,10 +35,10 @@ export class SummaryComponent implements OnChanges {
   @Input()
   cart: Cart;
 
-  @ViewChild('confirmationTemplate')
+  @ViewChild('confirmationTemplate', { static: false })
   confirmationTemplate: TemplateRef<any>;
 
-  @ViewChild(ProductConfigurationSummaryComponent)
+  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   summaryModal: ProductConfigurationSummaryComponent;
 
   state: SummaryState;

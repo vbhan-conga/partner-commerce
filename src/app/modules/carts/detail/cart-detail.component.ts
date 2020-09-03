@@ -15,7 +15,7 @@ import { map as rmap } from 'rxjs/operators';
  * Manage Cart component is used to show the list of cart line item(s)  and summary of the cart.
  */
 export class CartDetailComponent implements OnInit {
-  @ViewChild('discardChangesTemplate') discardChangesTemplate: TemplateRef<any>;
+  @ViewChild('discardChangesTemplate', { static: false }) discardChangesTemplate: TemplateRef<any>;
 
 
   discardChangesModal: BsModalRef;

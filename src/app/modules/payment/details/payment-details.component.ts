@@ -19,7 +19,7 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
    */
   @Input() order: Order;
   /** @ignore */
-  @ViewChild('paymentForm') paymentForm: TemplateRef<any>;
+  @ViewChild('paymentForm', { static: false }) paymentForm: TemplateRef<any>;
   /**
    * Instance of Payment transaction object.
   */

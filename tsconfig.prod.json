@@ -14,9 +14,5 @@
   "exclude": [
     "src/test.ts",
     "src/**/*.spec.ts"
-  ],
-  "angularCompilerOptions": {
-    "enableIvy": false,
-    "fullTemplateTypeCheck": true
-  }
+  ]
 }
