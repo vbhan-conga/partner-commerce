@@ -45,7 +45,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private endpoint: string;
 
 
-    @ViewChild(ProductConfigurationSummaryComponent, { static: false })
+    @ViewChild(ProductConfigurationSummaryComponent)
     configSummaryModal: ProductConfigurationSummaryComponent;
     subscriptions: Array<Subscription> = [];
 
