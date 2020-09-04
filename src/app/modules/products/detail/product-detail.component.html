@@ -67,7 +67,7 @@
                             *ngIf="viewState?.storefront?.ConfigurationLayout === 'Embedded' && (viewState?.product?.HasAttributes || viewState?.product?.HasOptions)"
                             (click)="openConfigWindow(viewState?.product, viewState?.relatedTo);">Configure
                             Product</button>
-                        <div class="form-group mx-3 my-0 d-flex align-items-center">
+                        <div class="form-group mx-3 my-0 d-flex align-items-center" *ngIf="viewState?.storefront?.ConfigurationLayout !== 'Embedded'">
                             <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
                             <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity"
                                 name="quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" />
