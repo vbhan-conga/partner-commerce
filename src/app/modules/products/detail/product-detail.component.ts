@@ -85,7 +85,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     onAddToCart(cartItems: Array<CartItem>): void {
-        if(this.productConfigurationService.configWindow) this.productConfigurationService.configWindow.close();
         this.configurationChanged = false;
         if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
         const primaryItem = this.getPrimaryItem(cartItems);
@@ -105,11 +104,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.productConfigurationService.changeProductQuantity(newQty);
             });
     }
-
-    openConfigWindow(product: BundleProduct, relatedTo?: CartItem) {
-        this.productConfigurationService.openConfigWindow(product, relatedTo);
-    }
-
 
     /**
      * Changes the quantity of the cart item passed to this method.
