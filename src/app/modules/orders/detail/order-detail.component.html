@@ -1,9 +1,9 @@
 <app-detail *ngIf="order$ | async as order; else loading" [context]="order">
 
-    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status" 
+    <div class="btn-group secondary-actions align-self-stretch" role="group" [ngSwitch]="order?.Status"
     [tooltip]="order.hasErrors ? 'Some mandatory informations are missing in the order details. Please fill to proceed.' : ''">
         <ng-container *ngSwitchCase="'Draft'">
-            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading" 
+            <button type="button" class="btn btn-link text-primary px-4" (click)="confirmOrder(order.Id, order.PrimaryContactId)" [ladda]="isLoading"
             data-style="zoom-in" [disabled]="order.hasErrors">{{'ACTION_BAR.CONFIRM_ORDER' | translate}}</button>
             <apt-generate-document [record]="order" class="align-items-stretch d-flex" (onStatusUpdate)="getOrder()"></apt-generate-document>
         </ng-container>
@@ -80,7 +80,7 @@
         </div>
     </app-detail-section>
 
-    <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4">
+    <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4" *ngIf="orderLineItems$ | async as orderLineItems">
         <div class="card">
             <div class="card-body">
                 <h5 class="py-2">
@@ -93,7 +93,7 @@
                 </h5>
                 <table class="table table-responsive">
                     <tbody>
-                        <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
+                        <ng-container *ngFor="let item of orderLineItems; let i = index">
                             <apt-line-item-table-row
                             [index]="i"
                             [parent]="item.MainLine"
@@ -107,6 +107,7 @@
             </div>
         </div>
     </app-detail-section>
+
     <!-- COMMENT SECTION     -->
     <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
         <div class="card" *ngIf="noteList$ | async as noteList; else loading">
@@ -155,18 +156,18 @@
         </div>
     </app-detail-section>
 
-    <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
+    <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4" *ngIf="attachments$ | async as attachments">
         <div class="card">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.ATTACHMENTS' | translate}}
-                    <span *ngIf="order?.Attachments?.length > 0">({{order?.Attachments?.length}})</span>
+                    <span *ngIf="attachments.length > 0">({{attachments.length}})</span>
                 </h5>
                 <div class="row">
                     <div class="col-12 col-md-6 attachment-container">
                         <ng-scrollbar>
-                            <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
-                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
+                            <ng-container *ngIf="attachments.length > 0; else emptyAttachments">
+                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachments">
                                     <div class="d-flex">
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-between">
