@@ -145,6 +145,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     this.orderSubscription = this.activatedRoute.params
       .pipe(
         filter(params => get(params, 'id') != null),
+        map(params => get(params, 'id')),
         flatMap(orderId => this.apiService.get(`/orders?condition[0]=Id,Equal,${orderId}&lookups=PriceListId,PrimaryContact,BillToAccountId,ShipToAccountId,SoldToAccountId,Owner,CreatedBy`, Order)),
         map(orderList => get(orderList, '[0]')),
         switchMap((order: Order) => combineLatest(of(order), get(order, 'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
