@@ -30,7 +30,7 @@ import { ACondition, ApiService } from '@apttus/core';
 export class QuoteDetailComponent implements OnInit, OnDestroy {
   quote$: BehaviorSubject<Quote> = new BehaviorSubject<Quote>(null);
 
-  quoteLineItems$: Observable<Array<ItemGroup>>;
+  quoteLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
 
   order$: Observable<Order>;
 

@@ -221,7 +221,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
     this.attachmentSubscription = this.activatedRoute.params
       .pipe(
-        switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
+        switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
       ).subscribe((attachments: Array<Attachment>) => this.attachments$.next(attachments));
   }
 
