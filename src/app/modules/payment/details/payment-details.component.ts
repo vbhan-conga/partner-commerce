@@ -3,7 +3,7 @@ import { PaymentTransaction, Order, UserService, OrderService } from '@apttus/ec
 import { ConfigurationService } from '@apttus/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
@@ -19,7 +19,7 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
    */
   @Input() order: Order;
   /** @ignore */
-  @ViewChild('paymentForm', { static: false }) paymentForm: TemplateRef<any>;
+  @ViewChild('paymentForm') paymentForm: TemplateRef<any>;
   /**
    * Instance of Payment transaction object.
   */
