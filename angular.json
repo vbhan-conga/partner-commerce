@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "showCircularDependencies": false,
             "preserveSymlinks": true,
             "outputPath": "dist/reference-base",
             "index": "src/index.html",
@@ -37,7 +38,7 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "node_modules/roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss",
+              "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
               "src/styles.scss",
               "node_modules/ladda/dist/ladda-themeless.min.css"
             ],
