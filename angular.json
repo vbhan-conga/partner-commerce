@@ -277,5 +277,8 @@
       }
     }
   },
-  "defaultProject": "reference-base"
+  "defaultProject": "reference-base",
+  "cli": {
+    "analytics": false
+  }
 }

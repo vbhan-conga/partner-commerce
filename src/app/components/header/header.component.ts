@@ -33,8 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private storefrontService: StorefrontService,
     private userService: UserService,
     private router: Router,
-    private productService: ProductService,
-    private config: ConfigurationService,
     private contactService: ContactService,
     private translateService: TranslateService,
     private cartService: CartService) {
@@ -59,10 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.storefrontService.getStorefront()
       , this.contactService.getMyContact()
       , this.userService.me()
-      , this.storefrontService.describe(null, 'DefaultLocale', true)
       , this.cartService.getMyCart()
     ).pipe(
-      map(([storefront, contact, user, localeFields, activeCart]) => {
+      map(([storefront, contact, user, activeCart]) => {
         user.SmallPhotoUrl = this.userService.configurationService.get('endpoint') + user.SmallPhotoUrl.substring(user.SmallPhotoUrl.indexOf('/profilephoto'));
         return {
           storefront: storefront,
