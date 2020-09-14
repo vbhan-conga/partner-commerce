@@ -47,7 +47,7 @@
     "ngx-bootstrap": "^6.1.0",
     "ngx-gallery-9": "^1.0.6",
     "ngx-scrollbar": "7.3.0",
-    "ngx-toastr": "^11.3.2",
+    "ngx-toastr": "^13.0.0",
     "popper.js": "^1.16.1",
     "raven-js": "^3.27.2",
     "replace": "^1.1.5",
