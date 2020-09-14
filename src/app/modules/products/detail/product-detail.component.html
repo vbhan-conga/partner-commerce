@@ -39,7 +39,7 @@
             <div class="d-flex align-items-center">
                 <apt-add-to-cart [showQuantityControls]="false" (onAddToCart)="onAddToCart($event)"
                     [configurationEnabled]="false" [quantity]="viewState.quantity" [aboEnabled]="false"
-                    [cartItems]="(cartItemList?.length > 0) ? cartItemList : null"
+                    [cartItems]="(cartItemList?.length > 0) ? cartItemList : null" [disabled]="configurationPending"
                     [product]="product ? product: viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'">
                 </apt-add-to-cart>
             </div>
@@ -51,7 +51,7 @@
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                         [quantity]="viewState.quantity" [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
-                        [product]="product ? product: viewState?.product"
+                        [product]="product ? product: viewState?.product" [disabled]="configurationPending"
                         [btnClass]="'btn-primary btn-raised px-3 py-2'" (onAddToCart)="onAddToCart($event)"
                         [label]="'Update Configuration'" [aboEnabled]="false">
                     </apt-add-to-cart>
@@ -66,7 +66,7 @@
                         </div>
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
-                                [quantity]="viewState.quantity" (onAddToCart)="onAddToCart($event)"
+                                [quantity]="viewState.quantity" (onAddToCart)="onAddToCart($event)" [disabled]="configurationPending"
                                 [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList" [product]="product ? product: viewState?.product"
                                 [aboEnabled]="false" [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
