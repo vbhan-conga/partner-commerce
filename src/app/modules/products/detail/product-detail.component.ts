@@ -72,11 +72,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
             if(response && _.has(response, 'configurationPending')) this.configurationPending = _.get(response,'configurationPending');
-            else
+            else {
             this.product = _.get(response,'product');
             this.cartItemList = _.get(response,'itemList');
             if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
-        }));
+        }}));
     }
 
     /**
