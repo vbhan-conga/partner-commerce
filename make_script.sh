@@ -29,7 +29,6 @@ function npm_install {
     LOG_INFO "NPM Install"
     npm set unsafe-perm true
     npm install --unsafe-perm --no-package-lock
-    npm run postinstall
 }
 
 function npm_version_update_patch {
