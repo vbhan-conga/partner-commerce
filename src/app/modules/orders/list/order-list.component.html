@@ -1,6 +1,6 @@
 <ng-container *ngIf="view$ | async as view; else loading">
     <div class="row mb-3">
-        <div class="col-12">
+        <div class="col-12" *ngIf="filterList$ | async as filterList">
             <apt-data-filter [type]="type" [filterOptions]="filterOptions" [filterList]="filterList" (filterListChange)="handleFilterListChange($event)">
             </apt-data-filter>
         </div>

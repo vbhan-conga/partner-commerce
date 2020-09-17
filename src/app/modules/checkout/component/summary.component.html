@@ -11,7 +11,7 @@
                         <h6 class="my-0">
                             {{item.Product.Name}}
                         </h6>
-                        <small class="text-muted" [translate]="'CART.CART_SUMMARY.PRODUCT_ID'" [translateParams]="{productCode: item?.Product?.ProductCode}"></small>
+                        <small *ngIf="item?.Product?.ProductCode" class="text-muted" [translate]="'CART.CART_SUMMARY.PRODUCT_ID'" [translateParams]="{productCode: item?.Product?.ProductCode}"></small>
                         <small class="text-muted">{{ 'CART.CART_SUMMARY.QUANTITY' | translate }} {{item.Quantity}}</small>
                         <small *ngIf="item.Product.HasAttributes || item.Product.HasOptions">
                             <a href="javascript:void(0)" (click)="openModal(item)">{{ 'CART.CART_SUMMARY.DETAILS' | translate }}</a>
