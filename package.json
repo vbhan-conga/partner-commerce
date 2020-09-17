@@ -1,6 +1,6 @@
 {
   "name": "partner-commerce-base-template",
-  "version": "1903.0.7",
+  "version": "1903.0.8",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,9 +23,9 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^8.2.3",
     "@angular/service-worker": "^8.2.3",
-    "@apttus/core": "^1903.0.7",
-    "@apttus/ecommerce": "^1903.0.7",
-    "@apttus/elements": "^1903.0.7",
+    "@apttus/core": "^1903.0.8",
+    "@apttus/ecommerce": "^1903.0.8",
+    "@apttus/elements": "^1903.0.8",
     "@fortawesome/fontawesome-free": "^5.10.1",
     "@ng-select/ng-option-highlight": "0.0.2",
     "@ng-select/ng-select": "^3.0.6",
