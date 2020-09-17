@@ -67,9 +67,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.relatedTo = this.viewState$.value.relatedTo;
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-            this.product = response.product;
-            this.cartItemList = response.itemList;
-            if (_.get(response.configurationFlags, 'optionChanged') || _.get(response.configurationFlags, 'attributeChanged')) this.configurationChanged = true;
+            this.product = _.get(response,'product');
+            this.cartItemList = _.get(response,'itemList');
+            if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
         }));
     }
 
@@ -85,7 +85,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     onAddToCart(cartItems: Array<CartItem>): void {
-        if(this.productConfigurationService.configWindow) this.productConfigurationService.configWindow.close();
         this.configurationChanged = false;
         if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
         const primaryItem = this.getPrimaryItem(cartItems);
@@ -105,11 +104,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.productConfigurationService.changeProductQuantity(newQty);
             });
     }
-
-    openConfigWindow(product: BundleProduct, relatedTo?: CartItem) {
-        this.productConfigurationService.openConfigWindow(product, relatedTo);
-    }
-
 
     /**
      * Changes the quantity of the cart item passed to this method.
