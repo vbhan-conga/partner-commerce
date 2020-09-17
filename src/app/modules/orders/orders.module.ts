@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ComponentModule } from '../../components/component.module';
 import { LaddaModule } from 'angular2-ladda';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 
 @NgModule({

@@ -17,7 +17,7 @@ import { ProductCarouselModule, ConfigurationSummaryModule, PriceModule, Promoti
 import { TranslateModule } from '@ngx-translate/core';
 import { LaddaModule } from 'angular2-ladda';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TableModule, ChartModule } from '@apttus/elements';
 
 @NgModule({
