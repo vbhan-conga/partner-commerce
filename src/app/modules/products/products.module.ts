@@ -30,7 +30,7 @@ import { ProductListComponent } from './list/product-list.component';
 import { ResultsComponent } from './components/results.component';
 import { ProductDetailComponent } from './detail/product-detail.component';
 import { ApttusModule } from '@apttus/core';
-import { TabsModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DetailsModule } from '../details/details.module';
 import { TabAttachmentsComponent } from './components/tab-attachments.component';
 import { TabFeaturesComponent } from './components/tab-features.component';
