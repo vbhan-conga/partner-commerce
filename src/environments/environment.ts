@@ -24,7 +24,6 @@ export const environment: Configuration = {
   useIndexedDB: false,
   expandDepth: 7,
   hashRouting: false,
-  apiVersion: '2',
   pricingMode: 'turbo',
 
   // Salesforce environment variables

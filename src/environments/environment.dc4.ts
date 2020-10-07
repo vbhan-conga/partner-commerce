@@ -14,7 +14,6 @@ export const environment: Configuration = {
   maxBufferSize: 10,
   disableBuffer: false,
   subqueryLimit: 10,
-  apiVersion: '2',
   pricingMode: 'turbo',
   disableCache: false,
   encryptResponse: false,
