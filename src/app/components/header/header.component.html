@@ -6,7 +6,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <button class="navbar-brand btn btn-link d-none d-md-inline-block" [routerLink]="['/']"
+      <button class="navbar-brand btn btn-link d-none d-md-inline-block p-0" [routerLink]="['/']"
         *ngIf="view?.storefront?.Logo; else text">
         <img [src]="view?.storefront?.Logo | image" />
       </button>
