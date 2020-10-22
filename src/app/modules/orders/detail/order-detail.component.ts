@@ -329,6 +329,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     if (this.attachmentSubscription) {
       this.attachmentSubscription.unsubscribe();
     }
+
+    if (this.noteSubscription) {
+      this.noteSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewChecked() {

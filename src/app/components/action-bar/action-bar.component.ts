@@ -18,7 +18,7 @@ export class ActionBarComponent implements OnInit {
   cart$: Observable<Cart>;
   loading: boolean = false;
 
-  @ViewChild('accountField', {static: false}) accountField: OutputFieldComponent;
+  @ViewChild('accountField') accountField: OutputFieldComponent;
   // @ViewChild('priceListField', {static: false}) priceListField;
 
   constructor(

@@ -17,6 +17,7 @@ import {
 import { Observable, zip, BehaviorSubject, Subscription, combineLatest, of } from 'rxjs';
 import { take, map, tap, filter, switchMap, mergeMap } from 'rxjs/operators';
 import { isNil, get, first } from 'lodash';
+import { ProductConfigurationService } from '@apttus/elements';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,7 @@ export class ProductDetailsResolver implements Resolve<any> {
     private http: HttpClient,
     private storefrontService: StorefrontService,
     private translatorService: TranslatorLoaderService,
+    private productConfigurationService: ProductConfigurationService,
     private cartService: CartService) { }
 
 
@@ -42,6 +44,7 @@ export class ProductDetailsResolver implements Resolve<any> {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProductDetailsState> {
+    this.productConfigurationService.onChangeConfiguration(null);
     const routeParams = route.paramMap;
     if (!isNil(this.subscription))
       this.subscription.unsubscribe();
@@ -52,10 +55,7 @@ export class ProductDetailsResolver implements Resolve<any> {
           switchMap(data => this.translatorService.translateData(data)),
           map(first)
         ),
-      this.cartItemService.query({
-        conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [get(routeParams, 'params.cartItem')])],
-        skipCache: true
-      }),
+      this.cartItemService.getCartItem(get(routeParams, 'params.cartItem')),
       this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')]),
       this.storefrontService.getStorefront()
     ).pipe(

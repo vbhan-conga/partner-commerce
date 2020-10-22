@@ -24,6 +24,7 @@ export const environment: Configuration = {
   useIndexedDB: false,
   expandDepth: 7,
   hashRouting: false,
+  pricingMode: 'turbo',
 
   // Salesforce environment variables
   storefront: 'P-Commerce',
