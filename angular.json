@@ -30,6 +30,7 @@
               "src/assets",
               "src/manifest.json",
               "src/web.config",
+              "src/caas.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/crypto-js",

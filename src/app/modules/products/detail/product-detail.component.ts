@@ -49,8 +49,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private endpoint: string;
 
 
-    @ViewChild(ProductConfigurationSummaryComponent)
-    configSummaryModal: ProductConfigurationSummaryComponent;
+    @ViewChild(ProductConfigurationSummaryComponent) configSummaryModal: ProductConfigurationSummaryComponent;
     subscriptions: Array<Subscription> = [];
 
     constructor(private cartService: CartService,
@@ -68,15 +67,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             .pipe(take(1))
             .subscribe(() => {
                 this.viewState$ = this.resolver.state();
-                this.relatedTo = this.viewState$.value.relatedTo;
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-            if(response && _.has(response, 'configurationPending')) this.configurationPending = _.get(response,'configurationPending');
+            this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
+            if (response && _.has(response, 'configurationPending')) this.configurationPending = _.get(response, 'configurationPending');
             else {
-            this.product = _.get(response,'product');
-            this.cartItemList = _.get(response,'itemList');
-            if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
-        }}));
+                this.product = _.get(response, 'product');
+                this.cartItemList = _.get(response, 'itemList');
+                if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
+            }
+        }));
     }
 
     /**
@@ -95,7 +95,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
         const primaryItem = this.getPrimaryItem(cartItems);
         this.relatedTo = primaryItem;
-        if (!_.isNil(primaryItem) && (_.get(primaryItem, 'Product.HasOptions') || _.get(primaryItem, 'Product.HasAttributes'))) {
+        if (!_.isNil(primaryItem) && (_.get(primaryItem, 'HasOptions') || _.get(primaryItem, 'HasAttributes'))) {
             this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
         }
         if (this.quantity <= 0) {
@@ -128,9 +128,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     getPrimaryItem(cartItems: Array<CartItem>): CartItem {
         let primaryItem: CartItem;
         if (_.isNil(this.viewState$.value.relatedTo))
-            primaryItem = _.maxBy(_.filter(cartItems, i => _.get(i, 'IsPrimaryLine') === true && _.isNil(_.get(i, 'Option'))), 'PrimaryLineNumber');
+            primaryItem = _.maxBy(_.filter(cartItems, i => _.get(i, 'LineType') === 'Product/Service' && _.isNil(_.get(i, 'Option'))), 'PrimaryLineNumber');
         else
-            primaryItem = _.find(cartItems, i => _.get(i, 'IsPrimaryLine') === true && i.PrimaryLineNumber === _.get(this.viewState$.value.relatedTo, 'PrimaryLineNumber') && _.isNil(_.get(i, 'Option')));
+            primaryItem = _.find(cartItems, i => _.get(i, 'LineType') === 'Product/Service' && i.PrimaryLineNumber === _.get(this.viewState$.value.relatedTo, 'PrimaryLineNumber') && _.isNil(_.get(i, 'Option')));
         return primaryItem;
     }
 
