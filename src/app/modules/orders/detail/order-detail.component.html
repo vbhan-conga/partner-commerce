@@ -80,7 +80,7 @@
         </div>
     </app-detail-section>
 
-    <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4" *ngIf="orderLineItems$ | async as orderLineItems">
+    <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="py-2">
@@ -93,7 +93,7 @@
                 </h5>
                 <table class="table table-responsive">
                     <tbody>
-                        <ng-container *ngFor="let item of orderLineItems; let i = index">
+                        <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
                             <apt-line-item-table-row
                             [index]="i"
                             [parent]="item.MainLine"
@@ -156,18 +156,18 @@
         </div>
     </app-detail-section>
 
-    <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4" *ngIf="attachments$ | async as attachments">
+    <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.ATTACHMENTS' | translate}}
-                    <span *ngIf="attachments.length > 0">({{attachments.length}})</span>
+                    <span *ngIf="order?.Attachments?.length > 0">({{order?.Attachments?.length}})</span>
                 </h5>
                 <div class="row">
                     <div class="col-12 col-md-6 attachment-container">
                         <ng-scrollbar>
-                            <ng-container *ngIf="attachments.length > 0; else emptyAttachments">
-                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachments">
+                            <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
+                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
                                     <div class="d-flex">
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-between">
