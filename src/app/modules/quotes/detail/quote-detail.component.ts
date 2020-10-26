@@ -35,6 +35,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   notesSubscription: Subscription;
   attachemntSubscription: Subscription;
   quoteSubscription: Subscription;
+  quoteLineItemsSubscription: Subscription;
 
   @ViewChild('intimationTemplate') intimationTemplate: TemplateRef<any>;
 
@@ -45,16 +46,16 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   };
 
   constructor(private activatedRoute: ActivatedRoute,
-    private quoteService: QuoteService,
-    private noteService: NoteService,
-    private exceptionService: ExceptionService,
-    private modalService: BsModalService,
-    private orderService: OrderService,
-    private attachmentService: AttachmentService,
-    private productInformationService: ProductInformationService,
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
-    private userService: UserService) { }
+              private quoteService: QuoteService,
+              private noteService: NoteService,
+              private exceptionService: ExceptionService,
+              private modalService: BsModalService,
+              private orderService: OrderService,
+              private attachmentService: AttachmentService,
+              private productInformationService: ProductInformationService,
+              private cdr: ChangeDetectorRef,
+              private ngZone: NgZone,
+              private userService: UserService) { }
 
   ngOnInit() {
     this.getQuote();
@@ -63,29 +64,31 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   getQuote() {
     this.ngOnDestroy();
     if(this.quoteSubscription) this.quoteSubscription.unsubscribe();
+
     this.quoteSubscription = this.activatedRoute.params
-    .pipe(
-      filter(params => _.get(params, 'id') != null),
-      mergeMap(params => {
-        return this.quoteService.query({
-          conditions: [new ACondition(this.quoteService.type, 'Id', 'In', [_.get(params, 'id')])],
-          waitForExpansion: false
-        });
-      }),
-      map(quoteList => {
-        return _.get(quoteList, '[0]');
-      })
-    ).subscribe(result => {
-      this.quote$.next(result);
-      this.quoteLineItems$ = this.quote$.pipe(
-        map(
-          quote => LineItemService.groupItems(quote.QuoteLineItems)
-        )
-      );
-      this.order$ = this.quote$.pipe(
-        mergeMap(quote => this.orderService.getOrderByQuote(_.get(quote, 'Id')))
-      );
-    });
+      .pipe(
+        filter(params => _.get(params, 'id') != null),
+        mergeMap(params => {
+          return this.quoteService.query({
+            conditions: [new ACondition(this.quoteService.type, 'Id', 'In', [_.get(params, 'id')])],
+            waitForExpansion: false
+          });
+        }),
+        map(quoteList => {
+          return _.get(quoteList, '[0]');
+        })
+      ).subscribe(result => {
+        this.quote$.next(result);
+        this.quoteLineItems$ = this.quote$.pipe(
+          map(
+            quote => LineItemService.groupItems(quote.QuoteLineItems)
+          )
+        );
+        this.order$ = this.quote$.pipe(
+          mergeMap(quote => this.orderService.getOrderByQuote(_.get(quote, 'Id')))
+        );
+      });
+
     this.getNotes();
     this.getAttachments();
   }
@@ -100,9 +103,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   getNotes() {
     if(this.notesSubscription) this.notesSubscription.unsubscribe();
     this.notesSubscription = this.activatedRoute.params
-    .pipe(
-      switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
-    ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
+      .pipe(
+        switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
+      ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
   }
 
   addComment(quoteId: string) {
@@ -115,14 +118,14 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     }
     this.noteService.create([this.note])
       .subscribe(r => {
-        this.getNotes();
-        this.clear();
-        this.comments_loader = false;
-      },
-      err => {
-        this.exceptionService.showError(err);
-        this.comments_loader = false;
-    });
+          this.getNotes();
+          this.clear();
+          this.comments_loader = false;
+        },
+        err => {
+          this.exceptionService.showError(err);
+          this.comments_loader = false;
+      });
   }
 
   clear() {
@@ -215,11 +218,11 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   getAttachments() {
-    if(this.attachemntSubscription) this.attachemntSubscription.unsubscribe();
+    if (this.attachemntSubscription) this.attachemntSubscription.unsubscribe();
     this.attachemntSubscription = this.activatedRoute.params
-    .pipe(
-      switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
-    ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
+      .pipe(
+        switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
+      ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
   }
 
   /**
@@ -263,11 +266,13 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnDestroy() {
-    if(this.notesSubscription)
+    if (this.notesSubscription)
       this.notesSubscription.unsubscribe();
-    if(this.attachemntSubscription)
+    if (this.attachemntSubscription)
       this.attachemntSubscription.unsubscribe();
-    if(this.quoteSubscription)
+    if (this.quoteSubscription)
       this.quoteSubscription.unsubscribe();
+    if (this.quoteLineItemsSubscription)
+      this.quoteLineItemsSubscription.unsubscribe();
   }
 }

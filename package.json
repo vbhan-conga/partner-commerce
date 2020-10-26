@@ -1,11 +1,11 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2003.0.44",
+  "version": "2003.0.55",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc4",
+    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc6",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"
@@ -23,9 +23,9 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^10.1.1",
     "@angular/service-worker": "^10.1.1",
-    "@apttus/core": "^2003.0.69",
-    "@apttus/ecommerce": "^2003.0.69",
-    "@apttus/elements": "^2003.0.69",
+    "@apttus/core": "^2003.0.80",
+    "@apttus/ecommerce": "^2003.0.80",
+    "@apttus/elements": "^2003.0.80",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@ng-select/ng-option-highlight": "0.0.5",
     "@ng-select/ng-select": "^5.0.1",
