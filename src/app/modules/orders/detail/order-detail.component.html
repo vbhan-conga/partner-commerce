@@ -93,9 +93,8 @@
         </h5>
         <table class="table table-responsive">
           <tbody>
-          <ng-container *ngIf="orderLineItems">
+          <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
             <apt-line-item-table-row
-              *ngFor="let item of orderLineItems; let i = index"
               [index]="i"
               [parent]="item.MainLine"
               [options]="item.Options"

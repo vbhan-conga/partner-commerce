@@ -72,9 +72,8 @@
         </h5>
         <table class="table table-responsive border-bottom">
           <tbody>
-          <ng-container *ngIf="quoteLineItems">
+          <ng-container *ngFor="let item of quoteLineItems$ | async; let i = index">
             <apt-line-item-table-row
-              *ngFor="let item of quoteLineItems; let i = index"
               [index]="i"
               [parent]="item.MainLine"
               [options]="item.Options"

@@ -30,7 +30,7 @@ import { ACondition, ApiService } from '@apttus/core';
 export class QuoteDetailComponent implements OnInit, OnDestroy {
   quote$: BehaviorSubject<Quote> = new BehaviorSubject<Quote>(null);
 
-  quoteLineItems: Array<ItemGroup>;
+  quoteLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
 
   order$: Observable<Order>;
 
@@ -114,7 +114,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(map(([quote, lineItems]) => {
         if (!quote) return;
         quote.R00N70000001yUfBEAU = lineItems;
-        this.quoteLineItems = LineItemService.groupItems(lineItems);
+        this.quoteLineItems$.next(LineItemService.groupItems(lineItems));
         this.order$ = this.orderService.getOrderByQuote(_.get(quote, 'Id'));
         this.ngZone.run(() => this.quote$.next(_.cloneDeep(quote)));
       })).subscribe();

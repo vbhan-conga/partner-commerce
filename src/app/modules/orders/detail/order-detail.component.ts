@@ -44,7 +44,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
 
-  orderLineItems: Array<ItemGroup>;
+  orderLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
 
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
 
@@ -167,7 +167,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
 
         order.OrderLineItems = lineItems;
-        this.orderLineItems = LineItemService.groupItems(lineItems);
+        this.orderLineItems$.next(LineItemService.groupItems(lineItems));
 
         return this.updateOrder(order);
       })).subscribe();
