@@ -5,6 +5,7 @@ import { environment } from '../environments/environment';
 import { MainComponent } from './main.component';
 import { RouteGuard } from './services/route.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
+import { AboGuard } from './services/abo.guard';
 
 @NgModule({
   imports: [
@@ -61,7 +62,7 @@ import { ConstraintRuleGuard } from './services/constraint-rule.guard';
               },
               {
                 path: 'assets',
-                canActivate: [LoginGuard],
+                canActivate: [AboGuard],
                 loadChildren: () => import('./modules/assets/assets.module').then(m => m.AssetsModule),
                 data: { title: 'Assets' }
               },

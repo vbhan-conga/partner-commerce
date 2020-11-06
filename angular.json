@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "showCircularDependencies": false,
             "preserveSymlinks": true,
             "outputPath": "dist/reference-base",
             "index": "src/index.html",
@@ -29,6 +30,7 @@
               "src/assets",
               "src/manifest.json",
               "src/web.config",
+              "src/caas.css",
               {
                 "glob": "**/*",
                 "input": "node_modules/crypto-js",
@@ -37,7 +39,6 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "node_modules/roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss",
               "src/styles.scss",
               "node_modules/ladda/dist/ladda-themeless.min.css"
             ],
@@ -69,7 +70,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "tsConfig": "tsconfig.app.json",
+              "tsConfig": "tsconfig.prod.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -277,5 +278,8 @@
       }
     }
   },
-  "defaultProject": "reference-base"
+  "defaultProject": "reference-base",
+  "cli": {
+    "analytics": false
+  }
 }
