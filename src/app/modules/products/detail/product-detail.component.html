@@ -16,11 +16,16 @@
             <div class="form-group my-0 mr-3">
                 <small class="mb-2 d-block"> {{'COMMON.NET_PRICE' | translate}} </small>
                 <h5>
-                    <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
-                        [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
-                    <ng-template #productPrice>
-                        <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true"
-                            type="net"></apt-price>
+                    <div *ngIf="viewState?.storefront?.ConfigurationLayout === 'Embedded' && (viewState?.product?.HasAttributes || viewState?.product?.HasOptions) else calculatePrice">
+                        {{netPrice | localCurrency | async}}
+                    </div>
+                    <ng-template #calculatePrice>
+                        <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
+                            [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
+                        <ng-template #productPrice>
+                            <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true"
+                                type="net"></apt-price>
+                        </ng-template>
                     </ng-template>
                 </h5>
             </div>

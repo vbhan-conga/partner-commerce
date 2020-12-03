@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ConfigurationService } from '@apttus/core';
-import { CartService, CartItem, Storefront, StorefrontService, BundleProduct, Cart } from '@apttus/ecommerce';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { CartService, CartItem, BundleProduct } from '@apttus/ecommerce';
 import { ProductConfigurationSummaryComponent, ProductConfigurationService } from '@apttus/elements';
 import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-product-detail',
@@ -46,8 +46,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     /**@ignore */
     relatedTo: CartItem;
-    private endpoint: string;
 
+    netPrice: number = 0;
 
     @ViewChild(ProductConfigurationSummaryComponent) configSummaryModal: ProductConfigurationSummaryComponent;
     subscriptions: Array<Subscription> = [];
@@ -56,9 +56,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private resolver: ProductDetailsResolver,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private storefrontService: StorefrontService,
-        private productConfigurationService: ProductConfigurationService,
-        private configurationService: ConfigurationService) {
+        private productConfigurationService: ProductConfigurationService) {
     }
 
     ngOnInit() {
@@ -69,6 +67,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.viewState$ = this.resolver.state();
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+            this.netPrice = _.defaultTo(_.get(response, 'netPrice'), 0);
             this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
             if (response && _.has(response, 'configurationPending')) this.configurationPending = _.get(response, 'configurationPending');
             else {
