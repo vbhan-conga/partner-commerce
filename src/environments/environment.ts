@@ -25,7 +25,7 @@ export const environment: Configuration = {
   expandDepth: 7,
   hashRouting: false,
   pricingMode: 'turbo',
-
+  pricingFallback: true,
   // Salesforce environment variables
   storefront: 'P-Commerce',
   endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'

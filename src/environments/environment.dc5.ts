@@ -24,6 +24,7 @@ export const environment: Configuration = {
   useIndexedDB: true,
   expandDepth: 8,
   hashRouting: false,
+  pricingFallback: true,
   // Salesforce environment variables
   storefront: 'P-Commerce',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
