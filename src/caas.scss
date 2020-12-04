@@ -418,6 +418,16 @@ constraint-dialog .modal-dialog {
     }
   }
 }
+configuration-summary {
+  .sidebar--configure-product.classic-sidebar-height {
+    .summary-pane {
+      background: none !important;
+      .configure-product__product-prices, h3 {
+        display: none;
+      }
+    }
+  }
+}
 /* Scrollbar width */
 ::-webkit-scrollbar {
   box-shadow: inset 0 1px 3px rgba($black, 0.5), inset 0 0 2px rgba($black, 0.2), 0 0 0 1px rgba($white, 0.5);
