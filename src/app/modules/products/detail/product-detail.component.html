@@ -20,12 +20,12 @@
                         {{netPrice | localCurrency | async}}
                     </div>
                     <ng-template #calculatePrice>
-                        <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
-                            [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
-                        <ng-template #productPrice>
-                            <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true"
-                                type="net"></apt-price>
-                        </ng-template>
+                        <apt-price
+                            [record]="getBundleRecord()"
+                            [quantity]="viewState?.quantity"
+                            [bundle]="true"
+                            [type]="'net'">
+                        </apt-price>
                     </ng-template>
                 </h5>
             </div>
