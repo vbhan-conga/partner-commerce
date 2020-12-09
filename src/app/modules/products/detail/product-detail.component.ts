@@ -133,6 +133,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         return primaryItem;
     }
 
+    /**
+     * @ignore
+     */
+    getBundleRecord(): BundleProduct | Array<CartItem> {
+        return (this.cartItemList && this.cartItemList.length > 0) ? this.cartItemList : _.get(this, 'viewState$.value.product');
+    }
+
     ngOnDestroy() {
         _.forEach(this.subscriptions, (item) => item.unsubscribe());
     }
