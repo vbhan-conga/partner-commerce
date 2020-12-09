@@ -27,9 +27,9 @@ export class CartDetailComponent implements OnInit {
   constructor(private crService: ConstraintRuleService, private cartService: CartService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.view$ = combineLatest(
+    this.view$ = combineLatest([
       this.cartService.getMyCart(),
-      this.crService.getRecommendationsForCart())
+      this.crService.getRecommendationsForCart()])
       .pipe(
         rmap(([cart, products]) => {
           this.cdr.detectChanges();
