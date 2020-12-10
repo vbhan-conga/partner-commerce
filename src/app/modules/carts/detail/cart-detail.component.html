@@ -14,7 +14,7 @@
     <apt-alert message="ERROR.CART.VALIDATE" [record]="view?.cart"></apt-alert>
     <div class="container-fluid" [ngClass]="(view?.cart?.Order?.Id) ? 'py-2' : 'py-4'">
         <div class="px-4">
-            <div *ngIf="view?.cart?.Order?.Id" class="d-flex justify-content-end my-3">
+            <div *ngIf="view?.cart?.OrderId" class="d-flex justify-content-end my-3">
                 <button class="btn btn-outline-primary" [routerLink]="['/products']">{{'COMMON.ADD_PRODUCTS' | translate}}</button>
                 <button
                     class="btn btn-sm btn-outline-primary dropdown-toggle-split"
