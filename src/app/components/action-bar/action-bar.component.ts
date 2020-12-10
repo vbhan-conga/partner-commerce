@@ -32,7 +32,7 @@ export class ActionBarComponent implements OnInit {
   ngOnInit() {
     this.cart$ = this.cartService.getMyCart()
     .pipe(
-      switchMap(cart => combineLatest([of(cart), this.orderService.getOrder(cart.OrderId), this.accountService.getAccountById(cart.AccountId)])),
+      switchMap(cart => combineLatest([of(cart), get(cart,'OrderId') ? this.orderService.getOrder(cart.OrderId) : of(null), this.accountService.getAccountById(cart.AccountId)])),
       map(([cart, order, account]) => {
         cart.Order = order;
         cart.Account = first(account);
