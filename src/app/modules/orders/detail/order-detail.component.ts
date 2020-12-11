@@ -154,7 +154,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
         mergeMap(orderId => this.orderLineItemService.query({
-          conditions: [new ACondition(this.orderLineItemService.type, 'OrderId', 'In', [orderId])],
+          conditions: [new ACondition(this.orderLineItemService.type, 'OrderId', 'Equal', orderId)],
           waitForExpansion: false
         }))
       );
