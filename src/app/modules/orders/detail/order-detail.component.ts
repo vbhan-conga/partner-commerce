@@ -159,7 +159,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         }))
       );
 
-    this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+    this.orderSubscription = combineLatest([order$.pipe(startWith(null)), lineItems$.pipe(startWith(null))])
       .pipe(map(([order, lineItems]) => {
         if (!order) return;
 
