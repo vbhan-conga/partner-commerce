@@ -313,7 +313,11 @@
         "ALL": "es_MX All",
         "CHANGES_ONLY": "es_MX Changes Only",
         "OPTION_TOTAL": "es_MX Option Total",
-        "ITEMIZED_OPTIONS": "es_MX Itemized Options"
+        "ITEMIZED_OPTIONS": "es_MX Itemized Options",
+        "PRICING_FAILED": "es_MX Pricing Failed",
+        "CLEAR_CART": "es_MX Clear Cart",
+        "REPRICE_CART": "es_MX Reprice Cart",
+        "PRICE_ERROR": "es_MX Pricing has failed for your cart. Please retry."
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",

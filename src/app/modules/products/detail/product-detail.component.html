@@ -2,6 +2,7 @@
     [context]="viewState?.product" *ngIf="viewState$ | async as viewState; else loading">
 
     <div class="constraintAlerts">
+        <apt-alert></apt-alert>
         <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </div>
 

@@ -18,7 +18,8 @@ import {
   ProductImagesModule,
   PriceModule,
   InputDateModule,
-  ConstraintRuleModule
+  ConstraintRuleModule,
+  AlertCustomModule
 } from '@apttus/elements';
 
 
@@ -63,7 +64,8 @@ import { RouterModule } from '@angular/router';
     InputSelectModule,
     InputFieldModule,
     FilterModule,
-    ConstraintRuleModule
+    ConstraintRuleModule,
+    AlertCustomModule
   ],
   declarations: [ProductListComponent, ResultsComponent, ProductDetailComponent, TabAttachmentsComponent, TabFeaturesComponent, ProductReplacementsComponent]
 })

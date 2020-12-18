@@ -327,7 +327,11 @@
         "ALL": "All",
         "CHANGES_ONLY": "Changes Only",
         "OPTION_TOTAL": "Option Total",
-        "ITEMIZED_OPTIONS": "Itemized Options"
+        "ITEMIZED_OPTIONS": "Itemized Options",
+        "PRICING_FAILED": "Pricing Failed",
+        "CLEAR_CART": "Clear Cart",
+        "REPRICE_CART": "Reprice Cart",
+        "PRICE_ERROR": "Pricing has failed for your cart. Please retry."
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
