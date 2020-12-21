@@ -8,19 +8,18 @@ import {
   ChangeDetectorRef,
   OnDestroy
 } from '@angular/core';
-import {
-  UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  ProductInformationService, ItemGroup, LineItemService, Attachment, QuoteLineItemService
-} from '@apttus/ecommerce';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { ACondition, ApiService } from '@apttus/core';
-
+import {
+  UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
+  ProductInformationService, ItemGroup, LineItemService, Attachment, QuoteLineItemService, Account
+} from '@apttus/ecommerce';
+import { ExceptionService, LookupOptions } from '@apttus/elements';
 @Component({
   selector: 'app-quote-details',
   templateUrl: './quote-detail.component.html',
@@ -99,8 +98,17 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => _.get(params, 'id') != null),
         map(params => _.get(params, 'id')),
-        mergeMap(quoteId => this.apiService.get(`/quotes?condition[0]=Id,Equal,${quoteId}&lookups=PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,Account,CreatedBy`, Quote)),
-        map(quoteList => _.get(quoteList, '[0]'))
+        mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
+        switchMap((quote: Quote) => combineLatest([of(quote), 
+          this.apiService.get(`/accounts?condition[0]=Id,In,${_.compact(_.uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, _.get(quote, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)])
+        ),
+        map(([quote, account]) => {
+          quote.Account = _.find(account, acc => acc.Id === quote.AccountId);
+          quote.BillToAccount = _.find(account, acc => acc.Id === quote.BillToAccountId);
+          quote.ShipToAccount = _.find(account, acc => acc.Id === quote.ShipToAccountId);
+          _.set(quote, 'Primary_Contact.Account', _.find(account, acc => quote.Primary_Contact && acc.Id === quote.Primary_Contact.AccountId));
+          return quote;
+        })
       );
 
     const lineItems$ = this.activatedRoute.params
