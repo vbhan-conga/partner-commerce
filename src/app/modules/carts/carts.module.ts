@@ -15,7 +15,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ProductCarouselModule, ConfigurationSummaryModule, PriceModule, PromotionModule, InputDateModule,
         LineItemTableRowModule, BreadcrumbModule, IconModule, TaxPopHoverModule, PriceSummaryModule, OutputFieldModule,
-        InputFieldModule, AlertCustomModule, ConstraintRuleModule } from '@apttus/elements';
+        InputFieldModule, AlertModule, ConstraintRuleModule } from '@apttus/elements';
 import { TranslateModule } from '@ngx-translate/core';
 import { LaddaModule } from 'angular2-ladda';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -54,7 +54,7 @@ import { TableModule, ChartModule } from '@apttus/elements';
     LaddaModule,
     InputFieldModule,
     PaginationModule.forRoot(),
-    AlertCustomModule,
+    AlertModule,
     TableModule,
     ChartModule,
     ConstraintRuleModule

@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { ApttusModule } from '@apttus/core';
 import { PricingModule } from '@apttus/ecommerce';
 import { FilterModule, AssetListModule, InputSelectModule, ButtonModule, BreadcrumbModule, TableModule,
-        ChartModule, DataFilterModule, ConstraintRuleModule, AlertCustomModule } from '@apttus/elements';
+        ChartModule, DataFilterModule, ConstraintRuleModule, AlertModule } from '@apttus/elements';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -38,7 +38,7 @@ import { AssetActionFilterComponent } from './components/asset-action-filter.com
     AccordionModule.forRoot(),
     ButtonModule,
     ConstraintRuleModule,
-    AlertCustomModule
+    AlertModule
   ],
   declarations: [
     AssetListComponent,
