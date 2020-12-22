@@ -308,7 +308,11 @@
         "ALL": "fr_FR All",
         "CHANGES_ONLY": "fr_FR Changes Only",
         "OPTION_TOTAL": "fr_FR Option Total",
-        "ITEMIZED_OPTIONS": "fr_FR Itemized Options"
+        "ITEMIZED_OPTIONS": "fr_FR Itemized Options",
+        "PRICING_FAILED": "fr_FR Pricing Failed",
+        "CLEAR_CART": "fr_FR Clear Cart",
+        "REPRICE_CART": "fr_FR Reprice Cart",
+        "PRICE_ERROR": "fr_FR Pricing has failed for your cart. Please retry."
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
