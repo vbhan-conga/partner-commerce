@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { filter, flatMap, map, mergeMap, startWith, switchMap } from 'rxjs/operators';
-import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter } from 'lodash';
+import { filter, flatMap, map, mergeMap, startWith, switchMap, take } from 'rxjs/operators';
+import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq } from 'lodash';
 import {
   Order,
   OrderLineItem,
@@ -26,12 +26,10 @@ import {
   Contact,
   CartService,
   Cart,
-  QuoteService, OrderLineItemService, Attachment, AttachmentService
+  OrderLineItemService, Attachment, AttachmentService, Quote, Account
 } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
-import { take } from 'rxjs/operators';
-
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -39,6 +37,16 @@ import { take } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None
 })
 export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
+
+  /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy`;
+
+  /**
+   * String containing the lookup fields to be queried for a proposal record.
+   */
+  private proposalLookups = `PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,AccountId,OpportunityId,Owner`;
 
   orderSubscription: Subscription;
 
@@ -106,13 +114,11 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
               private productInformationService: ProductInformationService,
               private exceptionService: ExceptionService,
               private noteService: NoteService,
-              private lineItemService: LineItemService,
               private router: Router,
               private emailService: EmailService,
               private accountService: AccountService,
               private cartService: CartService,
               private cdr: ChangeDetectorRef,
-              private quoteService: QuoteService,
               private ngZone: NgZone,
               private orderLineItemService: OrderLineItemService,
               private apiService: ApiService,
@@ -140,11 +146,17 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.apiService.get(`/orders?condition[0]=Id,Equal,${orderId}&lookups=PriceListId,PrimaryContact,BillToAccountId,ShipToAccountId,SoldToAccountId,Owner,CreatedBy`, Order)),
-        map(orderList => get(orderList, '[0]')),
-        switchMap((order: Order) => combineLatest(of(order), get(order, 'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
-        map(([order, quote]) => {
-          order.Proposal = first(quote);
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
+        switchMap((order: Order) => combineLatest([of(order), 
+          get(order, 'ProposalId') ? this.apiService.get(`/quotes/${order.ProposalId}?lookups=${this.proposalLookups}`, Quote) : of(null),
+          this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)])
+        ),
+        map(([order, quote, account]) => {
+          order.Proposal = quote;
+          order.SoldToAccount = find(account, acc => acc.Id === order.SoldToAccountId);
+          order.BillToAccount = find(account, acc => acc.Id === order.BillToAccountId);
+          order.ShipToAccount = find(account, acc => acc.Id === order.ShipToAccountId);
+          set(order, 'PrimaryContact.Account', find(account, acc => order.PrimaryContact && acc.Id === order.PrimaryContact.AccountId));
           return order;
         })
       );
@@ -153,7 +165,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.getOrderLineItemsForOrder(orderId))
+        mergeMap(orderId => this.orderLineItemService.query({
+          conditions: [new ACondition(this.orderLineItemService.type, 'OrderId', 'Equal', orderId)],
+          waitForExpansion: false
+        }))
       );
 
     this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
