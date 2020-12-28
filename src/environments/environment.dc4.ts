@@ -14,7 +14,6 @@ export const environment: Configuration = {
   maxBufferSize: 10,
   disableBuffer: false,
   subqueryLimit: 10,
-  pricingMode: 'turbo',
   disableCache: false,
   encryptResponse: false,
   cartRetryLimit: 3,
@@ -25,7 +24,8 @@ export const environment: Configuration = {
   useIndexedDB: true,
   expandDepth: 8,
   hashRouting: true,
-  pricingFallback: true,
+  pricingMode: 'turbo',
+  pricingFallback: false,
   packageNamespace: 'Apttus_WebStore',
   // *** TODO: Replace with Salesforce environment variables ***
   storefront: 'P-Commerce',
