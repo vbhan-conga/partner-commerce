@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc6",
+    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc1",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"
