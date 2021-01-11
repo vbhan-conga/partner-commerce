@@ -635,7 +635,10 @@
     "MINI_CART": {
         "CART_TOTAL": "es_MX Cart Total",
         "VIEW_CART": "es_MX View Cart",
-        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty"
+        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty",
+        "UNSAVED_CHANGES_TEXT":"es_MX There are few unsaved configuration changes in <strong>{{value}}</strong> product",
+        "SAVE_CHANGES":"es_MX Save Changes",
+        "UNSAVED_CHANGES": "es_MX Unsaved Changes"
     },
     "MINI_PROFILE": {
         "LOGIN": "es_MX Login",
