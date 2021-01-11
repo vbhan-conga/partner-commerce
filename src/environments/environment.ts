@@ -22,6 +22,8 @@ export const environment: Configuration = {
   type: 'Salesforce',
   debounceTime: 1000,
   useIndexedDB: false,
+  skipPricing: true,
+  skipRules: false,
   expandDepth: 7,
   hashRouting: false,
   pricingMode: 'turbo',
