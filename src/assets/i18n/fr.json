@@ -593,6 +593,7 @@
         "PRODUCT_CODE": "fr_FR Product ID: {{value}}",
         "STANDARD_PRICE": "fr_FR Standard Price",
         "UPDATE_CONFIGURATION": "fr_FR Update Configuration",
+        "SAVE_CHANGES": "fr_FR Save Changes",
         "CONFIGURATIONS": "fr_FR Configurations",
         "SPECIFICATIONS": "fr_FR Specifications",
         "ATTACHMENTS": "fr_FR Attachments",
