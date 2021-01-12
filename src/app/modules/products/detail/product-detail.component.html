@@ -59,7 +59,7 @@
                         [quantity]="viewState.quantity" [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
                         [product]="product ? product: viewState?.product" [disabled]="configurationPending"
                         [btnClass]="'btn-primary btn-raised px-3 py-2'" (onAddToCart)="onAddToCart($event)"
-                        [label]="'PRODUCT_DETAILS.SAVE_CHANGES' | translate" [aboEnabled]="false">
+                        [label]="(viewState?.storefront?.ConfigurationLayout === 'Embedded')? ('PRODUCT_DETAILS.SAVE_CHANGES' | translate) : ('PRODUCT_DETAILS.UPDATE_CONFIGURATION' | translate)" [aboEnabled]="false">
                     </apt-add-to-cart>
                 </ng-container>
 
