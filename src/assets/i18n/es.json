@@ -599,6 +599,7 @@
         "PRODUCT_CODE": "es_MX Product ID: {{value}}",
         "STANDARD_PRICE": "es_MX Standard Price",
         "UPDATE_CONFIGURATION": "es_MX Update Configuration",
+        "SAVE_CHANGES": "es_MX Save Changes",
         "CONFIGURATIONS": "es_MX Configurations",
         "SPECIFICATIONS": "es_MX Specifications",
         "ATTACHMENTS": "es_MX Attachments",

@@ -619,6 +619,7 @@
         "PRODUCT_CODE": "Product ID: {{value}}",
         "STANDARD_PRICE": "Standard Price",
         "UPDATE_CONFIGURATION": "Update Configuration",
+        "SAVE_CHANGES": "Save Changes",
         "CONFIGURATIONS": "Configurations",
         "SPECIFICATIONS": "Specifications",
         "ATTACHMENTS": "Attachments",
