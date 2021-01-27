@@ -67,13 +67,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.viewState$ = this.resolver.state();
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+            this.configurationChanged = _.get(response, 'configurationChanged');
             this.netPrice = _.defaultTo(_.get(response, 'netPrice'), 0);
             this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
             if (response && _.has(response, 'hasErrors')) this.configurationPending = _.get(response, 'hasErrors');
             else {
                 this.product = _.get(response, 'product');
                 this.cartItemList = _.get(response, 'itemList');
-                if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
             }
         }));
     }
