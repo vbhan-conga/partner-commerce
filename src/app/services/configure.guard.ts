@@ -37,6 +37,11 @@ export class ConfigureGuard implements CanActivate, CanDeactivate<ProductDetailC
     }
 
     canDeactivate(component: ProductDetailComponent, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+
+        // Allow navigation from page if the configuration is loaded in native mode and not there in the cart yet.
+        if(component.viewState$.value.storefront.ConfigurationLayout !== 'Embedded' && !route.params.hasOwnProperty('cartItem')) {
+            return true;
+        }
         if (component.configurationChanged) {
             if (confirm('You have unsaved changes to the product configuration! Are you sure you want to proceed?'))
                 return true;
