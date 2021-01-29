@@ -14,7 +14,8 @@ const routes: Routes = [
   {
     path: ':id',
     component: ProductDetailComponent,
-    resolve: { state: ProductDetailsResolver }
+    resolve: { state: ProductDetailsResolver },
+    canDeactivate: [ConfigureGuard]
   },
   {
     path: 'category/:categoryName',
