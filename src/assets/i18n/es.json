@@ -313,7 +313,11 @@
         "ALL": "es_MX All",
         "CHANGES_ONLY": "es_MX Changes Only",
         "OPTION_TOTAL": "es_MX Option Total",
-        "ITEMIZED_OPTIONS": "es_MX Itemized Options"
+        "ITEMIZED_OPTIONS": "es_MX Itemized Options",
+        "PRICING_FAILED": "es_MX Pricing Failed",
+        "CLEAR_CART": "es_MX Clear Cart",
+        "REPRICE_CART": "es_MX Reprice Cart",
+        "PRICE_ERROR": "es_MX Pricing has failed for your cart. Please retry."
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -595,6 +599,7 @@
         "PRODUCT_CODE": "es_MX Product ID: {{value}}",
         "STANDARD_PRICE": "es_MX Standard Price",
         "UPDATE_CONFIGURATION": "es_MX Update Configuration",
+        "SAVE_CHANGES": "es_MX Save Changes",
         "CONFIGURATIONS": "es_MX Configurations",
         "SPECIFICATIONS": "es_MX Specifications",
         "ATTACHMENTS": "es_MX Attachments",
@@ -631,7 +636,10 @@
     "MINI_CART": {
         "CART_TOTAL": "es_MX Cart Total",
         "VIEW_CART": "es_MX View Cart",
-        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty"
+        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty",
+        "UNSAVED_CHANGES_TEXT":"es_MX There are few unsaved configuration changes in <strong>{{value}}</strong> product",
+        "SAVE_CHANGES":"es_MX Save Changes",
+        "UNSAVED_CHANGES": "es_MX Unsaved Changes"
     },
     "MINI_PROFILE": {
         "LOGIN": "es_MX Login",

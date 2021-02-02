@@ -301,7 +301,11 @@
         "CONFIRM_CHANGES": "it_IT Confirm Changes",
         "ADD_PRODUCTS": "it_IT Add Products",
         "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
-        "NO_DATA": "it_IT n/a"
+        "NO_DATA": "it_IT n/a",
+        "PRICING_FAILED": "it_IT Pricing Failed",
+        "CLEAR_CART": "it_IT Clear Cart",
+        "REPRICE_CART": "it_IT Reprice Cart",
+        "PRICE_ERROR": "it_IT Pricing has failed for your cart. Please retry."
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",

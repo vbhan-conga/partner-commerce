@@ -2,6 +2,7 @@
     [context]="viewState?.product" *ngIf="viewState$ | async as viewState; else loading">
 
     <div class="constraintAlerts">
+        <apt-alert></apt-alert>
         <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </div>
 
@@ -20,12 +21,12 @@
                         {{netPrice | localCurrency | async}}
                     </div>
                     <ng-template #calculatePrice>
-                        <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
-                            [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
-                        <ng-template #productPrice>
-                            <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true"
-                                type="net"></apt-price>
-                        </ng-template>
+                        <apt-price
+                            [record]="getBundleRecord()"
+                            [quantity]="viewState?.quantity"
+                            [bundle]="true"
+                            [type]="'net'">
+                        </apt-price>
                     </ng-template>
                 </h5>
             </div>
@@ -58,7 +59,7 @@
                         [quantity]="viewState.quantity" [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
                         [product]="product ? product: viewState?.product" [disabled]="configurationPending"
                         [btnClass]="'btn-primary btn-raised px-3 py-2'" (onAddToCart)="onAddToCart($event)"
-                        [label]="'Update Configuration'" [aboEnabled]="false">
+                        [label]="(viewState?.storefront?.ConfigurationLayout === 'Embedded')? ('PRODUCT_DETAILS.SAVE_CHANGES' | translate) : ('PRODUCT_DETAILS.UPDATE_CONFIGURATION' | translate)" [aboEnabled]="false">
                     </apt-add-to-cart>
                 </ng-container>
 

@@ -22,9 +22,12 @@ export const environment: Configuration = {
   debounceTime: 1000,
   proxy: 'https://apttus-proxy.herokuapp.com',
   useIndexedDB: true,
+  skipPricing: true,
+  skipRules: false,
   expandDepth: 8,
   hashRouting: false,
-  pricingFallback: true,
+  pricingMode: 'turbo',
+  pricingFallback: false,
   // Salesforce environment variables
   storefront: 'P-Commerce',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',

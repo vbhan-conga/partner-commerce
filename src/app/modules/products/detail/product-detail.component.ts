@@ -67,13 +67,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.viewState$ = this.resolver.state();
             });
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+            this.configurationChanged = _.get(response, 'configurationChanged');
             this.netPrice = _.defaultTo(_.get(response, 'netPrice'), 0);
             this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
             if (response && _.has(response, 'hasErrors')) this.configurationPending = _.get(response, 'hasErrors');
             else {
                 this.product = _.get(response, 'product');
                 this.cartItemList = _.get(response, 'itemList');
-                if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
             }
         }));
     }
@@ -131,6 +131,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         else
             primaryItem = _.find(cartItems, i => _.get(i, 'LineType') === 'Product/Service' && i.PrimaryLineNumber === _.get(this.viewState$.value.relatedTo, 'PrimaryLineNumber') && _.isNil(_.get(i, 'Option')));
         return primaryItem;
+    }
+
+    /**
+     * @ignore
+     */
+    getBundleRecord(): BundleProduct | Array<CartItem> {
+        return (this.cartItemList && this.cartItemList.length > 0) ? this.cartItemList : _.get(this, 'viewState$.value.product');
     }
 
     ngOnDestroy() {
