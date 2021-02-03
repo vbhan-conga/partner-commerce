@@ -72,6 +72,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
             if (response && _.has(response, 'hasErrors')) this.configurationPending = _.get(response, 'hasErrors');
             else {
+                this.configurationPending = false;
                 this.product = _.get(response, 'product');
                 this.cartItemList = _.get(response, 'itemList');
             }
