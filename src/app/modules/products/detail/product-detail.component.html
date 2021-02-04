@@ -74,7 +74,8 @@
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                                 [quantity]="viewState.quantity" (onAddToCart)="onAddToCart($event)" [disabled]="configurationPending"
                                 [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList" [product]="product ? product: viewState?.product"
-                                [aboEnabled]="false" [btnClass]="'btn-primary btn-raised px-3'">
+                                [aboEnabled]="false" [btnClass]="'btn-primary btn-raised px-3'"
+                                [label]="(viewState?.storefront?.ConfigurationLayout === 'Embedded') ? ('PRODUCT_DETAILS.SAVE_CHANGES' | translate) : ('COMMON.ADD_TO_CART' | translate)">
                             </apt-add-to-cart>
                         </div>
                     </div>
