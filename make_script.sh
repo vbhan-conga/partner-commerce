@@ -28,7 +28,8 @@ function npm_install {
     npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
     npm set unsafe-perm true
-    npm install --unsafe-perm --no-package-lock --legacy-peer-deps
+    export NODE_OPTIONS=--max_old_space_size=4096
+    npm install --unsafe-perm --max_old_space_size=4096 --legacy-peer-deps
 }
 
 function npm_version_update_patch {
