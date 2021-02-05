@@ -637,7 +637,7 @@
         "CART_TOTAL": "es_MX Cart Total",
         "VIEW_CART": "es_MX View Cart",
         "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty",
-        "UNSAVED_CHANGES_TEXT":"es_MX There are few unsaved configuration changes in <strong>{{value}}</strong> product",
+        "UNSAVED_CHANGES_TEXT":"es_MX There may be some unsaved configuration changes in <strong>{{value}}</strong> product",
         "SAVE_CHANGES":"es_MX Save Changes",
         "UNSAVED_CHANGES": "es_MX Unsaved Changes"
     },

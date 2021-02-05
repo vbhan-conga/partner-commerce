@@ -631,7 +631,7 @@
         "CART_TOTAL": "fr_FR Cart Total",
         "VIEW_CART": "fr_FR View Cart",
         "YOUR_CART_IS_EMPTY": "fr_FR Your cart is empty",
-        "UNSAVED_CHANGES_TEXT":"fr_FR There are few unsaved configuration changes in <strong>{{value}}</strong> product",
+        "UNSAVED_CHANGES_TEXT":"fr_FR There may be some unsaved configuration changes in <strong>{{value}}</strong> product",
         "SAVE_CHANGES":"fr_FR Save Changes",
         "UNSAVED_CHANGES": "fr_FR Unsaved Changes"
     },
