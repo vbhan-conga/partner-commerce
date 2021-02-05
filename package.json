@@ -27,7 +27,7 @@
     "@apttus/ecommerce": "^2002.1.58",
     "@apttus/elements": "^2002.1.58",
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "@ng-select/ng-option-highlight": "0.0.6",
+    "@ng-select/ng-option-highlight": "0.0.4",
     "@ng-select/ng-select": "^3.0.6",
     "@ngx-translate/core": "^11.0.1",
     "angular2-ladda": "^2.0.2",
