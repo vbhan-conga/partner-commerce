@@ -23,7 +23,7 @@ function npm_install {
     cd $packageJSON_Folder
     rm -rf node_modules
     LOG_INFO "Update NPM"
-    npm install -g npm --legacy-peer-deps
+    npm install -g npm@6.14.8 --legacy-peer-deps
     LOG_INFO "Set Registry"
     npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
