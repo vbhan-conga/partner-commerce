@@ -24,7 +24,7 @@ metadata:
 spec:
   containers:
   - name: ic-ui-builder
-    image: art01-ic-devops.jfrog.io/ic-ui-builder:10.x
+    image: art01-ic-devops.jfrog.io/ic-ui-builder:14.9
     command:
     - cat
     tty: true
