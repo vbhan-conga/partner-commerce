@@ -23,7 +23,7 @@ function npm_install {
     cd $packageJSON_Folder
     rm -rf node_modules
     LOG_INFO "Update NPM"
-    npm install -g npm
+    npm install -g npm@6.14.8
     LOG_INFO "Set Registry"
     npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
