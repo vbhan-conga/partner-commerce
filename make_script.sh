@@ -29,7 +29,7 @@ function npm_install {
     LOG_INFO "NPM Install"
     npm set unsafe-perm true
     export NODE_OPTIONS=--max_old_space_size=4096
-    npm install --unsafe-perm --max_old_space_size=4096 --legacy-peer-deps
+    npm install --unsafe-perm --max_old_space_size=4096
 }
 
 function npm_version_update_patch {
