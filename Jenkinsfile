@@ -30,7 +30,7 @@ spec:
     tty: true
     imagePullPolicy: Always
   - name: ic-tag-builder
-    image: art01-ic-devops.jfrog.io/ic-tag-builder:2.30.0
+    image: art01-ic-devops.jfrog.io/ic-tag-builder:1.x
     command:
     - cat
     tty: true

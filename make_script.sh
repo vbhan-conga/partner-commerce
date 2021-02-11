@@ -37,8 +37,8 @@ function npm_version_update_patch {
     LOG_INFO "PackageJSON Folder $packageJSON_Folder"
     cd $packageJSON_Folder
     LOG_INFO "Update version"
-    git config --global user.email 'apttusengrxuser@apttus.com'
-    git config --global user.name 'github-cicd-id'
+    git config --global user.email 'apttusengrxuser@conga.com'
+    git config --global user.name 'apttusengrxuser-conga'
     npm version patch -m "Updated to patch version: %s with auto increment with Jenkins job. [ci skip]"
     git status
 }
