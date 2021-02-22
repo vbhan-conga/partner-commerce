@@ -36,8 +36,8 @@ function npm_version_update_patch {
     LOG_INFO "PackageJSON Folder $packageJSON_Folder"
     cd $packageJSON_Folder
     LOG_INFO "Update version"
-    git config --global user.email 'apttusengrxuser@apttus.com'
-    git config --global user.name 'github-cicd-id'
+    git config --global user.email 'apttusengrxuser@conga.com'
+    git config --global user.name 'apttusengrxuser-conga'
     npm version patch -m "Updated to patch version: %s with auto increment with Jenkins job. [ci skip]"
     git status
 }
@@ -121,8 +121,8 @@ function git_tag_repo_and_update_pacakge_json {
     test ${PACKAGE_LOCK_JSON_PATH} && echo "package.json file exists"
     test ${PACKAGE_LOCK_JSON_PATH} && echo "packag-lock.json file exists"
 
-    git config --global user.email "apttusengrxuser@apttus.com"
-    git config --global user.name "github-cicd-id"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     #Add tag
     git tag -l ${AIC_TAG_NAME}
@@ -143,8 +143,8 @@ function evaluate_ci_skip {
     COMMIT_ID_SHA=${2}
     PROPERTY_FILE_NAME=${3}
 
-    git config --global user.email "apttusengrxuser@apttus.com"
-    git config --global user.name "github-cicd-id"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     ciSkipKey="[ci skip]"
 
@@ -168,8 +168,8 @@ function get_commit_info {
     COMMIT_ID_SHA=${2}
     PROPERTY_FILE_NAME=${3}
 
-    git config --global user.email "apttusengrxuser@apttus.com"
-    git config --global user.name "github-cicd-id"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     msg=$(git log --format=%B -n 1 ${COMMIT_ID_SHA})
 
