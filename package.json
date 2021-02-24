@@ -1,11 +1,11 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2101.0.45",
+  "version": "2101.0.54",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc1",
+    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc6",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"
@@ -23,11 +23,11 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^10.1.1",
     "@angular/service-worker": "^10.1.1",
-    "@apttus/core": "^2101.0.74",
-    "@apttus/ecommerce": "^2101.0.74",
-    "@apttus/elements": "^2101.0.74",
+    "@apttus/core": "^2101.0.99",
+    "@apttus/ecommerce": "^2101.0.99",
+    "@apttus/elements": "^2101.0.99",
     "@fortawesome/fontawesome-free": "^5.12.0",
-    "@ng-select/ng-option-highlight": "0.0.5",
+    "@ng-select/ng-option-highlight": "0.0.6",
     "@ng-select/ng-select": "^5.0.1",
     "@ngx-translate/core": "^13.0.0",
     "angular2-ladda": "^3.1.0",
@@ -93,10 +93,5 @@
     "typescript": "4.0.2",
     "uglifyjs-folder": "^1.5.2",
     "webpack-bundle-analyzer": "^3.4.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "ng build --configuration=production"
-    }
   }
 }
