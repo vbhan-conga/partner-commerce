@@ -24,8 +24,12 @@ export const environment: Configuration = {
   useIndexedDB: false,
   expandDepth: 7,
   hashRouting: false,
-
-  // Salesforce environment variables
+  skipPricing: true,
+  skipRules: false,
+  packageNamespace: 'Apttus_WebStore',
+  // *** TODO: Replace with Salesforce environment variables ***
   storefront: 'P-Commerce',
-  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
+  organizationId: '00D2g0000008fIO',
+  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  endpoint: 'https://dc2-cpqqacommunity1.cs35.force.com/pcom'
 };

@@ -144,6 +144,16 @@ main{
     padding: .25rem .5rem;
 }
 
+.input-group-sm > .form-control:not(textarea),
+.input-group-sm > .custom-file-control:not(textarea),
+fieldset[disabled][disabled] .form-control,
+fieldset[disabled][disabled] .custom-file-control,
+.form-control.disabled, .disabled.custom-file-control,
+.form-control:disabled, .custom-file-control:disabled,
+.form-control[disabled], [disabled].custom-file-control {
+    line-height: $custom-select-height-sm;
+}
+
 app-cart apt-input-field[name='description'] textarea.form-control {
     padding: 0px;
     height: 25px;

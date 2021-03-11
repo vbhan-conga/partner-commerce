@@ -13,7 +13,9 @@ import { TableOptions, FilterOptions } from '@apttus/elements';
 })
 export class OrderListComponent implements OnInit {
   type = Order;
+
   view$: Observable<OrderListView>;
+
   colorPalette = ['#D22233', '#F2A515', '#6610f2', '#008000', '#17a2b8', '#0079CC', '#CD853F', '#6f42c1', '#20c997', '#fd7e14'];
 
   tableOptions: TableOptions = {
@@ -47,7 +49,18 @@ export class OrderListComponent implements OnInit {
         prop: 'ActivatedDate'
       }
     ],
-    fields: ['BillToAccount.Name', 'ShipToAccount.Name', 'PriceList.Name']
+    fields: [
+      'Id',
+      'Name',
+      'Description',
+      'Status',
+      'BillToAccount.Name',
+      'ShipToAccount.Name',
+      'PriceList.Name',
+      'OrderAmount',
+      'CreatedDate',
+      'ActivatedDate'
+    ]
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);

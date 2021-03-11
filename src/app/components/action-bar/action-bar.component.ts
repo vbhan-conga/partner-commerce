@@ -1,11 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
-import { CartService, Cart, AccountService } from '@apttus/ecommerce';
-import { Observable, of } from 'rxjs';
+import { CartService, Cart, AccountService, OrderService, CategoryService } from '@apttus/ecommerce';
+import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
-import * as _ from 'lodash';
 import { ExceptionService } from '@apttus/elements';
 import { OutputFieldComponent } from '@apttus/elements';
 import { Router } from '@angular/router';
+import { first, get } from 'lodash';
 
 @Component({
   selector: 'app-action-bar',
@@ -25,10 +25,19 @@ export class ActionBarComponent implements OnInit {
     private cartService: CartService,
     private accountService: AccountService,
     private exceptionService: ExceptionService,
+    private orderService: OrderService,
+    private categoryService: CategoryService,
     private router: Router) { }
 
   ngOnInit() {
-    this.cart$ = this.cartService.getMyCart();
+    this.cart$ = this.cartService.getMyCart()
+    .pipe(
+      switchMap(cart => combineLatest(of(cart), get(cart,'OrderId') ? this.orderService.getOrder(cart.OrderId) : of(null))),
+      map(([cart, order]) => {
+        cart.Order = first(order);
+        return cart;
+      })
+    );
   }
 
   changeAccount(x){
@@ -37,6 +46,7 @@ export class ActionBarComponent implements OnInit {
       () => {
         this.exceptionService.showSuccess('ACTION_BAR.CHANGE_ACCOUNT_MESSAGE', 'ACTION_BAR.CHANGE_ACCOUNT_TITLE');
         this.accountField.handleHidePop();
+        this.categoryService.refresh();
       }
     );
   }

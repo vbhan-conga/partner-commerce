@@ -6,7 +6,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ApttusModule } from '@apttus/core';
 import { PricingModule } from '@apttus/ecommerce';
 import { ToastrModule } from 'ngx-toastr';
-import { MiniProfileModule, MiniCartModule, ConstraintSideMenuModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule, ConstraintRuleModule, ProductSearchModule } from '@apttus/elements';
+import { MiniProfileModule, MiniCartModule, PriceModule, OutputFieldModule, BreadcrumbModule, ButtonModule, DirectivesModule, ConstraintRuleModule, ProductSearchModule } from '@apttus/elements';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
@@ -19,7 +19,6 @@ import { ProgressComponent } from './progress/progress.component';
     MiniProfileModule,
     MiniCartModule,
     ConstraintRuleModule,
-    ConstraintSideMenuModule,
     LaddaModule,
     RouterModule,
     ApttusModule,

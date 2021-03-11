@@ -5,14 +5,15 @@ import { ApiService, ACondition } from '@apttus/core';
 import {
   Product,
   CartItem,
-  ProductService,
+  ProductOptionService,
   CartItemService,
   ConstraintRuleService,
-  StorefrontService
+  StorefrontService,
+  TranslatorLoaderService
 } from '@apttus/ecommerce';
 import { Observable, zip, BehaviorSubject, Subscription } from 'rxjs';
-import { take, map, tap, filter } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { take, map, tap, filter, switchMap } from 'rxjs/operators';
+import { isNil, get, first } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,13 @@ export class ProductDetailsResolver implements Resolve<any> {
   private subscription: Subscription;
 
   constructor(private apiService: ApiService,
-              private productService: ProductService,
-              private cartItemService: CartItemService,
-              private crService: ConstraintRuleService,
-              private router: Router,
-              private http: HttpClient,
-              private storefrontService: StorefrontService) { }
+    private productOptionService: ProductOptionService,
+    private cartItemService: CartItemService,
+    private crService: ConstraintRuleService,
+    private router: Router,
+    private http: HttpClient,
+    private storefrontService: StorefrontService,
+    private translatorService: TranslatorLoaderService) { }
 
 
   state(): BehaviorSubject<ProductDetailsState> {
@@ -37,24 +39,27 @@ export class ProductDetailsResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProductDetailsState> {
     const routeParams = route.paramMap;
-    if (!_.isNil(this.subscription))
+    if (!isNil(this.subscription))
       this.subscription.unsubscribe();
     this.subject.next(null);
     this.subscription = zip(
-      this.apiService.get(`/products/${_.get(routeParams, 'params.id')}?cacheStrategy=performance`, Product),
+      this.productOptionService.get([get(routeParams, 'params.id')])
+      .pipe(
+        switchMap(data => this.translatorService.translateData(data)),
+        map(first)
+      ),
       this.cartItemService.query({
-        conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [_.get(routeParams, 'params.cartItem')])],
+        conditions: [new ACondition(this.cartItemService.type, 'Id', 'In', [get(routeParams, 'params.cartItem')])],
         skipCache: true
       }),
-      this.crService.getRecommendationsForProducts([_.get(routeParams, 'params.id')]),
-      this.storefrontService.isCmsEnabled()
+      this.crService.getRecommendationsForProducts([get(routeParams, 'params.id')])
     ).pipe(
-      map(([product, cartitemList, rProductList, isCmsEnabled]) => {
+      map(([product, cartitemList, rProductList]) => {
         return {
-          product: product,
+          product: product as Product,
           recommendedProducts: rProductList,
-          relatedTo: _.first(cartitemList),
-          isCmsEnabled: isCmsEnabled
+          relatedTo: first(cartitemList),
+          quantity: get(first(cartitemList), 'Quantity', 1)
         };
       })
     ).subscribe(r => this.subject.next(r));
@@ -62,8 +67,8 @@ export class ProductDetailsResolver implements Resolve<any> {
     return this.subject.pipe(
       filter(s => s != null)
       , tap(state => {
-        if (!_.isNil(_.get(routeParams, 'params.cartItem')) && _.isNil(state.relatedTo))
-          this.router.navigate(['/products', _.get(state, 'product.Id')]);
+        if (!isNil(get(routeParams, 'params.cartItem')) && isNil(state.relatedTo))
+          this.router.navigate(['/products', get(state, 'product.Id')]);
       })
       , take(1)
     );
@@ -72,8 +77,20 @@ export class ProductDetailsResolver implements Resolve<any> {
 
 /** @ignore */
 export interface ProductDetailsState {
+  /**
+   * The product to display.
+   */
   product: Product;
+  /**
+   * Array of products to act as recommendations.
+   */
   recommendedProducts: Array<Product>;
+  /**
+   * The CartItem related to this product.
+   */
   relatedTo: CartItem;
-  isCmsEnabled: boolean;
+  /**
+   * Quantity to set to child components
+   */
+  quantity: number;
 }

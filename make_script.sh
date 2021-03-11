@@ -23,11 +23,14 @@ function npm_install {
     cd $packageJSON_Folder
     rm -rf node_modules
     LOG_INFO "Update NPM"
-    npm install -g npm
+    npm install -g npm@6.14.8 --legacy-peer-deps
     LOG_INFO "Set Registry"
     npm config set registry https://registry.npmjs.com/
     LOG_INFO "NPM Install"
-    npm install --no-package-lock
+    npm set unsafe-perm true
+    npm install --unsafe-perm --no-package-lock --legacy-peer-deps
+    export NODE_OPTIONS=--max_old_space_size=4096
+    npm install --unsafe-perm --max_old_space_size=4096 --legacy-peer-deps
 }
 
 function npm_version_update_patch {
@@ -35,8 +38,8 @@ function npm_version_update_patch {
     LOG_INFO "PackageJSON Folder $packageJSON_Folder"
     cd $packageJSON_Folder
     LOG_INFO "Update version"
-    git config --global user.email 'DevOps-J2B-ibm@apttus.com'
-    git config --global user.name 'ic-cicd'
+    git config --global user.email 'apttusengrxuser@conga.com'
+    git config --global user.name 'apttusengrxuser-conga'
     npm version patch -m "Updated to patch version: %s with auto increment with Jenkins job. [ci skip]"
     git status
 }
@@ -122,8 +125,8 @@ function git_tag_repo_and_update_pacakge_json {
     test ${PACKAGE_LOCK_JSON_PATH} && echo "package.json file exists"
     test ${PACKAGE_LOCK_JSON_PATH} && echo "packag-lock.json file exists"
 
-    git config --global user.email "DevOps-J2B-ibm@apttus.com"
-    git config --global user.name "ic-cicd"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     #Add tag
     git tag -l ${AIC_TAG_NAME}
@@ -144,8 +147,8 @@ function evaluate_ci_skip {
     COMMIT_ID_SHA=${2}
     PROPERTY_FILE_NAME=${3}
 
-    git config --global user.email "DevOps-J2B-ibm@apttus.com"
-    git config --global user.name "ic-cicd"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     ciSkipKey="[ci skip]"
 
@@ -169,8 +172,8 @@ function get_commit_info {
     COMMIT_ID_SHA=${2}
     PROPERTY_FILE_NAME=${3}
 
-    git config --global user.email "DevOps-J2B-ibm@apttus.com"
-    git config --global user.name "ic-cicd"
+    git config --global user.email "apttusengrxuser@conga.com"
+    git config --global user.name "apttusengrxuser-conga"
 
     msg=$(git log --format=%B -n 1 ${COMMIT_ID_SHA})
 

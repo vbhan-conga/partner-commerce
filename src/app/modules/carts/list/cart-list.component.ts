@@ -63,17 +63,20 @@ export class CartListComponent implements OnInit {
               {
                 prop: 'IsActive',
                 label: 'Is Active',
+                sortable: false,
                 value:(record: Cart) => this.isCartActive(currentCart, record) ? of('Yes') : of('No')
               },
               {
                 prop: 'TotalAmount',
                 label: 'Total Amount',
+                sortable: false,
                 value:(record: Cart) => this.getCartTotal(record)
               },
               {
                 prop: 'Status'
               }
             ],
+            lookups: [],
             actions: [
               {
                 enabled: true,
@@ -97,7 +100,7 @@ export class CartListComponent implements OnInit {
             highlightRow:(record: Cart) => of(this.isCartActive(currentCart, record)),
             children: ['SummaryGroups']
           },
-          totalCarts: _.get(cartList, 'total_records'),
+          totalCarts: _.get(_.first(cartList), 'total_records'),
           type: Cart
         } as CartListView;
       })

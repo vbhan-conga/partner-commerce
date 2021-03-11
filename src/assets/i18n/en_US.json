@@ -395,13 +395,12 @@
         "PRODUCTS_EXCLUSION": "<strong>The following products </strong> are excluded with the product <strong> {{productName}}</strong>.",
         "AUTO_INCLUDED_OPTIONS": "Auto Included Options",
         "AUTO_INCLUSION_OF_OPTIONS": "Below option(s) are auto included with option <strong> {{productName}}</strong>.",
-        "INCLUDED_OPTIONS_HEADING": "Included Options",
+        "OPTIONS_HEADING": "Include / Exclude Options",
         "AT_LEAST": "At least",
         "OPTION": "Option",
         "OPTION_MUST_BE_INCLUDED": "from below must be included with",
         "ADD_TO_BUNDLE": "Add To Bundle",
         "DONE": "Done",
-        "EXCLUSION_OPTIONS_HEADING": "Exclusion Options",
         "OPTIONS_MUST_BE_EXCLUDED": "Option(s) from below must be excluded with <strong> {{productName}}</strong>.",
         "REMOVE_FROM_BUNDLE": "Remove From Bundle",
         "INCLUDED_EXCLUDED_OPTIONS_HEADING": "Included/Excluded Options",
@@ -657,6 +656,7 @@
     "MINI_PROFILE": {
         "LOGIN": "Login",
         "ENTER_USERNAME": "Enter Username",
+        "PLEASE_ENTER_USERNAME": "Please enter your username",
         "PASSWORD": "Password",
         "REMEMBER_ME": "Remember Me",
         "FORGOT_PASSWORD": "Forgot Password",
@@ -671,7 +671,9 @@
         "TROUBLE_LOGGINGIN": "Having trouble logging in?",
         "USERNAME_ARE_IN_EMAIL": "Usernames are in the form of an email address.",
         "PASSWORDS_ARE_CASESENSITIVE": "Passwords are case sensitive.",
-        "TO_RESET_PASSWORD_ENTER_USERNAME": "To reset your password, enter your username."
+        "TO_RESET_PASSWORD_ENTER_USERNAME": "To reset your password, enter your username.",
+        "LICENSE_REQUIRED": "User you are trying to login with does not have required license. Contact your administrator.",
+        "INVALID_PASSWORD": "Please check your username and password. If you still can't log in, contact your administrator."
     },
     "MODAL": {
         "RENEWAL_END_DATE": "Renewal End Date",

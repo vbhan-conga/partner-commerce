@@ -10,7 +10,7 @@ export const environment: Configuration = {
   enableQueryLogs: true,
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
-  bufferTime: 10,
+  bufferTime: 20,
   maxBufferSize: 10,
   disableBuffer: false,
   subqueryLimit: 10,
@@ -24,10 +24,12 @@ export const environment: Configuration = {
   useIndexedDB: true,
   expandDepth: 8,
   hashRouting: true,
+  skipPricing: true,
+  skipRules: false,
   packageNamespace: 'Apttus_WebStore',
   // *** TODO: Replace with Salesforce environment variables ***
   storefront: 'P-Commerce',
-  organizationId: '00D3I0000008n7g',
+  organizationId: '00D2g0000008fIO',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
+  endpoint: 'https://dc2-cpqqacommunity1.cs35.force.com/pcom'
 };

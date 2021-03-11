@@ -120,6 +120,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   goBack(view: HeaderView) {
     _.set(view, `categoryBranch[${this.index}]`, new Category());
     this.index -= 1;
+    this.index = (this.index < 0) ? 0 : this.index;
   }
 
   doLogout() {

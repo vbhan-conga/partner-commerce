@@ -55,7 +55,29 @@ export class QuoteListComponent implements OnInit {
       }
     ],
     children: ['ProposalSummaryGroups'],
-    fields: ['Account.Name, PriceList.Name']
+    lookups: [
+      {
+        field: 'Account'
+      },
+      {
+        field: 'PriceListId'
+      },
+      {
+        field: 'Opportunity'
+      }, 
+      {
+        field: 'Primary_Contact'
+      }, 
+      {
+        field: 'BillToAccountId'
+      },
+      {
+        field: 'ShipToAccountId'
+      }, 
+      {
+        field: 'Owner'
+      }
+    ]
   };
 
   filterList$: BehaviorSubject<Array<AFilter>> = new BehaviorSubject<Array<AFilter>>([]);
