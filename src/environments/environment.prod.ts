@@ -11,7 +11,7 @@ export const environment: Configuration = {
   enablePerformanceLogs: false,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 100,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
