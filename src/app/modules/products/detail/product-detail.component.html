@@ -155,7 +155,7 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary
+    <apt-product-configuration-summary *ngIf='viewState?.product?.HasOptions || viewState?.product?.HasAttributes'
         [product]="viewState?.product"
         [relatedTo]="viewState?.relatedTo"
         [changes]="cartItemList"
