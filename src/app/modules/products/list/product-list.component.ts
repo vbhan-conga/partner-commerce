@@ -161,8 +161,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
    */
   onCategory(categoryList: Array<Category>) {
     const category = _.get(categoryList, '[0]');
-    if (category)
+    if (category){
+      this.subCategories = [];
       this.router.navigate(['/products/category', category.Name]);
+    }
   }
 
   /**
