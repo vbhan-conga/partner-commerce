@@ -112,23 +112,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/address']);
   }
 
-  goToCategory(category: Category, view: HeaderView, event: any) {
-    // to prevent double click event
-    if(event.detail === 1) {
-      _.set(view, `categoryBranch[${this.index}]`, category);
-      this.index += 1;
-    }
+  goToCategory(category: Category, view: CategoryView){
+    if(!_.some(view.categoryBranch, {'Id': category.Id})) {
+        _.set(view, `categoryBranch[${this.index}]`, category);
+        this.index += 1;
+    } 
   }
 
-  goBack(view: HeaderView, event: any) {
-    // only accept click event
-    if(event.detail === 1) {
-      _.set(view, `categoryBranch[${this.index}]`, new Category());
-      this.index -= 1;
-      this.index = (this.index < 0) ? 0 : this.index;
-    }
+  goBack(view: CategoryView, category: Category){
+    setTimeout(() => {
+      if(_.some(view.categoryBranch, {'Id': category.Id})) {
+        this.index -= 1;
+        this.index = (this.index < 0) ? 0 : this.index;
+        _.set(view, `categoryBranch[${this.index}]`, new Category());
+      }
+    }, 500);
   }
-
+  
   doLogout() {
     this.profile.doLogout();
     this.router.navigate(['/']);
