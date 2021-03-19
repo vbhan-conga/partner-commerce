@@ -2,7 +2,7 @@ import { Configuration } from '@apttus/core';
 
 export const environment: Configuration = {
   production: false,
-  defaultImageSrc: './assets/images/default.png',
+  defaultImageSrc: 'https://loremflickr.com/320/240/hardware',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
   enableErrorLogging: true,
