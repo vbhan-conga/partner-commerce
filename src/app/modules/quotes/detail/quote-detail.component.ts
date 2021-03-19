@@ -219,7 +219,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     this.attachemntSubscription = this.activatedRoute.params
     .pipe(
       switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
-    ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
+    ).subscribe((attachments: Array<Attachment>) => this.ngZone.run(() => this.attachmentList$.next(attachments)));
   }
 
   /**
