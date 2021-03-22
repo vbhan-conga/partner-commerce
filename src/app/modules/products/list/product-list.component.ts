@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CategoryService, Category, SearchResults, SearchService, ProductCategory, ProductService, AccountService } from '@apttus/ecommerce';
-import * as _ from 'lodash';
+import { get, set, compact, map, isNil, isEmpty, remove, isEqual } from 'lodash';
 import { ACondition, AJoin } from '@apttus/core';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { map, take, mergeMap, tap } from 'rxjs/operators';
+import { map as rmap, take, mergeMap, tap } from 'rxjs/operators';
 
 /**
  * Product list component shows all the products in a list for user selection.
@@ -78,7 +78,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnDestroy() {
-    if (!_.isNil(this.subscription))
+    if (!isNil(this.subscription))
       this.subscription.unsubscribe();
     this.routeSub.unsubscribe();
   }
@@ -91,7 +91,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     this.productFamilies$ = this.productService.query({ groupBy: ['Family'] })
       .pipe(
-        map(productList => _.compact(_.map(productList, 'Family')))
+        rmap(productList => compact(map(productList, 'Family')))
       );
 
     this.translateService.stream('PAGINATION').subscribe((val: string) => {
@@ -106,29 +106,29 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   getResults() {
-    if (!_.isNil(this.routeSub))
+    if (!isNil(this.routeSub))
       this.routeSub.unsubscribe();
     this.routeSub = this.activatedRoute.params.pipe(
       tap(() => {
-        if (!_.isNil(this.searchResults$)) {
+        if (!isNil(this.searchResults$)) {
           const results = this.searchResults$.value;
-          _.set(results, 'productList', null);
+          set(results, 'productList', null);
           this.searchResults$.next(results);
         }
       }),
       mergeMap(params => {
-        this.searchString = _.get(params, 'query');
+        this.searchString = get(params, 'query');
 
-        if (!_.isNil(_.get(params, 'categoryName')) && _.isEmpty(this.subCategories))
-          return this.categoryService.getCategoryByName(_.get(params, 'categoryName')).pipe(
+        if (!isNil(get(params, 'categoryName')) && isEmpty(this.subCategories))
+          return this.categoryService.getCategoryByName(get(params, 'categoryName')).pipe(
             tap(category => this.category = category),
             mergeMap(category => this.categoryService.getCategoryBranchChildren([category.Id])),
             tap(categoryList => {
               this.joins = [new AJoin(ProductCategory, 'Id', 'ProductId', [new ACondition(ProductCategory, 'ClassificationId', 'In', categoryList.map(c => c.Id))])];
             })
           );
-        else if (!_.isEmpty(this.subCategories)) {
-          _.remove(this.joins, (j) => j.type === ProductCategory);
+        else if (!isEmpty(this.subCategories)) {
+          remove(this.joins, (j) => j.type === ProductCategory);
           this.joins.push(new AJoin(ProductCategory, 'Id', 'ProductId', [new ACondition(ProductCategory, 'ClassificationId', 'In', this.subCategories.map(category => category.Id))]));
           return of(null);
         }
@@ -160,7 +160,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param categoryList Array of Category.
    */
   onCategory(categoryList: Array<Category>) {
-    const category = _.get(categoryList, '[0]');
+    const category = get(categoryList, '[0]');
     if (category){
       this.subCategories = [];
       this.router.navigate(['/products/category', category.Name]);
@@ -172,7 +172,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param evt Event object that was fired.
    */
   onPage(evt) {
-    if (_.get(evt, 'page') !== this.page) {
+    if (get(evt, 'page') !== this.page) {
       this.page = evt.page;
       this.getResults();
     }
@@ -201,7 +201,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param condition Search filter query to filter products.
    */
   onFilterAdd(condition: ACondition) {
-    _.remove(this.conditions, (c) => _.isEqual(c, condition));
+    remove(this.conditions, (c) => isEqual(c, condition));
     this.page = 1;
 
     this.conditions.push(condition);
@@ -213,7 +213,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param condition Search filter query to remove from products grid.
    */
   onFilterRemove(condition: ACondition) {
-    _.remove(this.conditions, (c) => _.isEqual(c, condition));
+    remove(this.conditions, (c) => isEqual(c, condition));
     this.page = 1;
     this.getResults();
   }
@@ -250,7 +250,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param event Event Object that was fired.
    */
   handlePicklistChange(event: any) {
-    if (this.productFamilyFilter) _.remove(this.conditions, this.productFamilyFilter);
+    if (this.productFamilyFilter) remove(this.conditions, this.productFamilyFilter);
     if (event.length > 0) {
       let values = [];
       event.forEach(item => values.push(item));

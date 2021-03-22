@@ -1,7 +1,7 @@
 import { Configuration } from '@apttus/core';
 export const environment: Configuration = {
   production: true,
-  defaultImageSrc: './assets/images/default.png',
+  defaultImageSrc: 'https://loremflickr.com/320/240/hardware',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
   enableErrorLogging: false,
@@ -11,7 +11,7 @@ export const environment: Configuration = {
   enablePerformanceLogs: false,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 100,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
