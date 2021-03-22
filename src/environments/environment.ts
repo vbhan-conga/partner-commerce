@@ -2,7 +2,7 @@ import { Configuration } from '@apttus/core';
 
 export const environment: Configuration = {
   production: false,
-  defaultImageSrc: './assets/images/default.png',
+  defaultImageSrc: 'https://loremflickr.com/320/240/hardware',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
   enableErrorLogging: true,
@@ -12,7 +12,7 @@ export const environment: Configuration = {
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 100,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
@@ -31,5 +31,6 @@ export const environment: Configuration = {
   storefront: 'P-Commerce',
   organizationId: '00D2g0000008fIO',
   sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  endpoint: 'https://dc2-cpqqacommunity1.cs35.force.com/pcom'
+  endpoint: 'https://dc2-cpqqacommunity1.cs35.force.com/pcom',
+  apiVersion: '3'
 };

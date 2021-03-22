@@ -1,125 +1,82 @@
-<ng-container *ngIf="view$ | async as view; else loading">
-  <div class="fixed-top navbar navbar-light bg-light border-bottom">
-    <div>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        (click)="menuModal.show()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<div class="fixed-top navbar navbar-light bg-light border-bottom">
+  <div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      (click)="menuModal.show()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <ng-container *ngIf="storefront$ | async as storefront">
       <button class="navbar-brand btn btn-link d-none d-md-inline-block" [routerLink]="['/']"
-        *ngIf="view?.storefront?.Logo; else text">
-        <img [src]="view?.storefront?.Logo | image" />
+        *ngIf="storefront?.Logo; else text">
+        <img [src]="storefront?.Logo | image" />
       </button>
       <ng-template #text>
-        <button class="navbar-brand btn btn-link" [routerLink]="['/']">{{view?.storefront?.Name}}</button>
+        <button class="navbar-brand btn btn-link" [routerLink]="['/']">{{storefront?.Name}}</button>
       </ng-template>
-    </div>
-
-    <div class="btn-group">
-      <apt-product-search></apt-product-search>
-      <apt-mini-cart [manageCartLink]="'/carts/' + view?.cart?.Id"></apt-mini-cart>
-      <apt-cr-constraint-icon></apt-cr-constraint-icon>
-    </div>
+    </ng-container>
   </div>
 
-  <apt-mini-profile #profile></apt-mini-profile>
+  <div class="btn-group">
+    <apt-product-search></apt-product-search>
+    <apt-mini-cart *ngIf="cart$ | async as cart" [manageCartLink]="'/carts/' + view?.cart?.Id"></apt-mini-cart>
+    <apt-cr-constraint-icon></apt-cr-constraint-icon>
+  </div>
+</div>
 
-  <div bsModal #menuModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
-    <div class="modal-dialog modal-lg menu">
-      <div class="modal-content py-3">
-        <div class="modal-header d-block p-0 border-bottom">
-          <div class="d-flex justify-content-between align-items-start p-2">
-            <div class="media p-2">
-              <img [src]="view?.me?.SmallPhotoUrl | image : null" class="img-circle" width="45" />
-              <div class="ml-3">
-                <ng-container *ngIf="view?.me?.Alias !== 'guest'; else guest">
-                  <h5 class="my-0">{{view?.me?.FirstName}} {{view?.me?.LastName}}</h5>
-                  <small class="d-block">{{'HEADER.LAST_LOGIN' | translate}}
-                    {{view?.me.LastLoginDate | date : 'short'}}</small>
-                </ng-container>
-                <ng-template #guest>
-                  <h5 class="my-0">{{'HEADER.GUEST_USER' | translate}}</h5>
-                </ng-template>
-              </div>
+<apt-mini-profile #profile></apt-mini-profile>
+
+<div bsModal #menuModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg menu">
+    <div class="modal-content py-3">
+      <div class="modal-header d-block p-0 border-bottom" *ngIf="user$ | async as user">
+        <div class="d-flex justify-content-between align-items-start p-2">
+          <div class="media p-2">
+            <img [src]="user?.SmallPhotoUrl | image : null" class="img-circle" width="45" />
+            <div class="ml-3">
+              <ng-container *ngIf="user?.Alias !== 'guest'; else guest">
+                <h5 class="my-0">{{user?.FirstName}} {{user?.LastName}}</h5>
+                <small class="d-block">{{'HEADER.LAST_LOGIN' | translate}}
+                  {{view?.me.LastLoginDate | date : 'short'}}</small>
+              </ng-container>
+              <ng-template #guest>
+                <h5 class="my-0">{{'HEADER.GUEST_USER' | translate}}</h5>
+              </ng-template>
             </div>
-          </div>
-          <div class="list-group list-group-flush mt-3">
-            <a href="javascript:void(0)" [routerLink]="['/']" (click)="menuModal.hide()"
-              class="list-group-item list-group-item-action">
-              <i class="fas fa-home mr-4"></i>{{'HEADER.HOME' | translate}}
-            </a>
-            <a href="javascript:void(0)" [routerLink]="['/orders']" (click)="menuModal.hide()"
-              class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
-              <i class="fas fa-cog mr-4"></i>{{'HEADER.MY_ACCOUNT' | translate}}
-            </a>
-            <a href="javascript:void(0)" [routerLink]="['/assets']" (click)="menuModal.hide()"
-              class="list-group-item list-group-item-action" *ngIf="view?.me?.Alias !== 'guest'">
-              <i class="fas fa-list mr-4"></i>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
-            </a>
-            <a href="javascript:void(0)" [routerLink]="['/products']" (click)="menuModal.hide()"
-              class="list-group-item list-group-item-action">
-              <i class="fas fa-th mr-4"></i>{{'HEADER.PRODUCT_CATALOG' | translate}}
-            </a>
-            <a href="javascript:void(0)" class="list-group-item list-group-item-action"
-              *ngIf="view?.me?.Alias !== 'guest'" (click)="doLogout(); menuModal.hide();">
-              <i class="fas fa-sign-out-alt mr-4"></i>{{'HEADER.LOG_OUT' | translate}}
-            </a>
-            <a href="javascript:void(0)" class="list-group-item list-group-item-action"
-              *ngIf="view?.me?.Alias === 'guest'" (click)="profile.openModal('second')">
-              <i class="fas fa-sign-in-alt mr-4"></i>{{'HEADER.LOG_IN' | translate}}
-            </a>
           </div>
         </div>
-        <ng-scrollbar *ngIf="categoryView$ | async as categoryView">
-          <div class="modal-body d-flex align-items-stretch">
-            <div class="carousel slide flex-grow-1" id="menuCarousel" data-ride="carousel" data-interval="0">
-              <div class="carousel-inner h-100">
-                <div class="carousel-item active">
-                  <ul class="list-group list-group-flush">
-                    <ng-container *ngFor="let category of categoryView?.categoryTree">
-                      <a class="list-group-item list-group-item-action" href="#menuCarousel"
-                        (click)="goToCategory(category, categoryView)" data-slide="next"
-                        *ngIf="category?.Children?.length > 0; else direct">{{category.Name}}</a>
-                      <ng-template #direct>
-                        <a class="list-group-item list-group-item-action" (click)="menuModal.hide()"
-                          [routerLink]="['/products/category', category.Name]">{{category.Name}}</a>
-                      </ng-template>
-                    </ng-container>
-                  </ul>
-                </div>
-                <div class="carousel-item" *ngFor="let currentCategory of categoryView?.categoryBranch">
-                  <div *ngIf="currentCategory?.Id">
-                    <div class="d-flex justify-content-between">
-                      <a href="#menuCarousel" data-slide="prev" (click)="goBack(categoryView, currentCategory)">
-                        <i class="fas fa-arrow-left mr-2"></i>{{'HEADER.BACK' | translate}}
-                      </a>
-                      <a href="#menuCarousel" [routerLink]="['/products/category', currentCategory.Name]"
-                        (click)="menuModal.hide()" data-slide-to="0">{{'HEADER.SHOW_ALL' | translate}}</a>
-                    </div>
-                    <ul class="list-group list-group-flush mt-3">
-                      <ng-container *ngFor="let category of currentCategory?.Children">
-                        <a class="list-group-item list-group-item-action" href="#menuCarousel"
-                          (click)="goToCategory(category, categoryView)" data-slide="next"
-                          *ngIf="category.Children && category.Children.length > 0; else link">{{category.Name}}</a>
-                        <ng-template #link>
-                          <a class="list-group-item list-group-item-action" href="#menuCarousel"
-                            (click)="menuModal.hide()" [routerLink]="['/products/category', category.Name]"
-                            data-slide-to="0">{{category.Name}}</a>
-                        </ng-template>
-                      </ng-container>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-scrollbar>
+        <div class="list-group list-group-flush mt-3">
+          <a href="javascript:void(0)" [routerLink]="['/']" (click)="menuModal.hide()"
+            class="list-group-item list-group-item-action">
+            <i class="fas fa-home mr-4"></i>{{'HEADER.HOME' | translate}}
+          </a>
+          <a href="javascript:void(0)" [routerLink]="['/orders']" (click)="menuModal.hide()"
+            class="list-group-item list-group-item-action" *ngIf="user?.Alias !== 'guest'">
+            <i class="fas fa-cog mr-4"></i>{{'HEADER.MY_ACCOUNT' | translate}}
+          </a>
+          <a href="javascript:void(0)" [routerLink]="['/assets']" (click)="menuModal.hide()"
+            class="list-group-item list-group-item-action" *ngIf="user?.Alias !== 'guest'">
+            <i class="fas fa-list mr-4"></i>{{'HEADER.INSTALLED_PRODUCTS' | translate}}
+          </a>
+          <a href="javascript:void(0)" [routerLink]="['/products']" (click)="menuModal.hide()"
+            class="list-group-item list-group-item-action">
+            <i class="fas fa-th mr-4"></i>{{'HEADER.PRODUCT_CATALOG' | translate}}
+          </a>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action"
+            *ngIf="user?.Alias !== 'guest'" (click)="doLogout(); menuModal.hide();">
+            <i class="fas fa-sign-out-alt mr-4"></i>{{'HEADER.LOG_OUT' | translate}}
+          </a>
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action"
+            *ngIf="user?.Alias === 'guest'" (click)="profile.openModal('second')">
+            <i class="fas fa-sign-in-alt mr-4"></i>{{'HEADER.LOG_IN' | translate}}
+          </a>
+        </div>
       </div>
+      <ng-scrollbar>
+        <div class="modal-body d-flex align-items-stretch">
+          <app-category-carousel [modalRef]="menuModal"></app-category-carousel>
+        </div>
+      </ng-scrollbar>
     </div>
   </div>
+</div>
 
-</ng-container>
-
-<ng-template #loading>
-  <div class="fixed-top navbar navbar-light bg-light border-bottom"></div>
-</ng-template>
