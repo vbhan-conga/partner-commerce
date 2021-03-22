@@ -1,5 +1,6 @@
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+$roboto-font-path: '~roboto-fontface/fonts';
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
@@ -12,6 +13,22 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import '~ngx-toastr/toastr-bs4-alert';
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
+/* latin-ext */
+@font-face {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Salesforce Sans'), local('SalesforceSans-Regular'), url(assets/fonts/Salesforce-latin-ext.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+    font-family: 'Salesforce Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Salesforce Sans'), local('SalesforceSans-Regular'), url(assets/fonts/Salesforce-latin.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 /**
  * Font awesome styles
@@ -142,6 +159,16 @@ main{
     text-transform: uppercase;
     padding-top: .25rem;
     padding: .25rem .5rem;
+}
+
+.input-group-sm > .form-control:not(textarea),
+.input-group-sm > .custom-file-control:not(textarea),
+fieldset[disabled][disabled] .form-control,
+fieldset[disabled][disabled] .custom-file-control,
+.form-control.disabled, .disabled.custom-file-control,
+.form-control:disabled, .custom-file-control:disabled,
+.form-control[disabled], [disabled].custom-file-control {
+    line-height: $custom-select-height-sm;
 }
 
 app-cart apt-input-field[name='description'] textarea.form-control {

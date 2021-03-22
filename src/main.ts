@@ -10,7 +10,7 @@ const sv = (<any>window).sv;
 if (environment.production) {
   enableProdMode();
   if (sv && sv.resource) {
-    __webpack_public_path__ = sv.resource + '/';
+    __webpack_public_path__ = sv.resource;
   }
 }
 

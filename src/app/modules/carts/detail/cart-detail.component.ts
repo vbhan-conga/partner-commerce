@@ -15,7 +15,7 @@ import { map as rmap } from 'rxjs/operators';
  * Manage Cart component is used to show the list of cart line item(s)  and summary of the cart.
  */
 export class CartDetailComponent implements OnInit {
-  @ViewChild('discardChangesTemplate', { static: false }) discardChangesTemplate: TemplateRef<any>;
+  @ViewChild('discardChangesTemplate') discardChangesTemplate: TemplateRef<any>;
 
 
   discardChangesModal: BsModalRef;
@@ -27,9 +27,9 @@ export class CartDetailComponent implements OnInit {
   constructor(private crService: ConstraintRuleService, private cartService: CartService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.view$ = combineLatest(
+    this.view$ = combineLatest([
       this.cartService.getMyCart(),
-      this.crService.getRecommendationsForCart())
+      this.crService.getRecommendationsForCart()])
       .pipe(
         rmap(([cart, products]) => {
           this.cdr.detectChanges();

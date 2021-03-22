@@ -11,8 +11,7 @@ import {
   MiniProfileModule,
   BreadcrumbModule,
   PriceSummaryModule,
-  InputFieldModule,
-  ConfigurationModule
+  InputFieldModule
 } from '@apttus/elements';
 import { CardFormComponent } from './component/card-form/card-form.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -47,8 +46,7 @@ import { ComponentModule } from '../../components/component.module';
     BreadcrumbModule,
     PriceSummaryModule,
     InputFieldModule,
-    LaddaModule,
-    ConfigurationModule
+    LaddaModule
   ],
   declarations: [CheckoutComponent, SummaryComponent, CardFormComponent]
 })

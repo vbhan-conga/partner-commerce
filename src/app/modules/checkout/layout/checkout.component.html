@@ -10,7 +10,7 @@
     <div class="col-md-4 order-md-2 mb-4">
       <apt-price-summary [paymentState]="paymentState" [record]="cart" [form]="form"
         [page]="pricingSummaryType" [loading]="loading" (onSubmitOrder)="submitOrder()" #priceSummary>
-        <button type="button" class="btn btn-link cancel-button w-100" [routerLink]="['/carts/active']" (click)="loader=true" [ladda]="loader" data-style="zoom-in">{{'COMMON.CANCEL' | translate}}</button>
+        <button type="button" class="btn btn-link cancel-button w-100" [routerLink]="['/carts/active']" data-style="zoom-in">{{'COMMON.CANCEL' | translate}}</button>
       </apt-price-summary>
       <cart-summary [cart]="cart"></cart-summary>
     </div>
