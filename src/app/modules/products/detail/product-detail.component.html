@@ -155,8 +155,12 @@
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
-        [changes]="cartItemList" [preload]="true" position="right" #configSummary>
+    <apt-product-configuration-summary *ngIf='viewState?.product?.HasOptions || viewState?.product?.HasAttributes'
+        [product]="viewState?.product"
+        [relatedTo]="viewState?.relatedTo"
+        [changes]="cartItemList"
+        [preload]="true"
+        position="right" #configSummary>
     </apt-product-configuration-summary>
 </app-detail>
 
