@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2002.1.32",
+  "version": "2002.1.39",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,10 +23,11 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^8.2.3",
     "@angular/service-worker": "^8.2.3",
-    "@apttus/core": "^2002.1.74",
-    "@apttus/ecommerce": "^2002.1.74",
-    "@apttus/elements": "^2002.1.74",
+    "@apttus/core": "^2002.1.83",
+    "@apttus/ecommerce": "^2002.1.83",
+    "@apttus/elements": "^2002.1.83",
     "@fortawesome/fontawesome-free": "^5.12.0",
+    "@kolkov/ngx-gallery": "^1.2.3",
     "@ng-select/ng-option-highlight": "0.0.4",
     "@ng-select/ng-select": "^3.0.6",
     "@ngx-translate/core": "^11.0.1",
@@ -44,7 +45,6 @@
     "lodash-decorators": "^6.0.1",
     "moment": "2.24.0",
     "ngx-bootstrap": "5.3.2",
-    "ngx-gallery": "^5.10.0",
     "ngx-indexed-db": "^2.2.0",
     "ngx-scrollbar": "7.1.0",
     "ngx-toastr": "^11.3.2",
@@ -58,7 +58,7 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.802.0",
+    "@angular-devkit/build-angular": "~0.803.8",
     "@angular-devkit/build-ng-packagr": "~0.802.0",
     "@angular/cli": "^8.3.0",
     "@angular/compiler-cli": "^8.2.3",
