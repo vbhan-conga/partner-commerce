@@ -14,9 +14,10 @@ import { ProductConfigurationSummaryComponent } from '@apttus/elements';
 })
 export class ProductDetailComponent implements OnInit {
 
+  viewState$: Observable<ProductDetailsState>;
+  recommendedProducts$: Observable<Array<Product>>;
   cartItemList: Array<CartItem>;
   product: Product;
-  viewState$: Observable<ProductDetailsState>
 
   /**
    * Flag to detect if their is change in product configuration.
@@ -47,17 +48,20 @@ export class ProductDetailComponent implements OnInit {
             switchMap(data => this.translatorService.translateData(data)),
             rmap(first)
           ),
-        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null),
-        this.crService.getRecommendationsForProducts([get(params, 'id')])
+        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null)
       ])),
-      rmap(([product, cartitemList, rProductList]) => {
+      rmap(([product, cartitemList]) => {
         return {
           product: product as Product,
-          recommendedProducts: rProductList,
           relatedTo: cartitemList,
           quantity: get(cartitemList, 'Quantity', 1)
         };
       })
+    );
+
+    this.recommendedProducts$ = this.route.params.pipe(
+      switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
+      rmap(r => Array.isArray(r) ? r : [])
     );
   }
 
@@ -115,10 +119,6 @@ export interface ProductDetailsState {
    * The product to display.
    */
   product: Product;
-  /**
-   * Array of products to act as recommendations.
-   */
-  recommendedProducts: Array<Product>;
   /**
    * The CartItem related to this product.
    */
