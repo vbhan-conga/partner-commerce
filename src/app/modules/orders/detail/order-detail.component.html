@@ -91,9 +91,9 @@
                         (click)="editOrderItems(order)">{{'COMMON.EDIT' | translate}}
                     </button>
                 </h5>
-                <table class="table table-responsive">
+                <table class="table table-responsive" *ngIf="orderLineItems$ | async as orderLineItems; else loading">
                     <tbody>
-                        <ng-container *ngFor="let item of orderLineItems$ | async; let i = index">
+                        <ng-container *ngFor="let item of orderLineItems; let i = index">
                             <apt-line-item-table-row
                             [index]="i"
                             [parent]="item.MainLine"
@@ -107,6 +107,7 @@
             </div>
         </div>
     </app-detail-section>
+
     <!-- COMMENT SECTION     -->
     <app-detail-section [title]="'DETAILS.COMMENTS' | translate" class="mt-4">
         <div class="card" *ngIf="noteList$ | async as noteList; else loading">
@@ -156,17 +157,17 @@
     </app-detail-section>
 
     <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
-        <div class="card">
+        <div class="card" *ngIf="attachments$ | async as attachments; else loading">
             <div class="card-body">
                 <h5 class="py-2 text-uppercase">
                     {{'DETAILS.ATTACHMENTS' | translate}}
-                    <span *ngIf="order?.Attachments?.length > 0">({{order?.Attachments?.length}})</span>
+                    <span *ngIf="attachments.length > 0">({{attachments.length}})</span>
                 </h5>
                 <div class="row">
                     <div class="col-12 col-md-6 attachment-container">
                         <ng-scrollbar>
-                            <ng-container *ngIf="order?.Attachments?.length > 0; else emptyAttachments">
-                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of order?.Attachments">
+                            <ng-container *ngIf="attachments.length > 0; else emptyAttachments">
+                                <div class="mb-2 hide-hscroll" *ngFor="let attachment of attachments">
                                     <div class="d-flex">
                                         <div class="col-md-6">
                                             <div class="d-flex justify-content-between">

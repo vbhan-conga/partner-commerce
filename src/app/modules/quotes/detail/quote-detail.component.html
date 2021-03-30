@@ -70,9 +70,9 @@
                 <h5 class="py-2">
                     {{'DETAILS.LINE_ITEMS' | translate}}
                 </h5>
-                <table class="table table-responsive border-bottom">
+                <table class="table table-responsive border-bottom" *ngIf="quoteLineItems$ | async as quoteLineItems; else loading">
                     <tbody>
-                        <ng-container *ngFor="let item of quoteLineItems$ | async; let i = index">
+                        <ng-container *ngFor="let item of quoteLineItems; let i = index">
                             <apt-line-item-table-row
                             [index]="i"
                             [parent]="item.MainLine"
