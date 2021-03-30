@@ -38,12 +38,14 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private translatorService: TranslatorLoaderService,
     private apiService: ApiService,
-    private crService: ConstraintRuleService) { }
+    private crService: ConstraintRuleService) {
+    this.product = get(this.router.getCurrentNavigation(), 'extras.state');
+  }
 
   ngOnInit() {
     this.viewState$ = this.route.params.pipe(
       switchMap(params => combineLatest([
-        this.productService.get([get(params, 'id')])
+        this.product ? of(this.product) : this.productService.get([get(params, 'id')])
           .pipe(
             switchMap(data => this.translatorService.translateData(data)),
             rmap(first)
