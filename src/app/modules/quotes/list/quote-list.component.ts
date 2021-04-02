@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { clone, assign, find, get, isArray, groupBy, sumBy, omit, zipObject, mapKeys, mapValues, map, bind, includes } from 'lodash';
 
@@ -92,44 +92,42 @@ export class QuoteListComponent implements OnInit {
     combineLatest([
       this.accountService.getCurrentAccount(),
       this.filterList$
-    ])
-      .pipe(
-        switchMap(([account, filterList]) => {
-          return combineLatest([
-            of(account),
-            this.quoteService.query({
-              aggregate: true,
-              groupBy: ['Approval_Stage', 'RFP_Response_Due_Date'],
-              filters: this.filterList$.value,
-              skipCache: true
-            }),
-            this.quoteService.getGrandTotalByApprovalStage()
-          ]);
-        }),
-        tap(([account, data, totalByStage]) => {
-          this.tableOptions = clone(assign(this.tableOptions, { filters: this.filterList$.value })),
-          this.totalRecords$ = of(get(data, 'total_records', sumBy(data, 'total_records'))),
-          this.totalAmount$ = of(get(totalByStage, 'NetPrice', sumBy(totalByStage, 'NetPrice'))),
+    ]).pipe(
+      switchMap(([account, filterList]) => {
+        return combineLatest([
+          of(account),
+          this.quoteService.query({
+            aggregate: true,
+            groupBy: ['Approval_Stage', 'RFP_Response_Due_Date'],
+            filters: this.filterList$.value,
+            skipCache: true
+          }),
+          this.quoteService.getGrandTotalByApprovalStage()
+        ]);
+      })
+    ).subscribe(([account, data, totalByStage]) => {
+      this.tableOptions = clone(assign(this.tableOptions, { filters: this.filterList$.value }));
+      this.totalRecords$ = of(get(data, 'total_records', sumBy(data, 'total_records')));
+      this.totalAmount$ = of(get(totalByStage, 'NetPrice', sumBy(totalByStage, 'NetPrice')));
 
-          this.amountsByStatus$ = of(
-            isArray(totalByStage)
-              ? omit(mapValues(groupBy(totalByStage, 'Stage'), s => sumBy(s, 'NetPrice')), 'null')
-              : zipObject([get(totalByStage, 'Stage')], map([get(totalByStage, 'Stage')], key => get(totalByStage, 'NetPrice'))),
-          ),
+      this.amountsByStatus$ = of(
+        isArray(totalByStage)
+          ? omit(mapValues(groupBy(totalByStage, 'Stage'), s => sumBy(s, 'NetPrice')), 'null')
+          : zipObject([get(totalByStage, 'Stage')], map([get(totalByStage, 'Stage')], key => get(totalByStage, 'NetPrice'))),
+      );
 
-          this.quotesByStatus$ = of(
-            isArray(data)
-              ? omit(mapValues(groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => sumBy(s, 'total_records')), 'null')
-              : zipObject([get(data, 'Apttus_Proposal__Approval_Stage__c')], map([get(data, 'Apttus_Proposal__Approval_Stage__c')], key => get(data, 'total_records')))
-          ),
+      this.quotesByStatus$ = of(
+        isArray(data)
+          ? omit(mapValues(groupBy(data, 'Apttus_Proposal__Approval_Stage__c'), s => sumBy(s, 'total_records')), 'null')
+          : zipObject([get(data, 'Apttus_Proposal__Approval_Stage__c')], map([get(data, 'Apttus_Proposal__Approval_Stage__c')], key => get(data, 'total_records')))
+      );
 
-          this.quotesByDueDate$ = of(
-            isArray(data)
-              ? omit(mapKeys(mapValues(groupBy(data, 'Apttus_Proposal__RFP_Response_Due_Date__c'), s => sumBy(s, 'total_records')), bind(this.generateLabel, this)), 'null')
-              : zipObject([get(data, 'Apttus_Proposal__RFP_Response_Due_Date__c')], map([get(data, 'Apttus_Proposal__RFP_Response_Due_Date__c')], key => get(data, 'total_records')))
-          )
-        })
-      ).subscribe()
+      this.quotesByDueDate$ = of(
+        isArray(data)
+          ? omit(mapKeys(mapValues(groupBy(data, 'Apttus_Proposal__RFP_Response_Due_Date__c'), s => sumBy(s, 'total_records')), bind(this.generateLabel, this)), 'null')
+          : zipObject([get(data, 'Apttus_Proposal__RFP_Response_Due_Date__c')], map([get(data, 'Apttus_Proposal__RFP_Response_Due_Date__c')], key => get(data, 'total_records')))
+      )
+    });
   }
 
   private generateLabel(date): string {

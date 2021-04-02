@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { of, Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { clone, assign, get, isArray, groupBy, sumBy, omit, zipObject, mapValues, map } from 'lodash';
 
 import { AFilter, Operator } from '@apttus/core';
@@ -94,34 +94,32 @@ export class OrderListComponent implements OnInit {
     combineLatest([
       this.accountService.getCurrentAccount(),
       this.filterList$
-    ])
-      .pipe(
-        switchMap(([account, filterList]) => {
-          return combineLatest([
-            of(account),
-            this.orderService.query({
-              aggregate: true,
-              groupBy: ['Status'],
-              filters: this.filterList$.value
-            })
-          ]);
-        }),
-        tap(([account, data]) => {
-          this.tableOptions = clone(assign(this.tableOptions, { filters: this.filterList$.value })),
-          this.totalRecords$ = of(get(data, 'total_records', sumBy(data, 'total_records'))),
-          this.totalAmount$ = of(get(data, 'SUM_OrderAmount', sumBy(data, 'SUM_OrderAmount'))),
-          this.ordersByStatus$ = of(
-            isArray(data)
-              ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'total_records')), 'null')
-              : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'total_records')))
-          ),
-          this.orderAmountByStatus$ = of(
-            isArray(data)
-              ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'SUM_OrderAmount')), 'null')
-              : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'SUM_OrderAmount')))
-          )
-        })
-      ).subscribe()
+    ]).pipe(
+      switchMap(([account, filterList]) => {
+        return combineLatest([
+          of(account),
+          this.orderService.query({
+            aggregate: true,
+            groupBy: ['Status'],
+            filters: this.filterList$.value
+          })
+        ]);
+      })
+    ).subscribe(([account, data]) => {
+      this.tableOptions = clone(assign(this.tableOptions, { filters: this.filterList$.value }));
+      this.totalRecords$ = of(get(data, 'total_records', sumBy(data, 'total_records')));
+      this.totalAmount$ = of(get(data, 'SUM_OrderAmount', sumBy(data, 'SUM_OrderAmount')));
+      this.ordersByStatus$ = of(
+        isArray(data)
+          ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'total_records')), 'null')
+          : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'total_records')))
+      );
+      this.orderAmountByStatus$ = of(
+        isArray(data)
+          ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'SUM_OrderAmount')), 'null')
+          : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'SUM_OrderAmount')))
+      )
+    });
   }
 
   handleFilterListChange(event: any) {

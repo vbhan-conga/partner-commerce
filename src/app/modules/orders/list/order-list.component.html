@@ -1,6 +1,6 @@
 <div class="row mb-3">
     <div class="col-12">
-        <apt-data-filter [type]="type" [filterOptions]="filterOptions" [filterList]="filterList"
+        <apt-data-filter [type]="type" [filterOptions]="filterOptions" [filterList]="filterList$ | async"
             (filterListChange)="handleFilterListChange($event)">
         </apt-data-filter>
     </div>
