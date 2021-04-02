@@ -14,9 +14,10 @@ import { ProductConfigurationSummaryComponent } from '@apttus/elements';
 })
 export class ProductDetailComponent implements OnInit {
 
+  viewState$: Observable<ProductDetailsState>;
+  recommendedProducts$: Observable<Array<Product>>;
   cartItemList: Array<CartItem>;
   product: Product;
-  viewState$: Observable<ProductDetailsState>
 
   /**
    * Flag to detect if their is change in product configuration.
@@ -37,27 +38,32 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private translatorService: TranslatorLoaderService,
     private apiService: ApiService,
-    private crService: ConstraintRuleService) { }
+    private crService: ConstraintRuleService) {
+    this.product = get(this.router.getCurrentNavigation(), 'extras.state');
+  }
 
   ngOnInit() {
     this.viewState$ = this.route.params.pipe(
       switchMap(params => combineLatest([
-        this.productService.get([get(params, 'id')])
+        this.product ? of(this.product) : this.productService.get([get(params, 'id')])
           .pipe(
             switchMap(data => this.translatorService.translateData(data)),
             rmap(first)
           ),
-        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null),
-        this.crService.getRecommendationsForProducts([get(params, 'id')])
+        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null)
       ])),
-      rmap(([product, cartitemList, rProductList]) => {
+      rmap(([product, cartitemList]) => {
         return {
           product: product as Product,
-          recommendedProducts: rProductList,
           relatedTo: cartitemList,
           quantity: get(cartitemList, 'Quantity', 1)
         };
       })
+    );
+
+    this.recommendedProducts$ = this.route.params.pipe(
+      switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
+      rmap(r => Array.isArray(r) ? r : [])
     );
   }
 
@@ -115,10 +121,6 @@ export interface ProductDetailsState {
    * The product to display.
    */
   product: Product;
-  /**
-   * Array of products to act as recommendations.
-   */
-  recommendedProducts: Array<Product>;
   /**
    * The CartItem related to this product.
    */
