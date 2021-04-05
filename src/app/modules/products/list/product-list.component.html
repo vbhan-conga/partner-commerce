@@ -2,27 +2,13 @@
     <app-action-bar></app-action-bar>
 </apt-breadcrumb>
 <apt-constraint-rule-alert></apt-constraint-rule-alert>
-<div class="container-fluid py-4" id="top" *ngIf="searchResults$ | async as searchResults; else loading">
+<div class="container-fluid py-4" id="top">
     <div class="d-flex justify-content-end mb-2">
         <apt-installed-products></apt-installed-products>
     </div>
     <div class="row">
         <div class="col-12 col-lg-3">
             <div>
-                <!-- <pl-product-type-filter
-          *ngIf="(storefront$ | async)?.EnableABO && (storefront$ | async) !== null ? true : false"
-          class="d-block mb-2"
-          (value)="onAssetFilterChange($event)"
-        ></pl-product-type-filter>
-
-        <pl-asset-filter class="d-block mb-2" *ngIf="showAssetFilters"></pl-asset-filter>
-        
-        <pl-related-categories [categoryList]="searchResults?.relatedCategories" class="d-block mb-2" *ngIf="searchResults?.relatedCategories?.length > 0"
-          [categoryId]="category?.Id"></pl-related-categories>
-
-        <pl-subcategory (onFilterChange)="onSubcategoryFilter($event)" *ngIf="searchResults?.subcategories?.length > 0"
-          [categoryList]="searchResults?.subcategories" [categories]="categoryFilter" class="d-block mb-2"></pl-subcategory>-->
-
                 <apt-product-type-filter (onFilterAdd)="onFilterAdd($event)" (onFilterRemove)="onFilterRemove($event)">
                 </apt-product-type-filter>
 
@@ -33,9 +19,6 @@
                     relationship="children" selection="multi" class="mb-2" (onChange)="onSubcategoryFilter($event)">
                 </apt-category-filter>
 
-                <!-- <apt-price-tier [conditions]="conditions" [joins]="joins" class="d-block mb-2"></apt-price-tier> -->
-
-                <!-- <apt-field-filter [fieldName]="'Family'" (fieldValueChange)="onFieldFilter($event)" class="d-block mb-2"></apt-field-filter> -->
                 <div class="card mb-2">
                     <div class="card-body">
                         <h5 class="card-title">{{'PRODUCT_LIST.PRODUCT_FAMILY' | translate}}</h5>
@@ -46,44 +29,46 @@
             </div>
         </div>
         <div class="col-12 col-lg-9">
-            <nav class="navbar navbar-light bg-white p-0 mb-3">
-                <pl-results [recordCount]="searchResults?.totals" [limit]="pageSize" [offset]="(page - 1) * pageSize"
-                    [page]="page" [view]="view" [query]="searchString" (onViewChange)="view = $event"
-                    (onSortChange)="onSortChange($event)" (onPageSizeChange)="onPageSizeChange($event)"
-                    class="d-block w-100">
-                </pl-results>
-            </nav>
+            <div *ngIf="searchResults$ | async as searchResults; else loading">
+                <nav class="navbar navbar-light bg-white p-0 mb-3">
+                    <pl-results [recordCount]="searchResults?.totals" [limit]="pageSize" [offset]="(page - 1) * pageSize"
+                        [page]="page" [view]="view" [query]="searchString" (onViewChange)="view = $event"
+                        (onSortChange)="onSortChange($event)" (onPageSizeChange)="onPageSizeChange($event)"
+                        class="d-block w-100">
+                    </pl-results>
+                </nav>
 
-            <div class="d-flex justify-content-center" *ngIf="searchResults?.totals">
-                <pagination (pageChanged)="onPage($event)" [totalItems]="searchResults?.totals" [(ngModel)]="page"
-                    [boundaryLinks]="true" [itemsPerPage]="pageSize" [maxSize]="5"
-                    [firstText]="paginationButtonLabels.first" [previousText]="paginationButtonLabels.previous"
-                    [nextText]="paginationButtonLabels.next" [lastText]="paginationButtonLabels.last"></pagination>
-            </div>
-
-            <div class="d-flex justify-content-center my-5 py-5" *ngIf="!searchResults?.productList">
-                <apt-dots></apt-dots>
-            </div>
-
-            <div class="row" *ngIf="view == 'grid' && searchResults?.productList">
-                <div class="col-12 col-sm-6 col-md-4 col-xl-3" *ngFor="let product of searchResults?.productList">
-                    <apt-product-card [product]="product" class="mb-3"></apt-product-card>
+                <div class="d-flex justify-content-center" *ngIf="searchResults?.totals">
+                    <pagination (pageChanged)="onPage($event)" [totalItems]="searchResults?.totals" [(ngModel)]="page"
+                        [boundaryLinks]="true" [itemsPerPage]="pageSize" [maxSize]="5"
+                        [firstText]="paginationButtonLabels.first" [previousText]="paginationButtonLabels.previous"
+                        [nextText]="paginationButtonLabels.next" [lastText]="paginationButtonLabels.last"></pagination>
                 </div>
-            </div>
-            <div class="row" *ngIf="view == 'list' && searchResults?.productList">
-                <div class="col-12">
-                    <ul class="list-unstyled list-group">
-                        <li *ngFor="let product of searchResults?.productList let i = index" class="list-group-item" [class.mb-3]="i === searchResults?.productList?.length - 1">
-                            <apt-product-card [product]="product" type="media"></apt-product-card>
-                        </li>
-                    </ul>
+
+                <div class="d-flex justify-content-center my-5 py-5" *ngIf="!searchResults?.productList">
+                    <apt-dots></apt-dots>
                 </div>
-            </div>
-            <div class="d-flex justify-content-center" *ngIf="searchResults?.totals">
-                <pagination (pageChanged)="onPage($event)" [totalItems]="searchResults?.totals" [(ngModel)]="page"
-                    [boundaryLinks]="true" [itemsPerPage]="pageSize" [maxSize]="5"
-                    [firstText]="paginationButtonLabels.first" [previousText]="paginationButtonLabels.previous"
-                    [nextText]="paginationButtonLabels.next" [lastText]="paginationButtonLabels.last"></pagination>
+
+                <div class="row" *ngIf="view == 'grid' && searchResults?.productList">
+                    <div class="col-12 col-sm-6 col-md-4 col-xl-3" *ngFor="let product of searchResults?.productList">
+                        <apt-product-card [product]="product" class="mb-3"></apt-product-card>
+                    </div>
+                </div>
+                <div class="row" *ngIf="view == 'list' && searchResults?.productList">
+                    <div class="col-12">
+                        <ul class="list-unstyled list-group">
+                            <li *ngFor="let product of searchResults?.productList let i = index" class="list-group-item" [class.mb-3]="i === searchResults?.productList?.length - 1">
+                                <apt-product-card [product]="product" type="media"></apt-product-card>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center" *ngIf="searchResults?.totals">
+                    <pagination (pageChanged)="onPage($event)" [totalItems]="searchResults?.totals" [(ngModel)]="page"
+                        [boundaryLinks]="true" [itemsPerPage]="pageSize" [maxSize]="5"
+                        [firstText]="paginationButtonLabels.first" [previousText]="paginationButtonLabels.previous"
+                        [nextText]="paginationButtonLabels.next" [lastText]="paginationButtonLabels.last"></pagination>
+                </div>
             </div>
         </div>
     </div>
