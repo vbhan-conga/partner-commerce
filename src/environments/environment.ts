@@ -12,7 +12,7 @@ export const environment: Configuration = {
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 100,
   disableBuffer: false,
   subqueryLimit: 10,
   disableCache: false,
@@ -27,7 +27,8 @@ export const environment: Configuration = {
   expandDepth: 7,
   hashRouting: false,
   pricingMode: 'turbo',
-
+  packageNamespace: 'Apttus_WebStore',
+  // apiVersion: 3,
   // Salesforce environment variables
   storefront: 'P-Commerce',
   endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'

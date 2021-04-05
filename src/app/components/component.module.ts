@@ -11,7 +11,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ProgressComponent } from './progress/progress.component';
-
+import { CategoryCarouselComponent } from './category-carousel/category-carousel.component';
 
 @NgModule({
   imports: [
@@ -44,7 +44,8 @@ import { ProgressComponent } from './progress/progress.component';
   declarations: [
     HeaderComponent,
     ActionBarComponent,
-    ProgressComponent
+    ProgressComponent,
+    CategoryCarouselComponent
   ]
 })
 export class ComponentModule { }
