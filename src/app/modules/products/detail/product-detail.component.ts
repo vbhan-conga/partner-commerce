@@ -45,12 +45,12 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     this.viewState$ = this.route.params.pipe(
       switchMap(params => combineLatest([
-        this.product ? of(this.product) : this.productService.get([get(params, 'id')])
+        (this.product && this.product instanceof Product) ? of(this.product) : this.productService.get([get(params, 'id')])
           .pipe(
             switchMap(data => this.translatorService.translateData(data)),
             rmap(first)
           ),
-        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null)
+        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,AssetLineItem,Product,TaxCode`, CartItem,) : of(null)
       ])),
       rmap(([product, cartitemList]) => {
         return {
