@@ -19,8 +19,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     cartItemList: Array<CartItem>;
     product: Product;
-    viewState$: Observable<ProductDetailsState>;
-
+    viewState$: Observable<ProductDetailsState>;    
+    recommendedProducts$: Observable<Array<Product>>;
+    
     /**
      * Flag to detect if there is change in product configuration.
      */
@@ -63,24 +64,28 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                             switchMap(data => this.translatorService.translateData(data)),
                             rmap(first)
                         ),
-                    (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null),
-                    this.crService.getRecommendationsForProducts([get(params, 'id')])
+                    (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode,AssetLineItem`, CartItem) : of(null)
                 ])
             }),
-            switchMap(([product, cartitemList, rProductList]) => combineLatest([of([product, cartitemList, rProductList]), this.storefrontService.getStorefront()])),
-            rmap(([[product, cartitemList, rProductList], storefront]) => {
+            switchMap(([product, cartitemList]) => combineLatest([of([product, cartitemList]), this.storefrontService.getStorefront()])),
+            rmap(([[product, cartitemList], storefront]) => {
                 this.configurationLayout = storefront.ConfigurationLayout;
                 this.relatedTo = cartitemList;
                 this.product = product;
                 return {
                     product: product as Product,
-                    recommendedProducts: rProductList,
                     relatedTo: cartitemList,
                     quantity: get(cartitemList, 'Quantity', 1),
                     storefront: storefront
                 };
             })
         );
+
+        this.recommendedProducts$ = this.route.params.pipe(
+            switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
+            rmap(r =>  Array.isArray(r) ? r : [])
+        );
+
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
             if (response && has(response, 'configurationPending')) {
                 this.configurationPending = get(response, 'configurationPending');
@@ -167,10 +172,6 @@ export interface ProductDetailsState {
      * The product to display.
      */
     product: Product;
-    /**
-     * Array of products to act as recommendations.
-     */
-    recommendedProducts: Array<Product>;
     /**
      * The CartItem related to this product.
      */
