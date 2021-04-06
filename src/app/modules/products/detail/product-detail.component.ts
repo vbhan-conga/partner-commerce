@@ -59,7 +59,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             switchMap(params => {
                 this.productConfigurationService.onChangeConfiguration(null);
                 return combineLatest([
-                    this.productService.get([get(params, 'id')])
+                    (this.product && this.product instanceof Product) ? of(this.product) : this.productService.get([get(params, 'id')])
                         .pipe(
                             switchMap(data => this.translatorService.translateData(data)),
                             rmap(first)
