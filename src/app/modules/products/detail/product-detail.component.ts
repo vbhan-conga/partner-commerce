@@ -111,6 +111,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     onAddToCart(cartItems: Array<CartItem>): void {
         this.configurationChanged = false;
+        this.productConfigurationService.onChangeConfiguration(null);
 
         if (get(cartItems, 'LineItems') && this.configurationLayout === 'Embedded') {
             cartItems = get(cartItems, 'LineItems');
