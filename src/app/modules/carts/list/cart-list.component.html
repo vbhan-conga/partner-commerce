@@ -14,11 +14,13 @@
     </div>
     
     <!-- Table component rendering list of carts with applicable actions and pagination -->
-    <apt-table #table *ngIf="view?.tableOptions" [type]="type" class="d-block bg-white" [options]="view?.tableOptions"></apt-table>    
+    <apt-table #table *ngIf="view?.tableOptions else showLoader" [type]="type" class="d-block bg-white" [options]="view?.tableOptions"></apt-table>    
     
     <!-- Spinner dots while data is loading -->
-    <ng-template #spinner>
-        <apt-dots></apt-dots>
+    <ng-template #showLoader>
+        <div class="d-flex justify-content-center py-5">
+            <apt-dots></apt-dots>
+        </div>
     </ng-template>
     
     <!-- Template for creating new cart -->
