@@ -58,13 +58,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.viewState$ = this.route.params.pipe(
             switchMap(params => {
                 this.productConfigurationService.onChangeConfiguration(null);
-                const product$ = (this.product instanceof Product) ? of(this.product) : this.productService.get([get(params, 'id')])
-                                    .pipe(
-                                        switchMap(data => this.translatorService.translateData(data)),
-                                        rmap(first)
-                                    );
-                const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode,AssetLineItem`, CartItem) : of(null);
-                return combineLatest([product$, cartItem$]);
+                return combineLatest([
+                    this.productService.get([get(params, 'id')])
+                        .pipe(
+                            switchMap(data => this.translatorService.translateData(data)),
+                            rmap(first)
+                        ),
+                    (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem) : of(null)
+                ])
             }),
             switchMap(([product, cartitemList]) => combineLatest([of([product, cartitemList]), this.storefrontService.getStorefront()])),
             rmap(([[product, cartitemList], storefront]) => {
@@ -110,7 +111,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     onAddToCart(cartItems: Array<CartItem>): void {
         this.configurationChanged = false;
-        this.productConfigurationService.onChangeConfiguration(null);
 
         if (get(cartItems, 'LineItems') && this.configurationLayout === 'Embedded') {
             cartItems = get(cartItems, 'LineItems');
