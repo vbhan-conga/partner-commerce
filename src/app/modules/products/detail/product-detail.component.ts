@@ -64,7 +64,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                             switchMap(data => this.translatorService.translateData(data)),
                             rmap(first)
                         ),
-                    (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem) : of(null)
+                    (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode,AssetLineItem`, CartItem) : of(null)
                 ])
             }),
             switchMap(([product, cartitemList]) => combineLatest([of([product, cartitemList]), this.storefrontService.getStorefront()])),
