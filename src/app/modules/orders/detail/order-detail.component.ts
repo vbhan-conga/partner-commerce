@@ -4,7 +4,7 @@ import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rx
 import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
 import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq } from 'lodash';
 import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
-         ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService,
+         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
         Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
