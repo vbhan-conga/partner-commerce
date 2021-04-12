@@ -111,7 +111,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     onAddToCart(cartItems: Array<CartItem>): void {
         this.configurationChanged = false;
-        this.productConfigurationService.onChangeConfiguration(null);
 
         if (get(cartItems, 'LineItems') && this.configurationLayout === 'Embedded') {
             cartItems = get(cartItems, 'LineItems');
@@ -124,6 +123,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         if (this.quantity <= 0) {
             this.quantity = 1;
         }
+
+        this.productConfigurationService.onChangeConfiguration({
+            product: get(this, 'product'),
+            itemList: cartItems,
+            configurationFlags: null,
+            configurationPending: false
+        });
     }
 
     changeProductQuantity(newQty: any) {
