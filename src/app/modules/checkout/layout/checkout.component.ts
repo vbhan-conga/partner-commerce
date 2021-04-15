@@ -260,12 +260,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   onBillToChange() {
     if(this.order.BillToAccountId)
-      this.billToAccount$ = this.accountService.getAccount(this.order.BillToAccountId).pipe(map(res => this.order.BillToAccount = res[0]));
+      this.billToAccount$ = this.accountService.getAccount(this.order.BillToAccountId).pipe(map(res => this.order.BillToAccount = res));
   }
 
   onShipToChange() {
     if(this.order.ShipToAccountId)
-      this.shipToAccount$ = this.accountService.getAccount(this.order.ShipToAccountId).pipe(map(res => this.order.ShipToAccount = res[0]));
+      this.shipToAccount$ = this.accountService.getAccount(this.order.ShipToAccountId).pipe(map(res => this.order.ShipToAccount = res));
   }
 
   onPrimaryContactChange() {
