@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, Category, SearchService, ProductService, ProductResult } from '@apttus/ecommerce';
+import { CategoryService, Category, SearchService, ProductService, ProductResult,  AccountService} from '@apttus/ecommerce';
 import { get, set, compact, map, isNil, isEmpty, remove, isEqual } from 'lodash';
 import { ACondition, AJoin } from '@apttus/core';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
@@ -72,7 +72,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  constructor(private activatedRoute: ActivatedRoute, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) {}
+  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) {}
 
   /**
    * @ignore
@@ -86,7 +86,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnInit() {
-    this.getResults();
+    this.subscription = this.accountService.getCurrentAccount().subscribe(res => this.getResults());
 
     this.productFamilies$ = this.productService.query({ groupBy: ['Family'] })
       .pipe(
