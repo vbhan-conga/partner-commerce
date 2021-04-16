@@ -26,10 +26,10 @@ export const environment: Configuration = {
   skipRules: false,
   expandDepth: 7,
   hashRouting: false,
-  pricingMode: 'turbo',
+  pricingMode: 'default',
   packageNamespace: 'Apttus_WebStore',
-  // apiVersion: 3,
   // Salesforce environment variables
   storefront: 'P-Commerce',
-  endpoint: 'https://dc5-cpqqacommunity1.cs123.force.com/partners'
+  organizationId: '00D3I0000008mFM',
+  endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
 };
