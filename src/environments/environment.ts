@@ -29,7 +29,5 @@ export const environment: Configuration = {
   pricingMode: 'default',
   packageNamespace: 'Apttus_WebStore',
   // Salesforce environment variables
-  storefront: 'P-Commerce',
-  organizationId: null,
-  endpoint: null
+  storefront: 'P-Commerce'
 };
