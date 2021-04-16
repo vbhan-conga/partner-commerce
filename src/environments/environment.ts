@@ -30,6 +30,6 @@ export const environment: Configuration = {
   packageNamespace: 'Apttus_WebStore',
   // Salesforce environment variables
   storefront: 'P-Commerce',
-  organizationId: '00D3I0000008mFM',
-  endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
+  organizationId: null,
+  endpoint: null
 };
