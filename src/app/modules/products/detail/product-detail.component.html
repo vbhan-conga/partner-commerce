@@ -18,7 +18,7 @@
                 <h5>
                     <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
                         [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
-                    <ng-template #productPrice>
+                        <ng-template #productPrice>
                         <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true" type="net">
                         </apt-price>
                     </ng-template>
@@ -58,7 +58,7 @@
                     <div class="d-flex justify-content-end">
                         <div class="form-group mx-3 my-0 d-flex align-items-center">
                             <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
-                            <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity" name="quantity" />
+                            <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" name="quantity" />
                         </div>
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
