@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { filter, flatMap, map, switchMap } from 'rxjs/operators';
-import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter } from 'lodash';
-import { Order, OrderLineItem, OrderService, UserService, ProductInformationService, ItemGroup, LineItemService, Note, NoteService, EmailService, orderLineItemFactory, AccountService, Contact, CartService, Cart, QuoteService  } from '@apttus/ecommerce';
+import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
+import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq } from 'lodash';
+import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
+         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
+        Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
-import { ACondition, APageInfo, AFilter } from '@apttus/core';
-import { take } from 'rxjs/operators';
+import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -20,9 +21,25 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
    * Observable instance of an Order.
    */
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
-  orderLineItems$: Observable<Array<ItemGroup>>;
+  orderLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
+  attachments$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
+
   noteSubscription: Subscription;
+  attachmentSubscription: Subscription;
+  orderSubscription: Subscription;
+  
+  private subscriptions: Subscription[] = [];
+
+  /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy`;
+
+  /**
+   * String containing the lookup fields to be queried for a proposal record.
+   */
+  private proposalLookups = `PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,AccountId,OpportunityId,Owner`;
 
   /**
     * Boolean observable to check if user is logged in.
@@ -64,16 +81,22 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     fieldList: ['Name', 'Id', 'Email']
   };
 
-  private subscriptions: Subscription[] = [];
-  orderSubscription: Subscription;
-
-  constructor(private activatedRoute: ActivatedRoute, private orderService: OrderService,
-    private userService: UserService, private productInformationService: ProductInformationService,
-    private exceptionService: ExceptionService, private noteService: NoteService,
-    private lineItemService: LineItemService, private router: Router, private emailService: EmailService,
-    private accountService: AccountService, private cartService: CartService,
-    private cdr: ChangeDetectorRef, private quoteService: QuoteService,
-    private ngZone: NgZone) { }
+  constructor(private activatedRoute: ActivatedRoute, 
+              private orderService: OrderService,
+              private userService: UserService, 
+              private productInformationService: ProductInformationService,
+              private exceptionService: ExceptionService, 
+              private noteService: NoteService,
+              private lineItemService: LineItemService, 
+              private router: Router, 
+              private emailService: EmailService,
+              private accountService: AccountService, 
+              private cartService: CartService,
+              private orderLineItemService: OrderLineItemService,
+              private apiService: ApiService,
+              private cdr: ChangeDetectorRef, 
+              private attachmentService: AttachmentService, 
+              private ngZone: NgZone) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -90,34 +113,55 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   getOrder() {
     if(this.orderSubscription) this.orderSubscription.unsubscribe();
-    this.orderSubscription = this.activatedRoute.params
+    
+    const order$ = this.activatedRoute.params
       .pipe(
         filter(params => get(params, 'id') != null),
-        flatMap(params => this.orderService.query({
-          conditions: [new ACondition(this.orderService.type, 'Id', 'In', [get(params, 'id')])],
-          waitForExpansion: false
-        })),
-        map(orderList => get(orderList, '[0]')),
-        switchMap((order: Order) => combineLatest(of(order), get(order,'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
-        map(([order, quote]) => {
-          order.Proposal = first(quote);
+        map(params => get(params, 'id')),
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
+        switchMap((order: Order) => combineLatest(
+          of(order), 
+          get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
+          this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)
+        )),
+        map(([order, quote, account]) => {
+          order.Proposal = quote;
+          order.SoldToAccount = find(account, acc => acc.Id === order.SoldToAccountId);
+          order.BillToAccount = find(account, acc => acc.Id === order.BillToAccountId);
+          order.ShipToAccount = find(account, acc => acc.Id === order.ShipToAccountId);
+          set(order, 'PrimaryContact.Account', find(account, acc => order.PrimaryContact && acc.Id === order.PrimaryContact.AccountId));
           return order;
         })
-      ).subscribe(result => {
-        this.ngZone.run(() => {
-          this.order$.next(result);
-        });
-        this.orderLineItems$ = this.order$.pipe(
-          map(order => {
-            if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
-              this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
-            if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
-              this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
-            return LineItemService.groupItems(order.OrderLineItems);
-          })
-        );
-      });
+      );
+
+    const lineItems$ = this.activatedRoute.params
+      .pipe(
+        filter(params => get(params, 'id') != null),
+        map(params => get(params, 'id')),
+        mergeMap(orderId => this.orderLineItemService.query({
+          conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
+          waitForExpansion: false
+        }))
+      );
+
+      this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+        .pipe(map(([order, lineItems]) => {
+          if(!order) return;
+
+          if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
+            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
+
+          if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
+            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
+
+          order.OrderLineItems = lineItems;
+          this.orderLineItems$.next(LineItemService.groupItems(lineItems));
+
+          return this.updateOrder(order);
+      })).subscribe();
+
       this.getNotes();
+      this.getAttachments();
   }
 
   refreshOrder(fieldValue, order, fieldName) {
@@ -144,6 +188,17 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       err => console.log('Error ', err)
       );
     this.subscriptions.push(this.noteSubscription);
+  }
+
+  getAttachments() {
+    if (this.attachmentSubscription) {
+      this.attachmentSubscription.unsubscribe();
+    }
+
+    this.attachmentSubscription = this.activatedRoute.params
+      .pipe(
+        switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
+      ).subscribe((attachments: Array<Attachment>) => this.attachments$.next(attachments));
   }
 
   /**
@@ -252,8 +307,18 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    if(this.orderSubscription)
+
+    if (this.orderSubscription) {
       this.orderSubscription.unsubscribe();
+    }
+
+    if (this.attachmentSubscription) {
+      this.attachmentSubscription.unsubscribe();
+    }
+
+    if (this.noteSubscription) {
+      this.noteSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewChecked(){

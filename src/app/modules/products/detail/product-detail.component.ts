@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap, map as rmap } from 'rxjs/operators';
-import { first, last, get, isNil, find } from 'lodash';
+import { first, last, get, isNil, find, forEach } from 'lodash';
 
 import { ApiService } from '@apttus/core';
 import { CartService, CartItem, Product, ProductService, TranslatorLoaderService, ConstraintRuleService } from '@apttus/ecommerce';
@@ -14,9 +14,10 @@ import { ProductConfigurationSummaryComponent } from '@apttus/elements';
 })
 export class ProductDetailComponent implements OnInit {
 
+  viewState$: Observable<ProductDetailsState>;
+  recommendedProducts$: Observable<Array<Product>>;
   cartItemList: Array<CartItem>;
   product: Product;
-  viewState$: Observable<ProductDetailsState>
 
   /**
    * Flag to detect if their is change in product configuration.
@@ -37,27 +38,29 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private translatorService: TranslatorLoaderService,
     private apiService: ApiService,
-    private crService: ConstraintRuleService) { }
+    private crService: ConstraintRuleService) {
+  }
 
   ngOnInit() {
     this.viewState$ = this.route.params.pipe(
-      switchMap(params => combineLatest([
-        this.productService.get([get(params, 'id')])
-          .pipe(
-            switchMap(data => this.translatorService.translateData(data)),
-            rmap(first)
-          ),
-        (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null),
-        this.crService.getRecommendationsForProducts([get(params, 'id')])
-      ])),
-      rmap(([product, cartitemList, rProductList]) => {
+      switchMap(params => {
+        const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
+          this.productService.fetch(get(params, 'id'));
+        const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
+        return combineLatest([product$, cartItem$]);
+      }),
+      rmap(([product, cartitemList]) => {
         return {
           product: product as Product,
-          recommendedProducts: rProductList,
           relatedTo: cartitemList,
           quantity: get(cartitemList, 'Quantity', 1)
         };
       })
+    );
+
+    this.recommendedProducts$ = this.route.params.pipe(
+      switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
+      rmap(r => Array.isArray(r) ? r : [])
     );
   }
 
@@ -69,6 +72,18 @@ export class ProductDetailComponent implements OnInit {
     this.product = first(result);
     this.cartItemList = result[1];
     if (get(last(result), 'optionChanged') || get(last(result), 'attributeChanged')) this.configurationChanged = true;
+  }
+
+
+  /**
+   * Change the product quantity and update the primary cartItem
+   * to see the updated the netprice of the product.
+   */
+  changeProductQuantity(newQty: any) {
+    if (this.cartItemList && this.cartItemList.length > 0)
+      forEach(this.cartItemList, c => {
+        if (c.LineType === 'Product/Service') c.Quantity = newQty;
+      });
   }
 
   /**
@@ -115,10 +130,6 @@ export interface ProductDetailsState {
    * The product to display.
    */
   product: Product;
-  /**
-   * Array of products to act as recommendations.
-   */
-  recommendedProducts: Array<Product>;
   /**
    * The CartItem related to this product.
    */
