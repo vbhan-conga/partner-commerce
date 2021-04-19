@@ -115,6 +115,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
           this.category = new Category();
           this.category.Id = get(params, 'categoryId');
           categories = [get(params, 'categoryId')];
+        } else if (!isEmpty(this.subCategories)) {
+          categories = this.subCategories.map(category => category.Id);
         }
         return this.productService.getProducts(categories, this.pageSize, this.page, this.sortField, 'ASC', this.searchString, this.conditions);
       }),
