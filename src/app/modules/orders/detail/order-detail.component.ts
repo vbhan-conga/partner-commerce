@@ -140,7 +140,11 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         map(params => get(params, 'id')),
         mergeMap(orderId => this.orderLineItemService.query({
           conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
-          waitForExpansion: false
+          waitForExpansion: false,
+          children: [
+            {
+              field: 'OrderTaxBreakups'
+            }]
         }))
       );
 
