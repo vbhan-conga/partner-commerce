@@ -32,7 +32,7 @@
             <div *ngIf="data$ | async as data; else loading">
                 <nav class="navbar navbar-light bg-white p-0 mb-3">
                     <pl-results [recordCount]="data?.TotalCount" [limit]="pageSize" [offset]="(page - 1) * pageSize"
-                        [page]="page" [view]="view" [query]="searchString" (onViewChange)="view = $event"
+                        [page]="page" [view]="view" [query]="searchString" [sortBy]="sortField" (onViewChange)="view = $event"
                         (onSortChange)="onSortChange($event)" (onPageSizeChange)="onPageSizeChange($event)"
                         class="d-block w-100">
                     </pl-results>
