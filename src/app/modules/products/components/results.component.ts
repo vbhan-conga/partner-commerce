@@ -30,9 +30,9 @@ import { TranslateService } from '@ngx-translate/core';
           <div class="input-group-prepend">
             <label class="input-group-text" for="sort">{{'PRODUCT_LIST.SORT_BY' | translate}}</label>
           </div>
-          <select class="custom-select custom-select-sm" id="sort" (change)="onSortChange.emit($event.target.value)">
-            <option>{{'PRODUCT_LIST.SORT_BY_RELEVANCE' | translate}}</option>
-            <option [value]="'Name'">{{'COMMON.NAME' | translate}}</option>
+          <select class="custom-select custom-select-sm" id="sort" [(ngModel)]="sortBy" (change)="onSortChange.emit($event.target.value)">
+            <option value="Relevance">{{'PRODUCT_LIST.SORT_BY_RELEVANCE' | translate}}</option>
+            <option value="Name">{{'COMMON.NAME' | translate}}</option>
           </select>
         </div>
         <a href="javascript:void(0)"
@@ -68,6 +68,7 @@ export class ResultsComponent implements OnChanges{
   @Input() page: number = 1;
   @Input() view: 'grid' | 'list';
   @Input() query: string;
+  @Input() sortBy: string;
 
   @Output() onViewChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() onSortChange: EventEmitter<string> = new EventEmitter<string>();
