@@ -106,6 +106,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    */
   getResults() {
     this.ngOnDestroy();
+    this.data$.next(null);
     this.subscription = this.activatedRoute.params.pipe(
       mergeMap(params => {
         this.searchString = get(params, 'query');
