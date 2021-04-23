@@ -31,8 +31,8 @@ import { TranslateService } from '@ngx-translate/core';
             <label class="input-group-text" for="sort">{{'PRODUCT_LIST.SORT_BY' | translate}}</label>
           </div>
           <select class="custom-select custom-select-sm" id="sort" [(ngModel)]="sortBy" name="sortBy" (change)="onSortChange.emit($event.target.value)">
-            <option value="'Relevance'">{{'PRODUCT_LIST.SORT_BY_RELEVANCE' | translate}}</option>
-            <option value="'Name'">{{'COMMON.NAME' | translate}}</option>
+            <option [value]="'Relevance'">{{'PRODUCT_LIST.SORT_BY_RELEVANCE' | translate}}</option>
+            <option [value]="'Name'">{{'COMMON.NAME' | translate}}</option>
           </select>
         </div>
         <a href="javascript:void(0)"
