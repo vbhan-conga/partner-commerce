@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
 import { switchMap, map as rmap } from 'rxjs/operators';
-import { first, last, get, isNil, find, forEach } from 'lodash';
+import { first, last, get, isNil, find, forEach, set } from 'lodash';
 
 import { ApiService } from '@apttus/core';
-import { CartService, CartItem, Product, ProductService, TranslatorLoaderService, ConstraintRuleService } from '@apttus/ecommerce';
+import { CartService, CartItem, Product, ProductService, ProductInformationService, ConstraintRuleService } from '@apttus/ecommerce';
 import { ProductConfigurationComponent, ProductConfigurationSummaryComponent } from '@apttus/elements';
 @Component({
   selector: 'app-product-detail',
@@ -39,7 +39,7 @@ export class ProductDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService,
-    private translatorService: TranslatorLoaderService,
+    private productInformationService: ProductInformationService,
     private apiService: ApiService,
     private crService: ConstraintRuleService) {
   }
@@ -50,13 +50,15 @@ export class ProductDetailComponent implements OnInit {
         const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
           this.productService.fetch(get(params, 'id'));
         const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
-        return combineLatest([product$, cartItem$]);
+        const attachments$ = this.productInformationService.getProductInformation(get(params, 'id'))
+        return combineLatest([product$, cartItem$, attachments$]);
       }),
-      rmap(([product, cartitemList]) => {
+      rmap(([product, cartItemList, attachments]) => {
+        set(product, 'ProductInformation', attachments);
         return {
           product: product as Product,
-          relatedTo: cartitemList,
-          quantity: get(cartitemList, 'Quantity', 1)
+          relatedTo: cartItemList,
+          quantity: get(cartItemList, 'Quantity', 1)
         };
       })
     );
