@@ -6,7 +6,7 @@ import { first, last, get, isNil, find, forEach } from 'lodash';
 
 import { ApiService } from '@apttus/core';
 import { CartService, CartItem, Product, ProductService, TranslatorLoaderService, ConstraintRuleService } from '@apttus/ecommerce';
-import { ProductConfigurationSummaryComponent } from '@apttus/elements';
+import { ProductConfigurationComponent, ProductConfigurationSummaryComponent } from '@apttus/elements';
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
@@ -31,6 +31,9 @@ export class ProductDetailComponent implements OnInit {
 
   @ViewChild(ProductConfigurationSummaryComponent, { static: false })
   configSummaryModal: ProductConfigurationSummaryComponent;
+
+  @ViewChild(ProductConfigurationComponent, { static: false })
+    productConfigComponent: ProductConfigurationComponent;
 
   constructor(private cartService: CartService,
     private router: Router,
@@ -83,6 +86,7 @@ export class ProductDetailComponent implements OnInit {
     if (this.cartItemList && this.cartItemList.length > 0)
       forEach(this.cartItemList, c => {
         if (c.LineType === 'Product/Service') c.Quantity = newQty;
+        this.productConfigComponent.changeProductQuantity(newQty);
       });
   }
 

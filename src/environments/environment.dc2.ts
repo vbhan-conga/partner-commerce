@@ -24,7 +24,7 @@ export const environment: Configuration = {
   useIndexedDB: true,
   expandDepth: 8,
   hashRouting: true,
-  skipPricing: true,
+  skipPricing: false,
   skipRules: false,
   apiVersion: '3',
   packageNamespace: 'Apttus_WebStore',
