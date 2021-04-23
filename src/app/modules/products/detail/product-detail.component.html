@@ -130,7 +130,7 @@
     </app-detail-section>
 
     <app-detail-section [title]="'PRODUCT_DETAILS.ATTACHMENTS' | translate"
-        *ngIf="viewState?.product?.ProductInformation?.length > 0">
+        *ngIf="(attachments$ | async)?.length > 0">
         <div class="row mt-4">
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.ATTACHMENTS' | translate}} </h4>
             <div class="col-12">
