@@ -18,9 +18,9 @@
                 <h5>
                     <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
                         [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
-                    <ng-template #productPrice>
-                        <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true"
-                            type="net"></apt-price>
+                        <ng-template #productPrice>
+                        <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true" type="net">
+                        </apt-price>
                     </ng-template>
                 </h5>
             </div>
@@ -61,8 +61,7 @@
                     <div class="d-flex justify-content-end">
                         <div class="form-group mx-3 my-0 d-flex align-items-center" *ngIf="viewState?.storefront?.ConfigurationLayout !== 'Embedded'">
                             <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
-                            <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity"
-                                name="quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" />
+                            <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" name="quantity" />
                         </div>
                         <div class="d-flex align-items-center">
                             <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
@@ -130,7 +129,7 @@
     </app-detail-section>
 
     <app-detail-section [title]="'PRODUCT_DETAILS.ATTACHMENTS' | translate"
-        *ngIf="viewState?.product?.ProductInformation?.length > 0">
+        *ngIf="(attachments$ | async)?.length > 0">
         <div class="row mt-4">
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.ATTACHMENTS' | translate}} </h4>
             <div class="col-12">
@@ -148,8 +147,7 @@
             <div class="row mt-4">
                 <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate}} </h4>
                 <div class="col-12">
-                    <apt-product-carousel [productList]="recommendedProducts" slides="5">
-                    </apt-product-carousel>
+                    <apt-product-carousel [productList]="recommendedProducts" slides="5"></apt-product-carousel>
                 </div>
             </div>
         </app-detail-section>

@@ -1,4 +1,4 @@
-import { Input, Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Input, Component, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { Product, ProductInformation, ProductInformationService } from '@apttus/ecommerce';
 import { Observable } from 'rxjs';
 @Component({
@@ -35,7 +35,7 @@ import { Observable } from 'rxjs';
 /**
  * Tab Attachments Component displays the list of attachment for the product.
  */
-export class TabAttachmentsComponent implements OnInit{
+export class TabAttachmentsComponent implements OnChanges{
 
     @Input() product: Product;
 
@@ -46,7 +46,7 @@ export class TabAttachmentsComponent implements OnInit{
 
     constructor(private productInformationService: ProductInformationService){}
 
-    ngOnInit(){
+    ngOnChanges(){
       this.productInformation$ = this.productInformationService.getProductInformation(this.product.Id);
     }
     /**
