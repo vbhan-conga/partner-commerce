@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { combineLatest, of, Observable, BehaviorSubject } from 'rxjs';
+import { of, Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { clone, assign, get, isArray, groupBy, sumBy, omit, zipObject, mapValues, map } from 'lodash';
 

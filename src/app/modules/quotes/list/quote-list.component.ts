@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -22,7 +21,6 @@ export class QuoteListComponent implements OnInit {
   totalRecords$: Observable<number>;
   quotesByStatus$: Observable<number>;
   quotesByDueDate$: Observable<number>;
-
   colorPalette: Array<String> = [];
   minDaysFromDueDate: number = 7;
   maxDaysFromDueDate: number = 14;
@@ -70,16 +68,16 @@ export class QuoteListComponent implements OnInit {
       },
       {
         field: 'Opportunity'
-      }, 
+      },
       {
         field: 'Primary_Contact'
-      }, 
+      },
       {
         field: 'BillToAccountId'
       },
       {
         field: 'ShipToAccountId'
-      }, 
+      },
       {
         field: 'Owner'
       }
