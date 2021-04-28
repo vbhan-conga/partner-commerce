@@ -27,14 +27,10 @@ export const environment: Configuration = {
   skipRules: false,
   expandDepth: 8,
   hashRouting: true,
-  // packageNamespace: 'Apttus_WebStore',
-  // // *** TODO: Replace with Salesforce environment variables ***
-  // storefront: 'P-Commerce',
-  // organizationId: '00D3I0000008n7g',
-  // sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  // endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
-
-  storefront: 'Partner Commerce',
-  organizationId: '00D2f0000008esc',
-  endpoint: 'https://dc9-cpqqacommunity1.cs34.force.com/pcom'
+  packageNamespace: 'Apttus_WebStore',
+  // *** TODO: Replace with Salesforce environment variables ***
+  storefront: 'P-Commerce',
+  organizationId: '00D3I0000008n7g',
+  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
+  endpoint: 'https://dc4-cpqqacommunity1.cs123.force.com/pcom'
 };
