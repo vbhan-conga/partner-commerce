@@ -13,18 +13,18 @@ pipeline {
                         stage('Build-linuxAgent'){
                             agent {
                         kubernetes {
-            label 'apttus-ui-builder'
+            label 'conga-ui-builder-v1'
             defaultContainer 'jnlp'
             yaml """
 apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    name: apttus-ui-builder
+    name: conga-ui-builder-v1
 spec:
   containers:
   - name: ic-ui-builder
-    image: art01-ic-devops.jfrog.io/ic-ui-builder:10.x
+    image: art01-ic-devops.jfrog.io/ic-ui-builder:14.9
     command:
     - cat
     tty: true
@@ -192,8 +192,8 @@ void updateNpmPackagePatchVersion(String packageJsonFolderPath, String slackChan
     try {
         stage('Update-Version') {
             container('ic-ui-builder') {
-                sh "git config --global user.email 'apttusengrxuser@apttus.com'"
-                sh "git config --global user.name 'github-cicd-id'"
+                sh "git config --global user.email 'apttusengrxuser@conga.com'"
+                sh "git config --global user.name 'apttusengrxuser-conga'"
                 sh "make npm-version-update-patch PACKAGEJSON_FOLDERPATH=$packageJsonFolderPath"
             }
         }

@@ -15,7 +15,7 @@
       <span class="badge badge-info ml-1">{{cart?.Order?.Status}}</span>
     </div>
 
-    <div *ngIf="cart?.Order?.Id" class="d-flex">
+    <div *ngIf="cart?.OrderId" class="d-flex">
       <button class="btn btn-primary btn-raised align-self-stretch" (click)="createNewCart()" [ladda]="loading">{{ 'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate }}</button>
     </div>
   </div>

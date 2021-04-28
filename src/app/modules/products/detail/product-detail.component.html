@@ -143,20 +143,24 @@
         </div>
     </app-detail-section>
 
-    <ng-container *ngIf="viewState?.recommendedProducts?.length > 0">
-        <app-detail-section [title]="'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate">
+    <ng-container *ngIf="recommendedProducts$ | async as recommendedProducts; else loading">
+        <app-detail-section *ngIf="recommendedProducts.length" [title]="'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate">
             <div class="row mt-4">
                 <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.RECOMMENDED_PRODUCTS' | translate}} </h4>
                 <div class="col-12">
-                    <apt-product-carousel [productList]="viewState?.recommendedProducts" slides="5">
+                    <apt-product-carousel [productList]="recommendedProducts" slides="5">
                     </apt-product-carousel>
                 </div>
             </div>
         </app-detail-section>
     </ng-container>
 
-    <apt-product-configuration-summary [product]="viewState?.product" [relatedTo]="viewState?.relatedTo"
-        [changes]="cartItemList" [preload]="true" position="right" #configSummary>
+    <apt-product-configuration-summary *ngIf='viewState?.product?.HasOptions || viewState?.product?.HasAttributes'
+        [product]="viewState?.product"
+        [relatedTo]="viewState?.relatedTo"
+        [changes]="cartItemList"
+        [preload]="true"
+        position="right" #configSummary>
     </apt-product-configuration-summary>
 </app-detail>
 

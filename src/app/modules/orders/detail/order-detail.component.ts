@@ -26,7 +26,7 @@ import {
   Contact,
   CartService,
   Cart,
-  QuoteService, OrderLineItemService, Attachment, AttachmentService
+  QuoteService, OrderLineItemService, Attachment, AttachmentService, Account
 } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
@@ -142,8 +142,12 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         map(params => get(params, 'id')),
         flatMap(orderId => this.apiService.get(`/orders?condition[0]=Id,Equal,${orderId}&lookups=PriceListId,PrimaryContact,BillToAccountId,ShipToAccountId,SoldToAccountId,Owner,CreatedBy`, Order)),
         map(orderList => get(orderList, '[0]')),
-        switchMap((order: Order) => combineLatest(of(order), get(order, 'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null))),
-        map(([order, quote]) => {
+        switchMap((order: Order) => combineLatest([of(order),
+          get(order, 'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null),
+          get(order, 'PrimaryContact.AccountId') ? this.apiService.get(`/accounts?condition[0]=Id,Equal,${order.PrimaryContact.AccountId}`, Account) : of(null)])
+        ),
+        map(([order, quote, account]) => {
+          set(order, 'PrimaryContact.Account', first(account));
           order.Proposal = first(quote);
           return order;
         })
@@ -153,10 +157,13 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.getOrderLineItemsForOrder(orderId))
+        mergeMap(orderId => this.orderLineItemService.query({
+          conditions: [new ACondition(this.orderLineItemService.type, 'OrderId', 'Equal', orderId)],
+          waitForExpansion: false
+        }))
       );
 
-    this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+    this.orderSubscription = combineLatest([order$.pipe(startWith(null)), lineItems$.pipe(startWith(null))])
       .pipe(map(([order, lineItems]) => {
         if (!order) return;
 
