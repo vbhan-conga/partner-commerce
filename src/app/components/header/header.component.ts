@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Storefront, StorefrontService,UserService, User, Cart, CartService } from '@apttus/ecommerce';
+import { Storefront, StorefrontService, UserService, User, Cart, CartService } from '@apttus/ecommerce';
 import { MiniProfileComponent } from '@apttus/elements';
 @Component({
   selector: 'app-header',
@@ -10,7 +10,7 @@ import { MiniProfileComponent } from '@apttus/elements';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
-  
+
   @ViewChild('profile', { static: false }) profile: MiniProfileComponent;
 
   index: number = 0;
