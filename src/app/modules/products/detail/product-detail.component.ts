@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, get, isNil, find, forEach, maxBy, filter, last } from 'lodash';
+import { first, get, isNil, find, forEach, maxBy, filter, last, has } from 'lodash';
 import { combineLatest, Observable, Subscription, of } from 'rxjs';
 import { switchMap, map as rmap } from 'rxjs/operators';
 
@@ -77,6 +77,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             switchMap(params => {
                 this.product = null;
                 this.cartItemList = null;
+                this.productConfigurationService.onChangeConfiguration(null);
                 const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
                     this.productService.fetch(get(params, 'id'));
                 const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
@@ -100,6 +101,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.attachments$ = this.route.params.pipe(
             switchMap(params => this.productInformationService.getProductInformation(get(params, 'id')))
         );
+
+        this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+            if (response && has(response, 'hasErrors')) 
+                this.configurationPending = get(response, 'hasErrors');
+            else {
+                this.configurationPending = false;
+                this.product = get(response, 'product');
+                this.cartItemList = get(response, 'itemList');
+                if (get(response, 'configurationFlags.optionChanged') || get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
+            }
+        }));
     }
 
     /**
