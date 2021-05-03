@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, get, isNil, find, forEach, maxBy, filter, last } from 'lodash';
+import { first, get, isNil, find, forEach, maxBy, filter, last, has } from 'lodash';
 import { combineLatest, Observable, Subscription, of } from 'rxjs';
 import { switchMap, map as rmap } from 'rxjs/operators';
 
@@ -100,6 +100,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.attachments$ = this.route.params.pipe(
             switchMap(params => this.productInformationService.getProductInformation(get(params, 'id')))
         );
+
+        this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+            if (response && has(response, 'hasErrors')) 
+                this.configurationPending = get(response, 'hasErrors');
+            else {
+                this.configurationPending = false;
+                this.product = get(response, 'product');
+                this.cartItemList = get(response, 'itemList');
+                if (get(response, 'configurationFlags.optionChanged') || get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
+            }
+        }));
     }
 
     /**
