@@ -1,12 +1,10 @@
-import { Component, OnInit, HostListener, ViewChild, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Storefront, ContactService, StorefrontService, UserService, CurrencyType, User, 
-          ProductService, Product, Contact, Cart, CartService } from '@apttus/ecommerce';
+          Contact, Cart, CartService } from '@apttus/ecommerce';
 import { MiniProfileComponent } from '@apttus/elements';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ConfigurationService } from '@apttus/core';
 import { TranslateService } from '@ngx-translate/core';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +14,7 @@ import { map } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
   
-  @ViewChild('profile') profile: MiniProfileComponent;
+  @ViewChild('profile', { static: false }) profile: MiniProfileComponent;
   
   pageTop: boolean = true;
   storefront$: Observable<Storefront>;

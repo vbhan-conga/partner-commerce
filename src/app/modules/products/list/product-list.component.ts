@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, Category, SearchResults, SearchService, ProductCategory, ProductService, AccountService } from '@apttus/ecommerce';
+import { CategoryService, Category, SearchService, ProductService, ProductResult,  AccountService} from '@apttus/ecommerce';
 import { get, set, compact, map, isNil, isEmpty, remove, isEqual } from 'lodash';
 import { ACondition, AJoin } from '@apttus/core';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { map as rmap, take, mergeMap, tap } from 'rxjs/operators';
+import { map as rmap, mergeMap } from 'rxjs/operators';
 
 /**
  * Product list component shows all the products in a list for user selection.
@@ -32,7 +32,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /**
    * A field name on which one wants to apply sorting.
    */
-  sortField: string;
+  sortField: string = 'Relevance';
   /**
    * Value of the product family field filter.
    */
@@ -50,11 +50,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * Search query to filter products list from grid.
    */
   searchString: string = null;
-  searchResults$: BehaviorSubject<SearchResults> = new BehaviorSubject<SearchResults>(null);
+  data$: BehaviorSubject<ProductResult> = new BehaviorSubject<ProductResult>(null);
   productFamilies$: Observable<Array<string>> = new Observable<Array<string>>();
   category: Category;
   subscription: Subscription;
-  routeSub: Subscription;
+
 
   /**
    * Control over button's text/label of pagination component for Multi-Language Support
@@ -72,7 +72,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  constructor(private activatedRoute: ActivatedRoute, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService, private accountService: AccountService) { }
+  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) {}
 
   /**
    * @ignore
@@ -80,7 +80,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (!isNil(this.subscription))
       this.subscription.unsubscribe();
-    this.routeSub.unsubscribe();
   }
 
   /**
@@ -106,41 +105,30 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   getResults() {
-    if (!isNil(this.routeSub))
-      this.routeSub.unsubscribe();
-    this.routeSub = this.activatedRoute.params.pipe(
-      tap(() => {
-        if (!isNil(this.searchResults$)) {
-          const results = this.searchResults$.value;
-          set(results, 'productList', null);
-          this.searchResults$.next(results);
-        }
-      }),
+    this.ngOnDestroy();
+    this.data$.next(null);
+    this.subscription = this.activatedRoute.params.pipe(
       mergeMap(params => {
         this.searchString = get(params, 'query');
-
-        if (!isNil(get(params, 'categoryName')) && isEmpty(this.subCategories))
-          return this.categoryService.getCategoryByName(get(params, 'categoryName')).pipe(
-            tap(category => this.category = category),
-            mergeMap(category => this.categoryService.getCategoryBranchChildren([category.Id])),
-            tap(categoryList => {
-              this.joins = [new AJoin(ProductCategory, 'Id', 'ProductId', [new ACondition(ProductCategory, 'ClassificationId', 'In', categoryList.map(c => c.Id))])];
-            })
-          );
-        else if (!isEmpty(this.subCategories)) {
-          remove(this.joins, (j) => j.type === ProductCategory);
-          this.joins.push(new AJoin(ProductCategory, 'Id', 'ProductId', [new ACondition(ProductCategory, 'ClassificationId', 'In', this.subCategories.map(category => category.Id))]));
-          return of(null);
-        }
-        else {
-          return of(null);
-        }
+        let categories = null;
+        const sortBy = this.sortField === 'Name' ? this.sortField : null;
+        if (!isNil(get(params, 'categoryId')) && isEmpty(this.subCategories)) {
+          this.category = new Category();
+          this.category.Id = get(params, 'categoryId');
+          categories = [get(params, 'categoryId')];
+          return this.categoryService.getCategoryBranchChildren(categories)
+            .pipe(mergeMap(result => {
+              if(result) categories = result.map(r => r.Id);
+              return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
+            }));
+        } else if (!isEmpty(this.subCategories)) {
+          categories = this.subCategories.map(category => category.Id);
+          return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
+        } else
+          return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
       }),
-      mergeMap(() => {
-        return this.searchService.searchProducts(this.searchString, this.pageSize, this.page, this.sortField, 'ASC', this.conditions, this.joins);
-    })
     ).subscribe(r => {
-      this.searchResults$.next(r);
+      this.data$.next(r);
     });
   }
 
@@ -159,11 +147,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * Filters peers Category from the categorylist.
    * @param categoryList Array of Category.
    */
-  onCategory(categoryList: Array<Category>) {
+  onCategory(categoryList: Array<Category>){
     const category = get(categoryList, '[0]');
-    if (category){
+    if(category){
       this.subCategories = [];
-      this.router.navigate(['/products/category', category.Name]);
+      this.router.navigate(['/products/category', category.Id]);
     }
   }
 
@@ -172,7 +160,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param evt Event object that was fired.
    */
   onPage(evt) {
-    if (get(evt, 'page') !== this.page) {
+    if(get(evt, 'page') !== this.page){
       this.page = evt.page;
       this.getResults();
     }
@@ -232,7 +220,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    */
   onSortChange(evt) {
     this.page = 1;
-    this.sortField = evt === 'Name' ? evt : null;
+    this.sortField = evt;
     this.getResults();
   }
 
