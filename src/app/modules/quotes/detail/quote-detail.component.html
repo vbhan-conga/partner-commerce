@@ -23,37 +23,23 @@
     <div class="row">
       <div class="col-12 col-md-8">
         <div class="card">
-          <div class="card-body">
-            <h5>{{'DETAILS.QUOTE_SUMMARY' | translate}}</h5>
-            <div class="row mt-4">
-              <dl class="col-12 col-md-6">
-                <apt-output-field [record]="quote" field="CreatedDate" layout="inline" [editable]="false">
-                </apt-output-field>
-                <apt-output-field [record]="quote.CreatedBy" field="Name" label="Created By" layout="inline"
-                                  [editable]="false"></apt-output-field>
-                <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
-                                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'" (onChange)="refreshQuote($event, quote, 'RFP_Response_Due_Date')">
-                </apt-output-field>
-                <apt-output-field [record]="quote" field="Primary_ContactId" layout="inline"
-                                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                  [showQuickView]="true" [lookupOptions]="lookupOptions"
-                                  (onChange)="refreshQuote($event, quote, 'Primary_ContactId')">
-                </apt-output-field>
-                <apt-output-field [record]="quote" field="AccountId" label="Account Name"
-                                  layout="inline" [editable]="false" [showQuickView]="true"></apt-output-field>
-              </dl>
-              <dl class="col-12 col-md-6">
-                <apt-output-field [record]="quote" field="ShipToAccountId" layout="inline"
-                                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                  label="Ship To Account" [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'ShipToAccountId')"></apt-output-field>
-                <apt-output-field [record]="quote" field="ShipToAccount.ShippingAddress" label="Ship To Address"
-                                  layout="inline" [editable]="false"></apt-output-field>
-                <apt-output-field [record]="quote" field="BillToAccountId" layout="inline"
-                                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
-                                  label="Bill To Account" [showQuickView]="true" (onChange)="refreshQuote($event, quote, 'BillToAccountId')"></apt-output-field>
-                <apt-output-field [record]="quote" field="BillToAccount.BillingAddress" label="Bill To Address"
-                                  layout="inline" [editable]="false"></apt-output-field>
-              </dl>
+            <div class="card-body">
+                <h5 class="py-2">
+                    {{'DETAILS.LINE_ITEMS' | translate}}
+                </h5>
+                <table class="table table-responsive border-bottom" *ngIf="quoteLineItems$ | async as quoteLineItems; else loading">
+                    <tbody>
+                        <ng-container *ngFor="let item of quoteLineItems; let i = index">
+                            <apt-line-item-table-row
+                            [index]="i"
+                            [parent]="item.MainLine"
+                            [options]="item.Options"
+                            [children]="item.SecondaryLines"
+                            [editableFields]="false">
+                            </apt-line-item-table-row>
+                        </ng-container>
+                    </tbody>
+                </table>
             </div>
           </div>
         </div>
@@ -61,7 +47,6 @@
       <div class="col-12 col-md-4">
         <apt-price-summary [record]="quote" [page]="'quotes'"></apt-price-summary>
       </div>
-    </div>
   </app-detail-section>
 
   <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4">

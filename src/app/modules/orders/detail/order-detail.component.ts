@@ -9,28 +9,13 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { filter, flatMap, map, mergeMap, startWith, switchMap } from 'rxjs/operators';
-import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter } from 'lodash';
-import {
-  Order,
-  OrderLineItem,
-  OrderService,
-  UserService,
-  ProductInformationService,
-  ItemGroup,
-  LineItemService,
-  Note,
-  NoteService,
-  EmailService,
-  AccountService,
-  Contact,
-  CartService,
-  Cart,
-  QuoteService, OrderLineItemService, Attachment, AttachmentService, Account
-} from '@apttus/ecommerce';
+import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
+import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq, defaultTo } from 'lodash';
+import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
+         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
+        Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-detail',
@@ -43,16 +28,24 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   orderSubscription: Subscription;
 
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
-
   orderLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
-
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
-
-  noteSubscription: Subscription;
-
   attachments$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
 
+  noteSubscription: Subscription;
   attachmentSubscription: Subscription;
+  
+  private subscriptions: Subscription[] = [];
+
+  /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
+
+  /**
+   * String containing the lookup fields to be queried for a proposal record.
+   */
+  private proposalLookups = `PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,AccountId,OpportunityId,Owner`;
 
   /**
    * Boolean observable to check if user is logged in.
@@ -98,25 +91,22 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     fieldList: ['Name', 'Id', 'Email']
   };
 
-  private subscriptions: Subscription[] = [];
-
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute, 
               private orderService: OrderService,
-              private userService: UserService,
+              private userService: UserService, 
               private productInformationService: ProductInformationService,
-              private exceptionService: ExceptionService,
+              private exceptionService: ExceptionService, 
               private noteService: NoteService,
-              private lineItemService: LineItemService,
-              private router: Router,
+              private lineItemService: LineItemService, 
+              private router: Router, 
               private emailService: EmailService,
-              private accountService: AccountService,
+              private accountService: AccountService, 
               private cartService: CartService,
-              private cdr: ChangeDetectorRef,
-              private quoteService: QuoteService,
-              private ngZone: NgZone,
               private orderLineItemService: OrderLineItemService,
               private apiService: ApiService,
-              private attachmentService: AttachmentService) { }
+              private cdr: ChangeDetectorRef, 
+              private attachmentService: AttachmentService, 
+              private ngZone: NgZone) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -132,23 +122,24 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   getOrder() {
-    if (this.orderSubscription) {
-      this.orderSubscription.unsubscribe();
-    }
-
+    if(this.orderSubscription) this.orderSubscription.unsubscribe();
+    
     const order$ = this.activatedRoute.params
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.apiService.get(`/orders?condition[0]=Id,Equal,${orderId}&lookups=PriceListId,PrimaryContact,BillToAccountId,ShipToAccountId,SoldToAccountId,Owner,CreatedBy`, Order)),
-        map(orderList => get(orderList, '[0]')),
-        switchMap((order: Order) => combineLatest([of(order),
-          get(order, 'Proposal.Id') ? this.quoteService.get([order.Proposal.Id]) : of(null),
-          get(order, 'PrimaryContact.AccountId') ? this.apiService.get(`/accounts?condition[0]=Id,Equal,${order.PrimaryContact.AccountId}`, Account) : of(null)])
-        ),
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
+        switchMap((order: Order) => combineLatest(
+          of(order), 
+          get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
+          this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)
+        )),
         map(([order, quote, account]) => {
-          set(order, 'PrimaryContact.Account', first(account));
-          order.Proposal = first(quote);
+          order.Proposal = quote;
+          order.SoldToAccount = defaultTo(find(account, acc => acc.Id === order.SoldToAccountId), order.SoldToAccount);
+          order.BillToAccount = defaultTo(find(account, acc => acc.Id === order.BillToAccountId), order.BillToAccount);
+          order.ShipToAccount = defaultTo(find(account, acc => acc.Id === order.ShipToAccountId), order.ShipToAccount);
+          set(order, 'PrimaryContact.Account', find(account, acc => order.PrimaryContact && acc.Id === order.PrimaryContact.AccountId));
           return order;
         })
       );
@@ -158,29 +149,33 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
         mergeMap(orderId => this.orderLineItemService.query({
-          conditions: [new ACondition(this.orderLineItemService.type, 'OrderId', 'Equal', orderId)],
-          waitForExpansion: false
+          conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
+          waitForExpansion: false,
+          children: [
+            {
+              field: 'OrderTaxBreakups'
+            }]
         }))
       );
 
-    this.orderSubscription = combineLatest([order$.pipe(startWith(null)), lineItems$.pipe(startWith(null))])
-      .pipe(map(([order, lineItems]) => {
-        if (!order) return;
+      this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+        .pipe(map(([order, lineItems]) => {
+          if(!order) return;
 
-        if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0){}
-          this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
+          if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
+            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
 
-        if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
-          this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
+          if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
+            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
 
-        order.OrderLineItems = lineItems;
-        this.orderLineItems$.next(LineItemService.groupItems(lineItems));
+          order.OrderLineItems = lineItems;
+          this.orderLineItems$.next(LineItemService.groupItems(lineItems));
 
-        return this.updateOrder(order);
+          return this.updateOrder(order);
       })).subscribe();
 
-    this.getNotes();
-    this.getAttachments();
+      this.getNotes();
+      this.getAttachments();
   }
 
   refreshOrder(fieldValue, order, fieldName) {

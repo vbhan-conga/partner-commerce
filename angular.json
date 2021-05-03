@@ -84,25 +84,6 @@
                 }
               ],
               "serviceWorker": false,
-              "ngswConfigPath": "src/ngsw-config.json"
-            },
-            "dc4": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dc4.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "tsConfig": "tsconfig.prod.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -115,7 +96,6 @@
                   "maximumError": "30kb"
                 }
               ],
-              "serviceWorker": false,
               "ngswConfigPath": "src/ngsw-config.json"
             }
           }

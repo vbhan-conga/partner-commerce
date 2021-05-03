@@ -49,7 +49,6 @@ export class CategoryCarouselComponent implements OnInit {
 
   goToCategory(category: Category, view: CategoryView) {
     if(!some(view.categoryBranch, {'Id': category.Id})){
-      console.log(view.categoryBranch);
       set(view, `categoryBranch[${this.index}]`, category);
       this.index += 1;
     }
