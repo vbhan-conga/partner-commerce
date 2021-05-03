@@ -1,10 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CartService, Cart, AccountService, OrderService, CategoryService } from '@apttus/ecommerce';
-import { Observable, of, combineLatest } from 'rxjs';
-import { switchMap, take, map } from 'rxjs/operators';
 import { ExceptionService } from '@apttus/elements';
 import { OutputFieldComponent } from '@apttus/elements';
-import { Router } from '@angular/router';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
+import { Observable, of, combineLatest } from 'rxjs';
+import { switchMap, take, map } from 'rxjs/operators';
 import { first, get } from 'lodash';
 
 @Component({
@@ -19,15 +18,14 @@ export class ActionBarComponent implements OnInit {
   loading: boolean = false;
 
   @ViewChild('accountField') accountField: OutputFieldComponent;
-  // @ViewChild('priceListField', {static: false}) priceListField;
 
   constructor(
     private cartService: CartService,
     private accountService: AccountService,
     private exceptionService: ExceptionService,
     private orderService: OrderService,
-    private categoryService: CategoryService,
-    private router: Router) { }
+    private categoryService: CategoryService)
+    { }
 
   ngOnInit() {
     this.cart$ = this.cartService.getMyCart()
@@ -62,7 +60,6 @@ export class ActionBarComponent implements OnInit {
     .subscribe(cart => {
       this.loading = false;
       this.exceptionService.showSuccess('ACTION_BAR.CART_CREATION_TOASTR_MESSAGE');
-      this.router.navigate(['/carts', cart.Id]);
     },
     error => {
       this.loading = false;
