@@ -7,7 +7,7 @@ import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import * as _ from 'lodash';
+import { get, uniqueId, find, defaultTo } from 'lodash';
 import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 import { ConfigurationService, ACondition, APageInfo } from '@apttus/core';
@@ -139,7 +139,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               private ngZone: NgZone,
               private toastr: ToastrService,
               private exceptionService: ExceptionService) {
-    this.uniqueId = _.uniqueId();
+    this.uniqueId = uniqueId();
   }
 
   ngOnInit() {
@@ -151,7 +151,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.accountService.getCurrentAccount().subscribe(account => {
       // Setting lookup options for primary contact field
-      this.lookupOptions.conditions = [new ACondition(Contact, 'AccountId', 'Equal', _.get(account, 'Id'))];
+      this.lookupOptions.conditions = [new ACondition(Contact, 'AccountId', 'Equal', get(account, 'Id'))];
       this.lookupOptions.expressionOperator = 'AND';
       this.lookupOptions.filters = null;
       this.lookupOptions.sortOrder = null;
@@ -162,20 +162,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.cart = cart;
 
       // Setting default values on order
-      this.order.SoldToAccount = _.get(cart, 'Account');
-      this.order.SoldToAccountId = _.get(cart, 'AccountId');
-      this.order.BillToAccount = _.get(cart, 'BillToAccount');
-      this.order.BillToAccountId = _.get(cart, 'BillToAccountId');
-      this.order.ShipToAccount = _.get(cart, 'ShipToAccount');
-      this.order.ShipToAccountId = _.get(cart, 'ShipToAccountId');
-      this.order.PriceList = _.get(cart, 'PriceList');
-      this.order.PriceListId = _.get(cart, 'PriceListId');
+      this.order.SoldToAccount = get(cart, 'Account');
+      this.order.SoldToAccountId = get(cart, 'AccountId');
+      this.order.BillToAccount = get(cart, 'BillToAccount');
+      this.order.BillToAccountId = get(cart, 'BillToAccountId');
+      this.order.ShipToAccount = get(cart, 'ShipToAccount');
+      this.order.ShipToAccountId = get(cart, 'ShipToAccountId');
+      this.order.PriceList = get(cart, 'PriceList');
+      this.order.PriceListId = get(cart, 'PriceListId');
     }));
     this.subscriptions.push(this.contactService.getMyContact().subscribe(c => {
       this.primaryContact = c;
 
       // Setting default values on order
-      this.order.PrimaryContactId = _.get(c, 'Id');
+      this.order.PrimaryContactId = get(c, 'Id');
       this.order.PrimaryContact = c;
     }));
     this.card = {} as Card;
@@ -216,8 +216,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
    * Allows user to submit order. Convert a cart to order and submit it.
    */
   submitOrder() {
-    const orderAmountGroup = _.find(_.get(this.cart, 'SummaryGroups'), c => _.get(c, 'LineType') === 'Grand Total');
-    this.orderAmount = _.defaultTo(_.get(orderAmountGroup, 'NetPrice', 0).toString(), '0');
+    const orderAmountGroup = find(get(this.cart, 'SummaryGroups'), c => get(c, 'LineType') === 'Grand Total');
+    this.orderAmount = defaultTo(get(orderAmountGroup, 'NetPrice', 0).toString(), '0');
     this.loading = true;
     if (this.isLoggedIn) {
       const selectedAcc: AccountInfo = {
@@ -226,7 +226,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         SoldToAccountId: this.order.SoldToAccountId
       };
 
-      this.convertCartToOrder(_.get(this, 'order'), _.get(this, 'order.PrimaryContact'), null, selectedAcc, false);
+      this.convertCartToOrder(get(this, 'order'), get(this, 'order.PrimaryContact'), null, selectedAcc, false);
     }
     // else {
     //   if (this.shippingEqualsBilling) {
@@ -260,18 +260,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   onBillToChange() {
     if(this.order.BillToAccountId)
-      this.billToAccount$ = this.accountService.getAccount(this.order.BillToAccountId).pipe(map(res => this.order.BillToAccount = res[0]));
+      this.billToAccount$ = this.accountService.getAccount(this.order.BillToAccountId).pipe(map(res => this.order.BillToAccount = res));
   }
 
   onShipToChange() {
     if(this.order.ShipToAccountId)
-      this.shipToAccount$ = this.accountService.getAccount(this.order.ShipToAccountId).pipe(map(res => this.order.ShipToAccount = res[0]));
+      this.shipToAccount$ = this.accountService.getAccount(this.order.ShipToAccountId).pipe(map(res => this.order.ShipToAccount = res));
   }
 
   onPrimaryContactChange() {
     this.subscriptions.push(
       this.contactService.getContact({Id: this.order.PrimaryContactId}).subscribe(c => {
-        this.order.PrimaryContactId = _.get(c, 'Id');
+        this.order.PrimaryContactId = get(c, 'Id');
         this.order.PrimaryContact = c;
       })
     );
@@ -302,22 +302,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
    */
   requestForPayment(orderDetails: Order) {
     this.paymentTransaction = new PaymentTransaction();
-    this.paymentTransaction.Currency = _.defaultTo(_.get(orderDetails, 'CurrencyIsoCode'),this.configurationService.get('defaultCurrency'));
-    this.paymentTransaction.CustomerFirstName = _.get(this.primaryContact, 'FirstName');
-    this.paymentTransaction.CustomerLastName = _.get(this.primaryContact, 'LastName');
-    this.paymentTransaction.CustomerEmailAddress = _.get(this.primaryContact, 'Email');
-    this.paymentTransaction.CustomerAddressLine1 = this.isLoggedIn ? _.get(orderDetails.BillToAccount, 'BillingStreet') : _.get(this.primaryContact, 'MailingStreet');
-    this.paymentTransaction.CustomerAddressCity = this.isLoggedIn ? _.get(orderDetails.BillToAccount, 'BillingCity') : _.get(this.primaryContact, 'MailingCity');
-    this.paymentTransaction.CustomerAddressStateCode = this.isLoggedIn ? _.get(orderDetails.BillToAccount, 'BillingAddress.stateCode') : _.get(this.primaryContact, 'MailingStateCode');
-    this.paymentTransaction.CustomerAddressCountryCode = this.isLoggedIn ? _.get(orderDetails.BillToAccount, 'BillingAddress.countryCode') : _.get(this.primaryContact, 'MailingCountryCode');
-    this.paymentTransaction.CustomerAddressPostalCode = this.isLoggedIn ? _.get(orderDetails.BillToAccount, 'BillingAddress.postalCode') : _.get(this.primaryContact, 'MailingPostalCode');
-    this.paymentTransaction.CustomerBillingAccountName = _.get(orderDetails.BillToAccount, 'Name');
-    this.paymentTransaction.CustomerBillingAccountID = _.get(orderDetails.BillToAccount, 'Id');
+    this.paymentTransaction.Currency = defaultTo(get(orderDetails, 'CurrencyIsoCode'),this.configurationService.get('defaultCurrency'));
+    this.paymentTransaction.CustomerFirstName = get(this.primaryContact, 'FirstName');
+    this.paymentTransaction.CustomerLastName = get(this.primaryContact, 'LastName');
+    this.paymentTransaction.CustomerEmailAddress = get(this.primaryContact, 'Email');
+    this.paymentTransaction.CustomerAddressLine1 = this.isLoggedIn ? get(orderDetails.BillToAccount, 'BillingStreet') : get(this.primaryContact, 'MailingStreet');
+    this.paymentTransaction.CustomerAddressCity = this.isLoggedIn ? get(orderDetails.BillToAccount, 'BillingCity') : get(this.primaryContact, 'MailingCity');
+    this.paymentTransaction.CustomerAddressStateCode = this.isLoggedIn ? get(orderDetails.BillToAccount, 'BillingAddress.stateCode') : get(this.primaryContact, 'MailingStateCode');
+    this.paymentTransaction.CustomerAddressCountryCode = this.isLoggedIn ? get(orderDetails.BillToAccount, 'BillingAddress.countryCode') : get(this.primaryContact, 'MailingCountryCode');
+    this.paymentTransaction.CustomerAddressPostalCode = this.isLoggedIn ? get(orderDetails.BillToAccount, 'BillingAddress.postalCode') : get(this.primaryContact, 'MailingPostalCode');
+    this.paymentTransaction.CustomerBillingAccountName = get(orderDetails.BillToAccount, 'Name');
+    this.paymentTransaction.CustomerBillingAccountID = get(orderDetails.BillToAccount, 'Id');
     this.paymentTransaction.isUserLoggedIn = this.isLoggedIn;
     this.paymentTransaction.OrderAmount =  this.orderAmount;
     this.paymentTransaction.Locale = this.currentUserLocale ;
-    this.paymentTransaction.OrderName = _.get(orderDetails, 'Name') ;
-    this.paymentTransaction.OrderGeneratedID = _.get(orderDetails, 'Id');
+    this.paymentTransaction.OrderName = get(orderDetails, 'Name') ;
+    this.paymentTransaction.OrderGeneratedID = get(orderDetails, 'Id');
     this.isPayForOrderEnabled = true;
     this.pricingSummaryType = '';
   }
@@ -365,7 +365,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       });
     }
     this.isPaymentCompleted = true;
-    if (_.get(this.orderConfirmation, 'Id'))
+    if (get(this.orderConfirmation, 'Id'))
       this.subscriptions.push(this.emailService.guestUserNewOrderNotification(this.orderConfirmation.Id, `https://${window.location.hostname}${window.location.pathname}#/Orders/${this.orderConfirmation.Id}`).subscribe());
   }
 
@@ -385,7 +385,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       class: 'modal-lg'
     };
     this.confirmationModal = this.modalService.show(this.confirmationTemplate, ngbModalOptions);
-    if (_.get(this.orderConfirmation, 'Id'))
+    if (get(this.orderConfirmation, 'Id'))
     this.emailService.guestUserNewOrderNotification(this.orderConfirmation.Id, `${this.configurationService.resourceLocation()}orders/${this.orderConfirmation.Id}`).pipe(take(1)).subscribe();
   }
 

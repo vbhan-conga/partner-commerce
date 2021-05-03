@@ -17,7 +17,7 @@ export class ActionBarComponent implements OnInit {
   cart$: Observable<Cart>;
   loading: boolean = false;
 
-  @ViewChild('accountField') accountField: OutputFieldComponent;
+  @ViewChild('accountField', { static: false }) accountField: OutputFieldComponent;
 
   constructor(
     private cartService: CartService,
@@ -33,7 +33,7 @@ export class ActionBarComponent implements OnInit {
       switchMap(cart => combineLatest([of(cart), get(cart,'OrderId') ? this.orderService.getOrder(cart.OrderId) : of(null), this.accountService.getAccount(cart.AccountId)])),
       map(([cart, order, account]) => {
         cart.Order = order;
-        cart.Account = first(account);
+        cart.Account = account;
         return cart;
       })
     );
