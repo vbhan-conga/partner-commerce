@@ -62,7 +62,6 @@ export class ActionBarComponent implements OnInit {
     .subscribe(cart => {
       this.loading = false;
       this.exceptionService.showSuccess('ACTION_BAR.CART_CREATION_TOASTR_MESSAGE');
-      this.router.navigate(['/carts', cart.Id]);
     },
     error => {
       this.loading = false;
