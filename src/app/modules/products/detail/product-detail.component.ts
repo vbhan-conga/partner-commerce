@@ -5,7 +5,7 @@ import { switchMap, map as rmap } from 'rxjs/operators';
 import { first, last, get, isNil, find, forEach } from 'lodash';
 
 import { ApiService } from '@apttus/core';
-import { CartService, CartItem, Product, ProductService, TranslatorLoaderService, ConstraintRuleService } from '@apttus/ecommerce';
+import { CartService, CartItem, Product, ProductService, ProductInformation, ProductInformationService, ConstraintRuleService } from '@apttus/ecommerce';
 import { ProductConfigurationComponent, ProductConfigurationSummaryComponent } from '@apttus/elements';
 @Component({
   selector: 'app-product-detail',
@@ -16,6 +16,7 @@ export class ProductDetailComponent implements OnInit {
 
   viewState$: Observable<ProductDetailsState>;
   recommendedProducts$: Observable<Array<Product>>;
+  attachments$: Observable<Array<ProductInformation>>;
   cartItemList: Array<CartItem>;
   product: Product;
 
@@ -39,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService,
-    private translatorService: TranslatorLoaderService,
+    private productInformationService: ProductInformationService,
     private apiService: ApiService,
     private crService: ConstraintRuleService) {
   }
@@ -47,16 +48,18 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     this.viewState$ = this.route.params.pipe(
       switchMap(params => {
+        this.product = null;
+        this.cartItemList = null;
         const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
           this.productService.fetch(get(params, 'id'));
         const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
         return combineLatest([product$, cartItem$]);
       }),
-      rmap(([product, cartitemList]) => {
+      rmap(([product, cartItemList]) => {
         return {
           product: product as Product,
-          relatedTo: cartitemList,
-          quantity: get(cartitemList, 'Quantity', 1)
+          relatedTo: cartItemList,
+          quantity: get(cartItemList, 'Quantity', 1)
         };
       })
     );
@@ -64,6 +67,10 @@ export class ProductDetailComponent implements OnInit {
     this.recommendedProducts$ = this.route.params.pipe(
       switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
       rmap(r => Array.isArray(r) ? r : [])
+    );
+
+    this.attachments$ = this.route.params.pipe(
+      switchMap(params => this.productInformationService.getProductInformation(get(params, 'id')))
     );
   }
 
