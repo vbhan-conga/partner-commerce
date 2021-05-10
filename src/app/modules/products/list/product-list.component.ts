@@ -128,7 +128,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
           return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
         } else {
 
-          if (this.searchString.length < 3) {
+          if (get(this.searchString, 'length') < 3) {
             this.hasSearchError = true;
             return of(null);
           }
