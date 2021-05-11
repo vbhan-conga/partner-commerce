@@ -537,7 +537,7 @@
     "HEADER": {
         "PRODUCT_SERACH": "La Ricerca Del Prodotto",
         "SUBMIT": "Invia",
-        "ENTER_YOUR_SEARCH_TERM": "Immettere il termine di ricerca...",
+        "ENTER_YOUR_SEARCH_TERM": "Inserisci il termine di ricerca (min 3 caratteri) ...",
         "GUEST_USER": "Utente Guest",
         "LAST_LOGIN": "Ultima Data Di Accesso",
         "HOME": "Casa",
@@ -547,7 +547,8 @@
         "LOG_OUT": "Il Log Out",
         "LOG_IN": "Log In",
         "BACK": "Indietro",
-        "SHOW_ALL": "Mostra Tutti"
+        "SHOW_ALL": "Mostra Tutti",
+        "MIN_VALIDATION_SEARCH_ERROR": "it_IT Search term should be at least 3 characters in length"
     },
     "PROMOTION": {
         "TITLE": "Promozione",
