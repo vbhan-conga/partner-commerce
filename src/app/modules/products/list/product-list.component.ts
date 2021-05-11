@@ -118,24 +118,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
           this.category = new Category();
           this.category.Id = get(params, 'categoryId');
           categories = [get(params, 'categoryId')];
-          return this.categoryService.getCategoryBranchChildren(categories)
-            .pipe(mergeMap(result => {
-              if (result) categories = result.map(r => r.Id);
-              return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
-            }));
         } else if (!isEmpty(this.subCategories)) {
           categories = this.subCategories.map(category => category.Id);
-          return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
-        } else {
-
-          if (get(this.searchString, 'length') < 3) {
+        }
+        
+        if (get(this.searchString, 'length') < 3) {
             this.hasSearchError = true;
             return of(null);
-          }
-
-          else
-            return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
-        }
+        }else
+          return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
       }),
     ).subscribe(r => {
       this.data$.next(r);
