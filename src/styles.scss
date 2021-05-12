@@ -16,7 +16,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 /**
  * Font awesome styles
  */
-button.chevron:before, button.minus:before{
+button.chevron:before, button.minus:before,button[aria-expanded]:before{
     font-family: "Font Awesome 5 Free";
     font-weight: 400;
 }
