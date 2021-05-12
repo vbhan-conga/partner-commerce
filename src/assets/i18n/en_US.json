@@ -566,7 +566,7 @@
     "HEADER": {
         "PRODUCT_SERACH": "Product Search",
         "SUBMIT": "Submit",
-        "ENTER_YOUR_SEARCH_TERM": "Enter your search term...",
+        "ENTER_YOUR_SEARCH_TERM": "Enter your search term (min 3 chars)...",
         "GUEST_USER": "Guest User",
         "LAST_LOGIN": "Last Login Date",
         "HOME": "Home",
@@ -576,7 +576,8 @@
         "LOG_OUT": "Log Out",
         "LOG_IN": "Log In",
         "BACK": "Back",
-        "SHOW_ALL": "Show All"
+        "SHOW_ALL": "Show All",
+        "MIN_VALIDATION_SEARCH_ERROR": "Search term should be at least 3 characters in length"
     },
     "PROMOTION": {
         "TITLE": "Promotion",

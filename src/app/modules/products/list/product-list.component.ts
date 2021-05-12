@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, Category, SearchService, ProductService, ProductResult,  AccountService} from '@apttus/ecommerce';
+import { CategoryService, Category, SearchService, ProductService, ProductResult, AccountService } from '@apttus/ecommerce';
 import { get, set, compact, map, isNil, isEmpty, remove, isEqual } from 'lodash';
 import { ACondition, AJoin } from '@apttus/core';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
@@ -54,6 +54,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   productFamilies$: Observable<Array<string>> = new Observable<Array<string>>();
   category: Category;
   subscription: Subscription;
+  hasSearchError: boolean;
 
 
   /**
@@ -72,7 +73,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) {}
+  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) { }
 
   /**
    * @ignore
@@ -109,6 +110,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.subscription = this.activatedRoute.params.pipe(
       mergeMap(params => {
         this.data$.next(null);
+        this.hasSearchError = false;
         this.searchString = get(params, 'query');
         let categories = null;
         const sortBy = this.sortField === 'Name' ? this.sortField : null;
@@ -116,15 +118,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
           this.category = new Category();
           this.category.Id = get(params, 'categoryId');
           categories = [get(params, 'categoryId')];
-          return this.categoryService.getCategoryBranchChildren(categories)
-            .pipe(mergeMap(result => {
-              if(result) categories = result.map(r => r.Id);
-              return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
-            }));
         } else if (!isEmpty(this.subCategories)) {
           categories = this.subCategories.map(category => category.Id);
-          return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
-        } else
+        }
+        
+        if (get(this.searchString, 'length') < 3) {
+            this.hasSearchError = true;
+            return of(null);
+        }else
           return this.productService.getProducts(categories, this.pageSize, this.page, sortBy, 'ASC', this.searchString, this.conditions);
       }),
     ).subscribe(r => {
@@ -147,9 +148,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * Filters peers Category from the categorylist.
    * @param categoryList Array of Category.
    */
-  onCategory(categoryList: Array<Category>){
+  onCategory(categoryList: Array<Category>) {
     const category = get(categoryList, '[0]');
-    if(category){
+    if (category) {
       this.subCategories = [];
       this.router.navigate(['/products/category', category.Id]);
     }
@@ -160,7 +161,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @param evt Event object that was fired.
    */
   onPage(evt) {
-    if(get(evt, 'page') !== this.page){
+    if (get(evt, 'page') !== this.page) {
       this.page = evt.page;
       this.getResults();
     }
