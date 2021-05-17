@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account } from '@apttus/ecommerce';
+  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService } from '@apttus/ecommerce';
+  import { ExceptionService, LookupOptions } from '@apttus/elements';
+  import { ACondition, ApiService } from '@apttus/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
-import { get, set, compact, uniq, find, cloneDeep, sum } from 'lodash';
+import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { ACondition, ApiService } from '@apttus/core';
 
 @Component({
   selector: 'app-quote-details',
@@ -60,7 +60,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private userService: UserService,
     private apiService: ApiService,
-    private quoteLineItemService: QuoteLineItemService) { }
+    private quoteLineItemService: QuoteLineItemService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
     this.getQuote();
@@ -75,14 +76,18 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
         mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
-        switchMap((quote: Quote) => combineLatest([of(quote), 
-          this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)])
+        switchMap((quote: Quote) => combineLatest([of(quote),
+          // Using query instead of get(), as get is not returning list of accounts as expected.
+          this.accountService.query({
+            conditions: [
+                new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]})
+          ])
         ),
-        map(([quote, account]) => {
-          quote.Account = find(account, acc => acc.Id === quote.AccountId);
-          quote.BillToAccount = find(account, acc => acc.Id === quote.BillToAccountId);
-          quote.ShipToAccount = find(account, acc => acc.Id === quote.ShipToAccountId);
-          set(quote, 'Primary_Contact.Account', find(account, acc => quote.Primary_Contact && acc.Id === quote.Primary_Contact.AccountId));
+        map(([quote, accounts]) => {
+          quote.Account = defaultTo(find(accounts, acc => acc.Id === quote.AccountId), quote.Account);
+          quote.BillToAccount = defaultTo(find(accounts, acc => acc.Id === quote.BillToAccountId), quote.BillToAccount);
+          quote.ShipToAccount = defaultTo(find(accounts, acc => acc.Id === quote.ShipToAccountId), quote.ShipToAccount);
+          set(quote, 'Primary_Contact.Account', find(accounts, acc => quote.Primary_Contact && acc.Id === quote.Primary_Contact.AccountId));
           return quote;
         })
       );
