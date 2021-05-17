@@ -3,7 +3,7 @@ import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteServic
   Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account } from '@apttus/ecommerce';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
-import { get, set, compact, uniq, find, cloneDeep, sum } from 'lodash';
+import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -79,9 +79,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
           this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)])
         ),
         map(([quote, account]) => {
-          quote.Account = find(account, acc => acc.Id === quote.AccountId);
-          quote.BillToAccount = find(account, acc => acc.Id === quote.BillToAccountId);
-          quote.ShipToAccount = find(account, acc => acc.Id === quote.ShipToAccountId);
+          quote.Account = defaultTo(find(account, acc => acc.Id === quote.AccountId), quote.Account);
+          quote.BillToAccount = defaultTo(find(account, acc => acc.Id === quote.BillToAccountId), quote.BillToAccount);
+          quote.ShipToAccount = defaultTo(find(account, acc => acc.Id === quote.ShipToAccountId), quote.ShipToAccount);
           set(quote, 'Primary_Contact.Account', find(account, acc => quote.Primary_Contact && acc.Id === quote.Primary_Contact.AccountId));
           return quote;
         })
