@@ -122,14 +122,18 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         switchMap((order: Order) => combineLatest(
           of(order), 
           get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
-          this.apiService.get(`/accounts?condition[0]=Id,In,${compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')]))}&lookups=OwnerId,PriceListId`, Account)
+          // Using query instead of get(), as get is not returning list of accounts as expected.
+          this.accountService.query({
+            conditions: [
+              new ACondition(Account, 'Id', 'In', compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')])))
+          ]})
         )),
-        map(([order, quote, account]) => {
+        map(([order, quote, accounts]) => {
           order.Proposal = quote;
-          order.SoldToAccount = defaultTo(find(account, acc => acc.Id === order.SoldToAccountId), order.SoldToAccount);
-          order.BillToAccount = defaultTo(find(account, acc => acc.Id === order.BillToAccountId), order.BillToAccount);
-          order.ShipToAccount = defaultTo(find(account, acc => acc.Id === order.ShipToAccountId), order.ShipToAccount);
-          set(order, 'PrimaryContact.Account', find(account, acc => order.PrimaryContact && acc.Id === order.PrimaryContact.AccountId));
+          order.SoldToAccount = defaultTo(find(accounts, acc => acc.Id === order.SoldToAccountId), order.SoldToAccount);
+          order.BillToAccount = defaultTo(find(accounts, acc => acc.Id === order.BillToAccountId), order.BillToAccount);
+          order.ShipToAccount = defaultTo(find(accounts, acc => acc.Id === order.ShipToAccountId), order.ShipToAccount);
+          set(order, 'PrimaryContact.Account', find(accounts, acc => order.PrimaryContact && acc.Id === order.PrimaryContact.AccountId));
           return order;
         })
       );
