@@ -49,6 +49,10 @@
         <ng-template #complex>
             <div class="d-flex">
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
+                    <div class="form-group mx-3 my-0 d-flex align-items-center">
+                        <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
+                        <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" name="quantity" />
+                      </div>
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false" [quantity]="viewState.quantity"
                         [cartItems]="cartItemList" [product]="product ? product: viewState?.product" [btnClass]="'btn-primary btn-raised px-3 py-2'"
                         (onAddToCart)="onAddToCart($event)" [label]="'Update Configuration'" [aboEnabled]="false">
@@ -106,6 +110,7 @@
                 <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
                 <apt-product-configuration
                   [product]="viewState?.product"
+                  [productQuantity]="viewState?.quantity"
                   [relatedTo]="viewState?.relatedTo"
                   (configurationChange)="onConfigurationChange($event)"
                   (click)="configurationChanged = true">
