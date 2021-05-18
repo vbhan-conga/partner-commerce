@@ -52,11 +52,7 @@ export class ProductDetailComponent implements OnInit {
         this.cartItemList = null;
         const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
           this.productService.fetch(get(params, 'id'));
-          let cartItem$ = of(null)
-          if(get(params, 'cartItem'))
-              cartItem$ = this.cartService.getMyCart().pipe(
-                      rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
-                  );
+        const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
         return combineLatest([product$, cartItem$]);
       }),
       rmap(([product, cartItemList]) => {
