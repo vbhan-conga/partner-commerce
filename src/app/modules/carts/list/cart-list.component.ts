@@ -25,6 +25,7 @@ export class CartListComponent implements OnInit {
   loading: boolean = false;
   cart: Cart;
   view$: Observable<CartListView>;
+  cartAggregate$: Observable<any>;
   /** @ignore */
   type = Cart;
 
@@ -41,15 +42,11 @@ export class CartListComponent implements OnInit {
   }
   /** @ignore */
   loadView() {
+    this.getCartAggregate();
     this.view$ = combineLatest(
-      this.cartService.getMyCart(),
-      this.cartService.query({
-        aggregate: true,
-        skipCache: true,
-        filters: this.getFilters()
-      })
-    ).pipe(
-      map(([currentCart, cartList]) => {
+      this.cartService.getMyCart())
+    .pipe(
+      map(([currentCart]) => {
         return {
           tableOptions: {
             columns: [
@@ -96,18 +93,26 @@ export class CartListComponent implements OnInit {
                 label: 'Delete',
                 theme: 'danger',
                 validate: (record: Cart) => this.canDelete(record),
-                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => null))
+                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => this.getCartAggregate()))
               } as TableAction
             ],
             highlightRow: (record: Cart) => of(this.isCartActive(currentCart, record)),
             children: ['SummaryGroups'],
             filters: this.getFilters()
           },
-          totalCarts: _.get(_.first(cartList), 'total_records'),
           type: Cart
         } as CartListView;
       })
     );
+  }
+
+  /** @ignore */
+  private getCartAggregate(): any {
+    return this.cartAggregate$ = this.cartService.query({
+      aggregate: true,
+      skipCache: true,
+      filters: this.getFilters()
+    }).pipe(map(_.first));
   }
 
   /**
@@ -172,5 +177,4 @@ export class CartListComponent implements OnInit {
 interface CartListView {
   tableOptions: TableOptions;
   type: ClassType<AObject>;
-  totalCarts: number;
 }
