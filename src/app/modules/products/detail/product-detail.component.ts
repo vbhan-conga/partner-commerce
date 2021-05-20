@@ -46,11 +46,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      */
     configurationPending: boolean = false;
 
-    quantity: number = 1;
-
-    /** @ignore */
-    productCode: string;
-
     /**@ignore */
     relatedTo: CartItem;
 
@@ -102,8 +97,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-            if (response && has(response, 'hasErrors')) 
-                this.configurationPending = get(response, 'hasErrors');
+            if (response && has(response, 'configurationPending')) {
+                this.configurationPending = get(response, 'configurationPending');
+            }
             else {
                 this.configurationPending = false;
                 this.product = get(response, 'product');
@@ -149,10 +145,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.relatedTo = primaryItem;
         if (!isNil(primaryItem) && (get(primaryItem, 'HasOptions') || get(primaryItem, 'HasAttributes')))
             this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
-
-        if (this.quantity <= 0) {
-            this.quantity = 1;
-        }
 
         this.productConfigurationService.onChangeConfiguration({
             product: get(this, 'product'),
