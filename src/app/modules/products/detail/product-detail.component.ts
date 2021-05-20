@@ -97,8 +97,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-            if (response && has(response, 'hasErrors')) 
-                this.configurationPending = get(response, 'hasErrors');
+            if (response && has(response, 'configurationPending')) {
+                this.configurationPending = get(response, 'configurationPending');
+            }
             else {
                 this.configurationPending = false;
                 this.product = get(response, 'product');
