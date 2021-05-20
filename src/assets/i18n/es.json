@@ -548,7 +548,7 @@
     "HEADER": {
         "PRODUCT_SERACH": "es_MX Product Search",
         "SUBMIT": "es_MX Submit",
-        "ENTER_YOUR_SEARCH_TERM": "es_MX Enter your search term...",
+        "ENTER_YOUR_SEARCH_TERM": "es_MX Enter your search term (min 3 chars)...",
         "GUEST_USER": "es_MX Guest User",
         "LAST_LOGIN": "es_MX Last Login Date",
         "HOME": "es_MX Home",
@@ -558,7 +558,8 @@
         "LOG_OUT": "es_MX Log Out",
         "LOG_IN": "es_MX Log In",
         "BACK": "es_MX Back",
-        "SHOW_ALL": "es_MX Show All"
+        "SHOW_ALL": "es_MX Show All",
+        "MIN_VALIDATION_SEARCH_ERROR": "es_MX Search term should be at least 3 characters in length"
     },
     "PROMOTION": {
         "TITLE": "es_MX Promotion",
