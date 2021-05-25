@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { TranslateService } from '@ngx-translate/core';
 import { map, mergeMap, take } from 'rxjs/operators';
@@ -42,9 +42,12 @@ export class CartListComponent implements OnInit {
   }
   /** @ignore */
   loadView() {
-    this.view$ = this.getCartAggregate()
+    this.view$ = combineLatest(
+      this.cartService.getMyCart(),
+      this.getCartAggregate()
+    )
     .pipe(
-      map(() => {
+      map(([currentCart, cartList]) => {
         return {
           tableOptions: {
             columns: [
