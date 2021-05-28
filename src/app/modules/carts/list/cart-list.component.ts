@@ -3,7 +3,7 @@ import { AObject, AFilter, ACondition } from '@apttus/core';
 import { CartService, Cart, PriceService, CartApiService } from '@apttus/ecommerce';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { map, mergeMap, take } from 'rxjs/operators';
@@ -41,8 +41,11 @@ export class CartListComponent implements OnInit {
   }
   /** @ignore */
   loadView() {
-    this.view$ = this.getCartAggregate().pipe(
-      map(() => {
+    this.view$ = combineLatest(
+      this.cartService.getMyCart(),
+      this.getCartAggregate()
+    ).pipe(
+      map(([currentCart, cartList]) => {
         return {
           tableOptions: {
             columns: [
