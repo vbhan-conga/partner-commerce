@@ -85,7 +85,7 @@ export class CartListComponent implements OnInit {
                 label: 'Set Active',
                 theme: 'primary',
                 validate:(record: Cart) => this.canActivate(currentCart, record),
-                action:(recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList)).pipe(map(cart => null))
+                action:(recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList), true)
               } as TableAction,
               {
                 enabled: true,
