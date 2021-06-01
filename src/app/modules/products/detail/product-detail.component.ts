@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { switchMap, map as rmap } from 'rxjs/operators';
+import { switchMap, map as rmap, take } from 'rxjs/operators';
 import { first, last, get, isNil, find, forEach } from 'lodash';
 
 import { ApiService } from '@apttus/core';
@@ -24,8 +24,6 @@ export class ProductDetailComponent implements OnInit {
    * Flag to detect if their is change in product configuration.
    */
   configurationChanged = false;
-
-  quantity = 1;
 
   /** @ignore */
   productCode: string;
@@ -52,7 +50,12 @@ export class ProductDetailComponent implements OnInit {
         this.cartItemList = null;
         const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
           this.productService.fetch(get(params, 'id'));
-        const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
+        let cartItem$ = of(null);
+        if(get(params, 'cartItem'))
+            cartItem$ = this.cartService.getMyCart().pipe(
+                    take(1),
+                    rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
+                );
         return combineLatest([product$, cartItem$]);
       }),
       rmap(([product, cartItemList]) => {
@@ -115,9 +118,6 @@ export class ProductDetailComponent implements OnInit {
       this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
     }
 
-    if (this.quantity <= 0) {
-      this.quantity = 1;
-    }
   }
 
   /**
