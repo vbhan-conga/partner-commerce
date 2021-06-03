@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { switchMap, map as rmap, take } from 'rxjs/operators';
-import { first, last, get, isNil, find, forEach } from 'lodash';
+import { switchMap, map as rmap } from 'rxjs/operators';
+import { get, isNil, find, forEach } from 'lodash';
 
 import { ApiService } from '@apttus/core';
 import { CartService, CartItem, Product, ProductService, ProductInformation, ProductInformationService, ConstraintRuleService } from '@apttus/ecommerce';
@@ -53,7 +53,6 @@ export class ProductDetailComponent implements OnInit {
         let cartItem$ = of(null);
         if(get(params, 'cartItem'))
             cartItem$ = this.cartService.getMyCart().pipe(
-                    take(1),
                     rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
                 );
         return combineLatest([product$, cartItem$]);
