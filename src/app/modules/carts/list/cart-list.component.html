@@ -6,7 +6,7 @@
         <nav class="navbar navbar-light bg-white d-flex justify-content-between">
             <span class="navbar-brand">
                 {{'COMMON.CARTS' | translate}}
-                <span *ngIf="view?.totalCarts">({{view?.totalCarts}})</span>
+                <span *ngIf="cartAggregate$ | async as cartAggregate">({{cartAggregate?.total_records}})</span>
             </span>
             <button type="button" class="btn btn-primary btn-raised"
                 (click)="newCart(template)">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</button>
