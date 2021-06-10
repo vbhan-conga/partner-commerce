@@ -82,10 +82,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
             }),
             rmap(([product, cartItemList, storefront]) => {
+                const qty = get(cartItemList, 'Quantity', 1);
+                this.productConfigurationService.changeProductQuantity(qty);
                 return {
                     product: product as Product,
                     relatedTo: cartItemList,
-                    quantity: get(cartItemList, 'Quantity', 1),
+                    quantity: qty,
                     storefront: storefront
                 };
             })
