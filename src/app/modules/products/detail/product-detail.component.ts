@@ -82,10 +82,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             }),
             rmap(([product, cartItemList, storefront]) => {
                 const pli = PriceListItemService.getPriceListItemForProduct(product as Product);
+                const qty = isNil(cartItemList) ? defaultTo(get(pli, 'DefaultQuantity'), 1) : get(cartItemList, 'Quantity', 1);
+                this.productConfigurationService.changeProductQuantity(qty);
                 return {
                     product: product as Product,
                     relatedTo: cartItemList,
-                    quantity: isNil(cartItemList) ? defaultTo(get(pli, 'DefaultQuantity'), 1) : get(cartItemList, 'Quantity', 1),
+                    quantity: qty,
                     storefront: storefront
                 };
             })
