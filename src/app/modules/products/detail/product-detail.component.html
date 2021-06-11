@@ -49,6 +49,10 @@
         <ng-template #complex>
             <div class="d-flex">
                 <ng-container *ngIf="viewState?.relatedTo; else newProduct">
+                    <div class="form-group mx-3 my-0 d-flex align-items-center">
+                        <span class="mr-3"> {{'COMMON.QUANTITY' | translate}} </span>
+                        <input type="number" min="1" class="w-75 form-control" [(ngModel)]="viewState.quantity" (ngModelChange)="changeProductQuantity(viewState.quantity)" name="quantity" />
+                    </div>
                     <apt-add-to-cart [showQuantityControls]="false" [configurationEnabled]="false"
                         [quantity]="viewState.quantity"
                         [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"

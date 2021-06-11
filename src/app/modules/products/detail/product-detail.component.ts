@@ -74,7 +74,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.cartItemList = null;
                 const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
                     this.productService.fetch(get(params, 'id'));
-                const cartItem$ = (get(params, 'cartItem')) ? this.apiService.get(`/Apttus_Config2__LineItem__c/${get(params, 'cartItem')}?lookups=AttributeValue,AssetLineItem,PriceList,PriceListItem,Product,TaxCode`, CartItem,) : of(null);
+                    let cartItem$ = of(null);
+                    if(get(params, 'cartItem'))
+                        cartItem$ = this.cartService.getMyCart().pipe(
+                                rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
+                            );
                 return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
             }),
             rmap(([product, cartItemList, storefront]) => {
