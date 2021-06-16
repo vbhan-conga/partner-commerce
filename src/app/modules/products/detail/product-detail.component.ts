@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { switchMap, map as rmap, take } from 'rxjs/operators';
-import { first, last, get, isNil, find, forEach } from 'lodash';
-
-import { ApiService } from '@apttus/core';
-import { CartService, CartItem, Product, ProductService, ProductInformation, ProductInformationService, ConstraintRuleService } from '@apttus/ecommerce';
+import { switchMap, map as rmap } from 'rxjs/operators';
+import { get, isNil, find, forEach, defaultTo } from 'lodash';
+import { CartService, CartItem, Product, ProductService, ProductInformation, ProductInformationService, ConstraintRuleService, PriceListItemService } from '@apttus/ecommerce';
 import { ProductConfigurationComponent, ProductConfigurationSummaryComponent } from '@apttus/elements';
 @Component({
   selector: 'app-product-detail',
@@ -32,14 +30,13 @@ export class ProductDetailComponent implements OnInit {
   configSummaryModal: ProductConfigurationSummaryComponent;
 
   @ViewChild(ProductConfigurationComponent, { static: false })
-    productConfigComponent: ProductConfigurationComponent;
+  productConfigComponent: ProductConfigurationComponent;
 
   constructor(private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService,
     private productInformationService: ProductInformationService,
-    private apiService: ApiService,
     private crService: ConstraintRuleService) {
   }
 
@@ -52,17 +49,17 @@ export class ProductDetailComponent implements OnInit {
           this.productService.fetch(get(params, 'id'));
         let cartItem$ = of(null);
         if(get(params, 'cartItem'))
-            cartItem$ = this.cartService.getMyCart().pipe(
-                    take(1),
-                    rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
-                );
+          cartItem$ = this.cartService.getMyCart().pipe(
+            rmap(cart => find(get(cart, 'LineItems'), { Id: get(params, 'cartItem') }))
+          );
         return combineLatest([product$, cartItem$]);
       }),
       rmap(([product, cartItemList]) => {
+        const pli = PriceListItemService.getPriceListItemForProduct(product as Product);
         return {
           product: product as Product,
           relatedTo: cartItemList,
-          quantity: get(cartItemList, 'Quantity', 1)
+          quantity: isNil(cartItemList) ? defaultTo(get(pli, 'DefaultQuantity'), 1) : get(cartItemList, 'Quantity', 1)
         };
       })
     );
