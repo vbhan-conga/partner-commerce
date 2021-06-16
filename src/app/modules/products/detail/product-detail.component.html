@@ -110,7 +110,7 @@
                 <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
                 <apt-product-configuration
                   [product]="viewState?.product"
-                  [isAccordion]="true"
+                  [accordion]="true"
                   [relatedTo]="viewState?.relatedTo"
                   (configurationChange)="onConfigurationChange($event)"
                   (click)="configurationChanged = true">
