@@ -28,6 +28,7 @@ _Put an `x` in the boxes that apply._
 - [ ] Angular unit tests pass locally with my changes
 - [ ] No linting issues with my changes
 - [ ] I have added any necessary documentation
+- [ ] Peer testing has been done in my local
 - [ ] Any dependent changes have been merged and published in downstream modules
 
 ## Test Reports
