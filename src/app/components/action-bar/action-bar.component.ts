@@ -4,7 +4,6 @@ import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
 import { ExceptionService } from '@apttus/elements';
 import { OutputFieldComponent } from '@apttus/elements';
-import { Router } from '@angular/router';
 import { first, get } from 'lodash';
 
 @Component({
@@ -18,21 +17,22 @@ export class ActionBarComponent implements OnInit {
   cart$: Observable<Cart>;
   loading: boolean = false;
 
-  @ViewChild('accountField', {static: false}) accountField: OutputFieldComponent;
-  // @ViewChild('priceListField', {static: false}) priceListField;
+  @ViewChild('accountField', { static: false }) accountField: OutputFieldComponent;
 
   constructor(
     private cartService: CartService,
     private accountService: AccountService,
     private exceptionService: ExceptionService,
     private orderService: OrderService,
-    private categoryService: CategoryService,
-    private router: Router) { }
+    private categoryService: CategoryService) { }
 
   ngOnInit() {
     this.cart$ = this.cartService.getMyCart()
     .pipe(
-      switchMap(cart => combineLatest([of(cart), get(cart,'OrderId') ? this.orderService.getOrder(cart.OrderId) : of(null), this.accountService.getAccount(cart.AccountId)])),
+      switchMap(cart => combineLatest(
+        [of(cart),
+          get(cart,'OrderId') ? this.orderService.getOrder(get(cart, 'OrderId')) : of(null),
+          this.accountService.getAccount(get(cart, 'AccountId'))])),
       map(([cart, order, account]) => {
         cart.Order = first(order);
         cart.Account = account;
