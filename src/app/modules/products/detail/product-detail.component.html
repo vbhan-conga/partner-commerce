@@ -115,7 +115,10 @@
             <h4 class="text-muted col-12"> {{'PRODUCT_DETAILS.CONFIGURATIONS' | translate}} </h4>
             <div class="col-12">
                 <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
-                <apt-product-configuration [productId]="viewState?.product?.Id" [relatedTo]="viewState?.relatedTo"
+                <apt-product-configuration
+                    [productId]="viewState?.product?.Id"
+                    [relatedTo]="viewState?.relatedTo"
+                    [accordion]="true"
                     (click)="configurationChanged = true">
                 </apt-product-configuration>
             </div>
