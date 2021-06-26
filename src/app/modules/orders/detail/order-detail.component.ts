@@ -148,7 +148,12 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
           children: [
             {
               field: 'OrderTaxBreakups'
-            }]
+            }],
+            lookups: [
+              {
+                field: 'Apttus_Config2__ProductId__c'
+              }
+            ]
         }))
       );
 
