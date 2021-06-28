@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService } from '@apttus/ecommerce';
+  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService, QuoteLineItem } from '@apttus/ecommerce';
   import { ExceptionService, LookupOptions } from '@apttus/elements';
   import { ACondition, ApiService } from '@apttus/core';
 import { ActivatedRoute } from '@angular/router';
@@ -96,20 +96,26 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.quoteLineItemService.query({
-          conditions: [new ACondition(this.quoteLineItemService.type, 'ProposalId', 'In', [quoteId])],
-          waitForExpansion: false,
-          children: [
+        mergeMap(quoteId =>  this.apiService.post('/Apttus_Proposal__Proposal_Line_Item__c/query', {
+          'conditions': [
             {
-              field: 'TaxBreakups'
-            }],
-            lookups: [
-              {
-                field: 'Apttus_Proposal__Product__c'
-              }
-            ]
-        }))
-      );
+              'field': 'ProposalId',
+              'filterOperator': 'Equal',
+              'value': quoteId
+            }
+          ],
+          'lookups': [
+            {
+              'field': 'Apttus_Proposal__Product__c'
+            },
+            {
+              'field': 'Apttus_QPConfig__AttributeValueId__c'
+            }
+          ],
+          'children': [{
+            'field': 'Apttus_QPConfig__TaxBreakups__r'
+          }]
+        }, QuoteLineItem, null)));
 
     this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), quoteLineItems$.pipe(startWith(null)))
       .pipe(map(([quote, lineItems]) => {

@@ -142,20 +142,26 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.query({
-          conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
-          waitForExpansion: false,
-          children: [
+        mergeMap(orderId => this.apiService.post('/Apttus_Config2__OrderLineItem__c/query', {
+          'conditions': [
             {
-              field: 'OrderTaxBreakups'
-            }],
-            lookups: [
-              {
-                field: 'Apttus_Config2__ProductId__c'
-              }
-            ]
-        }))
-      );
+              'field': 'OrderId',
+              'filterOperator': 'Equal',
+              'value': orderId
+            }
+          ],
+          'lookups': [
+            {
+              'field': 'Apttus_Config2__ProductId__c'
+            },
+            {
+              'field': 'Apttus_Config2__AttributeValueId__c'
+            }
+          ],
+          'children': [{
+            'field': 'Apttus_Config2__OrderTaxBreakups__r'
+          }]
+        }, OrderLineItem, null)));
 
       this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
         .pipe(map(([order, lineItems]) => {
