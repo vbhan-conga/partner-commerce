@@ -32,11 +32,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   private subscriptions: Subscription[] = [];
 
   /**
-   * String containing the lookup fields to be queried for an order record.
-   */
-  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
-
-  /**
    * String containing the lookup fields to be queried for a proposal record.
    */
   private proposalLookups = `PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,AccountId,OpportunityId,Owner`;
@@ -118,7 +113,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
+        flatMap(orderId => this.orderService.fetch(orderId)),
         switchMap((order: Order) => combineLatest(
           of(order), 
           get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
@@ -142,26 +137,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.apiService.post('/Apttus_Config2__OrderLineItem__c/query', {
-          'conditions': [
-            {
-              'field': 'OrderId',
-              'filterOperator': 'Equal',
-              'value': orderId
-            }
-          ],
-          'lookups': [
-            {
-              'field': 'Apttus_Config2__ProductId__c'
-            },
-            {
-              'field': 'Apttus_Config2__AttributeValueId__c'
-            }
-          ],
-          'children': [{
-            'field': 'Apttus_Config2__OrderTaxBreakups__r'
-          }]
-        }, OrderLineItem, null)));
+        mergeMap(orderId => this.orderLineItemService.getOrderLineItems(orderId)));
 
       this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
         .pipe(map(([order, lineItems]) => {
