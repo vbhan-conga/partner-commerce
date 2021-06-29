@@ -16,6 +16,10 @@ import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
   encapsulation: ViewEncapsulation.None
 })
 export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
+ /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
 
   /**
    * Observable instance of an Order.
@@ -113,7 +117,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.orderService.fetch(orderId)),
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
         switchMap((order: Order) => combineLatest(
           of(order), 
           get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
