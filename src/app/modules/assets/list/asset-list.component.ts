@@ -327,7 +327,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
                 field: 'ProductId',
                 children: [
                   {
-                    field: 'AssetLineItems'
+                    field: 'AssetLineItems',
+                    filters: [new AFilter(this.assetService.type, [new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'), new ACondition(this.assetService.type, 'PriceType', 'In', ['Recurring', 'Usage']), new ACondition(this.assetService.type, 'BundleAssetId', 'NotNull', null)])]
                   }
                 ]
               }
