@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService } from '@apttus/ecommerce';
+  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService, QuoteLineItem } from '@apttus/ecommerce';
   import { ExceptionService, LookupOptions } from '@apttus/elements';
   import { ACondition, ApiService } from '@apttus/core';
 import { ActivatedRoute } from '@angular/router';
@@ -75,7 +75,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
+        mergeMap(quoteId => this.quoteService.fetch(quoteId)),
         switchMap((quote: Quote) => combineLatest([of(quote),
           // Using query instead of get(), as get is not returning list of accounts as expected.
           this.accountService.query({
@@ -96,20 +96,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.quoteLineItemService.query({
-          conditions: [new ACondition(this.quoteLineItemService.type, 'ProposalId', 'In', [quoteId])],
-          waitForExpansion: false,
-          children: [
-            {
-              field: 'TaxBreakups'
-            }],
-            lookups: [
-              {
-                field: 'Apttus_Proposal__Product__c'
-              }
-            ]
-        }))
-      );
+        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItems(quoteId)));
 
     this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), quoteLineItems$.pipe(startWith(null)))
       .pipe(map(([quote, lineItems]) => {
