@@ -16,6 +16,10 @@ import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
   encapsulation: ViewEncapsulation.None
 })
 export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
+ /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
 
   /**
    * Observable instance of an Order.
@@ -30,11 +34,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   orderSubscription: Subscription;
   
   private subscriptions: Subscription[] = [];
-
-  /**
-   * String containing the lookup fields to be queried for an order record.
-   */
-  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
 
   /**
    * String containing the lookup fields to be queried for a proposal record.
@@ -142,15 +141,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.query({
-          conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
-          waitForExpansion: false,
-          children: [
-            {
-              field: 'OrderTaxBreakups'
-            }]
-        }))
-      );
+        mergeMap(orderId => this.orderLineItemService.getOrderLineItems(orderId)));
 
       this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
         .pipe(map(([order, lineItems]) => {
