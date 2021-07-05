@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { first, get, isNil, find, forEach, maxBy, filter, last, has } from 'lodash';
+import { first, get, isNil, find, forEach, maxBy, filter, last, has, defaultTo } from 'lodash';
 import { combineLatest, Observable, Subscription, of } from 'rxjs';
-import { switchMap, map as rmap } from 'rxjs/operators';
+import { switchMap, map as rmap, distinctUntilKeyChanged } from 'rxjs/operators';
 
-import { ApiService } from '@apttus/core';
 import {
     CartService,
     CartItem,
@@ -14,7 +13,8 @@ import {
     ProductInformationService,
     ProductInformation,
     StorefrontService,
-    Storefront
+    Storefront,
+    PriceListItemService
 } from '@apttus/ecommerce';
 import { ProductConfigurationComponent, ProductConfigurationSummaryComponent, ProductConfigurationService } from '@apttus/elements';
 
@@ -60,7 +60,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private productService: ProductService,
-        private apiService: ApiService,
         private productInformationService: ProductInformationService,
         private storefrontService: StorefrontService,
         private productConfigurationService: ProductConfigurationService,
@@ -77,12 +76,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                     let cartItem$ = of(null);
                     if(get(params, 'cartItem'))
                         cartItem$ = this.cartService.getMyCart().pipe(
-                                rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
+                                rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')})),
+                                distinctUntilKeyChanged('Quantity')
                             );
                 return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
             }),
             rmap(([product, cartItemList, storefront]) => {
-                const qty = get(cartItemList, 'Quantity', 1);
+                const pli = PriceListItemService.getPriceListItemForProduct(product as Product);
+                const qty = isNil(cartItemList) ? defaultTo(get(pli, 'DefaultQuantity'), 1) : get(cartItemList, 'Quantity', 1);
                 this.productConfigurationService.changeProductQuantity(qty);
                 return {
                     product: product as Product,
