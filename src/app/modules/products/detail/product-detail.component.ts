@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, get, isNil, find, forEach, maxBy, filter, last, has, defaultTo } from 'lodash';
 import { combineLatest, Observable, Subscription, of } from 'rxjs';
-import { switchMap, map as rmap } from 'rxjs/operators';
+import { switchMap, map as rmap, distinctUntilKeyChanged } from 'rxjs/operators';
 
 import {
     CartService,
@@ -76,7 +76,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                     let cartItem$ = of(null);
                     if(get(params, 'cartItem'))
                         cartItem$ = this.cartService.getMyCart().pipe(
-                                rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')}))
+                                rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')})),
+                                distinctUntilKeyChanged('Quantity')
                             );
                 return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
             }),
