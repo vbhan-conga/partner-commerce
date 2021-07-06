@@ -77,7 +77,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                     if(get(params, 'cartItem'))
                         cartItem$ = this.cartService.getMyCart().pipe(
                                 rmap(cart => find(get(cart, 'LineItems'), {Id: get(params, 'cartItem')})),
-                                distinctUntilKeyChanged('Quantity')
+                                distinctUntilKeyChanged('TotalQuantity')
                             );
                 return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
             }),
