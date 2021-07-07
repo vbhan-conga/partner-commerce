@@ -27,7 +27,7 @@ export const environment: Configuration = {
   skipPricing: true,
   skipRules: false,
   apiVersion: '3',
-  pricingMode: 'default',
+  pricingMode: 'turbo',
   packageNamespace: 'Apttus_WebStore',
   // *** TODO: Replace with Salesforce environment variables ***
   storefront: 'P-Commerce',
