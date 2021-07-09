@@ -1,35 +1,13 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  OnDestroy,
-  ChangeDetectorRef,
-  AfterViewChecked,
-  NgZone
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
 import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq, defaultTo } from 'lodash';
-import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
-import {
-  Order,
-  OrderLineItem,
-  OrderService,
-  UserService,
-  ProductInformationService,
-  ItemGroup,
-  LineItemService,
-  Note,
-  NoteService,
-  EmailService,
-  AccountService,
-  Contact,
-  CartService,
-  Cart,
-  OrderLineItemService, Attachment, AttachmentService, Quote, Account
-} from '@apttus/ecommerce';
+import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
+         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
+        Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@apttus/ecommerce';
 import { ExceptionService, LookupOptions } from '@apttus/elements';
+import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -38,9 +16,14 @@ import { ExceptionService, LookupOptions } from '@apttus/elements';
   encapsulation: ViewEncapsulation.None
 })
 export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
+ /**
+   * String containing the lookup fields to be queried for an order record.
+   */
+  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
 
-  orderSubscription: Subscription;
-
+  /**
+   * Observable instance of an Order.
+   */
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
   orderLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
@@ -48,6 +31,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   noteSubscription: Subscription;
   attachmentSubscription: Subscription;
+  orderSubscription: Subscription;
 
   private subscriptions: Subscription[] = [];
 
@@ -111,7 +95,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private accountService: AccountService,
     private cartService: CartService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone,
     private orderLineItemService: OrderLineItemService,
     private apiService: ApiService,
     private attachmentService: AttachmentService) { }
@@ -136,7 +119,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.orderService.fetch(orderId)),
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
         switchMap((order: Order) => combineLatest([
           of(order),
           get(order, 'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
@@ -191,7 +174,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   updateOrder(order) {
-    this.ngZone.run(() => this.order$.next(cloneDeep(order)));
+    this.order$.next(cloneDeep(order));
   }
 
   /**
@@ -212,8 +195,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   /**
    * @ignore
    */
-  getTotalPromotions(orderLineItems: Array<OrderLineItem> = []): number {
-    return orderLineItems.length ? sum(orderLineItems.map(res => res.IncentiveAdjustmentAmount)) : 0;
+  getTotalPromotions(order: Order): number {
+    return ((get(order, 'OrderLineItems.length') > 0)) ? sum(get(order, 'OrderLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
 
   /**
