@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
@@ -97,7 +97,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private cdr: ChangeDetectorRef,
     private orderLineItemService: OrderLineItemService,
     private apiService: ApiService,
-    private attachmentService: AttachmentService) { }
+    private attachmentService: AttachmentService,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -174,7 +175,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   updateOrder(order) {
-    this.order$.next(cloneDeep(order));
+    this.ngZone.run(() => this.order$.next(cloneDeep(order)));
   }
 
   /**
@@ -195,8 +196,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   /**
    * @ignore
    */
-  getTotalPromotions(order: Order): number {
-    return ((get(order, 'OrderLineItems.length') > 0)) ? sum(get(order, 'OrderLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
+   getTotalPromotions(orderLineItems: Array<OrderLineItem> = []): number {
+    return orderLineItems.length ? sum(orderLineItems.map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
 
   /**
