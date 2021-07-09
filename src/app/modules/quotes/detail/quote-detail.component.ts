@@ -1,8 +1,4 @@
 import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService } from '@apttus/ecommerce';
-  import { ExceptionService, LookupOptions } from '@apttus/elements';
-  import { ACondition, ApiService } from '@apttus/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
 import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
@@ -10,6 +6,12 @@ import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rx
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 
+import { ACondition, ApiService } from '@apttus/core';
+import {
+  UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
+  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService
+} from '@apttus/ecommerce';
+import { ExceptionService, LookupOptions } from '@apttus/elements';
 @Component({
   selector: 'app-quote-details',
   templateUrl: './quote-detail.component.html',
@@ -80,7 +82,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
 
   getQuote() {
     this.ngOnDestroy();
-    if(this.quoteSubscription) this.quoteSubscription.unsubscribe();
+    if (this.quoteSubscription) this.quoteSubscription.unsubscribe();
 
     const quote$ = this.activatedRoute.params
       .pipe(
@@ -91,7 +93,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
           // Using query instead of get(), as get is not returning list of accounts as expected.
           this.accountService.query({
             conditions: [
-                new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]})
+              new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]
+            })
           ])
         ),
         map(([quote, accounts]) => {
@@ -107,15 +110,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.quoteLineItemService.query({
-          conditions: [new ACondition(this.quoteLineItemService.type, 'ProposalId', 'In', [quoteId])],
-          waitForExpansion: false,
-          children: [
-            {
-              field: 'TaxBreakups'
-            }]
-        }))
-      );
+        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItems(quoteId)));
 
     this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), quoteLineItems$.pipe(startWith(null)))
       .pipe(map(([quote, lineItems]) => {
@@ -128,7 +123,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
 
     this.getNotes();
     this.getAttachments();
-    
+
   }
 
   refreshQuote(fieldValue, quote, fieldName) {
@@ -141,9 +136,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   getNotes() {
     if (this.notesSubscription) this.notesSubscription.unsubscribe();
     this.notesSubscription = this.activatedRoute.params
-    .pipe(
-      switchMap(params => this.noteService.getNotes(get(params, 'id')))
-    ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
+      .pipe(
+        switchMap(params => this.noteService.getNotes(get(params, 'id')))
+      ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
   }
 
   addComment(quoteId: string) {
@@ -156,10 +151,10 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     }
     this.noteService.create([this.note])
       .subscribe(r => {
-          this.getNotes();
-          this.clear();
-          this.comments_loader = false;
-        },
+        this.getNotes();
+        this.clear();
+        this.comments_loader = false;
+      },
         err => {
           this.exceptionService.showError(err);
           this.comments_loader = false;
@@ -258,9 +253,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   getAttachments() {
     if (this.attachemntSubscription) this.attachemntSubscription.unsubscribe();
     this.attachemntSubscription = this.activatedRoute.params
-    .pipe(
-      switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
-    ).subscribe((attachments: Array<Attachment>) => this.ngZone.run(() => this.attachmentList$.next(attachments)));
+      .pipe(
+        switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
+      ).subscribe((attachments: Array<Attachment>) => this.ngZone.run(() => this.attachmentList$.next(attachments)));
   }
 
   /**

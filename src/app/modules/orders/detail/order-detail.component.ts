@@ -11,11 +11,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
 import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq, defaultTo } from 'lodash';
-import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
-         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
-        Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@apttus/ecommerce';
-import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@apttus/core';
+import {
+  Order,
+  OrderLineItem,
+  OrderService,
+  UserService,
+  ProductInformationService,
+  ItemGroup,
+  LineItemService,
+  Note,
+  NoteService,
+  EmailService,
+  AccountService,
+  Contact,
+  CartService,
+  Cart,
+  OrderLineItemService, Attachment, AttachmentService, Quote, Account
+} from '@apttus/ecommerce';
+import { ExceptionService, LookupOptions } from '@apttus/elements';
 
 @Component({
   selector: 'app-order-detail',
@@ -34,13 +48,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   noteSubscription: Subscription;
   attachmentSubscription: Subscription;
-  
-  private subscriptions: Subscription[] = [];
 
-  /**
-   * String containing the lookup fields to be queried for an order record.
-   */
-  private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
+  private subscriptions: Subscription[] = [];
 
   /**
    * String containing the lookup fields to be queried for a proposal record.
@@ -91,22 +100,21 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     fieldList: ['Name', 'Id', 'Email']
   };
 
-  constructor(private activatedRoute: ActivatedRoute, 
-              private orderService: OrderService,
-              private userService: UserService, 
-              private productInformationService: ProductInformationService,
-              private exceptionService: ExceptionService, 
-              private noteService: NoteService,
-              private lineItemService: LineItemService, 
-              private router: Router, 
-              private emailService: EmailService,
-              private accountService: AccountService, 
-              private cartService: CartService,
-              private orderLineItemService: OrderLineItemService,
-              private apiService: ApiService,
-              private cdr: ChangeDetectorRef, 
-              private attachmentService: AttachmentService, 
-              private ngZone: NgZone) { }
+  constructor(private activatedRoute: ActivatedRoute,
+    private orderService: OrderService,
+    private userService: UserService,
+    private productInformationService: ProductInformationService,
+    private exceptionService: ExceptionService,
+    private noteService: NoteService,
+    private router: Router,
+    private emailService: EmailService,
+    private accountService: AccountService,
+    private cartService: CartService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private orderLineItemService: OrderLineItemService,
+    private apiService: ApiService,
+    private attachmentService: AttachmentService) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.userService.isLoggedIn();
@@ -122,22 +130,23 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   }
 
   getOrder() {
-    if(this.orderSubscription) this.orderSubscription.unsubscribe();
-    
+    if (this.orderSubscription) this.orderSubscription.unsubscribe();
+
     const order$ = this.activatedRoute.params
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
-        switchMap((order: Order) => combineLatest(
-          of(order), 
-          get(order,'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
+        flatMap(orderId => this.orderService.fetch(orderId)),
+        switchMap((order: Order) => combineLatest([
+          of(order),
+          get(order, 'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
           // Using query instead of get(), as get is not returning list of accounts as expected.
           this.accountService.query({
             conditions: [
               new ACondition(Account, 'Id', 'In', compact(uniq([order.BillToAccountId, order.ShipToAccountId, order.SoldToAccountId, get(order, 'PrimaryContact.AccountId')])))
-          ]})
-        )),
+            ]
+          })
+        ])),
         map(([order, quote, accounts]) => {
           order.Proposal = quote;
           order.SoldToAccount = defaultTo(find(accounts, acc => acc.Id === order.SoldToAccountId), order.SoldToAccount);
@@ -152,34 +161,26 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.query({
-          conditions: [new ACondition(this.orderLineItemService.type, 'Apttus_Config2__OrderId__c', 'Equal', orderId)],
-          waitForExpansion: false,
-          children: [
-            {
-              field: 'OrderTaxBreakups'
-            }]
-        }))
-      );
+        mergeMap(orderId => this.orderLineItemService.getOrderLineItems(orderId)));
 
-      this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
-        .pipe(map(([order, lineItems]) => {
-          if(!order) return;
+    this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+      .pipe(map(([order, lineItems]) => {
+        if (!order) return;
 
-          if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
-            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
+        if (order.Status === 'Partially Fulfilled' && indexOf(this.orderStatusSteps, 'Fulfilled') > 0)
+          this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Fulfilled')] = 'Partially Fulfilled';
 
-          if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
-            this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
+        if (order.Status === 'Fulfilled' && indexOf(this.orderStatusSteps, 'Partially Fulfilled') > 0)
+          this.orderStatusSteps[indexOf(this.orderStatusSteps, 'Partially Fulfilled')] = 'Fulfilled';
 
-          order.OrderLineItems = lineItems;
-          this.orderLineItems$.next(LineItemService.groupItems(lineItems));
+        order.OrderLineItems = lineItems;
+        this.orderLineItems$.next(LineItemService.groupItems(lineItems));
 
-          return this.updateOrder(order);
+        return this.updateOrder(order);
       })).subscribe();
 
-      this.getNotes();
-      this.getAttachments();
+    this.getNotes();
+    this.getAttachments();
   }
 
   refreshOrder(fieldValue, order, fieldName) {
@@ -263,10 +264,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     }
     this.noteService.create([this.note])
       .subscribe(r => {
-          this.getNotes();
-          this.clear();
-          this.comments_loader = false;
-        },
+        this.getNotes();
+        this.clear();
+        this.comments_loader = false;
+      },
         err => {
           this.exceptionService.showError(err);
           this.comments_loader = false;
