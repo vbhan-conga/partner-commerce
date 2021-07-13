@@ -172,6 +172,7 @@ export class CartListComponent implements OnInit {
     ]));
   }
 
+
 }
 /** @ignore */
 interface CartListView {
