@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2003.1.58",
+  "version": "2003.1.59",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -82,7 +82,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-mocha-reporter": "^2.2.5",
     "locale-currency": "0.0.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "ng-packagr": "^10.1.0",
     "node-minify": "^3.2.1",
     "node-sass": "^4.13.1",
