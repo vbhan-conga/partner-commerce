@@ -8,7 +8,7 @@
               *ngIf="category?.Children?.length > 0; else direct">{{category.Name}}</a>
             <ng-template #direct>
               <a class="list-group-item list-group-item-action" (click)="modalRef.hide()"
-                [routerLink]="['/products/category', category.Name]">{{category.Name}}</a>
+                [routerLink]="['/products/category', category.Id]">{{category.Name}}</a>
             </ng-template>
           </ng-container>
         </ul>
@@ -19,7 +19,7 @@
             <a href="#menuCarousel" data-slide="prev" (click)="goBack(view, currentCategory)">
               <i class="fas fa-arrow-left mr-2"></i>{{'HEADER.BACK' | translate}}
             </a>
-            <a href="#menuCarousel" [routerLink]="['/products/category', currentCategory.Name]"
+            <a href="#menuCarousel" [routerLink]="['/products/category', currentCategory.Id]"
               (click)="modalRef.hide()" data-slide-to="0">{{'HEADER.SHOW_ALL' | translate}}</a>
           </div>
           <ul class="list-group list-group-flush mt-3">
@@ -29,7 +29,7 @@
                 *ngIf="category.Children && category.Children.length > 0; else link">{{category.Name}}</a>
               <ng-template #link>
                 <a class="list-group-item list-group-item-action" href="#menuCarousel"
-                  (click)="modalRef.hide()" [routerLink]="['/products/category', category.Name]"
+                  (click)="modalRef.hide()" [routerLink]="['/products/category', category.Id]"
                   data-slide-to="0">{{category.Name}}</a>
               </ng-template>
             </ng-container>

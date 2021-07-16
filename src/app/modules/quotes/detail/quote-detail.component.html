@@ -3,18 +3,17 @@
     <div class="d-flex d-flex align-items-center mb-2">
       <h3 class="m-0">{{quote?.Proposal_Name}}</h3>
       <span class="badge badge-light ml-3 px-3 py-1 border text-uppercase"
-            *ngIf="quote?.Approval_Stage">{{quote?.Approval_Stage}}</span>
+        *ngIf="quote?.Approval_Stage">{{quote?.Approval_Stage}}</span>
       <div *ngIf="quote?.Approval_Stage === 'Accepted' && order$ | async as order" class="ml-auto">
-                <span class="pr-4 d-flex align-items-center">
-                    <apt-output-field [record]="order" field="Name" label="Order ID" layout="inline"
-                                      [editable]="false" [showQuickView]="true"></apt-output-field>
-                    <span class="badge badge-info ml-1">{{order?.Status}}</span>
-                </span>
+        <span class="pr-4 d-flex align-items-center">
+          <apt-output-field [record]="order" field="Name" label="Order ID" layout="inline" [editable]="false"
+            [showQuickView]="true"></apt-output-field>
+          <span class="badge badge-info ml-1">{{order?.Status}}</span>
+        </span>
       </div>
 
       <button type="button" class="btn btn-primary btn-raised ml-auto" [ladda]="accept_loader"
-              *ngIf="quote?.Approval_Stage === 'Presented'"
-              (click)="acceptQuote(quote?.Id)">{{'COMMON.ACCEPT_QUOTE' | translate}}</button>
+        *ngIf="quote?.Approval_Stage === 'Presented'" (click)="acceptQuote(quote?.Id)">{{'COMMON.ACCEPT_QUOTE' |translate}}</button>
     </div>
     <span>{{quote?.Name}}</span>
   </div>
@@ -23,23 +22,40 @@
     <div class="row">
       <div class="col-12 col-md-8">
         <div class="card">
-            <div class="card-body">
-                <h5 class="py-2">
-                    {{'DETAILS.LINE_ITEMS' | translate}}
-                </h5>
-                <table class="table table-responsive border-bottom" *ngIf="quoteLineItems$ | async as quoteLineItems; else loading">
-                    <tbody>
-                        <ng-container *ngFor="let item of quoteLineItems; let i = index">
-                            <apt-line-item-table-row
-                            [index]="i"
-                            [parent]="item.MainLine"
-                            [options]="item.Options"
-                            [children]="item.SecondaryLines"
-                            [editableFields]="false">
-                            </apt-line-item-table-row>
-                        </ng-container>
-                    </tbody>
-                </table>
+          <div class="card-body">
+            <h5>{{'DETAILS.QUOTE_SUMMARY' | translate}}</h5>
+            <div class="row mt-4">
+              <dl class="col-12 col-md-6">
+                <apt-output-field [record]="quote" field="CreatedDate" layout="inline" [editable]="false">
+                </apt-output-field>
+                <apt-output-field [record]="quote.CreatedBy" field="Name" label="Created By" layout="inline"
+                  [editable]="false"></apt-output-field>
+                <apt-output-field [record]="quote" field="RFP_Response_Due_Date" layout="inline"
+                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
+                  (onChange)="refreshQuote($event, quote, 'RFP_Response_Due_Date')">
+                </apt-output-field>
+                <apt-output-field [record]="quote" field="Primary_ContactId" layout="inline"
+                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
+                  [showQuickView]="true" [lookupOptions]="lookupOptions"
+                  (onChange)="refreshQuote($event, quote, 'Primary_ContactId')">
+                </apt-output-field>
+                <apt-output-field [record]="quote" field="AccountId" label="Account Name" layout="inline"
+                  [editable]="false" [showQuickView]="true"></apt-output-field>
+              </dl>
+              <dl class="col-12 col-md-6">
+                <apt-output-field [record]="quote" field="ShipToAccountId" layout="inline"
+                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
+                  label="Ship To Account" [showQuickView]="true"
+                  (onChange)="refreshQuote($event, quote, 'ShipToAccountId')"></apt-output-field>
+                <apt-output-field [record]="quote" field="ShipToAccount.ShippingAddress" label="Ship To Address"
+                  layout="inline" [editable]="false"></apt-output-field>
+                <apt-output-field [record]="quote" field="BillToAccountId" layout="inline"
+                  [editable]="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Presented'"
+                  label="Bill To Account" [showQuickView]="true"
+                  (onChange)="refreshQuote($event, quote, 'BillToAccountId')"></apt-output-field>
+                <apt-output-field [record]="quote" field="BillToAccount.BillingAddress" label="Bill To Address"
+                  layout="inline" [editable]="false"></apt-output-field>
+              </dl>
             </div>
         </div>
       </div>
@@ -57,15 +73,11 @@
         </h5>
         <table class="table table-responsive border-bottom">
           <tbody>
-          <ng-container *ngFor="let item of quoteLineItems$ | async; let i = index">
-            <apt-line-item-table-row
-              [index]="i"
-              [parent]="item.MainLine"
-              [options]="item.Options"
-              [children]="item.SecondaryLines"
-              [editableFields]="false">
-            </apt-line-item-table-row>
-          </ng-container>
+            <ng-container *ngFor="let item of quoteLineItems$ | async; let i = index">
+              <apt-line-item-table-row [index]="i" [parent]="item.MainLine" [options]="item.Options"
+                [children]="item.SecondaryLines" [editableFields]="false">
+              </apt-line-item-table-row>
+            </ng-container>
           </tbody>
         </table>
       </div>
@@ -103,14 +115,12 @@
           <div class="col-12 col-md-6">
             <form (ngSubmit)="addComment(quote.Id)">
               <!-- <apt-input-field [entity]="note" field="Title" [(ngModel)]="note.Title" name="title" [required]="true" [placeholder]="'Note Title'"></apt-input-field> -->
-              <apt-input-field [entity]="note" field="Body" rows="5"
-                               label="{{'COMMON.ADD_NEW_COMMENT' | translate }}" [(ngModel)]="note.Body" name="body"
-                               [required]="true"></apt-input-field>
+              <apt-input-field [entity]="note" field="Body" rows="5" label="{{'COMMON.ADD_NEW_COMMENT' | translate }}"
+                [(ngModel)]="note.Body" name="body" [required]="true"></apt-input-field>
               <div class="d-flex justify-content-end">
-                <button class="btn btn-link" (click)="clear()"
-                        type="button">{{'COMMON.CLEAR' | translate }}</button>
+                <button class="btn btn-link" (click)="clear()" type="button">{{'COMMON.CLEAR' | translate }}</button>
                 <button class="btn btn-primary btn-raised" type="submit" [ladda]="comments_loader"
-                        [disabled]="!note.Body">{{'COMMON.ADD_COMMENT' | translate }}</button>
+                  [disabled]="!note.Body">{{'COMMON.ADD_COMMENT' | translate }}</button>
               </div>
             </form>
           </div>
@@ -123,8 +133,8 @@
     <div class="card" *ngIf="attachmentList$ | async as attachmentList; else loading">
       <div class="card-body">
         <h5 class="py-2 text-uppercase">
-          {{'DETAILS.ATTACHMENTS' | translate}} <span
-          *ngIf="attachmentList?.length > 0">({{attachmentList?.length}})</span>
+          {{'DETAILS.ATTACHMENTS' | translate}}
+          <span *ngIf="attachmentList?.length > 0">({{attachmentList?.length}})</span>
         </h5>
 
         <div class="row">
@@ -135,13 +145,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="d-flex justify-content-between"><a class="text-underline"
-                                                                     href="{{downloadAttachment(attachment.Id, quote.Id)}}"
-                                                                     target="_blank">{{attachment?.Name}}</a><span>{{(attachment?.BodyLength/1024).toFixed(2)}}
-                                                    KB</span></div>
+                          href="{{downloadAttachment(attachment.Id, quote.Id)}}"
+                          target="_blank">{{attachment?.Name}}</a><span>{{(attachment?.BodyLength/1024).toFixed(2)}}
+                          KB</span></div>
                     </div>
                     <div class="col-md-6">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BY' | translate}}<span
-                      class="pl-2">{{attachment?.CreatedBy.Name}},</span><span
-                      class="pl-3">{{attachment?.CreatedDate | date:'short'}}</span></div>
+                        class="pl-2">{{attachment?.CreatedBy.Name}},</span><span class="pl-3">{{attachment?.CreatedDate
+                        | date:'short'}}</span></div>
                   </div>
                 </div>
               </ng-container>
@@ -156,15 +166,17 @@
           <div class="col-12 col-md-6">
             <form (ngSubmit)="uploadAttachment(quote.Id)">
               <label class="font-weight-bold">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.TITLE' | translate}}</label>
-              <div class="file-section bg-light d-flex align-items-center justify-content-center border-secondary file-upload"
-                   (dragover)="onDragFile($event)" (drop)="onDropFile($event)" data-max-size="26214400">
+              <div
+                class="file-section bg-light d-flex align-items-center justify-content-center border-secondary file-upload"
+                (dragover)="onDragFile($event)" (drop)="onDropFile($event)" data-max-size="26214400">
                 <label class="p-5 position-relative" for="browse"><span
-                  class="position-absolute upload-icon-position"><i
-                  class="fa fa-4x fa-cloud-upload text-black-50"></i></span><span
-                  class="pl-4">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.INPUT_LABEL' | translate}}</span><span
-                  class="pl-1 text-underline cursor-pointer">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BROWSE' | translate}}</span></label>
+                    class="position-absolute upload-icon-position"><i
+                      class="fa fa-4x fa-cloud-upload text-black-50"></i></span><span
+                    class="pl-4">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.INPUT_LABEL' | translate}}</span><span
+                    class="pl-1 text-underline cursor-pointer">{{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.BROWSE' |
+                    translate}}</span></label>
                 <input id="browse" class="d-none p-5" type="file" (change)="fileChange($event)"
-                       data-max-size="26214400" />
+                  data-max-size="26214400" />
               </div>
               <div class="mt-2" *ngIf="hasSizeError">
                 <p class="text-danger">
@@ -180,10 +192,9 @@
                 </div>
               </div>
               <div class="d-flex justify-content-end mt-3">
-                <button class="btn btn-link" (click)="clearFiles()"
-                        type="button">{{'COMMON.CLEAR' | translate }}</button>
+                <button class="btn btn-link" (click)="clearFiles()" type="button">{{'COMMON.CLEAR' | translate}}</button>
                 <button class="btn btn-primary btn-primary" type="submit" [disabled]="!file"
-                        [ladda]="attachments_loader">{{'COMMON.UPLOAD' | translate }}</button>
+                  [ladda]="attachments_loader">{{'COMMON.UPLOAD' | translate }}</button>
               </div>
             </form>
           </div>
@@ -204,7 +215,7 @@
     <div class="modal-body d-flex flex-column justify-content-center py-4">
       <p class="text-center"><strong>{{ 'QUOTE_CONFIRMATION_MODAL.THANK_YOU' | translate }}!</strong></p>
       <span class="text-center" [translate]="'DETAILS.SUCCESSFUL_QUOTE_ACCEPTANCE_MESSAGE'"
-            [translateParams]="{quoteName: quote?.Name}"></span>
+        [translateParams]="{quoteName: quote?.Name}"></span>
     </div>
   </ng-template>
 </app-detail>
