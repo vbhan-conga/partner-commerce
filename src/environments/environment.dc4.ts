@@ -14,7 +14,7 @@ export const environment: Configuration = {
   maxBufferSize: 10,
   disableBuffer: false,
   subqueryLimit: 10,
-  pricingMode: 'turbo',
+  pricingMode: 'default',
   disableCache: false,
   encryptResponse: false,
   cartRetryLimit: 3,
