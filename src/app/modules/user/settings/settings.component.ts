@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService, AccountService, User, Account } from '@apttus/ecommerce';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
+import { UserService, AccountService, User, Account } from '@apttus/ecommerce';
 import { ExceptionService } from '@apttus/elements';
+
 
 /**
  * Loads user and account specific settings.

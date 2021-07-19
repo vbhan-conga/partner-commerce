@@ -1,26 +1,17 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  TemplateRef,
-  NgZone,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  OnDestroy
-} from '@angular/core';
-import {
-  UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  ProductInformationService, ItemGroup, LineItemService, Attachment, QuoteLineItemService
-} from '@apttus/ecommerce';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { ExceptionService, LookupOptions } from '@apttus/elements';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { ACondition, ApiService } from '@apttus/core';
 
+import { ACondition, ApiService } from '@apttus/core';
+import {
+  UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
+  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService
+} from '@apttus/ecommerce';
+import { ExceptionService, LookupOptions } from '@apttus/elements';
 @Component({
   selector: 'app-quote-details',
   templateUrl: './quote-detail.component.html',
@@ -28,10 +19,12 @@ import { ACondition, ApiService } from '@apttus/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuoteDetailComponent implements OnInit, OnDestroy {
+
+
   quote$: BehaviorSubject<Quote> = new BehaviorSubject<Quote>(null);
-
   quoteLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
-
+  attachmentList$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
+  noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
   order$: Observable<Order>;
 
   note: Note = new Note();
@@ -54,10 +47,6 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
 
   attachments_loader = false;
 
-  attachmentList$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
-
-  noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
-
   notesSubscription: Subscription;
 
   attachemntSubscription: Subscription;
@@ -73,58 +62,72 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   };
 
   constructor(private activatedRoute: ActivatedRoute,
-              private quoteService: QuoteService,
-              private noteService: NoteService,
-              private exceptionService: ExceptionService,
-              private modalService: BsModalService,
-              private orderService: OrderService,
-              private attachmentService: AttachmentService,
-              private productInformationService: ProductInformationService,
-              private cdr: ChangeDetectorRef,
-              private ngZone: NgZone,
-              private userService: UserService,
-              private quoteLineItemService: QuoteLineItemService,
-              private apiService: ApiService) { }
+    private quoteService: QuoteService,
+    private noteService: NoteService,
+    private exceptionService: ExceptionService,
+    private modalService: BsModalService,
+    private orderService: OrderService,
+    private attachmentService: AttachmentService,
+    private productInformationService: ProductInformationService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private userService: UserService,
+    private apiService: ApiService,
+    private quoteLineItemService: QuoteLineItemService,
+    private accountService: AccountService) { }
 
   ngOnInit() {
     this.getQuote();
   }
 
   getQuote() {
-    if (this.quoteSubscription) {
-      this.quoteSubscription.unsubscribe();
-    }
+    this.ngOnDestroy();
+    if (this.quoteSubscription) this.quoteSubscription.unsubscribe();
 
     const quote$ = this.activatedRoute.params
       .pipe(
-        filter(params => _.get(params, 'id') != null),
-        map(params => _.get(params, 'id')),
-        mergeMap(quoteId => this.apiService.get(`/quotes?condition[0]=Id,Equal,${quoteId}&lookups=PriceListId,Primary_Contact,BillToAccountId,ShipToAccountId,Account,CreatedBy`, Quote)),
-        map(quoteList => _.get(quoteList, '[0]'))
+        filter(params => get(params, 'id') != null),
+        map(params => get(params, 'id')),
+        mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
+        switchMap((quote: Quote) => combineLatest([of(quote),
+          // Using query instead of get(), as get is not returning list of accounts as expected.
+          this.accountService.query({
+            conditions: [
+              new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]
+            })
+          ])
+        ),
+        map(([quote, accounts]) => {
+          quote.Account = defaultTo(find(accounts, acc => acc.Id === quote.AccountId), quote.Account);
+          quote.BillToAccount = defaultTo(find(accounts, acc => acc.Id === quote.BillToAccountId), quote.BillToAccount);
+          quote.ShipToAccount = defaultTo(find(accounts, acc => acc.Id === quote.ShipToAccountId), quote.ShipToAccount);
+          set(quote, 'Primary_Contact.Account', find(accounts, acc => quote.Primary_Contact && acc.Id === quote.Primary_Contact.AccountId));
+          return quote;
+        })
       );
 
-    const lineItems$ = this.activatedRoute.params
+    const quoteLineItems$ = this.activatedRoute.params
       .pipe(
-        filter(params => _.get(params, 'id') != null),
-        map(params => _.get(params, 'id')),
-        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItemsForQuote(quoteId))
-      );
+        filter(params => get(params, 'id') != null),
+        map(params => get(params, 'id')),
+        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItems(quoteId)));
 
-    this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
+    this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), quoteLineItems$.pipe(startWith(null)))
       .pipe(map(([quote, lineItems]) => {
         if (!quote) return;
         quote.R00N70000001yUfBEAU = lineItems;
-        this.quoteLineItems$.next(LineItemService.groupItems(lineItems));
-        this.order$ = this.orderService.getOrderByQuote(_.get(quote, 'Id'));
-        this.ngZone.run(() => this.quote$.next(_.cloneDeep(quote)));
+        lineItems && this.quoteLineItems$.next(LineItemService.groupItems(lineItems));
+        this.order$ = this.orderService.getOrderByQuote(get(quote, 'Id'));
+        this.ngZone.run(() => this.quote$.next(cloneDeep(quote)));
       })).subscribe();
 
     this.getNotes();
     this.getAttachments();
+
   }
 
   refreshQuote(fieldValue, quote, fieldName) {
-    _.set(quote, fieldName, fieldValue);
+    set(quote, fieldName, fieldValue);
     this.quoteService.update([quote]).subscribe(r => {
       this.getQuote();
     });
@@ -134,24 +137,24 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     if (this.notesSubscription) this.notesSubscription.unsubscribe();
     this.notesSubscription = this.activatedRoute.params
       .pipe(
-        switchMap(params => this.noteService.getNotes(_.get(params, 'id')))
+        switchMap(params => this.noteService.getNotes(get(params, 'id')))
       ).subscribe((notes: Array<Note>) => this.noteList$.next(notes));
   }
 
   addComment(quoteId: string) {
     this.comments_loader = true;
 
-    _.set(this.note, 'ParentId', quoteId);
-    _.set(this.note, 'OwnerId', _.get(this.userService.me(), 'Id'));
+    set(this.note, 'ParentId', quoteId);
+    set(this.note, 'OwnerId', get(this.userService.me(), 'Id'));
     if (!this.note.Title) {
-      _.set(this.note, 'Title', 'Dummy Title');
+      set(this.note, 'Title', 'Dummy Title');
     }
     this.noteService.create([this.note])
       .subscribe(r => {
-          this.getNotes();
-          this.clear();
-          this.comments_loader = false;
-        },
+        this.getNotes();
+        this.clear();
+        this.comments_loader = false;
+      },
         err => {
           this.exceptionService.showError(err);
           this.comments_loader = false;
@@ -159,9 +162,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    _.set(this.note, 'Body', null);
-    _.set(this.note, 'Title', null);
-    _.set(this.note, 'Id', null);
+    set(this.note, 'Body', null);
+    set(this.note, 'Title', null);
+    set(this.note, 'Id', null);
   }
 
   acceptQuote(quoteId: string) {
@@ -251,8 +254,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     if (this.attachemntSubscription) this.attachemntSubscription.unsubscribe();
     this.attachemntSubscription = this.activatedRoute.params
       .pipe(
-        switchMap(params => this.attachmentService.getAttachments(_.get(params, 'id')))
-      ).subscribe((attachments: Array<Attachment>) => this.attachmentList$.next(attachments));
+        switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
+      ).subscribe((attachments: Array<Attachment>) => this.ngZone.run(() => this.attachmentList$.next(attachments)));
   }
 
   /**
@@ -282,7 +285,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
    * @ignore
    */
   getTotalPromotions(quote: Quote): number {
-    return ((_.get(quote, 'QuoteLineItems.length') > 0)) ? _.sum(_.get(quote, 'QuoteLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
+    return ((get(quote, 'QuoteLineItems.length') > 0)) ? sum(get(quote, 'QuoteLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
 
   closeModal() {

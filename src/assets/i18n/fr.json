@@ -542,7 +542,7 @@
     "HEADER": {
         "PRODUCT_SERACH": "fr_FR Product Search",
         "SUBMIT": "fr_FR Submit",
-        "ENTER_YOUR_SEARCH_TERM": "fr_FR Enter your search term...",
+        "ENTER_YOUR_SEARCH_TERM": "fr_FR Enter your search term (min 3 chars)...",
         "GUEST_USER": "fr_FR Guest User",
         "LAST_LOGIN": "fr_FR Last Login Date",
         "HOME": "fr_FR Home",
@@ -552,7 +552,8 @@
         "LOG_OUT": "fr_FR Log Out",
         "LOG_IN": "fr_FR Log In",
         "BACK": "fr_FR Back",
-        "SHOW_ALL": "fr_FR Show All"
+        "SHOW_ALL": "fr_FR Show All",
+        "MIN_VALIDATION_SEARCH_ERROR": "fr_FR Search term should be at least 3 characters in length"
     },
     "PROMOTION": {
         "TITLE": "fr_FR Promotion",

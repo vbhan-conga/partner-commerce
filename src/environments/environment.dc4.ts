@@ -1,7 +1,7 @@
 import { Configuration } from '@apttus/core';
 export const environment: Configuration = {
   production: true,
-  defaultImageSrc: './assets/images/default.png',
+  defaultImageSrc: 'https://loremflickr.com/320/240/hardware',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
   enableErrorLogging: false,
@@ -11,10 +11,9 @@ export const environment: Configuration = {
   enablePerformanceLogs: true,
   defaultCurrency: 'USD',
   bufferTime: 10,
-  maxBufferSize: 10,
+  maxBufferSize: 100,
   disableBuffer: false,
   subqueryLimit: 10,
-  pricingMode: 'default',
   disableCache: false,
   encryptResponse: false,
   cartRetryLimit: 3,
@@ -23,6 +22,7 @@ export const environment: Configuration = {
   debounceTime: 1000,
   proxy: 'https://apttus-proxy.herokuapp.com',
   useIndexedDB: true,
+  pricingMode: 'default',
   skipPricing: true,
   skipRules: false,
   expandDepth: 8,

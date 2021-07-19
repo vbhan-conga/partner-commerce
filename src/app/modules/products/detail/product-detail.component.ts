@@ -1,140 +1,229 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ConfigurationService } from '@apttus/core';
-import { CartService, CartItem, Storefront, StorefrontService, BundleProduct, Cart } from '@apttus/ecommerce';
-import { Router, ActivatedRoute } from '@angular/router';
-import * as _ from 'lodash';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { ProductConfigurationSummaryComponent, ProductConfigurationService } from '@apttus/elements';
-import { ProductDetailsState, ProductDetailsResolver } from '../services/product-details.resolver';
-import { take } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first, get, isNil, find, forEach, maxBy, filter, last, has, defaultTo } from 'lodash';
+import { combineLatest, Observable, Subscription, of } from 'rxjs';
+import { switchMap, map as rmap, distinctUntilChanged } from 'rxjs/operators';
+
+import {
+  CartService,
+  CartItem,
+  ConstraintRuleService,
+  Product,
+  ProductService,
+  ProductInformationService,
+  ProductInformation,
+  StorefrontService,
+  Storefront,
+  PriceListItemService
+} from '@apttus/ecommerce';
+import { ProductConfigurationComponent, ProductConfigurationSummaryComponent, ProductConfigurationService } from '@apttus/elements';
 
 @Component({
-    selector: 'app-product-detail',
-    templateUrl: './product-detail.component.html',
-    styleUrls: ['./product-detail.component.scss']
+  selector: 'app-product-detail',
+  templateUrl: './product-detail.component.html',
+  styleUrls: ['./product-detail.component.scss']
 })
 /**
  * Product Details Component is the details of the product for standalone and bundle products with attributes and options.
  */
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
-    cartItemList: Array<CartItem>;
-    product: BundleProduct;
-    viewState$: BehaviorSubject<ProductDetailsState>;
+  viewState$: Observable<ProductDetailsState>;
+  recommendedProducts$: Observable<Array<Product>>;
 
-    /**
-     * Flag to detect if there is change in product configuration.
-     */
-    configurationChanged: boolean = false;
-    /**
-     * Flag to detect if there is pending in product configuration.
-     */
-    configurationPending: boolean = false;
+  attachments$: Observable<Array<ProductInformation>>;
 
-    quantity: number = 1;
-    /**
-     * Flag used in update configuration method
-     */
-    saving: boolean = false;
-    /**
-     * Default term is set to 1.
-     */
-    term: number = 1;
+  cartItemList: Array<CartItem>;
+  product: Product;
+  subscriptions: Array<Subscription> = new Array<Subscription>();
 
-    /** @ignore */
-    productCode: string;
+  /**
+   * Flag to detect if there is change in product configuration.
+   */
+  configurationChanged: boolean = false;
+  /**
+   * Flag to detect if there is pending in product configuration.
+   */
+  configurationPending: boolean = false;
 
-    /**@ignore */
-    relatedTo: CartItem;
-    private endpoint: string;
+  currentQty: number;
+
+  /**@ignore */
+  relatedTo: CartItem;
+
+  private configurationLayout: string = null;
+
+  @ViewChild(ProductConfigurationSummaryComponent, { static: false })
+  configSummaryModal: ProductConfigurationSummaryComponent;
+  @ViewChild(ProductConfigurationComponent, { static: false })
+  productConfigComponent: ProductConfigurationComponent;
+
+  constructor(private cartService: CartService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private productService: ProductService,
+    private productInformationService: ProductInformationService,
+    private storefrontService: StorefrontService,
+    private productConfigurationService: ProductConfigurationService,
+    private crService: ConstraintRuleService) {
+  }
+
+  ngOnInit() {
+    this.viewState$ = this.route.params.pipe(
+      switchMap(params => {
+        this.product = null;
+        this.cartItemList = null;
+        const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
+          this.productService.fetch(get(params, 'id'));
+        let cartItem$ = of(null);
+        if (get(params, 'cartItem'))
+          cartItem$ = this.cartService.getMyCart().pipe(
+            rmap(cart => find(get(cart, 'LineItems'), { Id: get(params, 'cartItem') })),
+            distinctUntilChanged((oldCli, newCli) => newCli.Quantity === this.currentQty)
+          );
+        return combineLatest([product$, cartItem$, this.storefrontService.getStorefront()]);
+      }),
+      rmap(([product, cartItemList, storefront]) => {
+        const pli = PriceListItemService.getPriceListItemForProduct(product as Product);
+        this.currentQty = isNil(cartItemList) ? defaultTo(get(pli, 'DefaultQuantity'), 1) : get(cartItemList, 'Quantity', 1);
+        this.productConfigurationService.changeProductQuantity(this.currentQty);
+        return {
+          product: product as Product,
+          relatedTo: cartItemList,
+          quantity: this.currentQty,
+          storefront: storefront
+        };
+      })
+    );
+
+    this.recommendedProducts$ = this.route.params.pipe(
+      switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
+      rmap(r => Array.isArray(r) ? r : [])
+    );
+
+    this.attachments$ = this.route.params.pipe(
+      switchMap(params => this.productInformationService.getProductInformation(get(params, 'id')))
+    );
+
+    this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
+      if (response && has(response, 'configurationPending')) {
+        this.configurationPending = get(response, 'configurationPending');
+      }
+      else {
+        this.configurationPending = false;
+        this.product = get(response, 'product');
+        this.cartItemList = get(response, 'itemList');
+        if (get(response, 'configurationFlags.optionChanged') || get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
+      }
+    }));
+  }
+
+  /**
+   * onConfigurationChange method is invoked whenever there is change in product configuration and this method sets flag
+   * isConfigurationChanged to true.
+   */
+  onConfigurationChange(result: any) {
+    this.product = first(result);
+    this.cartItemList = result[1];
+    if (get(last(result), 'optionChanged') || get(last(result), 'attributeChanged')) this.configurationChanged = true;
+  }
 
 
-    @ViewChild(ProductConfigurationSummaryComponent) configSummaryModal: ProductConfigurationSummaryComponent;
-    subscriptions: Array<Subscription> = [];
+  /**
+   * Changes the quantity of the cart item passed to this method.
+   *
+   * @param cartItem Cart item reference to the cart line item object.
+   * @fires CartService.updateCartItems()
+   */
 
-    constructor(private cartService: CartService,
-        private resolver: ProductDetailsResolver,
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private storefrontService: StorefrontService,
-        private productConfigurationService: ProductConfigurationService,
-        private configurationService: ConfigurationService) {
+  handleStartChange(cartItem: CartItem) {
+    this.cartService.updateCartItems([cartItem]);
+  }
+
+  onAddToCart(cartItems: Array<CartItem>): void {
+    this.configurationChanged = false;
+
+    const primaryItem = find(cartItems, i => get(i, 'IsPrimaryLine') === true && isNil(get(i, 'Option')));
+    if (!isNil(primaryItem) && (get(primaryItem, 'Product.HasOptions') || get(primaryItem, 'Product.HasAttributes'))) {
+      this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
     }
 
-    ngOnInit() {
-        this.resolver
-            .resolve(this.activatedRoute.snapshot)
-            .pipe(take(1))
-            .subscribe(() => {
-                this.viewState$ = this.resolver.state();
-            });
-        this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-            this.relatedTo = _.get(this.viewState$, 'value.relatedTo');
-            if (response && _.has(response, 'configurationPending')) this.configurationPending = _.get(response, 'configurationPending');
-            else {
-                this.product = _.get(response, 'product');
-                this.cartItemList = _.get(response, 'itemList');
-                if (_.get(response, 'configurationFlags.optionChanged') || _.get(response, 'configurationFlags.attributeChanged')) this.configurationChanged = true;
-            }
-        }));
+    if (get(cartItems, 'LineItems') && this.configurationLayout === 'Embedded') {
+      cartItems = get(cartItems, 'LineItems');
     }
+    this.relatedTo = primaryItem;
+    if (!isNil(primaryItem) && (get(primaryItem, 'HasOptions') || get(primaryItem, 'HasAttributes')))
+      this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
 
-    /**
-     * Changes the quantity of the cart item passed to this method.
-     *
-     * @param cartItem Cart item reference to the cart line item object.
-     * @fires CartService.updateCartItems()
-     */
+    this.productConfigurationService.onChangeConfiguration({
+      product: get(this, 'product'),
+      itemList: cartItems,
+      configurationFlags: null,
+      configurationPending: false
+    });
+  }
 
-    handleStartChange(cartItem: CartItem) {
-        this.cartService.updateCartItems([cartItem]);
+  /**
+   * Change the product quantity and update the primary cartItem
+   * to see the updated the netprice of the product.
+   */
+  changeProductQuantity(newQty: any) {
+    if (this.cartItemList && this.cartItemList.length > 0)
+      forEach(this.cartItemList, c => {
+        if (c.LineType === 'Product/Service') c.Quantity = newQty;
+        this.productConfigurationService.changeProductQuantity(newQty);
+      });
+  }
+
+  /**
+   * Changes the quantity of the cart item passed to this method.
+   *
+   * @param cartItem Cart item reference to the cart line item object.
+   * @fires CartService.updateCartItems()
+   */
+  handleEndDateChange(cartItem: CartItem) {
+    this.cartService.updateCartItems([cartItem]);
+  }
+
+  showSummary() {
+    this.configSummaryModal.show();
+  }
+
+
+  getPrimaryItem(cartItems: Array<CartItem>): CartItem {
+    let primaryItem: CartItem;
+    if (isNil(this.relatedTo)) {
+      primaryItem = maxBy(filter(cartItems, i => get(i, 'LineType') === 'Product/Service' && isNil(get(i, 'Option')) && get(this, 'product.Id') === get(i, 'ProductId')), 'PrimaryLineNumber');
     }
-
-    onAddToCart(cartItems: Array<CartItem>): void {
-        this.configurationChanged = false;
-        if (_.get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') cartItems = _.get(cartItems, 'LineItems');
-        const primaryItem = this.getPrimaryItem(cartItems);
-        this.relatedTo = primaryItem;
-        if (!_.isNil(primaryItem) && (_.get(primaryItem, 'HasOptions') || _.get(primaryItem, 'HasAttributes'))) {
-            this.router.navigate(['/products', _.get(this, 'viewState$.value.product.Id'), _.get(primaryItem, 'Id')]);
-        }
-        if (this.quantity <= 0) {
-            this.quantity = 1;
-        }
+    else {
+      primaryItem = find(cartItems, i => get(i, 'LineType') === 'Product/Service' && i.PrimaryLineNumber === get(this, 'relatedTo.PrimaryLineNumber') && isNil(get(i, 'Option')));
     }
+    return primaryItem;
+  }
 
-    changeProductQuantity(newQty: any) {
-        if (this.cartItemList && this.cartItemList.length > 0)
-            _.forEach(this.cartItemList, c => {
-                if (c.LineType === 'Product/Service') c.Quantity = newQty;
-                this.productConfigurationService.changeProductQuantity(newQty);
-            });
-    }
+  ngOnDestroy() {
+    forEach(this.subscriptions, item => {
+      if (item) item.unsubscribe();
+    });
+  }
+}
 
-    /**
-     * Changes the quantity of the cart item passed to this method.
-     *
-     * @param cartItem Cart item reference to the cart line item object.
-     * @fires CartService.updateCartItems()
-     */
-    handleEndDateChange(cartItem: CartItem) {
-        this.cartService.updateCartItems([cartItem]);
-    }
-
-    showSummary() {
-        this.configSummaryModal.show();
-    }
-
-    getPrimaryItem(cartItems: Array<CartItem>): CartItem {
-        let primaryItem: CartItem;
-        if (_.isNil(this.viewState$.value.relatedTo))
-            primaryItem = _.maxBy(_.filter(cartItems, i => _.get(i, 'LineType') === 'Product/Service' && _.isNil(_.get(i, 'Option')) && _.get(this, 'viewState$.value.product.Id') === _.get(i, 'ProductId')), 'PrimaryLineNumber');
-        else
-            primaryItem = _.find(cartItems, i => _.get(i, 'LineType') === 'Product/Service' && i.PrimaryLineNumber === _.get(this.viewState$.value.relatedTo, 'PrimaryLineNumber') && _.isNil(_.get(i, 'Option')));
-        return primaryItem;
-    }
-
-    ngOnDestroy() {
-        _.forEach(this.subscriptions, (item) => item.unsubscribe());
-    }
+/** @ignore */
+export interface ProductDetailsState {
+  /**
+   * The product to display.
+   */
+  product: Product;
+  /**
+   * The CartItem related to this product.
+   */
+  relatedTo: CartItem;
+  /**
+   * Quantity to set to child components
+   */
+  quantity: number;
+  /**
+   * The storefront.
+   */
+  storefront: Storefront;
 }

@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2003.1.19",
+  "version": "2003.1.61",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,14 +23,15 @@
     "@angular/pwa": "~0.802.0",
     "@angular/router": "^10.1.1",
     "@angular/service-worker": "^10.1.1",
-    "@apttus/core": "^2003.1.31",
-    "@apttus/ecommerce": "^2003.1.31",
-    "@apttus/elements": "^2003.1.31",
+    "@apttus/core": "^2003.1.101",
+    "@apttus/ecommerce": "^2003.1.101",
+    "@apttus/elements": "^2003.1.101",
     "@fortawesome/fontawesome-free": "^5.12.0",
+    "@kolkov/ngx-gallery": "^1.2.3",
     "@ng-select/ng-option-highlight": "0.0.5",
     "@ng-select/ng-select": "^5.0.1",
     "@ngx-translate/core": "^13.0.0",
-    "angular2-ladda": "^3.1.0",
+    "angular2-ladda": "3.1.1",
     "bootstrap": "^4.4.1",
     "bootstrap-material-design": "^4.1.2",
     "chart.js": "^2.9.3",
@@ -82,7 +83,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-mocha-reporter": "^2.2.5",
     "locale-currency": "0.0.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "ng-packagr": "^10.1.0",
     "node-minify": "^3.2.1",
     "node-sass": "^4.13.1",
@@ -93,10 +94,5 @@
     "typescript": "4.0.2",
     "uglifyjs-folder": "^1.5.2",
     "webpack-bundle-analyzer": "^3.4.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "ng build --configuration=production"
-    }
   }
 }

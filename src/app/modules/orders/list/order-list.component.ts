@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService, Order, CartService, AccountService } from '@apttus/ecommerce';
-import * as _ from 'lodash';
-import { combineLatest, of, Observable, BehaviorSubject } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
-import { ACondition, AFilter, Operator } from '@apttus/core';
+
+import { of, Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { clone, assign, get, isArray, groupBy, sumBy, omit, zipObject, mapValues, map } from 'lodash';
+
+import { AFilter, Operator } from '@apttus/core';
+import { OrderService, Order, AccountService } from '@apttus/ecommerce';
 import { TableOptions, FilterOptions } from '@apttus/elements';
 
 @Component({
@@ -14,7 +16,10 @@ import { TableOptions, FilterOptions } from '@apttus/elements';
 export class OrderListComponent implements OnInit {
   type = Order;
 
-  view$: Observable<OrderListView>;
+  totalRecords$: Observable<number>;
+  totalAmount$: Observable<number>;
+  ordersByStatus$: Observable<number>;
+  orderAmountByStatus$: Observable<number>;
 
   colorPalette = ['#D22233', '#F2A515', '#6610f2', '#008000', '#17a2b8', '#0079CC', '#CD853F', '#6f42c1', '#20c997', '#fd7e14'];
 
@@ -82,50 +87,43 @@ export class OrderListComponent implements OnInit {
     ]
   };
 
-  constructor(private orderService: OrderService, private cartService: CartService, private accountService: AccountService) { }
+  constructor(private orderService: OrderService, private accountService: AccountService) { }
 
   ngOnInit() {
 
-    this.view$ = combineLatest(
+    combineLatest([
       this.accountService.getCurrentAccount(),
       this.filterList$
-    )
-      .pipe(
-        switchMap(([account, filterList]) => {
-          return combineLatest(
-            of(account),
-            this.orderService.query({
-              aggregate: true,
-              groupBy: ['Status'],
-              filters: this.filterList$.value
-            })
-          );
-        }),
-        map(([account, data]) => ({
-          tableOptions: _.clone(_.assign(this.tableOptions, { filters: this.filterList$.value })),
-          total: _.get(data, 'total_records', _.sumBy(data, 'total_records')),
-          totalAmount: _.get(data, 'SUM_OrderAmount', _.sumBy(data, 'SUM_OrderAmount')),
-          ordersByStatus: _.isArray(data)
-            ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Config2__Status__c'), s => _.sumBy(s, 'total_records')), 'null')
-            : _.zipObject([_.get(data, 'Apttus_Config2__Status__c')], _.map([_.get(data, 'Apttus_Config2__Status__c')], key => _.get(data, 'total_records'))),
-          orderAmountByStatus: _.isArray(data)
-            ? _.omit(_.mapValues(_.groupBy(data, 'Apttus_Config2__Status__c'), s => _.sumBy(s, 'SUM_OrderAmount')), 'null')
-            : _.zipObject([_.get(data, 'Apttus_Config2__Status__c')], _.map([_.get(data, 'Apttus_Config2__Status__c')], key => _.get(data, 'SUM_OrderAmount')))
-        }))
+    ]).pipe(
+      switchMap(([account, filterList]) => {
+        return combineLatest([
+          of(account),
+          this.orderService.query({
+            aggregate: true,
+            groupBy: ['Status'],
+            filters: this.filterList$.value
+          })
+        ]);
+      })
+    ).subscribe(([account, data]) => {
+      this.tableOptions = clone(assign(this.tableOptions, { filters: this.filterList$.value }));
+      this.totalRecords$ = of(get(data, 'total_records', sumBy(data, 'total_records')));
+      this.totalAmount$ = of(get(data, 'SUM_OrderAmount', sumBy(data, 'SUM_OrderAmount')));
+      this.ordersByStatus$ = of(
+        isArray(data)
+          ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'total_records')), 'null')
+          : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'total_records')))
       );
+      this.orderAmountByStatus$ = of(
+        isArray(data)
+          ? omit(mapValues(groupBy(data, 'Apttus_Config2__Status__c'), s => sumBy(s, 'SUM_OrderAmount')), 'null')
+          : zipObject([get(data, 'Apttus_Config2__Status__c')], map([get(data, 'Apttus_Config2__Status__c')], key => get(data, 'SUM_OrderAmount')))
+      )
+    });
   }
 
   handleFilterListChange(event: any) {
     this.filterList$.next(event);
   }
 
-}
-
-/** @ignore */
-interface OrderListView {
-  tableOptions: TableOptions;
-  total: number;
-  totalAmount: number;
-  ordersByStatus: object;
-  orderAmountByStatus: object;
 }
