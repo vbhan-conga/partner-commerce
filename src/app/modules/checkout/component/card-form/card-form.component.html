@@ -1,0 +1,42 @@
+<div *ngIf="card">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label for="cc-name">{{'PAYMENT_CARD.NAME_ON_CARD' | translate}}</label>
+      <input type="text" class="form-control" id="cc-name" name="cc-name" required [(ngModel)]="card.name" #ccName="ngModel" [ngClass]="{ 'is-invalid': ccName.invalid && (ccName.touched || ccName.dirty || form.submitted) }">
+      <small class="text-muted"> {{'PAYMENT_CARD.NAME_ON_CARD_INFO' | translate}}</small>
+      <div class="invalid-feedback">
+          {{'PAYMENT_CARD.INVALID_NAME_ON_CARD' | translate}}
+      </div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="cc-number">{{'PAYMENT_CARD.CREDITCARD_NUMBER' | translate}}</label>
+      <input type="text" pattern="\d*" class="form-control" id="cc-number" name="cc-number" required [(ngModel)]="card.number" #ccNumber="ngModel" [ngClass]="{ 'is-invalid': ccNumber.invalid && (ccNumber.touched || ccNumber.dirty || form.submitted) }">
+      <div class="invalid-feedback">
+          {{'PAYMENT_CARD.INVALID_CREDITCARD_NUMBER' | translate}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <label for="cc-expiration">{{'PAYMENT_CARD.EXPIRATION_MONTH' | translate}}</label>
+      <input  type="number" min="0" max="12" pattern="\d*" maxlength="2" class="form-control" id="cc-expiration-month" name="cc-expiration-month" required [(ngModel)]="card.expirationMonth" #ccExprM="ngModel" [ngClass]="{ 'is-invalid': ccExprM.invalid && (ccExprM.touched || ccExprM.dirty || form.submitted) }">
+      <div class="invalid-feedback">
+          {{'PAYMENT_CARD.INVALID_EXPIRATION_MONTH' | translate}}
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="cc-expiration">{{'PAYMENT_CARD.EXPIRATION_YEAR' | translate}}</label>
+      <input type="number" min="0" max="99" class="form-control" id="cc-expiration-year" name="cc-expiration-year" required [(ngModel)]="card.expirationYear" #ccExprY="ngModel" [ngClass]="{ 'is-invalid': ccExprY.invalid && (ccExprY.touched || ccExprY.dirty || form.submitted) }">
+      <div class="invalid-feedback">
+          {{'PAYMENT_CARD.INVALID_EXPIRATION_YEAR' | translate}}
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="cc-expiration">{{'PAYMENT_CARD.CVV' | translate}}</label>
+      <input type="text" pattern="\d*" class="form-control" id="cc-cvv" placeholder="" name="cc-cvv" required [(ngModel)]="card.securityCode" #cvv="ngModel" [ngClass]="{ 'is-invalid': cvv.invalid && (cvv.touched || cvv.dirty || form.submitted) }">
+      <div class="invalid-feedback">
+        {{'PAYMENT_CARD.INVALID_CVV' | translate}}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,751 @@
+{
+    "ERROR": {
+        "OPTION_GROUP" : {
+            "ERROR" : "opzione gruppo Errori",
+            "MIN_OPTIONS": "voi dovere Selezionare a meno {{value}} opzioni.",
+            "MAX_opzioni": "voi può Selezionare non più di {{value}} opzioni.",
+            "MIN_TOTAL_QUANTITY": "La quantità minima totale è {{value}}.",
+            "MAX_TOTAL_QUANTITY": "La quantità massima totale è {{value}}."
+        },
+        "UNABLE_TO_RENEW": "Si è verificato un errore rinnovo di questo asset(s)",
+        "CART": {
+            "TOO_MANY_ATTEMPTS": "Un articolo nel tuo carrello potrebbero non essere il suo prezzo. Si prega di provare la rimozione di un elemento \/ gli elementi e provare di nuovo.",
+            "SERVER_ERROR": "Oops qualcosa è andato storto.",
+            "PRICE_CHANGE": "Il prezzo del carrello è stato aggiornato",
+            "PRICE_CHANGE_TOASTR_TITLE": "Aggiornamento Prezzo",
+            "VALIDATE" : "Ci sono errori nel tuo carrello.",
+            "CONSTRAINT_RULES": "Un articolo nel carrello ha violato 1 o più regole di vincolo."
+        },
+        "CART_ITEM": {
+            "VALIDATE": "Sono errori con questo articolo carrello."
+        },
+        "CONSTRAINT_RULE": {
+            "ASSOCIATE_AND_APPLY": "Un errore dovuto al sempre le regole di vincolo per il vostro carrello."
+        },
+        "PROMOTION": {
+            "INVALID_TOASTR_MESSAGE": "Promozione {{nome}} non viene applicata.",
+            "INVALID_TOASTR_TITLE": "La Promozione Non Viene Applicata"
+        },
+        "APPLICATION_ERROR_TOASTR_TITLE": "Errore Di Applicazione"
+    },
+    "SUCCESS": {
+        "TITLE": "Successo",
+        "CART": {
+            "ITEM_ADDED_TOASTR_MESSAGE": "{{productName}} è stato aggiunto al carrello.",
+            "ITEM_ADDED_TOASTR_TITLE": "Elemento Aggiunto",
+            "CONFIGURATION_UPDATED": "{{productName}} configurazione è stato aggiornato."
+        },
+        "PROMOTION": {
+            "REMOVED_TOASTR_MESSAGE": "Promozione {{nome}} è stato rimosso.",
+            "REMOVED_TOASTR_TITLE": "Promozione Rimosso"
+        },
+        "QUOTE_UPDATED": "Preventivo Aggiornato Con Successo!",
+        "QUOTE_UPDATE_TITLE": "Citazione Di Aggiornamento",
+        "GENERATED": "Il documento dell'ordine è stato generato e può essere visualizzato nella scheda 'Allegati'.",
+        "DOCUMENT_GENERATED_TITLE": "Documento Generato",
+        "PRESENTED": "Il documento dell'ordine è stato presentato a {{primary_contact}} e la notifica via e-mail viene inviata.",
+        "DOCUMENT_PRESENTED_TITLE": "Documento Presentato"
+    },
+    "ASSETS": {
+        "TERMINATE_SUCCESS": "L'attività di terminazione è stato aggiunto al tuo carrello.",
+        "RENEW_SUCCESS": "L'attività di rinnovo è stato aggiunto al tuo carrello.",
+        "BUYMORE_SUCCESS": "Il bene è stato aggiunto al tuo carrello.",
+        "CHANGECONFIGURATION_SUCCESS": "Il bene è stato aggiunto al tuo carrello.",
+        "CHANGECONFIGURATION_START_DATE": "Configurazione Di Data Di Inizio",
+        "CHANGECONFIGURATION_END_DATE": "Configurazione Data Di Fine"
+    },
+    "MY_ACCOUNT": {
+        "LAST_LOGIN_DATE": "Last Login:",
+        "OVERVIEW": "Panoramica",
+        "SETTINGS": "Impostazioni",
+        "DASHBOARD": {
+            "WEEKLY": "Settimanale",
+            "ORDERS_THIS_WEEK": "Gli ordini di questa settimana",
+            "SPENT": "Trascorso",
+            "ORDERS_BY_STATUS": "Ordini Stato",
+            "INFORMATION": "Il Tuo Scopo",
+            "ACCOUNT_DETAILS": "I Dettagli Dell'Account",
+            "EMAIL": "Email",
+            "RECENT_ORDERS": "Ordini Recenti",
+            "ORDER_NAME": "Nome Dell'Ordine"
+        },
+        "ORDER_LIST": {
+            "NUM_OF_ITEMS": "di Elementi"
+        },
+        "ORDER_DETAIL": {
+            "BILLING_ADDRESS": "Indirizzo Di Fatturazione",
+            "SHIPPING_ADDRESS": "Indirizzo Di Spedizione",
+            "PAYMENT_INFO": "Informazioni Di Pagamento",
+            "PAYMENT_TYPE": "Tipo Di Pagamento",
+            "PURCHASE_ORDER": "Ordine Di Acquisto",
+            "PO_NUMBER": "Numero di PO",
+            "ORDER_SUMMARY": "Riepilogo Ordine",
+            "ORDER_ID": "Id Ordine",
+            "ORDER_DATE": "Data Ordine",
+            "ORDER_STATUS": "Stato Dell'Ordine",
+            "PRODUCT_CONFIG": "La Configurazione Del Prodotto"
+        },
+        "CART_LIST": {
+            "CREATE_NEW": "Nuovo Carrello",
+            "CART_NAME": "Carrello Nome",
+            "NUMBER_OF_ITEMS": "Numero di Elementi",
+            "IS_ACTIVE": "È Attivo",
+            "SET_ACTIVE": "Set Active",
+            "CART_CREATION_FAILED": "Impossibile creare il carrello. Si prega di contattare l'amministratore."
+        },
+        "ADDRESS_BOOK": {
+            "NEW_ADDRESS": "Nuovo Indirizzo",
+            "SET_AS_DEFAULT": "Imposta come Predefinito",
+            "SAVE_FAILED": "Non è riuscito a salvare l'indirizzo. Si prega di contattare l'amministratore."
+        },
+        "SETTING": {
+            "MY_SETTINGS": "Le Mie Impostazioni",
+            "CHANGE_PASSWORD": "Cambia Password",
+            "USER_INFO": "Informazioni Utente",
+            "LOCALE": "Locale",
+            "ACCOUNT_INFO": "Informazioni Di Account",
+            "ADDRESS": "Indirizzo",
+            "PHONE": "Telefono"
+        },
+        "PRODUCT_CATALOG": {
+            "NEW_PRODUCT": "Nuovo Prodotto",
+            "LIST_PRICE": "Prezzo Di Listino",
+            "CLONE": "Clone",
+            "DESCRIPTION": "Descrizione",
+            "CONTRACT_PRICE": "Prezzo Del Contratto",
+            "PRODUCT_CREATION_FAILED": "Impossibile creare il prodotto. Si prega di contattare l'amministratore"
+        },
+        "QUOTE_DETAIL": {
+            "PRIMARY_CONTACT": "Contatto Principale",
+            "PAYMENT_TERM": "Termine Di Pagamento",
+            "PRESENTED_DATE": "Presentato In Data",
+            "CONFIGURATION": "Configurazione",
+            "QUOTES_BY_STATUS": "Preventivi Per Stato",
+            "QUOTES_BY_DUE_DATE": "Le Citazioni Della Data Di Scadenza",
+            "TOTAL_QUOTES": "Totale Citazioni",
+            "ATTACHMENTS": {
+                "TITLE": "Aggiungere un nuovo file(s)",
+                "INPUT_LABEL": "Rilasciare i file per Allegare o",
+                "BROWSE": "sfoglia",
+                "FILE_SIZE_EXCEEDED_ERROR": "Di dimensioni superiori a 25 MB",
+                "NO_ATTACHMENTS": "Allegati non sono ancora stati aggiunti",
+                "REMOVE_ATTACHMENT": "Rimuovere L'Allegato",
+                "BY": "da"
+            }
+        },
+        "QUOTE_LIST": {
+            "QUOTES": "Preventivi",
+            "EXPECTED_START_DATE": "Previsto Inizio Data"
+        },
+        "REORDER": {
+            "SELECT_ITEMS": "Selezionare Gli Elementi",
+            "PRE_SELECTION_OF_PRODUCTS": "I vostri prodotti precedentemente acquistati sono stati pre-selezionati",
+            "UNIT": "Unità",
+            "BASE": "Base",
+            "TOTAL_PRICE": "Prezzo Totale"
+        }
+    },
+    "CHANGE_PASSWORD": {
+        "SET_PASSWORD": "Impostare la password",
+        "PLACEHOLDER_PASSWORD": "Password",
+        "NEW_PASSWORD": "Nuova Password",
+        "CONFIRM_PASSWORD": "Conferma Password",
+        "PASSWORD_MIN_LENGTH_ERROR": "La Password deve essere di almeno 6 caratteri.",
+        "PASSWORD_DO_NOT_MATCH_ERROR": "La tua password non corrispondono",
+        "OLD_PASSWORD_CAN_NOT_BE_USED_ERROR": "Non riutilizzare la vecchia password.",
+        "OCURRED_SERVER_ERROR": "Un errore dovuto al. Si prega di contattare l'amministratore.",
+        "SUBMIT": "Invia"
+    },
+    "BUTTON": {
+        "Buy More": "Comprare Di Più",
+        "Buy_More": "Comprare Di Più",
+        "Change Configuration": "Modificare La Configurazione",
+        "Renew": "Rinnovare",
+        "Terminate": "Terminare",
+        "INSTALLED_PRODUCTS": "Prodotti Installati",
+        "LOGIN_MUST_TOOLTIP": "Necessario essere registrati per eseguire questa azione.",
+        "LOGIN_REQUIRED_TOOLTIP": "È richiesto il Login per vedere i prodotti installati.",
+        "ACTION_CANNOT_BE_COMPLETED_TOOLTIP": "Questa azione non può essere completata."
+    },
+    "FILTER": {
+        "PRODUCT_TYPES": "I Tipi Di Prodotto",
+        "ALL": "Tutti",
+        "ASSETS": "Attività",
+        "CATEGORIES": "Categorie",
+        "WRONG_INPUT": "Categoria filtro di ingresso deve essere un id o la categoria",
+        "PRICE_RANGE": "Fascia Di Prezzo",
+        "ADVANCED_FILTERS": "Filtri Avanzati",
+        "ADD_CRITERIA": "Aggiungi Criteri"
+    },
+    "INPUT_SELECT": {
+        "FIELD_TYPE_INVALID_ERROR": "Valore del campo non contiene elenco di selezione o multipicklist dati.",
+        "DATA_NOT_FOUND": "Selezione di dati non presente in questo tipo di campo."
+    },
+    "PRODUCT_LIST": {
+        "RELATED_CATEGORIES": "Categorie Correlate",
+        "PRODUCT_FAMILY": "Famiglia Di Prodotti",
+        "SHOW_COUNT_OF_RECORDS_MESSAGE": "Mostrando {{minVal}}-{{maxVal}} di {{totalVal}} risultati",
+        "SHOW": "Mostra",
+        "SORT_BY": "Ordina Per",
+        "SORT_BY_RELEVANCE": "Rilevanza"
+    },
+    "PRODUCT_CARD": {
+        "INSTALLED_PRODUCT": "Prodotto Installato",
+        "COMPLEX_PRODUCT": "Prodotto Complesso",
+        "STANDARD_PRICE": "Il Prezzo Standard",
+        "CHANGE_CONFIGURATION": "Modificare La Configurazione",
+        "EDIT_CONFIGURATION": "Configurare",
+        "SELECTED_PRODUCTS": "Prodotti Selezionati"
+    },
+    "PAGINATION": {
+        "FIRST": "Prima",
+        "PREVIOUS": "Precedente",
+        "NEXT": "Accanto",
+        "LAST": "Ultimo"
+    },
+    "COMMON": {
+        "ADD": "Inserisci",
+        "REMOVE": "Rimuovere",
+        "FIELD": "Campo",
+        "OPERATOR": "Operatore",
+        "VALUE": "Valore",
+        "APPLY": "Applicare",
+        "ORDERS": "Gli ordini",
+        "CARTS": "Carrelli",
+        "ADDRESS_BOOK": "Rubrica",
+        "AMOUNT": "Quantità",
+        "DATE": "Data",
+        "ORDER": "Ordine",
+        "TOTAL_AMOUNT": "Importo Totale",
+        "STATUS": "Stato",
+        "NAME": "Nome",
+        "DELETE": "Eliminare",
+        "EDIT": "Modifica",
+        "CANCEL": "Annulla",
+        "SAVE": "Salva",
+        "USERNAME": "Nome utente",
+        "PRODUCT_CATALOG": "Catalogo Prodotti",
+        "PRODUCT_CODE": "Codice Prodotto",
+        "CREATED_DATE": "Data Di Creazione",
+        "ITEMS": "Articoli",
+        "YOUR_PRICE": "Il Prezzo",
+        "QUANTITY": "Quantità",
+        "QUOTE": "Citazione",
+        "TOTAL": "Totale",
+        "APPROVAL_STAGE": "Fase Di Approvazione",
+        "ADD_TO_CART": "Aggiungi al Carrello",
+        "REORDER": "Riordinare",
+        "PRODUCT": "Prodotto",
+        "SELLING_FREQUENCY": "Vendita Di Frequenza",
+        "UNIT_PRICE": "Prezzo Unitario",
+        "START_DATE": "Data Di Inizio",
+        "END_DATE": "Data Di Fine",
+        "PRODUCT_gruppo": "Gruppo prodotti <strong>{{productGroupName}}<\/strong>",
+        "PRODUCT_FAMILY": "Famiglia di prodotti <strong>{{productFamily}}<\/strong>",
+        "PRICE": "Prezzo",
+        "QTY2": "Qty",
+        "PRODUCT_PRICE": "Il Prezzo Del Prodotto",
+        "SUB_CATEGORIES": "Sottocategorie",
+        "ERROR_ALERT": "errore",
+        "WARNING_ALERT": "avviso",
+        "INFO_ALERT": "informazioni",
+        "PRODUCT_CONFIGURATION": "La Configurazione Del Prodotto",
+        "SUBMIT": "Invia",
+        "REGISTER": "Registro",
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Cognome",
+        "EMAIL_ADDRESS": "Indirizzo E-Mail",
+        "FREQUENCY": "Frequenza",
+        "NET_PRICE": "Prezzo Netto",
+        "SEARCH_CONFIGURATION": "Ricerca Di Configurazione",
+        "QTY": "Qty",
+        "YES": "Sì",
+        "NO": "No",
+        "EMPTY": "- Vuoto -",
+        "YOU_MAY_ALSO_LIKE": "Si può anche come",
+        "RENEW": "Rinnovare",
+        "BUY_MORE": "Comprare Di Più",
+        "CHANGE_CONFIGURATION": "Modificare La Configurazione",
+        "TERMINATE": "Terminare",
+        "TERMINATE_ASSETS": "Terminare Asset(s)",
+        "COMPARE": "Confrontare",
+        "QUOTES": "Preventivi",
+        "TERM": "Termine",
+        "LINE_STATUS": "Stato Della Linea",
+        "TOTAL_PRICE": "Prezzo Totale",
+        "PROMOTIONS_APPLIED": "Promozione(s) Applicato",
+        "AUTO_APPLIED": "<strong>Auto Applicato: <\/strong> {{autoApplied}}",
+        "SUB_TOTAL": "Sub Totale",
+        "REQUEST_QUOTE": "Richiedi Preventivo",
+        "COMMENTS": "Commenti",
+        "ATTACHMENTS": "Allegati",
+        "ADD_NEW_COMMENT": "Aggiungi un nuovo commento",
+        "CLEAR": "Chiaro",
+        "NO_COMMENTS_TO_DISPLAY": "Non c'è stato alcun commento ancora",
+        "ACCEPT_QUOTE": "Accettare Il Preventivo",
+        "VIEW_ORDER": "Ordine Di Visualizzazione",
+        "VIEW_QUOTE": "Vista Preventivo",
+        "CHANGE_SHIPPING_ADDRESS": "Modificare L'Indirizzo Di Spedizione",
+        "CHANGE_BILLING_ADDRESS": "Modificare L'Indirizzo Di Fatturazione",
+        "EDIT_LINE_ITEMS": "Modificare Le Voci",
+        "CHARTGE_TYPE": "Tipo Di Carica",
+        "PRODUCT_NAME": "Prodotto",
+        "MANAGE_CART": "Gestire Carrello",
+        "UPLOAD": "Caricare",
+        "ADD_COMMENT": "Aggiungi Un Commento",
+        "CREATE_QUOTE": "Creare Preventivo",
+        "DEFALUT_COMMENT": "Non c'è stato alcun commento ancora",
+        "PLACE_ORDER": "L'ordine Di Creazione",
+        "PLACE_ORDER_PAY": "Crea Ordine & Pay",
+        "ON": "su",
+        "CONFIRM_CHANGES": "it_IT Confirm Changes",
+        "ADD_PRODUCTS": "it_IT Add Products",
+        "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
+        "NO_DATA": "it_IT n/a"
+    },
+    "CREATE_QUOTE": {
+        "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",
+        "QUOTE_TITLE": "Quotazione Del Titolo",
+        "EXPECTED_RESPONSE_DATE": "Previsto La Risposta Data",
+        "PRIMARY_CONTACT": "Contatto Principale",
+        "SHIP_TO_ACCOUNT": "Nave per Conto",
+        "BILL_TO_ACCOUNT": "Disegno di legge per Conto",
+        "SEARCH_CONTACTS": "La Ricerca Dei Contatti",
+        "FINALIZE_AND_SUBMIT": "Finalizzare Invia & Quote"
+    },
+    "QUOTE_CONFIRMATION_MODAL": {
+        "THANK_YOU": "Grazie",
+        "QUOTE_REQUEST": "Richiesta Di Preventivo",
+        "QUOTE_CONFIRMATION_MSG": "La vostra offerta è stata invia per revisione e assegnato al venditore {{Sellername}}. L'attesa Risposta Data è {{RFP_value}}",
+        "QUOTE_CONFIRMATION_Update_MSG": "L'aggiornamento di preventivo è stata inviata per la revisione e assegnato al venditore {{Sellername}}. L'attesa Risposta Data è {{RFP_value}}",
+        "QUOTE_CONFIRMATION_NO": "La tua Citazione è :",
+        "REVIEW_YOUR_QUOTE": "RECENSIONE IL TUO PREVENTIVO"
+    },
+    "BUYMORE": {
+        "ASSET_NET_UNIT_PRICE": "Patrimoniale Netto Per Unità Di Prezzo",
+        "ASSET_TERM": "Asset Termine",
+        "ADDITIONAL_QUANTITY": "Ulteriori Quantità",
+        "UPDATED_QUANTITY": "Aggiornato Quantità",
+        "RENEW_SUCCESS": "L'attività di rinnovo è stato aggiunto al tuo carrello."
+    },
+    "ASSET_LIST": {
+        "SELECTED_ASSETS": "Attività Selezionate",
+        "CHARGE_TYPE": "Tipo Di Carica",
+        "PRICE_TYPE": "Prezzo Tipo",
+        "NET_PRICE": "Prezzo Netto",
+        "ASSET_STATUS": "Lo Stato Delle Risorse",
+        "ASSET_ALREADY_EXIST_IN_CART_TOOLTIP": "Attività già aggiunto al carrello.",
+        "ASSET_START_DATE": "Attività Data Di Inizio",
+        "ASSET_END_DATE": "Data Di Fine Attività"
+    },
+    "BREADCRUMB": {
+        "HOME": "Casa",
+        "CRUMB": "{{testo}}"
+    },
+    "CONSTRAINT_ALERT": {
+        "VIEW_DETAILS": "Visualizza Dettagli",
+        "MESSAGES_FOUND": "messaggi trovati.",
+        "NUM_OF_ERRORS": "{{amount}} errori trovati.",
+        "NUM_OF_WARNINGS": "{{amount}} avvertimenti trovati.",
+        "NUM_OF_INFO_MESSAGES": "{{amount}} messaggi informativi trovati."
+    },
+    "CONSTRAINT_MODAL": {
+        "PRODUCTS_INCLUDED_HEADING": "Prodotto(s) Incluso",
+        "PRODUCTS_INCLUSION_MESSAGE": "I seguenti prodotti sono inclusi con l'aggiunta di",
+        "NEXT": "Accanto",
+        "PRODUCTS_EXCLUDED_HEADING": "Prodotto(i) Esclusi",
+        "PRODUCTS_EXCLUSION_MESSAGE": "I seguenti prodotti verranno rimossi dal carrello con l'aggiunta di",
+        "REMOVE": "Rimuovere",
+        "INCLUDE_PRODUCTS_HEADING": "Includono Prodotti",
+        "QTY": "QTY",
+        "ITEM_IS_IN_CART": "Questa voce è nel tuo carrello",
+        "PRODUCTS_ADDED_TO_CART": "1 Prodotto(s) aggiunto al carrello",
+        "CART_TOTAL": "Carrello Totale",
+        "VIEW_CART": "Vedi Il Carrello"
+    },
+    "CONSTRAINT_POPOVER": {
+        "PRODUCTS_INCLUDED_EXCLUDED_HEADING": "Prodotto(s) Incluso \/ Escluso",
+        "PRODUCTS_INCLUSION": "<strong>I seguenti prodotti <\/strong> sono inclusi con il prodotto <strong> {{productName}}<\/strong>.",
+        "PRODUCTS_EXCLUSION": "<strong>I seguenti prodotti <\/strong> sono esclusi con il prodotto <strong> {{productName}}<\/strong>.",
+        "AUTO_INCLUDED_OPTIONS": "Auto Incluso Opzioni",
+        "AUTO_INCLUSION_OF_OPTIONS": "Al di sotto di opzione(s) sono auto incluso con l'opzione <strong> {{productName}}<\/strong>.",
+        "OPTIONS_HEADING": "Opzioni Incluse / Esclusione",
+        "INCLUDED_OPTIONS_HEADING": "Opzioni Incluse/ Esclusione",
+        "AT_LEAST": "Almeno",
+        "OPTION": "Opzione",
+        "OPTION_MUST_BE_INCLUDED": "dal basso deve essere incluso con",
+        "ADD_TO_BUNDLE": "Aggiungi A Bundle",
+        "DONE": "Fatto",
+        "OPTIONS_MUST_BE_EXCLUDED": "Opzione(s) da sotto deve essere esclusi con <strong> {{productName}}<\/strong>.",
+        "REMOVE_FROM_BUNDLE": "Rimuovere Dal Gruppo",
+        "INCLUDED_EXCLUDED_OPTIONS_HEADING": "Incluso\/Escluso Opzioni",
+        "PRODUCT_GROUP_MESSAGE": "Gruppo prodotti <strong>{{productGroupName}}<\/strong> opzione(s) <span>{{messaggio}}<\/span> <strong>{{productName}}<\/strong>",
+        "PRODUCT_FAMILY_MESSAGE": "Famiglia di prodotti <strong>{{productFamily}}<\/strong> opzione(s) <span>{{messaggio}}<\/span> <strong>{{productName}}<\/strong>",
+        "OPTIONS": "opzione(s)",
+        "PRODUCT_OPTION_GROUP_MESSAGE": "Tipo di prodotto del Gruppo <strong><\/strong> opzione(s) <span>{{messaggio}}<\/span> <strong>{{productName}}<\/strong>"
+    },
+    "CONSTRAINT_SIDE_MENU": {
+        "VALIDATION_MESSAGES": "Messaggi di convalida",
+        "MESSAGES": "messaggi",
+        "OPTIONS": "Opzione(s)",
+        "DESELECT_OPTION": "Deselezionare L'Opzione",
+        "SELECT_OPTION": "Selezionare L'Opzione",
+        "CHANGE_CONFIGURATION": "Modificare La Configurazione",
+        "REMOVE_FROM_CART": "Rimuovi dal Carrello",
+        "NUM_OF_ERRORS.ONE": "{{amount}} Errore",
+        "NUM_OF_ERRORS.PLURAL": "{{amount}} Errori",
+        "NUM_OF_WARNINGS.ONE": "{{amount}} Avvertimento",
+        "NUM_OF_WARNINGS.PLURAL": "{{amount}} Avvertenze",
+        "NUM_OF_INFO_MESSAGES.ONE": "{{amount}} Messaggio Informativo",
+        "NUM_OF_INFO_MESSAGES.PLURAL": "{{amount}} Messaggi Informativi"
+    },
+    "DEPENDENT_PICKLIST": {
+        "CHOOSE": "Scegliere"
+    },
+    "PRIMARY_CONTACT": {
+        "FIRST_NAME": "Nome",
+        "LAST_NAME": "Cognome",
+        "EMAIL": "Email",
+        "INVALID_FIRSTNAME": "Valido per primo nome richiesto.",
+        "INVALID_LASTNAME": "Valido cognome è obbligatorio.",
+        "INVALID_EMAIL": "Si prega di inserire un indirizzo email valido per la spedizione aggiornamenti."
+    },
+    "CART": {
+        "ADDRESS_TITLE": "Indirizzo Informazioni",
+        "SHIPPING_AS_BILLING": "Indirizzo di spedizione è lo stesso che il mio indirizzo di fatturazione",
+        "SAVE_INFO": "Salvare le informazioni per la prossima volta",
+        "PAYMENT": {
+            "PAYMENT_INPUT": "Immettere Informazioni Sulla Carta Di Credito",
+            "PAYMENT_INPUTSAVE": "Salva questa scheda dati per il pagamento",
+            "PAYMENT_TITLE": "EFFETTUARE IL PAGAMENTO",
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE_SubTitle": "Vi verrà notificato l'ordine di dettagli al tuo indirizzo e-mail {{emailAddress}}",
+            "DEBITCARD": "Carta di debito",
+            "PONUMBER": "Numero di PO",
+            "PAYNOW": "Paga Ora",
+            "Invoice_Me_Later": "Fattura, In Seguito, Mi",
+            "USE_NEW_METHOD": "Utilizzare la nuova carta di credito\/debito",
+            "SUCCESSFUL_PAYMENT_ORDER_MESSAGE": "Il tuo pagamento è stato di successo e di ordine.",
+            "ORDER_CONFIRMATION_MESSAGE": "Il tuo ordine è stato effettuato con successo!",
+            "ORDER_NUMBER": "Numero Di Ordine :",
+            "ORDER_SUBTITLE": "Si prega di effettuare il pagamento per completare il processo di checkout."
+        },
+        "SUBMIT_ORDER": "Invia Ordine",
+        "CONTINUE_SHIPPING": "Continua Lo Shopping",
+        "ORDER_DETAILS": "Dettagli Dell'Ordine",
+        "CART_SUMMARY": {
+            "YOUR_CART": "Il tuo carrello",
+            "QUANTITY": "Quantità:",
+            "DETAILS": "Dettagli",
+            "REDEEM": "Riscattare",
+            "QUOTE_GENERATED": "Preventivo {{valore}} Generato",
+            "CONTINUE_SHOPPING": "Continua Lo Shopping",
+            "QUOTE_DETAILS": "Citazione Dettagli",
+            "PRODUCT_ID": "ID prodotto: {{productCode}}"
+        },
+        "DEFAULT_ACC_NOT_AVAILABLE": "Account predefinito per gli Ordini dell'Ospite non disponibile.",
+        "BILLING_ADDRESS": "INDIRIZZO DI FATTURAZIONE",
+        "SHIPPING_ADDRESS": "INDIRIZZO DI SPEDIZIONE",
+        "PROMO_CODE": "Codice Promo",
+        "CHECKOUT": "Checkout",
+        "LOG_IN": "LOG IN",
+        "LOGIN_FOR_FASTER_CHECKOUT": "per velocizzare l'esperienza e per ottenere l'accesso a funzionalità aggiuntive, o si può continuare come ospite.",
+        "BILLING_AND_SHIPPING_INFORMATION": "FATTURAZIONE E INFORMAZIONI DI SPEDIZIONE",
+        "ENTER_SHIPPING_ADDRESS": "Inserisci il tuo indirizzo di spedizione.",
+        "SUCCESSFUL_ORDER_CREATION_MESSAGE": "L'ordine è stato effettuato. Vi verrà notificato l'ordine di dettagli al tuo indirizzo e-mail {{emailAddress}}"
+    },
+    "PAYMENT_CARD": {
+        "NAME_ON_CARD": "Nome sulla carta",
+        "NAME_ON_CARD_INFO": "Nome completo, come visualizzato sulla carta",
+        "CREDITCARD_NUMBER": "Numero di carta di credito",
+        "EXPIRATION_MONTH": "Scadenza Mese",
+        "EXPIRATION_YEAR": "Anno Di Scadenza",
+        "CVV": "CVV",
+        "INVALID_NAME_ON_CARD": "Nome sulla carta è richiesto",
+        "INVALID_CREDITCARD_NUMBER": "Numero di carta di credito è richiesto",
+        "INVALID_EXPIRATION_MONTH": "Scadenza mese richiesto",
+        "INVALID_EXPIRATION_YEAR": "Anno di scadenza richiesta",
+        "INVALID_CVV": "Codice di sicurezza richiesto"
+    },
+    "ADDRESS": {
+        "ADDRESS_LINE1": "Indirizzo",
+        "PLACEHOLDER_FOR_ADDRESS_LINE1": "1234 Main St",
+        "CITY": "Città",
+        "COUNTRY": "Mailing Codice Di Paese",
+        "STATE": "Mailing Stato\/Provincia, Codice",
+        "ZIP": "Zip",
+        "INVALID_SHIPPING": "Inserisci il tuo indirizzo di spedizione.",
+        "INVALID_CITY": "Si prega di inserire la tua città.",
+        "INVALID_ZIP": "C.a.p. richiesto."
+    },
+    "MANAGE_CART": {
+        "CART_SUMMARY": {
+            "CART_SUMMARY_TITLE": "Riepilogo Carrello",
+            "TOTAL_PRICE": "Prezzo Totale",
+            "PROMOTIONS_APPLIED": "Promozione(s) Applicato",
+            "SUB_TOTAL": "Sub Totale",
+            "CHECKOUT": "L'Ordine Del Posto",
+            "DISCARD_CHANGES": "Annullare Le Modifiche",
+            "FINALIZE_AND_SUBMIT": "Finalizzare & Submit",
+            "TAX": "Fiscale Stimato"
+        },
+        "CART_TABLE": {
+            "ITEMS_IN_YOURCART": "Articoli nel tuo carrello",
+            "TERM": "Termine:",
+            "LINE_STATUS": "Stato Della Linea:",
+            "STANDARD_PRICE": "Il Prezzo Standard",
+            "REMOVE": "Eliminare",
+            "PRODUCT_CONFIGURATION": "La Configurazione Del Prodotto",
+            "CART_EMPTY": "Il tuo carrello è vuoto",
+            "ALL_PRODUCTS": "Visualizza Tutti I Prodotti",
+            "HOMEPAGE": "Vai Alla Homepage"
+        },
+        "DISCARD_CHANGES_MODAL": {
+            "DISCARD_CHANGES_TITLE": "Annullare le modifiche",
+            "DISCARD_CHANGES_Message": "Tutte le modifiche andranno perse.",
+            "DISCARD_CHANGES_CONFIRMATION": "Vuoi annullare le modifiche e tornare alla della pagina dei Dettagli?",
+            "DISCARD_CHANGES": "Sì, annullare le MODIFICHE"
+        }
+    },
+    "JUMBORTON": {
+        "MORE_INFO": "Ulteriori Informazioni",
+        "PREVIOUS": "Precedente",
+        "NEXT": "Accanto"
+    },
+    "FOOTER": {
+        "PRODUCTS": "Prodotti",
+        "NEW_PRODUCTS": "Nuovi Prodotti",
+        "DISCOUNT_PRODUCTS": "Sconto Prodotti",
+        "BSET_SELL_PRODUCTS": "Migliore Vendita Prodotti",
+        "POPULAR_PRODUCTS": "Prodotti Popolari",
+        "MANUFACTURERS": "Produttori",
+        "SUPPLIERS": "Fornitori",
+        "SPECIAL_PRODUCTS": "Prodotti Speciali",
+        "MY_ACCOUNT": "Il Mio Account",
+        "MY_WISHLIST": "La Mia Lista Dei Desideri",
+        "MY_CART": "Il Mio Carrello",
+        "SIGN_IN": "Accedi",
+        "REGISTRATION": "Registrazione",
+        "CHECKOUT": "Check Out",
+        "ORDER_COMPLETE": "Ordine Completo",
+        "GET_IN_TOUCH": "Entrare In Contatto",
+        "YOUR_NAME_HERE": "Il tuo nome qui...",
+        "YOUR_EMAIL_HERE": "Qui il tuo indirizzo email...",
+        "YOUR_MESSAGE_HERE": "Il tuo messaggio qui...",
+        "SUBMIT": "Invia",
+        "APTTUS_COPYRIGHT": "© Apttus Corporation {{currentYear}}. Tutti I Diritti Riservati"
+    },
+    "HEADER": {
+        "PRODUCT_SERACH": "La Ricerca Del Prodotto",
+        "SUBMIT": "Invia",
+        "ENTER_YOUR_SEARCH_TERM": "Inserisci il termine di ricerca (min 3 caratteri) ...",
+        "GUEST_USER": "Utente Guest",
+        "LAST_LOGIN": "Ultima Data Di Accesso",
+        "HOME": "Casa",
+        "MY_ACCOUNT": "Il Mio Account",
+        "INSTALLED_PRODUCTS": "Prodotti Installati",
+        "PRODUCT_CATALOG": "Catalogo Prodotti",
+        "LOG_OUT": "Il Log Out",
+        "LOG_IN": "Log In",
+        "BACK": "Indietro",
+        "SHOW_ALL": "Mostra Tutti",
+        "MIN_VALIDATION_SEARCH_ERROR": "it_IT Search term should be at least 3 characters in length"
+    },
+    "PROMOTION": {
+        "TITLE": "Promozione",
+        "PROMOTION_TITLE": "Promozioni",
+        "APPLY": "Applicare",
+        "REMOVE": "Rimuovere",
+        "PROMO_CODE": "Codice Promo",
+        "USE_CODE": "Utilizzare Il Codice",
+        "EXPIRE_ON": "Scadenza",
+        "PRODUCT_NAME": "Nome Del Prodotto",
+        "CHARGE_TYPE": "Tipo Di Carica",
+        "QUANTITY": "Quantità",
+        "LINE_NUMBER": "Il Numero Di Riga",
+        "PROMOTION_CODE": "Codice Promozione",
+        "PROMOTION_AMOUNT": "Importo Di Promozione",
+        "PROMOTION_APPLIED": "Di seguito le promozioni sono applicate con il prodotto",
+        "PROMOTION_APPLIED_TO": "Promozioni Applicate",
+        "APPLIED_PROMOTIONS": "Applicato Promozioni",
+        "TOTAL_PROMOTION_AMOUNT": "Totale Importo Di Promozione",
+        "PROMOTION_APPLIEDTO": "Promozioni Applicate A",
+        "APPLIED_PROMOTION": "applicati i seguenti articoli nel carrello."
+    },
+    "LOGIN": {
+        "PLS_SIGNIN": "Si prega di firmare in",
+        "USERNAME": "Nome utente",
+        "PASSWORD": "Password",
+        "REMEMBER_ME": "Ricordati di me",
+        "SIGN_IN": "Accedi",
+        "LOGOUT": "Sei stato disconnesso",
+        "LOGOUT_TITLE": "Sessione Scaduta",
+        "INCORRECT_CREDENTIALS_TOASTR_MESSAGE": "Il tuo nome utente o la password non è corretta.",
+        "INCORRECT_CREDENTIALS_TOASTR_TITLE": "Login Fail"
+    },
+    "PRODUCT_DETAILS": {
+        "PRODUCT_DETAIL": "Dettagli Del Prodotto",
+        "PRODUCT_CODE": "ID prodotto: {{valore}}",
+        "STANDARD_PRICE": "Il Prezzo Standard",
+        "UPDATE_CONFIGURATION": "Aggiornamento Di Configurazione",
+        "CONFIGURATIONS": "Configurazioni",
+        "SPECIFICATIONS": "Specifiche",
+        "ATTACHMENTS": "Allegati",
+        "RECOMMENDED_PRODUCTS": "Prodotti Consigliati",
+        "DETAILS": "Dettagli",
+        "FILE_NAME": "Nome Del File",
+        "DESCRIPTION": "Descrizione",
+        "INFORMATION_TYPE": "Tipo Di Informazioni",
+        "FEATURE": "Funzione",
+        "VALUE": "Valore"
+    },
+    "INSTALLED_PRODUCTS": {
+        "PRODUCT_FAMILY": "Famiglia Di Prodotti",
+        "SEARCH_ASSETS": "Attività Di Ricerca",
+        "RENEW_FILTER": {
+            "DAYS_TO_RENEW": "Giorni Per Rinnovare",
+            "ALL": "Tutti",
+            "LT30DAYS": "< 30 Giorni",
+            "LT60DAYS": "< 60 Giorni",
+            "LT90DAYS": "< 90 Giorni",
+            "GT90DAYS": "> 90 Giorni"
+        },
+        "PRICE_TYPE_FILTER": {
+            "PRICE_TYPE": "Prezzo Tipo",
+            "ALL": "Tutti",
+            "ONE_TIME": "Una Volta",
+            "RECURRING": "Ricorrenti",
+            "USAGE": "Utilizzo"
+        },
+        "ASSET_ACTION_FILTER": {
+            "ASSET_ACTION": "Azione Patrimoniale"
+        }
+    },
+    "MINI_CART": {
+        "CART_TOTAL": "Carrello Totale",
+        "VIEW_CART": "Vedi Il Carrello",
+        "YOUR_CART_IS_EMPTY": "Il tuo carrello è vuoto"
+    },
+    "MINI_PROFILE": {
+        "LOGIN": "Login",
+        "ENTER_USERNAME": "Immettere Il Nome Utente",
+        "PLEASE_ENTER_USERNAME": "Per favore inserisci il tuo cognome",
+        "PASSWORD": "Password",
+        "REMEMBER_ME": "Ricordati Di Me",
+        "FORGOT_PASSWORD": "Hai Dimenticato La Password?",
+        "ENTER_EMAIL": "Inserisci e-mail",
+        "PASSWORD_RESET": "Reimpostazione Della Password",
+        "PASSWORD_RESET_CONFIRM1": "Ti abbiamo inviato una email con un link per completare la reimpostazione della password.",
+        "PASSWORD_RESET_CONFIRM2": "Non riesci a trovare l'email? Prova a controllare la cartella spam.",
+        "PASSWORD_RESET_CONFIRM3": "Se ancora non è possibile accedere, riprovare o contattare l'amministratore di Salesforce.",
+        "NEVER_SHARE_YOUR_EMAIL": "Non riusciremo mai a condividere la tua e-mail con chiunque altro.",
+        "GO_BACK": "Tornare Indietro",
+        "RESET_PASSWORD": "Reset Password",
+        "TROUBLE_LOGGINGIN": "Avendo problemi di accesso?",
+        "USERNAME_ARE_IN_EMAIL": "Nome utente nella forma di un indirizzo email.",
+        "PASSWORDS_ARE_CASESENSITIVE": "Le password sono case sensitive.",
+        "TO_RESET_PASSWORD_ENTER_USERNAME": "Per reimpostare la tua password, inserisci il tuo nome utente.",
+        "LICENSE_REQUIRED": "it_IT User you are trying to login with does not have required license. Contact your administrator.",
+        "INVALID_PASSWORD": "it_IT Please check your username and password. If you still can't log in, contact your administrator."
+    },
+    "MODAL": {
+        "RENEWAL_END_DATE": "Rinnovo Data Di Fine",
+        "USE_EXISTING_TERM": "Utilizzo Di Un Termine",
+        "TERMINATION_DATE": "Data Di Cessazione",
+        "TERMINATE": "Terminare",
+        "NEW_START_DATE": "Nuova Data Di Inizio",
+        "NEW_END_DATE": "Nuova Data Di Fine"
+    },
+    "APP": {
+        "PAGE_RELOADED_TOASTR_MESSAGE": "Questa pagina è stata ricaricata.",
+        "PAGE_RELOADED_TOASTR_TITLE": "Sessione Scaduta"
+    },
+    "PRODUCT_CONFIGURATION_SUMMARY": {
+        "PRODUCT_ID": "ID prodotto: {{productCode}}"
+    },
+    "DETAILS": {
+        "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",
+        "ORDER_SUMMARY": "RIEPILOGO ORDINE",
+        "LINE_ITEMS": "GLI ELEMENTI DI RIGA",
+        "COMMENTS": "COMMENTI",
+        "ATTACHMENTS": "ALLEGATI",
+        "PRICE_SUMMARY": "Prezzo Riepilogo",
+        "SUMMARY": "RIEPILOGO",
+        "SUCCESSFUL_QUOTE_ACCEPTANCE_MESSAGE": "Si sono riusciti ad accettare la citazione ({{quoteName}}) e l'ordine è stato generato per la stessa.",
+        "GENERATED_ORDER_NUMBER": "Il tuo Numero di Ordine È: {{orderName}}",
+        "VIEW_YOUR_ORDER": "VISUALIZZA IL TUO ORDINE",
+        "GENERATE": "Genera Ordine",
+        "TEMPLATE": "Modello",
+        "FILE_FORMAT": "File Format",
+        "PRESENT": "Presente",
+        "PRESENT_ORDER": "Presente Order",
+        "SEND_TO": "Invia Ordine a"
+    },
+    "SERVICES": {
+        "SELECTION_OF_ASSETS_MUST_TOOLTIP": "È necessario selezionare asset(s) per eseguire le azioni batch.",
+        "UNABLE_TO_RENEW_TOOLTIP": "Uno o più elementi selezionati sono unabled essere rinnovato.",
+        "UNABLE_TO_TERMINATE_TOOLTIP": "Uno o più elementi selezionati sono in grado di essere terminato.",
+        "ITEMS_ARE_ALREADY_ADDED_TO_CART_TOOLTIP": "Uno o più elementi selezionati sono già aggiunto al carrello.",
+        "NO_FEATURES_TO_COMPARE_TOOLTIP": "Uno o più prodotti non hanno caratteristiche da confrontare.",
+        "TOO_MANY_PRODUCTS_SELECTED_TO_COMPARE_TOOLTIP": "Troppi prodotti selezionati da confrontare.",
+        "SELECT_MORE_PRODUCTS_TO_COMPARE_TOOLTIP": "Selezionare più prodotti da confrontare.",
+        "TOO_MANY_PRODUCTS_SELECTED_TO_RENEW_TOOLTIP": "Troppe prodotto selezionato per il rinnovo.",
+        "SELECT_MORE_PRODUCTS_TO_RENEW_TOOLTIP": "Selezionare più prodotti di rinnovare.",
+        "TOO_MANY_PRODUCTS_SELECTED_TO_TERMINATE_TOOLTIP": "Troppi prodotti selezionati per terminare.",
+        "SELECT_MORE_PRODUCTS_TO_TERMINATE_TOOLTIP": "Selezionare più prodotti per terminare.",
+        "INVALID_QUOTE_ID": "Citazione id non è valido o non definito.",
+        "INVALID_ORDER_ID": "it_IT Order id is either invalid or undefined."
+    },
+    "LINE_ITEMS": {
+        "CREATED_ON": "Creato Il",
+        "CREATED_BY": "Creata Da",
+        "EXPECTED_RESPONSE_DATE": "Previsto La Risposta Data",
+        "PRIMARY_CONTACT": "Contatto Principale",
+        "ACCOUNT": "Account",
+        "BILL_TO": "Disegno Di Legge Per",
+        "SHIP_TO": "Nave"
+    },
+    "PAYMENT_METHOD_LABELS": {
+        "SUCCESS_TITLE": "Carta Aggiunte",
+        "SUCCESS_MSG": "La tua nuova carta di Credito\/carta di Debito è aggiunto.",
+        "ERROR_TITLE": "Carta Non Aggiunto",
+        "ERROR_MSG": "Scheda ancora aggiunto dovuta per il seguente motivo: ",
+        "DELETE_TITLE": "Scheda Eliminato",
+        "DELETE_MSG": "Tua carta di Credito\/carta di Debito viene cancellato.",
+        "Detail_Item1": "Salvate Le Carte",
+        "Detail_Item2": "Nome sulla carta",
+        "Detail_Item3": "Scade il",
+        "Detail_Ending": "finale",
+        "DEFAULT_TITLE": "Scheda Di Default",
+        "DEFAULT_MSG": "Impossibile eliminare il metodo di default",
+        "Expired_MSG": "Scaduto"
+    },
+    "PRICE_SUMMARY": {
+        "TAX": "Fiscale ({{taxPercent}}%)"
+    },
+    "TAX": {
+        "TAX_SUMMARY": "Riassunto Fiscale",
+        "TOTAL_ESTIMATED_TAX": "Totale Stimato Fiscale",
+        "COMPUTE_TAX_SUCCESS": "Stima che l'imposta è stata calcolata per il carrello",
+        "COMPUTE_TAX_SUCCESS_TITLE": "Fiscale Stimato",
+        "COMPUTE_TAX_ERROR_TITLE": "Imposta non calcolata"
+    },
+    "CONFIGURATION": {
+        "EMPTY": "Questo prodotto non è stato configurato",
+        "NO_CONFIGURATION": "Questo prodotto non ha tutte le opzioni di configurazione"
+    },
+    "ACTION_BAR": {
+        "CONFIRM_ORDER": "Confermare l'ordine",
+        "ORDER_CONFIRMATION_TOASTR_TITLE": "Conferma Dell'ordine",
+        "ORDER_CONFIRMATION_TOASTR_MESSAGE": "L'ordine è stato confermato.",
+        "ORDER_CONFIRMATION_FAILURE": "L'ordine non può essere confermato. Per favore riprova.",
+        "CART_CREATION_TOASTR_MESSAGE": "È stato creato un nuovo carrello.",
+        "PRESENT": "Presente"
+    },
+    "TABLE" : {
+        "SEARCH" : "Ricerca",
+        "SELECTED" : "Selezionato",
+        "OF": "Di",
+        "PER_PAGE": "Per pagina",
+        "NO_DATA_TO_DISPLAY": "Nessun dato da visualizzare"
+    }
+}

@@ -1,0 +1,50 @@
+<ng-container *ngTemplateOutlet="cartList; context: { view: view$ | async }"></ng-container>
+
+<ng-template #cartList let-view="view">
+    <!-- Total Carts and Add new Cart action button -->
+    <div class="card mb-2">
+        <nav class="navbar navbar-light bg-white d-flex justify-content-between">
+            <span class="navbar-brand">
+                {{'COMMON.CARTS' | translate}}
+                <span *ngIf="cartAggregate$ | async as cartAggregate">({{cartAggregate?.total_records}})</span>
+            </span>
+            <button type="button" class="btn btn-primary btn-raised"
+                (click)="newCart(template)">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</button>
+        </nav>
+    </div>
+    
+    <!-- Table component rendering list of carts with applicable actions and pagination -->
+    <apt-table #table *ngIf="view?.tableOptions else showLoader" [type]="type" class="d-block bg-white" [options]="view?.tableOptions"></apt-table>    
+    
+    <!-- Spinner dots while data is loading -->
+    <ng-template #showLoader>
+        <div class="d-flex justify-content-center py-5">
+            <apt-dots></apt-dots>
+        </div>
+    </ng-template>
+    
+    <!-- Template for creating new cart -->
+    <ng-template #template>
+        <form (ngSubmit)="createCart()">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">{{'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate}}</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <apt-input-field placeholder="{{'COMMON.NAME' | translate}}" name="cartName" [(ngModel)]="cart.Name"
+                        field="Name" [entity]="cart"></apt-input-field>
+                </div>
+                <small class="text-danger animated fadeIn" *ngIf="message">{{message}}</small>
+            </div>
+            <div class="d-flex justify-content-end modal-footer">
+                <button class="btn btn-link" type="button"
+                    (click)="modalRef.hide()">{{'COMMON.CANCEL' | translate}}</button>
+                <button class="btn btn-primary btn-raised w-25" type="submit"
+                    [ladda]="loading">{{'COMMON.SAVE' | translate}}</button>
+            </div>
+        </form>
+    </ng-template>
+</ng-template>

@@ -1,0 +1,45 @@
+<ng-template #paymentForm>
+  <div class="modal-header mb-3">
+    <h5 class="modal-title">{{'PAYMENT_METHOD_LABELS.MAKE_PAYMENT' | translate}}</h5>
+    <button class="close" aria-label="Close" (click)="hidePopover()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="d-block">
+      <div class="custom-control custom-radio m-3">
+        <input name="paymentState" type="radio" id="invoice" class="custom-control-input" [value]="'INVOICE'"
+          required="" [(ngModel)]="paymentState">
+        <label class="custom-control-label" for="invoice">{{'CART.PAYMENT.Invoice_Me_Later' | translate}}</label>
+      </div>
+      <div class="custom-control custom-radio m-3">
+        <input name="paymentState" type="radio" id="ponumber" class="custom-control-input" [value]="'PONUMBER'"
+          [(ngModel)]="paymentState">
+        <label class="custom-control-label" for="ponumber">{{ 'CART.PAYMENT.PONUMBER' | translate }}</label>
+        <div class="form-group" *ngIf="paymentState === 'PONUMBER'">
+          <input type="text" class="form-control" id="poNumber" placeholder="{{'CART.PAYMENT.ENTER_PO_NUMBER' | translate }}"
+            [(ngModel)]="order.PONumber" name="poNumber">
+        </div>
+      </div>
+      <div class="custom-control custom-radio m-3">
+        <input name="paymentState" type="radio" id="paynow" class="custom-control-input" [value]="'PAYNOW'"
+          [(ngModel)]="paymentState">
+        <label class="custom-control-label" for="paynow">{{'CART.PAYMENT.PAYNOW' | translate }}</label>
+        <div *ngIf="paymentTransaction && showPaymentOptions && paymentState === 'PAYNOW'">
+          <apt-payment [paymentTransaction]="paymentTransaction" (onSelectingPayment)='onSelectingPaymentMethod($event)'
+            (onPaymentComplete)='onPaymentComplete($event)'>
+          </apt-payment>
+          <apt-payment-iframe hidden *ngIf="makePaymentRequest" [paymentTransaction]="paymentTransaction"
+            [paymentType]="'SilentSale'" (onSubmitPaymentRequest)='onPaymentComplete($event)'>
+          </apt-payment-iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-link" data-dismiss="modal"
+      (click)="hidePopover()">{{'COMMON.CANCEL' | translate}}</button>
+    <button *ngIf="(isSilentSale || paymentState !== 'PAYNOW') && paymentState !== ''" class="btn btn-primary btn-raised" 
+    (click)="submitPayment()" [ladda]="loading" data-style="zoom-in">{{'COMMON.SUBMIT' | translate}}</button>
+  </div>
+</ng-template>
