@@ -2,6 +2,7 @@
     [context]="viewState?.product" *ngIf="viewState$ | async as viewState; else loading">
 
     <div class="constraintAlerts">
+        <apt-alert></apt-alert>
         <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </div>
 
@@ -58,7 +59,7 @@
                         [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
                         [product]="product ? product: viewState?.product" [disabled]="configurationPending"
                         [btnClass]="'btn-primary btn-raised px-3 py-2'" (onAddToCart)="onAddToCart($event)"
-                        [label]="'Update Configuration'" [aboEnabled]="false">
+                        [label]="(viewState?.storefront?.ConfigurationLayout === 'Embedded')? ('PRODUCT_DETAILS.SAVE_CHANGES' | translate) : ('PRODUCT_DETAILS.UPDATE_CONFIGURATION' | translate)" [aboEnabled]="false">
                     </apt-add-to-cart>
                 </ng-container>
 
@@ -76,6 +77,7 @@
                                 [disabled]="configurationPending"
                                 [cartItems]="(viewState?.storefront?.ConfigurationLayout === 'Embedded' && relatedTo)? [relatedTo] : cartItemList"
                                 [product]="product ? product: viewState?.product" [aboEnabled]="false"
+                                [label]="(viewState?.storefront?.ConfigurationLayout === 'Embedded') ? ('PRODUCT_DETAILS.SAVE_CHANGES' | translate) : ('COMMON.ADD_TO_CART' | translate)"
                                 [btnClass]="'btn-primary btn-raised px-3'">
                             </apt-add-to-cart>
                         </div>
@@ -118,6 +120,7 @@
                 <apt-product-configuration
                     [productId]="viewState?.product?.Id"
                     [relatedTo]="viewState?.relatedTo"
+                    [accordion]="true"
                     (click)="configurationChanged = true">
                 </apt-product-configuration>
             </div>

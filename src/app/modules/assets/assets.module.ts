@@ -8,7 +8,8 @@ import { PriceTypeFilterComponent } from './components/price-type-filter.compone
 import { FormsModule } from '@angular/forms';
 import { ApttusModule } from '@congacommerce/core';
 import { PricingModule } from '@congacommerce/ecommerce';
-import { FilterModule, AssetListModule, InputSelectModule, ButtonModule, BreadcrumbModule, TableModule, ChartModule, DataFilterModule, ConstraintRuleModule } from '@congacommerce/elements';
+import { FilterModule, AssetListModule, InputSelectModule, ButtonModule, BreadcrumbModule, TableModule,
+        ChartModule, DataFilterModule, ConstraintRuleModule, AlertModule } from '@congacommerce/elements';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -36,7 +37,8 @@ import { AssetActionFilterComponent } from './components/asset-action-filter.com
     BsDatepickerModule.forRoot(),
     AccordionModule.forRoot(),
     ButtonModule,
-    ConstraintRuleModule
+    ConstraintRuleModule,
+    AlertModule
   ],
   declarations: [
     AssetListComponent,

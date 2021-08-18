@@ -145,7 +145,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(orderId => this.orderLineItemService.getOrderLineItemsForOrder(orderId)));
+        mergeMap(orderId => this.orderLineItemService.getOrderLineItems(orderId)));
 
     this.orderSubscription = combineLatest(order$.pipe(startWith(null)), lineItems$.pipe(startWith(null)))
       .pipe(map(([order, lineItems]) => {

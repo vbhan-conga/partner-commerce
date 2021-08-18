@@ -110,7 +110,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItemsForQuote(quoteId)));
+        mergeMap(quoteId => this.quoteLineItemService.getQuoteLineItems(quoteId)));
 
     this.quoteSubscription = combineLatest(quote$.pipe(startWith(null)), quoteLineItems$.pipe(startWith(null)))
       .pipe(map(([quote, lineItems]) => {

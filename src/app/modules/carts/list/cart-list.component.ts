@@ -8,7 +8,7 @@ import { map, mergeMap, take } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { AObject, ACondition, AFilter } from '@congacommerce/core';
-import { CartService, Cart, PriceService, CartApiService } from '@congacommerce/ecommerce';
+import { CartService, Cart, PriceService } from '@congacommerce/ecommerce';
 import { TableOptions, TableAction } from '@congacommerce/elements';
 
 /**
@@ -64,7 +64,7 @@ export class CartListComponent implements OnInit {
                 prop: 'IsActive',
                 label: 'Is Active',
                 sortable: false,
-                value: (record: Cart) => CartApiService.getCurrentCartId() === record.Id ? of('Yes') : of('No')
+                value: (record: Cart) => CartService.getCurrentCartId() === record.Id ? of('Yes') : of('No')
               },
               {
                 prop: 'TotalAmount',
@@ -85,7 +85,8 @@ export class CartListComponent implements OnInit {
                 label: 'Set Active',
                 theme: 'primary',
                 validate: (record: Cart) => this.canActivate(record),
-                action: (recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList), true)
+                action: (recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList), true),
+                disableReload: true
               } as TableAction,
               {
                 enabled: true,
@@ -94,10 +95,11 @@ export class CartListComponent implements OnInit {
                 label: 'Delete',
                 theme: 'danger',
                 validate: (record: Cart) => this.canDelete(record),
-                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => this.getCartAggregate()))
+                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => this.getCartAggregate())),
+                disableReload: true
               } as TableAction
             ],
-            highlightRow: (record: Cart) => of(CartApiService.getCurrentCartId() === record.Id),
+            highlightRow: (record: Cart) => of(CartService.getCurrentCartId() === record.Id),
             children: ['SummaryGroups'],
             filters: this.getFilters()
           },
@@ -161,7 +163,7 @@ export class CartListComponent implements OnInit {
 
   /**@ignore */
   canActivate(cartToActivate: Cart) {
-    return (CartApiService.getCurrentCartId() !== cartToActivate.Id && cartToActivate.Status !== 'Finalized');
+    return (CartService.getCurrentCartId() !== cartToActivate.Id && cartToActivate.Status !== 'Finalized');
   }
 
   /**@ignore */

@@ -6,7 +6,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { ApttusModule } from '@congacommerce/core';
 import { PricingModule } from '@congacommerce/ecommerce';
 import { ToastrModule } from 'ngx-toastr';
-import { MiniProfileModule, MiniCartModule, PriceModule, OutputFieldModule, ButtonModule, DirectivesModule, ConstraintRuleModule, ProductSearchModule } from '@congacommerce/elements';
+import { MiniProfileModule, MiniCartModule, PriceModule, OutputFieldModule, ButtonModule,
+        DirectivesModule, ConstraintRuleModule, ProductSearchModule, PriceModalModule } from '@congacommerce/elements';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { ActionBarComponent } from './action-bar/action-bar.component';
@@ -31,7 +32,8 @@ import { CategoryCarouselComponent } from './category-carousel/category-carousel
     ButtonModule,
     DirectivesModule,
     ConstraintRuleModule,
-    ProductSearchModule
+    ProductSearchModule,
+    PriceModalModule
   ],
   exports: [
     HeaderComponent,

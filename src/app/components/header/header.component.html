@@ -16,9 +16,10 @@
     </ng-container>
   </div>
 
-  <div class="btn-group">
-    <apt-product-search></apt-product-search>
-    <apt-mini-cart *ngIf="cart$ | async as cart" [manageCartLink]="'/carts/' + cart?.Id"></apt-mini-cart>
+  <div class="actions d-flex align-items-center">
+    <apt-price-modal></apt-price-modal>
+    <apt-product-search [typeAheadLimit]="7"></apt-product-search>
+    <apt-mini-cart></apt-mini-cart>
     <apt-cr-constraint-icon></apt-cr-constraint-icon>
   </div>
 </div>

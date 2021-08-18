@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first, get, isNil, find, forEach, maxBy, filter, last, has, defaultTo } from 'lodash';
-import { combineLatest, Observable, Subscription, of } from 'rxjs';
+import { combineLatest, Observable, Subscription, of, BehaviorSubject } from 'rxjs';
 import { switchMap, map as rmap, distinctUntilChanged } from 'rxjs/operators';
 
 import {
@@ -28,7 +28,7 @@ import { ProductConfigurationComponent, ProductConfigurationSummaryComponent, Pr
  */
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
-  viewState$: Observable<ProductDetailsState>;
+  viewState$: BehaviorSubject<ProductDetailsState> = new BehaviorSubject<ProductDetailsState>(null);
   recommendedProducts$: Observable<Array<Product>>;
 
   attachments$: Observable<Array<ProductInformation>>;
@@ -50,6 +50,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   /**@ignore */
   relatedTo: CartItem;
+  netPrice: number = 0;
 
   private configurationLayout: string = null;
 
@@ -69,8 +70,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.viewState$ = this.route.params.pipe(
+    this.subscriptions.push(this.route.params.pipe(
       switchMap(params => {
+        this.productConfigurationService.onChangeConfiguration(null);
         this.product = null;
         this.cartItemList = null;
         const product$ = (this.product instanceof Product && get(params, 'id') === this.product.Id) ? of(this.product) :
@@ -94,7 +96,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           storefront: storefront
         };
       })
-    );
+    ).subscribe(r => this.viewState$.next(r)));
 
     this.recommendedProducts$ = this.route.params.pipe(
       switchMap(params => this.crService.getRecommendationsForProducts([get(params, 'id')])),
@@ -106,8 +108,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(this.productConfigurationService.configurationChange.subscribe(response => {
-      if (response && has(response, 'configurationPending')) {
-        this.configurationPending = get(response, 'configurationPending');
+      if (get(response, 'configurationChanged')) this.configurationChanged = true;
+      this.netPrice = defaultTo(get(response, 'netPrice'), 0);
+      this.relatedTo = get(this.viewState$, 'value.relatedTo');
+
+      if (response && has(response, 'hasErrors')) {
+        this.configurationPending = get(response, 'hasErrors');
       }
       else {
         this.configurationPending = false;
@@ -148,18 +154,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
     }
 
-    if (get(cartItems, 'LineItems') && this.configurationLayout === 'Embedded') {
+    if (get(cartItems, 'LineItems') && this.viewState$.value.storefront.ConfigurationLayout === 'Embedded') {
       cartItems = get(cartItems, 'LineItems');
     }
     this.relatedTo = primaryItem;
     if (!isNil(primaryItem) && (get(primaryItem, 'HasOptions') || get(primaryItem, 'HasAttributes')))
-      this.router.navigate(['/products', get(this, 'product.Id'), get(primaryItem, 'Id')]);
+      this.router.navigate(['/products', get(this.viewState$, 'value.product.Id'), get(primaryItem, 'Id')]);
 
     this.productConfigurationService.onChangeConfiguration({
       product: get(this, 'product'),
       itemList: cartItems,
-      configurationFlags: null,
-      configurationPending: false
+      configurationChanged: false,
+      hasErrors: false
     });
   }
 
