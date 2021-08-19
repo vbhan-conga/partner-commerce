@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "reference-base": {
+    "partner-commerce": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
@@ -23,20 +23,11 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "tsconfig.json",
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              "src/manifest.json",
-              "src/web.config",
-              "src/caas.css",
-              {
-                "glob": "**/*",
-                "input": "node_modules/crypto-js",
-                "output": "/assets/scripts/"
-              },
-              "src/manifest.webmanifest"
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss",
@@ -70,7 +61,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "tsConfig": "tsconfig.app.json",
+              "tsConfig": "tsconfig.json",
               "serviceWorker": false,
               "budgets": [
                 {
@@ -86,54 +77,36 @@
               ],
               "ngswConfigPath": "src/ngsw-config.json"
             },
-            "dc4": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dc4.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "tsConfig": "tsconfig.prod.json",
-              "serviceWorker": false,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "10mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "30kb"
-                }
-              ]
-            }
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "defaultConfiguration": "production"
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "reference-base:build"
+            "browserTarget": "partner-commerce:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "reference-base:build:production"
+              "browserTarget": "partner-commerce:build:production"
+            },
+            "development": {
+              "browserTarget": "partner-commerce:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "reference-base:build"
+            "browserTarget": "partner-commerce:build"
           }
         },
         "test": {
@@ -157,9 +130,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "tsconfig.json",
+              "tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -170,18 +142,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "reference-base:serve"
+            "devServerTarget": "partner-commerce:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "reference-base:serve:production"
+              "devServerTarget": "partner-commerce:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "reference-base",
+  "defaultProject": "partner-commerce",
   "cli": {
     "analytics": false
   }
