@@ -73,6 +73,10 @@ import { AboGuard } from './services/abo.guard';
               {
                 path: 'user',
                 loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
+              },
+              {
+                path: 'dashboard',
+                loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
               }
             ]
           }

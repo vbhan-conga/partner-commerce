@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslatorLoaderService, CommerceModule } from '@congacommerce/ecommerce';
@@ -35,7 +34,6 @@ registerLocaleData(localeIt, 'it-IT', localeItExtras);
     TranslateModule.forRoot({
       loader: { provide: TranslateLoader, useClass: TranslatorLoaderService }
     }),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     TableModule,
     ComponentModule,
     ApttusModalModule,
