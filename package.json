@@ -1,11 +1,11 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2003.1.59",
+  "version": "2103.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
-    "build": "node-sass  ./src/caas.scss -o ./src && ng build --configuration=dc4",
+    "build": "ng build --configuration=dc6",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "update-version": "gulp update-version"

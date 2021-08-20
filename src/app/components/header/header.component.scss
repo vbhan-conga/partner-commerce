@@ -1,6 +1,7 @@
+@use 'sass:math';
 @import "variables";
 .navbar-brand img{
-    max-height: $navbar-brand-height / 2;
+    max-height: math.div($navbar-brand-height, 2);
 }
 .navbar{
     height: $navbar-brand-height;

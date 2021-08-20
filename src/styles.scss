@@ -90,15 +90,6 @@ button{
     z-index: inherit;
 }
 
-
-/**
- * Add margin to the main section to accomodate header
- */
-//main{
-//   margin-top: $navbar-brand-height / 2;
-//   min-height: calc(100vh - #{$navbar-brand-height});
-//}
-
 main{
     margin-top: $navbar-brand-height + $breadcrumb-height;
     max-width: 100vw;
