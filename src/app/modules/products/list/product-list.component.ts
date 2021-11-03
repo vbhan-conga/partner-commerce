@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CategoryService, Category, SearchService, ProductService, ProductResult, AccountService } from '@congacommerce/ecommerce';
+import { CategoryService, Category, SearchService, ProductService, ProductResult, AccountService, Cart, CartService } from '@congacommerce/ecommerce';
 import { get, set, compact, map, isNil, isEmpty, remove, isEqual } from 'lodash';
 import { ACondition, AJoin } from '@congacommerce/core';
 import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
@@ -52,6 +52,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   searchString: string = null;
   data$: BehaviorSubject<ProductResult> = new BehaviorSubject<ProductResult>(null);
   productFamilies$: Observable<Array<string>> = new Observable<Array<string>>();
+  cart$: Observable<Cart>;
   category: Category;
   subscription: Subscription;
   hasSearchError: boolean;
@@ -73,7 +74,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /**
    * @ignore
    */
-  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, private searchService: SearchService, private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) { }
+  constructor(private activatedRoute: ActivatedRoute, private accountService: AccountService, 
+    private searchService: SearchService, private cartService: CartService,
+    private categoryService: CategoryService, private router: Router, public productService: ProductService, private translateService: TranslateService) { }
 
   /**
    * @ignore
@@ -87,6 +90,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
    * @ignore
    */
   ngOnInit() {
+    this.cart$ = this.cartService.getMyCart();
     this.subscription = this.accountService.getCurrentAccount().subscribe(res => this.getResults());
 
     this.productFamilies$ = this.productService.query({ groupBy: ['Family'] })

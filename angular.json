@@ -42,6 +42,17 @@
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/popper.js/dist/umd/popper.min.js",
               "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "locale-currency",
+              "class-transformer",
+              "lodash-decorators",
+              "chart.js",
+              "currency-codes",
+              "xml-js",
+              "raven-js",
+              "crypto-js",
+              "safe-buffer"
             ]
           },
           "configurations": {

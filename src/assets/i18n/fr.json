@@ -308,7 +308,26 @@
         "ALL": "fr_FR All",
         "CHANGES_ONLY": "fr_FR Changes Only",
         "OPTION_TOTAL": "fr_FR Option Total",
-        "ITEMIZED_OPTIONS": "fr_FR Itemized Options"
+        "ITEMIZED_OPTIONS": "fr_FR Itemized Options",
+        "PRICE_NOT_AUTOUPDATED":"fr_FR * Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE":"fr_FR Update Prices",
+        "PRICE_ERROR": "fr_FR Pricing has failed for your cart. Please retry."
+    },
+    "REVALIDATE_CART": {
+        "REVALIDATION_REQUIRED": "fr_FR Revalidation required",
+        "REVALIDATION_REQUIRED_MSG": "fr_FR The configuration of the following items in your cart has changed and need to be revalidated",
+        "WHATTODO": "fr_FR If you are not sure of what to do, you can",
+        "DEACTIVATE_CART": "fr_FR deactivate this cart",
+        "FORNOW": "fr_FR for now",
+        "REVALIDATE": "fr_FR Revalidate",
+        "TOBE_REVALIDATE": "fr_FR To be revalidated",
+        "OPTIONAL": "fr_FR optional",
+        "REQUIRED": "fr_FR required",
+        "REVALIDATION_ERROR": "fr_FR Revalidation has failed! You can try again below",
+        "PRODUCTNAME": "fr_FR Product Name",
+        "REVALIDATION_WARNING": "fr_FR Some items in your cart need to be validated",
+        "VALIDATE_CART": "fr_FR Validate Cart",
+        "SUCCESSFULLY_REVALIDATED": "fr_FR Successfully revalidated"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
@@ -626,7 +645,8 @@
     "MINI_CART": {
         "CART_TOTAL": "fr_FR Cart Total",
         "VIEW_CART": "fr_FR View Cart",
-        "YOUR_CART_IS_EMPTY": "fr_FR Your cart is empty"
+        "YOUR_CART_IS_EMPTY": "fr_FR Your cart is empty",
+        "PRICE_NOT_UPDATED_TXT": "fr_FR * Prices are yet to be updated."
     },
     "MINI_PROFILE": {
         "LOGIN": "fr_FR Login",

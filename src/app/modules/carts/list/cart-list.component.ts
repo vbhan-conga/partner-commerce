@@ -169,7 +169,6 @@ export class CartListComponent implements OnInit {
   /**@ignore */
   getFilters(): Array<AFilter> {
     return new Array(new AFilter(this.cartService.type, [
-      new ACondition(this.cartService.type, 'ParentConfigurationId', 'Equal', null),
       new ACondition(this.cartService.type, 'Status', 'NotEqual', 'Saved')
     ]));
   }

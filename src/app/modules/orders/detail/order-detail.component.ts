@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, AfterViewChecked, NgZone } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, ChangeDetectorRef, AfterViewChecked, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { filter, flatMap, map, switchMap, mergeMap, startWith, take } from 'rxjs/operators';
+import { filter, flatMap, map, switchMap, mergeMap, startWith, take, tap } from 'rxjs/operators';
 import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq, defaultTo } from 'lodash';
-import { Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService, 
-         ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
-        Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService  } from '@congacommerce/ecommerce';
-import { ExceptionService, LookupOptions } from '@congacommerce/elements';
 import { ACondition, APageInfo, AFilter, ApiService } from '@congacommerce/core';
-
+import {
+  Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService,
+  ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
+  Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService
+} from '@congacommerce/ecommerce';
+import { ExceptionService, LookupOptions, RevalidateCartService } from '@congacommerce/elements';
 @Component({
   selector: 'app-order-detail',
   templateUrl: './order-detail.component.html',
@@ -16,9 +17,9 @@ import { ACondition, APageInfo, AFilter, ApiService } from '@congacommerce/core'
   encapsulation: ViewEncapsulation.None
 })
 export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked {
- /**
-   * String containing the lookup fields to be queried for an order record.
-   */
+  /**
+    * String containing the lookup fields to be queried for an order record.
+    */
   private orderLookups = `PriceListId,PrimaryContact,Owner,CreatedBy,ShipToAccountId`;
 
   /**
@@ -32,6 +33,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   noteSubscription: Subscription;
   attachmentSubscription: Subscription;
   orderSubscription: Subscription;
+
+  @ViewChild('attachmentSection') attachmentSection: ElementRef;
 
   private subscriptions: Subscription[] = [];
 
@@ -98,6 +101,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private orderLineItemService: OrderLineItemService,
     private apiService: ApiService,
     private attachmentService: AttachmentService,
+    private revalidateCartService: RevalidateCartService,
     private ngZone: NgZone) { }
 
   ngOnInit() {
@@ -120,7 +124,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}`, Order)),
+        flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}&children=Attachments`, Order)),
         switchMap((order: Order) => combineLatest([
           of(order),
           get(order, 'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
@@ -196,7 +200,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   /**
    * @ignore
    */
-   getTotalPromotions(orderLineItems: Array<OrderLineItem> = []): number {
+  getTotalPromotions(orderLineItems: Array<OrderLineItem> = []): number {
     return orderLineItems.length ? sum(orderLineItems.map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
 
@@ -237,6 +241,14 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       else
         this.exceptionService.showError('ACTION_BAR.ORDER_CONFIRMATION_FAILURE');
     });
+  }
+
+  /**
+   * @ignore
+   */
+  onGenerateOrder() {
+    if (this.attachmentSection) this.attachmentSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    this.getOrder();
   }
 
   addComment(orderId: string) {
@@ -284,7 +296,8 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
               )
             );
           }
-          else return this.orderService.convertOrderToCart(order);
+          else return this.orderService.convertOrderToCart(order).pipe(
+            tap(() => this.revalidateCartService.setRevalidateLines()));
         })
       ).pipe(take(1)).subscribe(cart => {
         this.lineItem_loader = false;
@@ -295,10 +308,10 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
             this.lineItem_loader = false;
           });
       },
-      err => {
-        this.exceptionService.showError(err);
-        this.lineItem_loader = false;
-      });
+        err => {
+          this.exceptionService.showError(err);
+          this.lineItem_loader = false;
+        });
   }
 
   clear() {

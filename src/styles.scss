@@ -1,4 +1,3 @@
-
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 $roboto-font-path: '~roboto-fontface/fonts';
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
@@ -89,15 +88,6 @@ button{
 .navbar{
     z-index: inherit;
 }
-
-
-/**
- * Add margin to the main section to accomodate header
- */
-//main{
-//   margin-top: $navbar-brand-height / 2;
-//   min-height: calc(100vh - #{$navbar-brand-height});
-//}
 
 main{
     margin-top: $navbar-brand-height + $breadcrumb-height;

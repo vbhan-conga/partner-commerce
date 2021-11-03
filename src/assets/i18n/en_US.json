@@ -327,7 +327,26 @@
         "ALL": "All",
         "CHANGES_ONLY": "Changes Only",
         "OPTION_TOTAL": "Option Total",
-        "ITEMIZED_OPTIONS": "Itemized Options"
+        "ITEMIZED_OPTIONS": "Itemized Options",
+        "PRICE_NOT_AUTOUPDATED":"* Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE":"Update Prices",
+        "PRICE_ERROR": "Pricing has failed for your cart. Please retry."
+    },
+    "REVALIDATE_CART": {
+        "REVALIDATION_REQUIRED": "Revalidation required",
+        "REVALIDATION_REQUIRED_MSG": "The configuration of the following items in your cart has changed and need to be revalidated",
+        "WHATTODO": "If you are not sure of what to do, you can",
+        "DEACTIVATE_CART": "deactivate this cart",
+        "FORNOW": "for now",
+        "REVALIDATE": "Revalidate",
+        "TOBE_REVALIDATE": "To be revalidated",
+        "OPTIONAL": "optional",
+        "REQUIRED": "required",
+        "REVALIDATION_ERROR": "Revalidation has failed! You can try again below",
+        "PRODUCTNAME": "Product Name",
+        "REVALIDATION_WARNING": "Some items in your cart need to be validated",
+        "VALIDATE_CART": "Validate Cart",
+        "SUCCESSFULLY_REVALIDATED": "Successfully revalidated"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
@@ -652,7 +671,8 @@
     "MINI_CART": {
         "CART_TOTAL": "Cart Total",
         "VIEW_CART": "View Cart",
-        "YOUR_CART_IS_EMPTY": "Your cart is empty"
+        "YOUR_CART_IS_EMPTY": "Your cart is empty",
+        "PRICE_NOT_UPDATED_TXT": "* Prices are yet to be updated."
     },
     "MINI_PROFILE": {
         "LOGIN": "Login",

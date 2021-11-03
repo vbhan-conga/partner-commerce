@@ -24,7 +24,9 @@ export class CartDetailComponent implements OnInit {
    */
   view$: Observable<ManageCartState>;
 
-  constructor(private crService: ConstraintRuleService, private cartService: CartService, private cdr: ChangeDetectorRef) { }
+  constructor(private crService: ConstraintRuleService, 
+              private cartService: CartService, 
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.view$ = combineLatest([

@@ -2,7 +2,7 @@ import { Configuration } from '@congacommerce/core';
 
 export const environment: Configuration = {
   production: false,
-  defaultImageSrc: 'https://loremflickr.com/320/240/hardware',
+  defaultImageSrc: './assets/images/default.png',
   defaultCountry: 'US',
   defaultLanguage: 'en-US',
   enableErrorLogging: true,
@@ -24,12 +24,12 @@ export const environment: Configuration = {
   useIndexedDB: false,
   skipPricing: true,
   skipRules: false,
+  pricingMode: 'turbo',
   expandDepth: 7,
   hashRouting: false,
   packageNamespace: 'Apttus_WebStore',
-  // *** TODO: Replace with Salesforce environment variables ***
-  storefront: 'P-Commerce',
-  organizationId: '00D2g0000008fIO',
-  sentryDsn: 'https://6ad10246235742dc89f89b4c3f53f4aa@sentry.io/1230495',
-  endpoint: 'https://dc2-cpqqacommunity1.cs35.force.com/pcom',
+  // *** TODO: Replace with details of your Salesforce org ***
+  storefront: 'Storefront Name',
+  organizationId: 'Salesforce Org Id',
+  endpoint: 'Community Site Url'
 };
