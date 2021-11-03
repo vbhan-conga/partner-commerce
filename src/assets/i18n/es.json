@@ -313,7 +313,26 @@
         "ALL": "es_MX All",
         "CHANGES_ONLY": "es_MX Changes Only",
         "OPTION_TOTAL": "es_MX Option Total",
-        "ITEMIZED_OPTIONS": "es_MX Itemized Options"
+        "ITEMIZED_OPTIONS": "es_MX Itemized Options",
+        "PRICE_NOT_AUTOUPDATED":"es_MX * Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE":"es_MX Update Prices",
+        "PRICE_ERROR": "es_MX Pricing has failed for your cart. Please retry."
+    },
+    "REVALIDATE_CART": {
+        "REVALIDATION_REQUIRED": "es_MX Revalidation required",
+        "REVALIDATION_REQUIRED_MSG": "es_MX The configuration of the following items in your cart has changed and need to be revalidated",
+        "WHATTODO": "es_MX If you are not sure of what to do, you can",
+        "DEACTIVATE_CART": "es_MX deactivate this cart",
+        "FORNOW": "es_MX for now",
+        "REVALIDATE": "es_MX Revalidate",
+        "TOBE_REVALIDATE": "es_MX To be revalidated",
+        "OPTIONAL": "es_MX optional",
+        "REQUIRED": "es_MX required",
+        "REVALIDATION_ERROR": "es_MX Revalidation has failed! You can try again below",
+        "PRODUCTNAME": "es_MX Product Name",
+        "REVALIDATION_WARNING": "es_MX Some items in your cart need to be validated",
+        "VALIDATE_CART": "es_MX Validate Cart",
+        "SUCCESSFULLY_REVALIDATED": "es_MX Successfully revalidated"
     },
     "CREATE_QUOTE":{
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -632,7 +651,8 @@
     "MINI_CART": {
         "CART_TOTAL": "es_MX Cart Total",
         "VIEW_CART": "es_MX View Cart",
-        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty"
+        "YOUR_CART_IS_EMPTY": "es_MX Your cart is empty",
+        "PRICE_NOT_UPDATED_TXT": "es_MX * Prices are yet to be updated."
     },
     "MINI_PROFILE": {
         "LOGIN": "es_MX Login",

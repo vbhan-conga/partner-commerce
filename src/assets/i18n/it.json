@@ -301,7 +301,9 @@
         "CONFIRM_CHANGES": "it_IT Confirm Changes",
         "ADD_PRODUCTS": "it_IT Add Products",
         "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
-        "NO_DATA": "it_IT n/a"
+        "NO_DATA": "it_IT n/a",
+        "PRICE_NOT_AUTOUPDATED":"it_IT * Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE":"it_IT Update Prices"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",

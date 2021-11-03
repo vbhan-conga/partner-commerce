@@ -2,7 +2,7 @@
     [context]="viewState?.product" *ngIf="viewState$ | async as viewState; else loading">
 
     <div class="constraintAlerts">
-        <apt-alert></apt-alert>
+        <apt-alert [record]="cart" [autoRun]="false"></apt-alert>
         <apt-constraint-rule-alert></apt-constraint-rule-alert>
     </div>
 
@@ -12,18 +12,18 @@
                 <small class="mb-2 d-block"> {{'PRODUCT_DETAILS.STANDARD_PRICE' | translate}} </small>
                 <h5>
                     <apt-price [record]="viewState?.product" type="list" [bundle]="true"></apt-price>
-                </h5>
+                  </h5>
             </div>
             <div class="form-group my-0 mr-3">
                 <small class="mb-2 d-block"> {{'COMMON.NET_PRICE' | translate}} </small>
                 <h5>
                     <apt-price [record]="cartItemList" *ngIf="cartItemList?.length > 0; else productPrice"
-                        [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
+                      [quantity]="viewState?.quantity" [bundle]="true" [type]="'net'"></apt-price>
                     <ng-template #productPrice>
-                        <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true" type="net">
-                        </apt-price>
+                      <apt-price [record]="viewState?.product" [quantity]="viewState?.quantity" [bundle]="true" type="net">
+                      </apt-price>
                     </ng-template>
-                </h5>
+                  </h5>
             </div>
         </form>
     </div>

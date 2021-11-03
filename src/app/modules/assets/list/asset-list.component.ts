@@ -70,6 +70,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
    * Value of the advanced filter component.
    */
   advancedFilters: Array<AFilter> = [];
+  /**
+   * cart record
+   */
+  cart: Cart;
 
   /**
    * Configuration object used to configure the data filter.
@@ -173,14 +177,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
   defaultFilters: Array<AFilter> = [
     new AFilter(this.assetService.type, [
       new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'),
-      new ACondition(
-        this.assetService.type,
-        'Product.ConfigurationType',
-        'NotEqual',
-        'Option'
-      ),
-      new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true),
-      new ACondition(this.assetService.type, 'AssetStatus', 'Equal', 'Activated')
+      new ACondition(this.assetService.type, 'Product.ConfigurationType', 'NotEqual', 'Option'),
+      new ACondition(this.assetService.type, 'IsPrimaryLine', 'Equal', true)
     ])
   ];
 
@@ -301,9 +299,10 @@ export class AssetListComponent implements OnInit, OnDestroy {
       this.cartService.getMyCart()
     )
       .subscribe(([chartData, storefront, cart]) => {
+        this.cart = cart;
         this.view$.next({
           tableOptions: {
-            groupBy: 'Product.Name',
+            groupBy: 'Name',
             filters: this.getFilters(),
             defaultSort: {
               column: 'CreatedDate',
@@ -322,20 +321,9 @@ export class AssetListComponent implements OnInit, OnDestroy {
             lookups: [
               {
                 field: 'AttributeValueId'
-              },
+              }, 
               {
-                field: 'ProductId',
-                children: [
-                  {
-                    field: 'AssetLineItems',
-                    filters: [
-                      new AFilter(this.assetService.type, [
-                        new ACondition(this.assetService.type, 'LineType', 'NotEqual', 'Option'),
-                        new ACondition(this.assetService.type, 'PriceType', 'In', ['Recurring', 'Usage']),
-                        new ACondition(this.assetService.type, 'BundleAssetId', 'NotNull', null)])
-                    ]
-                  }
-                ]
+                field: 'ProductId'
               }
             ],
             actions: _.filter(this.getMassActions(cart), action =>
@@ -496,8 +484,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
         massAction: true,
         label: 'Renew',
         theme: 'primary',
-        validate(record: AssetLineItemExtended): boolean {
-          return record.canRenew() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
+        validate(record: AssetLineItemExtended, childRecords: Array<AssetLineItemExtended>): boolean {
+          return record.canRenew(childRecords) && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openRenewModal(
@@ -512,8 +500,8 @@ export class AssetListComponent implements OnInit, OnDestroy {
         massAction: true,
         label: 'Terminate',
         theme: 'danger',
-        validate(record: AssetLineItemExtended): boolean {
-          return record.canTerminate() && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
+        validate(record: AssetLineItemExtended, childRecords: Array<AssetLineItemExtended>): boolean {
+          return record.canTerminate(childRecords) && !(_.filter(_.get(cart, 'LineItems'), (item) => _.get(item, 'AssetLineItem.Id') === record.Id).length > 0);
         },
         action: (recordList: Array<AObject>): Observable<void> => {
           this.assetModalService.openTerminateModal(
