@@ -4,11 +4,11 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { combineLatest, Observable, of } from 'rxjs';
 import { ClassType } from 'class-transformer/ClassTransformer';
 import { TranslateService } from '@ngx-translate/core';
-import { map, mergeMap, take } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { first } from 'lodash';
 
 import { AObject, ACondition, AFilter } from '@congacommerce/core';
-import { CartService, Cart, PriceService } from '@congacommerce/ecommerce';
+import { CartService, Cart, Price, PriceService } from '@congacommerce/ecommerce';
 import { TableOptions, TableAction } from '@congacommerce/elements';
 
 /**
@@ -42,71 +42,74 @@ export class CartListComponent implements OnInit {
   }
   /** @ignore */
   loadView() {
-    this.view$ = combineLatest(
-      this.cartService.getMyCart(),
-      this.getCartAggregate()
-    )
-    .pipe(
-      map(([currentCart, cartList]) => {
-        return {
-          tableOptions: {
-            columns: [
-              {
-                prop: 'Name'
-              },
-              {
-                prop: 'CreatedDate'
-              },
-              {
-                prop: 'NumberOfItems'
-              },
-              {
-                prop: 'IsActive',
-                label: 'Is Active',
-                sortable: false,
-                value: (record: Cart) => CartService.getCurrentCartId() === record.Id ? of('Yes') : of('No')
-              },
-              {
-                prop: 'TotalAmount',
-                label: 'Total Amount',
-                sortable: false,
-                value: (record: Cart) => this.getCartTotal(record)
-              },
-              {
-                prop: 'Status'
-              }
-            ],
-            lookups: [],
-            actions: [
-              {
-                enabled: true,
-                icon: 'fa-check',
-                massAction: false,
-                label: 'Set Active',
-                theme: 'primary',
-                validate: (record: Cart) => this.canActivate(record),
-                action: (recordList: Array<Cart>) => this.cartService.setCartActive(_.first(recordList), true),
-                disableReload: true
-              } as TableAction,
-              {
-                enabled: true,
-                icon: 'fa-trash',
-                massAction: true,
-                label: 'Delete',
-                theme: 'danger',
-                validate: (record: Cart) => this.canDelete(record),
-                action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => this.getCartAggregate())),
-                disableReload: true
-              } as TableAction
-            ],
-            highlightRow: (record: Cart) => of(CartService.getCurrentCartId() === record.Id),
-            children: ['SummaryGroups'],
-            filters: this.getFilters()
-          },
-          type: Cart
-        } as CartListView;
-      })
-    );
+    this.view$ = this.cartService.getMyCart()
+      .pipe(
+        switchMap(cart => {
+          return combineLatest([
+            of(cart),
+            this.getCartAggregate()
+          ])
+        }),
+        map(([currentCart, cartList]) => {
+          return {
+            tableOptions: {
+              columns: [
+                {
+                  prop: 'Name'
+                },
+                {
+                  prop: 'CreatedDate'
+                },
+                {
+                  prop: 'NumberOfItems'
+                },
+                {
+                  prop: 'IsActive',
+                  label: 'Is Active',
+                  sortable: false,
+                  value: (record: Cart) => CartService.getCurrentCartId() === record.Id ? of('Yes') : of('No')
+                },
+                {
+                  prop: 'TotalAmount',
+                  label: 'Total Amount',
+                  sortable: false,
+                  value: (record: Cart) => this.getCartTotal(record)
+                },
+                {
+                  prop: 'Status'
+                }
+              ],
+              lookups: [],
+              actions: [
+                {
+                  enabled: true,
+                  icon: 'fa-check',
+                  massAction: false,
+                  label: 'Set Active',
+                  theme: 'primary',
+                  validate: (record: Cart) => this.canActivate(record),
+                  action: (recordList: Array<Cart>) => this.cartService.setCartActive(first(recordList), true),
+                  disableReload: true
+                } as TableAction,
+                {
+                  enabled: true,
+                  icon: 'fa-trash',
+                  massAction: true,
+                  label: 'Delete',
+                  theme: 'danger',
+                  validate: (record: Cart) => this.canDelete(record),
+                  action: (recordList: Array<Cart>) => this.cartService.deleteCart(recordList).pipe(map(res => this.getCartAggregate())),
+                  disableReload: true
+                } as TableAction
+              ],
+              highlightRow: (record: Cart) => of(CartService.getCurrentCartId() === record.Id),
+              children: ['SummaryGroups'],
+              filters: this.getFilters()
+            },
+            type: Cart
+          } as CartListView;
+        })
+      );
   }
 
   /** @ignore */
@@ -115,7 +118,7 @@ export class CartListComponent implements OnInit {
       aggregate: true,
       skipCache: true,
       filters: this.getFilters()
-    }).pipe(map(_.first));
+    }).pipe(map(first));
   }
 
   /**
@@ -153,7 +156,7 @@ export class CartListComponent implements OnInit {
    * @param currentCart Current cart object from where we need to fetch cart total.
    */
   getCartTotal(currentCart: Cart) {
-    return this.priceService.getCartPrice(currentCart).pipe(mergeMap((price) => { return price.netPrice$; }));
+    return this.priceService.getCartPrice(currentCart).pipe(mergeMap((price: Price) => price.netPrice$));
   }
 
   /**@ignore */
