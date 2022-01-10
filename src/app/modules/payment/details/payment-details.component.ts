@@ -1,12 +1,11 @@
 import { Component, OnInit, Input, ViewChild, TemplateRef, OnDestroy, EventEmitter, Output } from '@angular/core';
-import { PaymentTransaction, Order, UserService, OrderService } from '@congacommerce/ecommerce';
-import { ConfigurationService } from '@congacommerce/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import * as _ from 'lodash';
-
+import { defaultTo, get, round, toString } from 'lodash';
+import { ConfigurationService } from '@congacommerce/core';
+import { PaymentTransaction, Order, UserService, OrderService } from '@congacommerce/ecommerce';
 @Component({
   selector: 'app-payment-details',
   templateUrl: './payment-details.component.html',
@@ -58,11 +57,11 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
   };
 
   constructor(private modalService: BsModalService,
-              private configurationService: ConfigurationService,
-              private userService: UserService,
-              private translate: TranslateService,
-              private toastr: ToastrService,
-              private orderService: OrderService) { }
+    private configurationService: ConfigurationService,
+    private userService: UserService,
+    private translate: TranslateService,
+    private toastr: ToastrService,
+    private orderService: OrderService) { }
 
   ngOnInit() {
     this.subscriptions.push(this.userService.getCurrentUserLocale(false).subscribe((currentLocale) => this.currentUserLocale = currentLocale));
@@ -99,7 +98,7 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
     this.loading = true;
     if (this.paymentState === 'PAYNOW')
       this.makePaymentRequest = true;
-     // incase of PO Number OR Invoice Me Later
+    // incase of PO Number OR Invoice Me Later
     else
       this.onPaymentComplete('Success');
   }
@@ -118,7 +117,7 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
       this.translate.stream(['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_TITLE', 'PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_MESSAGE']).subscribe((val: string) => {
         this.toastr.success(val['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_MESSAGE'], val['PAYMENT_METHOD_LABELS.PAYMENT_SUCCESS_TITLE']);
       });
-      this.order.PaymentStatus = 'Processed'; 
+      this.order.PaymentStatus = 'Processed';
     }
     this.onPaymentProcessed.emit();
     this.loading = false;
@@ -136,24 +135,24 @@ export class PaymentDetailsComponent implements OnInit, OnDestroy {
    * Create payment transaction object
    */
   createPaymentTransaction() {
-      this.paymentTransaction = new PaymentTransaction();
-      this.paymentTransaction.Currency = _.defaultTo(_.get(this.order, 'CurrencyIsoCode'),this.configurationService.get('defaultCurrency'));
-      this.paymentTransaction.CustomerFirstName = _.get(this.order.PrimaryContact, 'FirstName');
-      this.paymentTransaction.CustomerLastName = _.get(this.order.PrimaryContact, 'LastName');
-      this.paymentTransaction.CustomerEmailAddress = _.get(this.order.PrimaryContact, 'Email');
-      this.paymentTransaction.CustomerAddressLine1 = _.get(this.order.BillToAccount, 'BillingStreet');
-      this.paymentTransaction.CustomerAddressCity = _.get(this.order.BillToAccount, 'BillingCity');
-      this.paymentTransaction.CustomerAddressStateCode = _.get(this.order.BillToAccount, 'BillingAddress.stateCode');
-      this.paymentTransaction.CustomerAddressCountryCode = _.get(this.order.BillToAccount, 'BillingAddress.countryCode');
-      this.paymentTransaction.CustomerAddressPostalCode = _.get(this.order.BillToAccount, 'BillingAddress.postalCode');
-      this.paymentTransaction.CustomerBillingAccountName = _.get(this.order.BillToAccount, 'Name');
-      this.paymentTransaction.CustomerBillingAccountID = _.get(this.order.BillToAccount, 'Id');
-      // Rounding off the string amount to 2 decimal places as cybersource doesn't allow higher numeric scale on order amount.
-      this.paymentTransaction.OrderAmount =  _.toString(_.round(parseFloat(this.order.OrderAmount), 2));
-      this.paymentTransaction.OrderName = _.get(this.order, 'Name') ;
-      this.paymentTransaction.OrderGeneratedID = _.get(this.order, 'Id');
-      this.paymentTransaction.isUserLoggedIn = true;
-      this.paymentTransaction.Locale = this.currentUserLocale;
+    this.paymentTransaction = new PaymentTransaction();
+    this.paymentTransaction.Currency = defaultTo(get(this.order, 'CurrencyIsoCode'), this.configurationService.get('defaultCurrency'));
+    this.paymentTransaction.CustomerFirstName = get(this.order.PrimaryContact, 'FirstName');
+    this.paymentTransaction.CustomerLastName = get(this.order.PrimaryContact, 'LastName');
+    this.paymentTransaction.CustomerEmailAddress = get(this.order.PrimaryContact, 'Email');
+    this.paymentTransaction.CustomerAddressLine1 = get(this.order.BillToAccount, 'BillingStreet');
+    this.paymentTransaction.CustomerAddressCity = get(this.order.BillToAccount, 'BillingCity');
+    this.paymentTransaction.CustomerAddressStateCode = get(this.order.BillToAccount, 'BillingAddress.stateCode');
+    this.paymentTransaction.CustomerAddressCountryCode = get(this.order.BillToAccount, 'BillingAddress.countryCode');
+    this.paymentTransaction.CustomerAddressPostalCode = get(this.order.BillToAccount, 'BillingAddress.postalCode');
+    this.paymentTransaction.CustomerBillingAccountName = get(this.order.BillToAccount, 'Name');
+    this.paymentTransaction.CustomerBillingAccountID = get(this.order.BillToAccount, 'Id');
+    // Rounding off the string amount to 2 decimal places as cybersource doesn't allow higher numeric scale on order amount.
+    this.paymentTransaction.OrderAmount = toString(round(parseFloat(defaultTo(this.order.OrderAmount, 0)), 2));
+    this.paymentTransaction.OrderName = get(this.order, 'Name');
+    this.paymentTransaction.OrderGeneratedID = get(this.order, 'Id');
+    this.paymentTransaction.isUserLoggedIn = true;
+    this.paymentTransaction.Locale = this.currentUserLocale;
   }
 
   hidePopover() {
