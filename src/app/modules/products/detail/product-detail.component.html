@@ -118,7 +118,7 @@
             <div class="col-12">
                 <apt-constraint-rule-alert [showProductConfig]="true"></apt-constraint-rule-alert>
                 <apt-product-configuration
-                    [productId]="viewState?.product?.Id"
+                    [product]="viewState?.product?.Id"
                     [relatedTo]="viewState?.relatedTo"
                     [accordion]="true"
                     (click)="configurationChanged = true">
