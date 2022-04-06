@@ -1,7 +1,7 @@
 {
     "ERROR": {
-        "OPTION_GROUP" : {
-            "ERROR" : "opzione gruppo Errori",
+        "OPTION_GROUP": {
+            "ERROR": "opzione gruppo Errori",
             "MIN_OPTIONS": "voi dovere Selezionare a meno {{value}} opzioni.",
             "MAX_opzioni": "voi può Selezionare non più di {{value}} opzioni.",
             "MIN_TOTAL_QUANTITY": "La quantità minima totale è {{value}}.",
@@ -13,7 +13,7 @@
             "SERVER_ERROR": "Oops qualcosa è andato storto.",
             "PRICE_CHANGE": "Il prezzo del carrello è stato aggiornato",
             "PRICE_CHANGE_TOASTR_TITLE": "Aggiornamento Prezzo",
-            "VALIDATE" : "Ci sono errori nel tuo carrello.",
+            "VALIDATE": "Ci sono errori nel tuo carrello.",
             "CONSTRAINT_RULES": "Un articolo nel carrello ha violato 1 o più regole di vincolo."
         },
         "CART_ITEM": {
@@ -23,8 +23,13 @@
             "ASSOCIATE_AND_APPLY": "Un errore dovuto al sempre le regole di vincolo per il vostro carrello."
         },
         "PROMOTION": {
-            "INVALID_TOASTR_MESSAGE": "Promozione {{nome}} non viene applicata.",
-            "INVALID_TOASTR_TITLE": "La Promozione Non Viene Applicata"
+            "PROMOTION_OR_COUPON_NOT_AVAILABLE": "it_IT Promotion {{name}} could not be applied.",
+            "INVALID_PROMOTION_TITLE": "it_IT Promotion Not Applied",
+            "INVALID_COUPON_TITLE": "it_IT Coupon Not Applied",
+            "COUPON_CODE_EXPIRED": "it_IT Coupon {{name}} is expired.",
+            "INACTIVE_COUPON_CODE": "it_IT Coupon {{name}} is not valid.",
+            "COUPON_LIMIT_EXCEEDED": "it_IT Coupon {{name}} usage limit is exceeded",
+            "TABLE_COL_OPTION": "it_IT Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "Errore Di Applicazione"
     },
@@ -36,6 +41,8 @@
             "CONFIGURATION_UPDATED": "{{productName}} configurazione è stato aggiornato."
         },
         "PROMOTION": {
+            "VALID_PROMOTION_TITLE": "it_IT Promotion Applied",
+            "VALID_PROMOTION_MESSAGE": "it_IT Promotion {{name}} is applied successfully",
             "REMOVED_TOASTR_MESSAGE": "Promozione {{nome}} è stato rimosso.",
             "REMOVED_TOASTR_TITLE": "Promozione Rimosso"
         },
@@ -44,7 +51,13 @@
         "GENERATED": "Il documento dell'ordine è stato generato e può essere visualizzato nella scheda 'Allegati'.",
         "DOCUMENT_GENERATED_TITLE": "Documento Generato",
         "PRESENTED": "Il documento dell'ordine è stato presentato a {{primary_contact}} e la notifica via e-mail viene inviata.",
-        "DOCUMENT_PRESENTED_TITLE": "Documento Presentato"
+        "DOCUMENT_PRESENTED_TITLE": "Documento Presentato",
+        "FAVORITE": {
+            "TITLE": "it_IT Favorite items added!",
+            "ADD_FAVORITE": "it_IT Added new {{name}} Favorite.",
+            "UPDATE_FAVORITE": "it_IT Updated existing {{name}} Favorite",
+            "ADD_FAVORITE_TO_CART": "it_IT Items from {{name}} were added to the cart."
+        }
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "L'attività di terminazione è stato aggiunto al tuo carrello.",
@@ -93,6 +106,10 @@
             "SET_ACTIVE": "Set Active",
             "CART_CREATION_FAILED": "Impossibile creare il carrello. Si prega di contattare l'amministratore."
         },
+        "FAVORITE_DETAIL": {
+            "FAVORITE_SUMMARY": "it_IT Favorite Summary",
+            "INACTIVE": "it_IT Inactive"
+        },
         "ADDRESS_BOOK": {
             "NEW_ADDRESS": "Nuovo Indirizzo",
             "SET_AS_DEFAULT": "Imposta come Predefinito",
@@ -123,6 +140,7 @@
             "QUOTES_BY_STATUS": "Preventivi Per Stato",
             "QUOTES_BY_DUE_DATE": "Le Citazioni Della Data Di Scadenza",
             "TOTAL_QUOTES": "Totale Citazioni",
+            "FINALIZE": "it_IT Finalize",
             "ATTACHMENTS": {
                 "TITLE": "Aggiungere un nuovo file(s)",
                 "INPUT_LABEL": "Rilasciare i file per Allegare o",
@@ -302,8 +320,20 @@
         "ADD_PRODUCTS": "it_IT Add Products",
         "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
         "NO_DATA": "it_IT n/a",
-        "PRICE_NOT_AUTOUPDATED":"it_IT * Prices shown in this page are not auto-updated.",
-        "UPDATE_PRICE":"it_IT Update Prices"
+        "PRICE_NOT_AUTOUPDATED": "it_IT * Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE": "it_IT Update Prices",
+        "FAVORITES": "it_IT Favorites",
+        "SELECTIONS": "it_IT Selections",
+        "PRODUCTS": "it_IT Products",
+        "CARTITEMS": "it_IT Cart Items",
+        "SAVE_FAVORITE": "it_IT Save as favorite",
+        "CLONE": "it_IT Clone",
+        "SELECT_ACTION": "it_IT Select action",
+        "CONFIRM": "it_IT Confirm",
+        "MY_FAVORITES": "it_IT My Favorites",
+        "QUOTE_ID": "it_IT Quote ID",
+        "EDIT_LAYOUT": "it_IT Edit Layout",
+        "ADDITIONAL_INFORMATION":"it_IT Additional Information"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",
@@ -668,6 +698,7 @@
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",
         "ORDER_SUMMARY": "RIEPILOGO ORDINE",
         "LINE_ITEMS": "GLI ELEMENTI DI RIGA",
+        "FAVORITE_SUMMARY": "it_IT FAVORITE SUMMARY",
         "COMMENTS": "COMMENTI",
         "ATTACHMENTS": "ALLEGATI",
         "PRICE_SUMMARY": "Prezzo Riepilogo",
@@ -743,11 +774,22 @@
         "CART_CREATION_TOASTR_MESSAGE": "È stato creato un nuovo carrello.",
         "PRESENT": "Presente"
     },
-    "TABLE" : {
-        "SEARCH" : "Ricerca",
-        "SELECTED" : "Selezionato",
+    "TABLE": {
+        "SEARCH": "Ricerca",
+        "SELECTED": "Selezionato",
         "OF": "Di",
         "PER_PAGE": "Per pagina",
         "NO_DATA_TO_DISPLAY": "Nessun dato da visualizzare"
+    },
+    "FAVORITE": {
+        "VISIBILITY": "it_IT Visibility",
+        "FAVORITE_MODAL": {
+            "ADD_FAVORITE": "it_IT Add Favorite",
+            "SEARCH_OR_ADD_FAV": "it_IT Search or add new favorite",
+            "MAKE_PUBLICLY_VISIBILE": "it_IT Make publicly visible",
+            "ADD_NEW_FAVORITE": "it_IT Add New <strong>{{search}}</strong> Favorite",
+            "ENTER_FAVORITE_NAME": "it_IT Enter favorite name...",
+            "ADD_TO_EXISTING": "it_IT Add to existing"
+        }
     }
 }

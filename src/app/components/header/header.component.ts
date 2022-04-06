@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
 
   doLogout() {
     this.profile.doLogout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/'],{queryParams:{loggedOut:true}});
   }
 
   @HostListener('window:scroll', ['$event'])

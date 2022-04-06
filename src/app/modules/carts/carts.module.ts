@@ -15,7 +15,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ProductCarouselModule, ConfigurationSummaryModule, PriceModule, PromotionModule, InputDateModule,
         LineItemTableRowModule, BreadcrumbModule, IconModule, TaxPopHoverModule, PriceSummaryModule, OutputFieldModule,
-        InputFieldModule, AlertModule, ConstraintRuleModule } from '@congacommerce/elements';
+        InputFieldModule, AlertModule, ConstraintRuleModule, SelectAllModule } from '@congacommerce/elements';
 import { TranslateModule } from '@ngx-translate/core';
 import { LaddaModule } from 'angular2-ladda';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -57,7 +57,8 @@ import { TableModule, ChartModule } from '@congacommerce/elements';
     AlertModule,
     TableModule,
     ChartModule,
-    ConstraintRuleModule
+    ConstraintRuleModule,
+    SelectAllModule
   ]
 })
 export class CartsModule { }

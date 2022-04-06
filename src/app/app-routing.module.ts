@@ -77,7 +77,12 @@ import { AboGuard } from './services/abo.guard';
               {
                 path: 'dashboard',
                 loadChildren: () => import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
-              }
+              },
+              {
+                path: 'favorites',
+                loadChildren: () => import('./modules/favorites/favorites.module').then(m => m.FavoritesModule),
+                data: { title: 'Favorites'}
+              },
             ]
           }
         ]

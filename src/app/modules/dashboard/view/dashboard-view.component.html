@@ -25,6 +25,8 @@
                 class="list-group-item list-group-item-action">{{'COMMON.MY_QUOTES' | translate}}</a>
             <a href="javascript:void(0)" [routerLink]="['/carts']" routerLinkActive="active"
                 class="list-group-item list-group-item-action">{{'COMMON.MY_CARTS' | translate}}</a>
+            <a *ngIf="showFavorites$ | async" href="javascript:void(0)" [routerLink]="['/favorites']" routerLinkActive="active"
+                class="list-group-item list-group-item-action">{{'COMMON.MY_FAVORITES' | translate}}</a>
             <a href="javascript:void(0)" [routerLink]="['/assets']" routerLinkActive="active"
                 class="list-group-item list-group-item-action">{{'COMMON.INSTALLED_PRODUCTS' | translate}}</a>
             <a href="javascript:void(0)" [routerLink]="['/products']" routerLinkActive="active"

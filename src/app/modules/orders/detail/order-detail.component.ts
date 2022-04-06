@@ -5,9 +5,9 @@ import { filter, flatMap, map, switchMap, mergeMap, startWith, take, tap } from 
 import { get, set, indexOf, first, sum, isEmpty, cloneDeep, filter as rfilter, find, compact, uniq, defaultTo } from 'lodash';
 import { ACondition, APageInfo, AFilter, ApiService } from '@congacommerce/core';
 import {
-  Order, Quote, OrderLineItem, OrderService, UserService, ProductInformationService,
+  Order, Quote, OrderLineItem, OrderService, UserService,
   ItemGroup, LineItemService, Note, NoteService, EmailService, AccountService,
-  Contact, CartService, Cart, OrderLineItemService, Account, Attachment, AttachmentService
+  Contact, CartService, Cart, OrderLineItemService, Account
 } from '@congacommerce/ecommerce';
 import { ExceptionService, LookupOptions, RevalidateCartService } from '@congacommerce/elements';
 @Component({
@@ -28,15 +28,14 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   order$: BehaviorSubject<Order> = new BehaviorSubject<Order>(null);
   orderLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
-  attachments$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
 
   noteSubscription: Subscription;
-  attachmentSubscription: Subscription;
   orderSubscription: Subscription;
 
   @ViewChild('attachmentSection') attachmentSection: ElementRef;
 
   private subscriptions: Subscription[] = [];
+  orderGenerated: boolean = false;
 
   /**
    * String containing the lookup fields to be queried for a proposal record.
@@ -77,9 +76,9 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
   note: Note = new Note();
 
-  comments_loader: boolean = false;
+  commentsLoader: boolean = false;
 
-  lineItem_loader: boolean = false;
+  lineItemLoader: boolean = false;
 
   lookupOptions: LookupOptions = {
     primaryTextField: 'Name',
@@ -90,7 +89,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   constructor(private activatedRoute: ActivatedRoute,
     private orderService: OrderService,
     private userService: UserService,
-    private productInformationService: ProductInformationService,
     private exceptionService: ExceptionService,
     private noteService: NoteService,
     private router: Router,
@@ -100,7 +98,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     private cdr: ChangeDetectorRef,
     private orderLineItemService: OrderLineItemService,
     private apiService: ApiService,
-    private attachmentService: AttachmentService,
     private revalidateCartService: RevalidateCartService,
     private ngZone: NgZone) { }
 
@@ -127,7 +124,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
         flatMap(orderId => this.apiService.get(`/orders/${orderId}?lookups=${this.orderLookups}&children=Attachments`, Order)),
         switchMap((order: Order) => combineLatest([
           of(order),
-          get(order, 'Proposal.Id') ? this.apiService.get(`/quotes/${order.Proposal.Id}?lookups=${this.proposalLookups}`, Quote) : of(null),
+          get(order, 'ProposalId') ? this.apiService.get(`/quotes/${order.ProposalId}?lookups=${this.proposalLookups}`, Quote) : of(null),
           // Using query instead of get(), as get is not returning list of accounts as expected.
           this.accountService.query({
             conditions: [
@@ -168,7 +165,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       })).subscribe();
 
     this.getNotes();
-    this.getAttachments();
   }
 
   refreshOrder(fieldValue, order, fieldName) {
@@ -211,24 +207,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
     return orderLineItems.filter(orderItem => !orderItem.IsPrimaryLine && orderItem.PrimaryLineNumber === lineItem.PrimaryLineNumber);
   }
 
-  getAttachments() {
-    if (this.attachmentSubscription) {
-      this.attachmentSubscription.unsubscribe();
-    }
-
-    this.attachmentSubscription = this.activatedRoute.params
-      .pipe(
-        switchMap(params => this.attachmentService.getAttachments(get(params, 'id')))
-      ).subscribe((attachments: Array<Attachment>) => this.attachments$.next(attachments));
-  }
-
-  /**
-   * @ignore
-   */
-  downloadAttachment(attachmentId: string, parentId: string) {
-    return this.productInformationService.getAttachmentUrl(attachmentId, parentId);
-  }
-
   confirmOrder(orderId: string, primaryContactId: string) {
     this.isLoading = true;
     this.orderService.acceptOrder(orderId).subscribe((res) => {
@@ -249,10 +227,11 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
   onGenerateOrder() {
     if (this.attachmentSection) this.attachmentSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
     this.getOrder();
+    this.orderGenerated = true;
   }
 
   addComment(orderId: string) {
-    this.comments_loader = true;
+    this.commentsLoader = true;
     set(this.note, 'ParentId', orderId);
     set(this.note, 'OwnerId', get(this.userService.me(), 'Id'));
     if (!this.note.Title) {
@@ -262,16 +241,16 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       .subscribe(r => {
         this.getNotes();
         this.clear();
-        this.comments_loader = false;
+        this.commentsLoader = false;
       },
         err => {
           this.exceptionService.showError(err);
-          this.comments_loader = false;
+          this.commentsLoader = false;
         });
   }
 
   editOrderItems(order: Order) {
-    this.lineItem_loader = true;
+    this.lineItemLoader = true;
     this.accountService.getCurrentAccount()
       .pipe(
         take(1),
@@ -300,17 +279,17 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
             tap(() => this.revalidateCartService.setRevalidateLines()));
         })
       ).pipe(take(1)).subscribe(cart => {
-        this.lineItem_loader = false;
+        this.lineItemLoader = false;
         this.router.navigate(['/carts', 'active'])
-          .then(result => this.lineItem_loader = false)
+          .then(result => this.lineItemLoader = false)
           .catch(error => {
             this.exceptionService.showError(error);
-            this.lineItem_loader = false;
+            this.lineItemLoader = false;
           });
       },
         err => {
           this.exceptionService.showError(err);
-          this.lineItem_loader = false;
+          this.lineItemLoader = false;
         });
   }
 
@@ -325,10 +304,6 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
 
     if (this.orderSubscription) {
       this.orderSubscription.unsubscribe();
-    }
-
-    if (this.attachmentSubscription) {
-      this.attachmentSubscription.unsubscribe();
     }
 
     if (this.noteSubscription) {

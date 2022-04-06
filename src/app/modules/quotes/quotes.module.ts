@@ -1,17 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
-import { PricingModule } from '@congacommerce/ecommerce';
-import { PriceModule, InputSelectModule, BreadcrumbModule, InputFieldModule, AddressModule, IconModule, LineItemTableRowModule, PriceSummaryModule, TableModule, ChartModule, DataFilterModule } from '@congacommerce/elements';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FormsModule } from '@angular/forms';
-import { DetailsModule } from '../details/details.module';
-import { OutputFieldModule } from '@congacommerce/elements';
 import { LaddaModule } from 'angular2-ladda';
+import { TranslateModule } from '@ngx-translate/core';
+import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { PricingModule } from '@congacommerce/ecommerce';
+import {
+  PriceModule,
+  InputSelectModule,
+  BreadcrumbModule,
+  InputFieldModule,
+  AddressModule,
+  IconModule,
+  LineItemTableRowModule,
+  PriceSummaryModule,
+  TableModule,
+  ChartModule,
+  DataFilterModule,
+  OutputFieldModule
+} from '@congacommerce/elements';
+import { DetailsModule } from '../details/details.module';
 import { QuotesRoutingModule } from './quotes-routing.module';
+import { ComponentModule } from '../../components/component.module';
 import { QuoteDetailComponent } from './detail/quote-detail.component';
 import { QuoteListComponent } from './list/quote-list.component';
+import { CreateQuoteComponent } from './quote-create/create-quote.component';
+import { RequestQuoteFormComponent } from './request-quote-form/request-quote-form.component';
 
 @NgModule({
   imports: [
@@ -37,8 +52,9 @@ import { QuoteListComponent } from './list/quote-list.component';
     DetailsModule,
     TableModule,
     ChartModule,
-    DataFilterModule
+    DataFilterModule,
+    ComponentModule
   ],
-  declarations: [QuoteDetailComponent, QuoteListComponent]
+  declarations: [CreateQuoteComponent, QuoteDetailComponent, RequestQuoteFormComponent, QuoteListComponent]
 })
 export class QuotesModule { }

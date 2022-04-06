@@ -56,7 +56,8 @@
     "url-search-params-polyfill": "^7.0.1",
     "xml-js": "^1.6.11",
     "zone.js": "~0.11.4",
-    "locale-currency": "0.0.2"
+    "locale-currency": "0.0.2",
+    "downloadjs": "^1.4.7"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.1",

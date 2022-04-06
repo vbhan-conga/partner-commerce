@@ -15,7 +15,12 @@
       <span class="badge badge-info ml-1">{{cart?.Order?.Status}}</span>
     </div>
 
-    <div *ngIf="cart?.OrderId" class="d-flex">
+    <div *ngIf="cart?.Proposald?.Name" class="border-left px-3 d-flex align-items-center">
+      <apt-output-field [record]="cart" field="ProposaldId" label="{{'COMMON.QUOTE_ID' | translate}}" layout="inline" [showQuickView]="true" [editable]="false"></apt-output-field>
+      <span class="badge badge-info ml-1">{{cart?.Proposald?.Approval_Stage}}</span>
+    </div>
+
+    <div *ngIf="cart?.OrderId || cart?.ProposaldId" class="d-flex">
       <button class="btn btn-primary btn-raised align-self-stretch" (click)="createNewCart()" [ladda]="loading">{{ 'MY_ACCOUNT.CART_LIST.CREATE_NEW' | translate }}</button>
     </div>
   </div>

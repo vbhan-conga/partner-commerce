@@ -1,25 +1,24 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { filter, map, take, mergeMap, switchMap, startWith } from 'rxjs/operators';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router} from '@angular/router';
+import { filter, map, take, mergeMap, switchMap, startWith, tap } from 'rxjs/operators';
 import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { ACondition, ApiService } from '@congacommerce/core';
 import {
   UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
   Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService
 } from '@congacommerce/ecommerce';
-import { ExceptionService, LookupOptions } from '@congacommerce/elements';
+import { ExceptionService, LookupOptions, RevalidateCartService } from '@congacommerce/elements';
 @Component({
   selector: 'app-quote-details',
   templateUrl: './quote-detail.component.html',
   styleUrls: ['./quote-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class QuoteDetailComponent implements OnInit, OnDestroy {
-
 
   quote$: BehaviorSubject<Quote> = new BehaviorSubject<Quote>(null);
   quoteLineItems$: BehaviorSubject<Array<ItemGroup>> = new BehaviorSubject<Array<ItemGroup>>(null);
@@ -39,19 +38,40 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
 
   uploadFileList: any;
 
-  edit_loader = false;
+  editLoader = false;
 
-  accept_loader = false;
+  acceptLoader = false;
 
-  comments_loader = false;
+  commentsLoader = false;
 
-  attachments_loader = false;
+  attachmentsLoader = false;
+
+  finalizeLoader = false;
 
   notesSubscription: Subscription;
 
   attachemntSubscription: Subscription;
 
   quoteSubscription: Subscription;
+
+  quoteStatusSteps = [
+    'Draft',
+    'Approved',
+    'Generated',
+    'Presented',
+    'Accepted'
+  ];
+
+  quoteStatusMap = {
+    'Draft': 'Draft',
+    'Approval Required': 'Approval Required',
+    'In Review': 'In Review',
+    'Approved': 'Approved',
+    'Generated': 'Generated',
+    'Presented': 'Presented',
+    'Accepted': 'Accepted',
+    'Denied': 'Denied'
+  }
 
   @ViewChild('intimationTemplate') intimationTemplate: TemplateRef<any>;
 
@@ -74,7 +94,9 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private apiService: ApiService,
     private quoteLineItemService: QuoteLineItemService,
-    private accountService: AccountService) { }
+    private accountService: AccountService,
+    private router: Router,
+    private revalidateCartService: RevalidateCartService) { }
 
   ngOnInit() {
     this.getQuote();
@@ -90,12 +112,12 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
         map(params => get(params, 'id')),
         mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
         switchMap((quote: Quote) => combineLatest([of(quote),
-          // Using query instead of get(), as get is not returning list of accounts as expected.
-          this.accountService.query({
-            conditions: [
-              new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]
-            })
-          ])
+        // Using query instead of get(), as get is not returning list of accounts as expected.
+        this.accountService.query({
+          conditions: [
+            new ACondition(Account, 'Id', 'In', compact(uniq([quote.BillToAccountId, quote.ShipToAccountId, quote.AccountId, get(quote, 'PrimaryContact.AccountId')])))]
+        })
+        ])
         ),
         map(([quote, accounts]) => {
           quote.Account = defaultTo(find(accounts, acc => acc.Id === quote.AccountId), quote.Account);
@@ -142,7 +164,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   addComment(quoteId: string) {
-    this.comments_loader = true;
+    this.commentsLoader = true;
 
     set(this.note, 'ParentId', quoteId);
     set(this.note, 'OwnerId', get(this.userService.me(), 'Id'));
@@ -153,11 +175,11 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .subscribe(r => {
         this.getNotes();
         this.clear();
-        this.comments_loader = false;
+        this.commentsLoader = false;
       },
         err => {
           this.exceptionService.showError(err);
-          this.comments_loader = false;
+          this.commentsLoader = false;
         });
   }
 
@@ -168,11 +190,11 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   }
 
   acceptQuote(quoteId: string) {
-    this.accept_loader = true;
+    this.acceptLoader = true;
     this.quoteService.acceptQuote(quoteId).pipe(take(1)).subscribe(
       res => {
         if (res) {
-          this.accept_loader = false;
+          this.acceptLoader = false;
           const ngbModalOptions: ModalOptions = {
             backdrop: 'static',
             keyboard: false
@@ -183,7 +205,22 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
         }
       },
       err => {
-        this.accept_loader = false;
+        this.acceptLoader = false;
+      }
+    );
+  }
+
+  finalizeQuote(quoteId: string) {
+    this.finalizeLoader = true;
+    this.quoteService.finalizeQuote(quoteId).pipe(take(1)).subscribe(
+      res => {
+        if (res) {
+          this.finalizeLoader = false;
+          this.getQuote();
+        }
+      },
+      err => {
+        this.finalizeLoader = false;
       }
     );
   }
@@ -262,10 +299,10 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
    * @ignore
    */
   uploadAttachment(parentId: string) {
-    this.attachments_loader = true;
+    this.attachmentsLoader = true;
     this.attachmentService.uploadAttachment(this.file, parentId).pipe(take(1)).subscribe(res => {
       this.getAttachments();
-      this.attachments_loader = false;
+      this.attachmentsLoader = false;
       this.clearFiles();
       this.cdr.detectChanges();
     }, err => {
@@ -287,7 +324,22 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   getTotalPromotions(quote: Quote): number {
     return ((get(quote, 'QuoteLineItems.length') > 0)) ? sum(get(quote, 'QuoteLineItems').map(res => res.IncentiveAdjustmentAmount)) : 0;
   }
-
+  
+  editQuoteItems(quoteId: string) {
+    this.editLoader = true;
+    this.quoteService.convertQuoteToCart(quoteId).pipe(
+      tap(() => this.revalidateCartService.setRevalidateLines()),
+      take(1)
+    ).subscribe(res => {
+      this.editLoader = false;
+      this.ngZone.run(() => this.router.navigate(['/carts', 'active']));
+    },
+      err => {
+        this.exceptionService.showError(err);
+        this.editLoader = false;
+      });
+  }
+  
   closeModal() {
     this.intimationModal.hide();
     this.quoteService.where([new ACondition(Quote, 'Id', 'In', this.activatedRoute.snapshot.params.id)], 'AND', null, null, null, null, true).subscribe(res => {

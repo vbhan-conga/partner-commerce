@@ -1,0 +1,70 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <apt-input-field [entity]="quote" [field]="'Proposal_Name'" [(ngModel)]="quote.Proposal_Name" (ngModelChange)="quoteChange()" [label]="'Quote Title'"></apt-input-field>
+        </div>
+        <div class="form-group">
+          <apt-input-field [entity]="quote" [field]="'RFP_Response_Due_Date'" [(ngModel)]="quote.RFP_Response_Due_Date" (ngModelChange)="quoteChange()">
+          </apt-input-field>
+        </div>
+        <div class="form-group">
+          <apt-input-field placeholder="{{'CREATE_QUOTE.SEARCH_CONTACTS' | translate }}" [entity]="quote" [field]="'Primary_ContactId'" [lookupOptions]="lookupOptions" [required]="true" [(ngModel)]="contactId" (ngModelChange)="primaryContactChange()" [errorMsg]="'Primary contact is mandatory'">
+          </apt-input-field>
+        </div>
+        <div class="form-group">
+          <apt-input-field [entity]="quote" [field]="'ShipToAccountId'" [(ngModel)]="quote.ShipToAccountId" (ngModelChange)="shipToChange()"></apt-input-field>
+          <small class="px-3 font-italic d-block" *ngIf="shipToAccount$ | async as shipToAccount">
+            <apt-address [ngModel]="shipToAccount" [readonly]="true" type="Shipping"></apt-address>
+          </small>
+        </div> 
+        <div class="form-group">
+          <apt-input-field [entity]="quote" [field]="'BillToAccountId'" [(ngModel)]="quote.BillToAccountId" (ngModelChange)="billToChange()"> </apt-input-field>
+          <small class="px-3 font-italic d-block" *ngIf="billToAccount$ | async as billToAccount">
+            <apt-address [ngModel]="billToAccount" [readonly]="true" type="Billing"></apt-address>
+          </small>
+        </div>
+        <div class="form-group">
+          <apt-output-field [record]="quote.Account" field="Name" label="Sold To" [editable]="false" [showQuickView]="true">
+          </apt-output-field>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+           <div>
+                <h5 class="py-2" *ngIf="cart.Proposald">
+                  {{'COMMON.COMMENTS' | translate}} <span *ngIf="comments?.length > 0">({{comments?.length}})</span>
+                </h5>
+                <div class="form-group">
+                  <apt-output-field [record]="quote.PriceList" field="Name" label="Price List" 
+                  [editable]="false" [showQuickView]="true"></apt-output-field>
+                </div>
+                <div>
+                  <div class="note-container" *ngIf="cart?.Proposald">
+                    <ng-scrollbar>
+                      <ng-container *ngIf="comments?.length > 0; else emptyNotes">
+                        <div class="my-3 pb-3 border-bottom" *ngFor="let note of comments">
+                          <div class="text-muted d-block mb-2"><strong>{{note?.CreatedBy?.Name}}</strong> {{'COMMON.ON' | translate }}
+                              {{note?.CreatedDate | date:'medium'}}</div>
+                          <div>
+                            {{note?.Body}}
+                          </div>
+                        </div>
+                      </ng-container>
+                      <ng-template #emptyNotes>
+                        <div class="d-flex align-items-center justify-content-center flex-column h-100 text-muted">
+                          <i class="fa fa-4x fa-comments-o mb-2"></i>
+                        {{ 'COMMON.NO_COMMENTS_TO_DISPLAY' | translate}}
+                        </div>
+                      </ng-template>
+                    </ng-scrollbar>
+                  </div>
+                  <div class="form-group">
+                      <apt-input-field [entity]="note" field="Body" rows="5" label="{{'COMMON.COMMENTS' | translate }}" [(ngModel)]="note.Body" name="body"  (ngModelChange)="addComment()"></apt-input-field>
+                  </div>
+                </div>
+           </div>
+      </div>
+    </div>
+  </div>
+</div>

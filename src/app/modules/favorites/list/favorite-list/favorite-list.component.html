@@ -1,0 +1,20 @@
+<div class="card mb-2">
+    <nav class="navbar navbar-light bg-white d-flex">
+      <span class="navbar-brand">
+        {{'COMMON.FAVORITES' | translate}}
+        <span *ngIf="favoritesAggregate$ | async as favoritesAggregate">({{favoritesAggregate?.total_records}})</span>
+      </span>
+    </nav>
+  </div>
+  
+  <!-- Table component rendering list of favorites with applicable actions and pagination -->
+  <div class="card" *ngIf="(tableOptions$ | async) as tableOptions; else spinner">
+    <apt-table [type]="type" [options]="tableOptions"></apt-table>
+  </div>
+  
+  <!-- Spinner dots while data is loading -->
+  <ng-template #spinner>
+    <div class="d-flex justify-content-center py-5">
+      <apt-dots></apt-dots>
+    </div>
+  </ng-template> 
