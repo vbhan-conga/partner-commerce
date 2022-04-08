@@ -19,7 +19,8 @@ import {
   PriceModule,
   InputDateModule,
   ConstraintRuleModule,
-  AlertModule
+  AlertModule,
+  SelectAllModule
 } from '@congacommerce/elements';
 
 
@@ -65,7 +66,8 @@ import { RouterModule } from '@angular/router';
     InputFieldModule,
     FilterModule,
     ConstraintRuleModule,
-    AlertModule
+    AlertModule,
+    SelectAllModule
   ],
   declarations: [ProductListComponent, ResultsComponent, ProductDetailComponent, TabAttachmentsComponent, TabFeaturesComponent, ProductReplacementsComponent]
 })

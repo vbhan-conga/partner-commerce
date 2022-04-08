@@ -1,0 +1,86 @@
+<app-detail *ngIf="favorite$ | async as favorite; else loading" [context]="favorite" [route]="'favorites'">
+  <div *ngIf="favorite?.Active" class="primary-actions">
+    <button type="button" class="btn btn-primary btn-raised px-4" (click)="addFavoriteToCart(favorite)"
+      [ladda]="isLoading" data-style="zoom-in">{{'COMMON.ADD_TO_CART' | translate}}</button>
+  </div>
+
+  <div class="detail-header py-4">
+    <div class="d-flex align-items-end mb-2">
+      <h3 class="m-0">{{favorite?.Name}}</h3>
+      <span class="badge badge-info ml-3 px-3 py-1 border text-uppercase"
+        *ngIf="!favorite?.Active">{{'MY_ACCOUNT.FAVORITE_DETAIL.INACTIVE' | translate}}</span>
+    </div>
+  </div>
+
+  <app-detail-section [title]="'DETAILS.FAVORITE_SUMMARY' | translate">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h5>
+              {{'DETAILS.FAVORITE_SUMMARY' | translate}}
+            </h5>
+            <div>
+              <apt-alert [record]="favorite"></apt-alert>
+            </div>
+            <div *ngIf="user$ | async as user" class="row mt-4">
+              <dl class="col-12 col-md-6">
+                <apt-output-field [record]="favorite" field="Name" layout="inline" label=" Name"
+                  [editable]="favorite?.Active && favorite?.OwnerId === user?.Id"
+                  (onChange)="updateFavorite($event, favorite, 'Name')">
+                </apt-output-field>
+                <div class="d-flex custom-field">
+                  <span class="font-weight-bold mr-1 mb-2">{{'FAVORITE.VISIBILITY' | translate}}:</span>
+                  <div *ngFor="let scope of favoriteScopes" class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" [id]="scope" [name]="scope"
+                      [disabled]="!(favorite?.Active && favorite?.OwnerId === user?.Id)"
+                      [checked]="favorite.Scope === scope" [value]="scope"
+                      (change)="updateFavorite(scope, favorite, 'Scope')" />
+                    <label class="custom-control-label mr-auto" [for]="scope">{{scope}}</label>
+                  </div>
+                </div>
+                <apt-output-field [record]="favorite.CreatedBy" field="Name" layout="inline" [editable]="false"
+                  label="Created By"></apt-output-field>
+              </dl>
+              <dl class="col-12 col-md-6">
+                <apt-output-field [record]="favorite" field="Description" layout="inline"
+                  [editable]="favorite?.Active && favorite?.OwnerId === user?.Id"
+                  (onChange)="updateFavorite($event, favorite, 'Description')"></apt-output-field>
+                <apt-output-field [record]="favorite" field="Active" layout="inline" [editable]="false">
+                </apt-output-field>
+                <apt-output-field [record]="favorite" field="CreatedDate" layout="inline" [editable]="false">
+                </apt-output-field>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-detail-section>
+
+  <app-detail-section [title]="'DETAILS.LINE_ITEMS' | translate" class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="py-2">
+          {{'DETAILS.LINE_ITEMS' | translate}}
+        </h5>
+        <table class="table table-responsive" *ngIf="lineItems$ | async as lineItems; else loading">
+          <tbody>
+            <ng-container *ngFor="let item of lineItems; let i = index">
+              <apt-line-item-table-row [index]="i" [parent]="item.MainLine" [options]="item.Options"
+                [children]="item.SecondaryLines" [readOnly]="'true'" [cart]="favorite.Configuration"
+                [editableFields]="false">
+              </apt-line-item-table-row>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </app-detail-section>
+</app-detail>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center pt-5">
+    <apt-dots></apt-dots>
+  </div>
+</ng-template>

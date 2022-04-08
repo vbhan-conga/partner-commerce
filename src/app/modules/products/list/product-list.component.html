@@ -41,12 +41,15 @@
                         </pl-results>
                     </nav>
 
-                    <div class="d-flex justify-content-center" *ngIf="data?.TotalCount">
+                    <div class="d-flex justify-content-center position-relative pagination" *ngIf="data?.TotalCount">
                         <pagination (pageChanged)="onPage($event)" [totalItems]="data?.TotalCount" [(ngModel)]="page"
                             [boundaryLinks]="true" [itemsPerPage]="pageSize" [maxSize]="5"
                             [firstText]="paginationButtonLabels.first" [previousText]="paginationButtonLabels.previous"
                             [nextText]="paginationButtonLabels.next" [lastText]="paginationButtonLabels.last">
                         </pagination>
+                        <div class="select-all">
+                            <apt-select-all [items]="data.Products"></apt-select-all>
+                        </div>
                     </div>
 
                     <div class="row" *ngIf="view == 'grid' && data?.Products">

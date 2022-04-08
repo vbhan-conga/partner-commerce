@@ -131,6 +131,7 @@ main{
 
 .checkbox label, .radio label, label {
     font-size: inherit;
+    line-height: inherit;
 }
 .dashed-border {
     border-style: dashed;
@@ -143,6 +144,10 @@ main{
 }
 .note-container, .attachment-container {
     height: 35vh;
+}
+
+.text-underline {
+    text-decoration: underline;
 }
 
 .badge{
@@ -191,10 +196,14 @@ ngx-gallery{
 apt-output-field{
     line-height: $line-height-lg;
 }
-
-// hide Request Quote button from cart page for POC
-apt-price-summary div[class='card-body'] button.btn.btn-link:not(.text-capitalize):not(.cancel-button) {
-    display: none;
+apt-batch-action{
+    select{
+        -webkit-appearance: auto !important;
+    }
+}
+apt-price-summary div[class='card-body'] button.btn.btn-link:focus {
+    color: $primary;
+    background: $light;
 }
 
 popover-container.CRPopover {
@@ -287,3 +296,22 @@ typeahead-container.dropdown-menu {
     opacity:1;
   }
 }
+apt-price.chargeType {
+    padding-top: 0.25rem ;
+}
+app-cart-detail apt-line-item-table-row apt-input-field {
+    label.font-weight-bold {
+    margin-top: 0.2rem;
+    padding-bottom: 0.35rem;
+    margin-bottom: unset;
+
+}
+ng-select.form-control  {
+    font-size: inherit;
+    margin-bottom: unset;
+    height: 1.7rem;
+}
+
+}
+
+

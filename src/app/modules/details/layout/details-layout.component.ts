@@ -18,6 +18,7 @@ export class DetailsLayoutComponent implements AfterContentInit {
   @Input() title: string;
   @Input() subtitle: string;
   @Input() context: AObject;
+  @Input() route: string;
 
   private activeTabIndex = 0;
 

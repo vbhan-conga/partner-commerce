@@ -11,7 +11,8 @@ import {
   InputFieldModule,
   DataFilterModule,
   IconModule,
-  AlertModule
+  AlertModule, 
+  FilesModule
 } from '@congacommerce/elements';
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrderListComponent } from './list/order-list.component';
@@ -52,7 +53,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     InputFieldModule,
     DataFilterModule,
     IconModule,
-    AlertModule
+    AlertModule, 
+    FilesModule
   ]
 })
 export class OrdersModule { }

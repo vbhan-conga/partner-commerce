@@ -11,13 +11,11 @@ dt{
     margin-top: $btn-block-spacing-y;
 }
 table{
-    min-width: 800px;
     height: 100px;
     tr:first-child td{
         border-top: none;
     }
 }
-
 .cart-total {
     width: 100px; 
     overflow: hidden; 

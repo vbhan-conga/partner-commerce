@@ -1,10 +1,9 @@
-import { CartService, Cart, AccountService, OrderService} from '@congacommerce/ecommerce';
-import { ExceptionService } from '@congacommerce/elements';
-import { OutputFieldComponent } from '@congacommerce/elements';
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
-import { first, get } from 'lodash';
+import { get } from 'lodash';
+import { CartService, Cart, AccountService, OrderService } from '@congacommerce/ecommerce';
+import { ExceptionService, OutputFieldComponent } from '@congacommerce/elements';
 
 @Component({
   selector: 'app-action-bar',
