@@ -1,6 +1,6 @@
 # Digital Commerce Core Reference Template
 
-This is the base reference application for the conga ecommerce product. Follow the below instructions to get started. See the [docs]( https://apttus-ecom.github.io/May22/index.html ) for more detailed instructions on interacting with the underlying SDK.
+This is the base reference application for the conga ecommerce product. Follow the below instructions to get started. See the [docs]( https://apttus-ecom.github.io/December21/index.html ) for more detailed instructions on interacting with the underlying SDK.
 
 ---
 ## Table of content 
