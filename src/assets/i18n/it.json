@@ -23,8 +23,13 @@
             "ASSOCIATE_AND_APPLY": "Un errore dovuto al sempre le regole di vincolo per il vostro carrello."
         },
         "PROMOTION": {
-            "INVALID_TOASTR_MESSAGE": "Promozione {{nome}} non viene applicata.",
-            "INVALID_TOASTR_TITLE": "La Promozione Non Viene Applicata"
+            "PROMOTION_OR_COUPON_NOT_AVAILABLE": "it_IT Promotion {{name}} could not be applied.",
+            "INVALID_PROMOTION_TITLE": "it_IT Promotion Not Applied",
+            "INVALID_COUPON_TITLE": "it_IT Coupon Not Applied",
+            "COUPON_CODE_EXPIRED": "it_IT Coupon {{name}} is expired.",
+            "INACTIVE_COUPON_CODE": "it_IT Coupon {{name}} is not valid.",
+            "COUPON_LIMIT_EXCEEDED": "it_IT Coupon {{name}} usage limit is exceeded",
+            "TABLE_COL_OPTION": "it_IT Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "Errore Di Applicazione"
     },
@@ -36,6 +41,8 @@
             "CONFIGURATION_UPDATED": "{{productName}} configurazione è stato aggiornato."
         },
         "PROMOTION": {
+            "VALID_PROMOTION_TITLE": "it_IT Promotion Applied",
+            "VALID_PROMOTION_MESSAGE": "it_IT Promotion {{name}} is applied successfully",
             "REMOVED_TOASTR_MESSAGE": "Promozione {{nome}} è stato rimosso.",
             "REMOVED_TOASTR_TITLE": "Promozione Rimosso"
         },
@@ -302,8 +309,26 @@
         "ADD_PRODUCTS": "it_IT Add Products",
         "ADD_INSTALLED_PRODUCTS": "it_IT Add Installed Products",
         "NO_DATA": "it_IT n/a",
-        "PRICE_NOT_AUTOUPDATED":"it_IT * Prices shown in this page are not auto-updated.",
-        "UPDATE_PRICE":"it_IT Update Prices"
+        "PRICE_NOT_AUTOUPDATED": "it_IT * Prices shown in this page are not auto-updated.",
+        "UPDATE_PRICE": "it_IT Update Prices",
+        "ADDITIONAL_INFORMATION":"it_IT Additional Information"
+    },
+    "REVALIDATE_CART": {
+        "REVALIDATION_REQUIRED": "it_IT Revalidation required",
+        "REVALIDATION_REQUIRED_MSG": "it_IT The configuration of the following items in your cart has changed and need to be revalidated",
+        "WHATTODO": "it_IT If you are not sure of what to do, you can",
+        "DEACTIVATE_CART": "it_IT deactivate this cart",
+        "FORNOW": "it_IT for now",
+        "REVALIDATE": "it_IT Revalidate",
+        "TOBE_REVALIDATE": "it_IT To be revalidated",
+        "OPTIONAL": "it_IT optional",
+        "REQUIRED": "it_IT required",
+        "REVALIDATION_ERROR": "it_IT Revalidation has failed! You can try again below",
+        "PRODUCTNAME": "it_IT Product Name",
+        "REVALIDATION_WARNING": "it_IT Some items in your cart need to be validated",
+        "VALIDATE_CART": "it_IT Validate Cart",
+        "SUCCESSFULLY_REVALIDATED": "it_IT Successfully revalidated",
+        "REVALIDATION_INFO":"it_IT If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",

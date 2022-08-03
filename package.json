@@ -21,9 +21,9 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "@congacommerce/core": "^2103.1.43",
-    "@congacommerce/ecommerce": "^2103.1.43",
-    "@congacommerce/elements": "^2103.1.43",
+    "@congacommerce/core": "^2202.0.40",
+    "@congacommerce/ecommerce": "^2202.0.40",
+    "@congacommerce/elements": "^2202.0.40",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@ng-select/ng-option-highlight": "0.0.5",
     "@ng-select/ng-select": "^5.0.1",
@@ -56,7 +56,8 @@
     "url-search-params-polyfill": "^7.0.1",
     "xml-js": "^1.6.11",
     "zone.js": "~0.11.4",
-    "locale-currency": "0.0.2"
+    "locale-currency": "0.0.2",
+    "downloadjs": "^1.4.7"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.1",
