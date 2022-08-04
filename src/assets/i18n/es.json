@@ -33,7 +33,10 @@
             "TABLE_COL_OPTION": "es_MX Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error",
-        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1"
+        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1",
+        "SESSION_EXPIRATION": "es_MX Session is expired, login again to proceed",
+        "INACCESSIBLE_ORDER": "es_MX Order not found or you do not have access to this order",
+        "INACCESSIBLE_QUOTE": "es_MX Quote not found or you do not have access to this quote"
     },
     "SUCCESS": {
         "TITLE": "es_MX Success",
@@ -346,7 +349,7 @@
         "SELECT_ACTION": "es_MX Select action",
         "CONFIRM": "es_MX Confirm",
         "EDIT_LAYOUT": "es_MX Edit Layout",
-        "ADDITIONAL_INFORMATION":"es_MX Additional Information"
+        "ADDITIONAL_INFORMATION": "es_MX Additional Information"
     },
     "REVALIDATE_CART": {
         "REVALIDATION_REQUIRED": "es_MX Revalidation required",
@@ -362,7 +365,8 @@
         "PRODUCTNAME": "es_MX Product Name",
         "REVALIDATION_WARNING": "es_MX Some items in your cart need to be validated",
         "VALIDATE_CART": "es_MX Validate Cart",
-        "SUCCESSFULLY_REVALIDATED": "es_MX Successfully revalidated"
+        "SUCCESSFULLY_REVALIDATED": "es_MX Successfully revalidated",
+        "REVALIDATION_INFO": "es_MX If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -693,9 +697,9 @@
         "FORGOT_PASSWORD": "es_MX Forgot Password",
         "ENTER_EMAIL": "es_MX Enter email",
         "PASSWORD_RESET": "es_MX Password Reset",
-        "PASSWORD_RESET_CONFIRM1": "es_MX We’ve sent you an email with a link to finish resetting your password.",
-        "PASSWORD_RESET_CONFIRM2": "es_MX Can’t find the email? Try checking your spam folder.",
-        "PASSWORD_RESET_CONFIRM3": "es_MX If you still can’t log in, try again or contact your Salesforce administrator.",
+        "PASSWORD_RESET_CONFIRM1": "es_MX We've sent you an email with a link to finish resetting your password.",
+        "PASSWORD_RESET_CONFIRM2": "es_MX Can't find the email? Try checking your spam folder.",
+        "PASSWORD_RESET_CONFIRM3": "es_MX If you still can't log in, try again or contact your Salesforce administrator.",
         "NEVER_SHARE_YOUR_EMAIL": "es_MX We'll never share your email with anyone else.",
         "GO_BACK": "es_MX Go Back",
         "RESET_PASSWORD": "es_MX Reset Password",
@@ -733,6 +737,7 @@
         "GENERATED_ORDER_NUMBER": "es_MX Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "es_MX VIEW YOUR ORDER",
         "GENERATE_ORDER": "es_MX Generate Order",
+        "GENERATE_QUOTE": "es_MX Generate Quote",
         "GENERATE": "es_MX Generate",
         "TEMPLATE": "es_MX Template",
         "FILE_FORMAT": "es_MX File Format",
