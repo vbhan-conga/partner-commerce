@@ -213,7 +213,7 @@ export class OrderDetailComponent implements OnInit, OnDestroy, AfterViewChecked
       this.isLoading = false;
       if (res) {
         this.exceptionService.showSuccess('ACTION_BAR.ORDER_CONFIRMATION_TOASTR_MESSAGE', 'ACTION_BAR.ORDER_CONFIRMATION_TOASTR_TITLE');
-        this.emailService.orderStatusChangeNotification('CustomerOrderEmailNotificationsTemplate', orderId, primaryContactId).pipe(take(1)).subscribe();
+        this.emailService.statusChangeNotification('CustomerOrderEmailNotificationsTemplate', orderId, primaryContactId).pipe(take(1)).subscribe();
         this.getOrder();
       }
       else

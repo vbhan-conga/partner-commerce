@@ -333,7 +333,24 @@
         "MY_FAVORITES": "it_IT My Favorites",
         "QUOTE_ID": "it_IT Quote ID",
         "EDIT_LAYOUT": "it_IT Edit Layout",
-        "ADDITIONAL_INFORMATION":"it_IT Additional Information"
+        "ADDITIONAL_INFORMATION": "it_IT Additional Information"
+    },
+    "REVALIDATE_CART": {
+        "REVALIDATION_REQUIRED": "it_IT Revalidation required",
+        "REVALIDATION_REQUIRED_MSG": "it_IT The configuration of the following items in your cart has changed and need to be revalidated",
+        "WHATTODO": "it_IT If you are not sure of what to do, you can",
+        "DEACTIVATE_CART": "it_IT deactivate this cart",
+        "FORNOW": "it_IT for now",
+        "REVALIDATE": "it_IT Revalidate",
+        "TOBE_REVALIDATE": "it_IT To be revalidated",
+        "OPTIONAL": "it_IT optional",
+        "REQUIRED": "it_IT required",
+        "REVALIDATION_ERROR": "it_IT Revalidation has failed! You can try again below",
+        "PRODUCTNAME": "it_IT Product Name",
+        "REVALIDATION_WARNING": "it_IT Some items in your cart need to be validated",
+        "VALIDATE_CART": "it_IT Validate Cart",
+        "SUCCESSFULLY_REVALIDATED": "it_IT Successfully revalidated",
+        "REVALIDATION_INFO": "it_IT If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "PREVENTIVO SOMMARIO",
@@ -711,6 +728,7 @@
         "FILE_FORMAT": "File Format",
         "PRESENT": "Presente",
         "PRESENT_ORDER": "Presente Order",
+        "GENERATE_QUOTE": "Genera Quote",
         "SEND_TO": "Invia Ordine a"
     },
     "SERVICES": {
