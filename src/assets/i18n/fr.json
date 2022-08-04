@@ -24,11 +24,19 @@
             "ASSOCIATE_AND_APPLY": "fr_FR An error ocurred getting the constraint rules for your cart."
         },
         "PROMOTION": {
-            "INVALID_TOASTR_MESSAGE": "fr_FR Promotion {{name}} is not applied.",
-            "INVALID_TOASTR_TITLE": "fr_FR Promotion Not Applied"
+            "PROMOTION_OR_COUPON_NOT_AVAILABLE": "fr_FR Promotion {{name}} could not be applied.",
+            "INVALID_PROMOTION_TITLE": "fr_FR Promotion Not Applied",
+            "INVALID_COUPON_TITLE": "fr_FR Coupon Not Applied",
+            "COUPON_CODE_EXPIRED": "fr_FR Coupon {{name}} is expired.",
+            "INACTIVE_COUPON_CODE": "fr_FR Coupon {{name}} is not valid.",
+            "COUPON_LIMIT_EXCEEDED": "fr_FR Coupon {{name}} usage limit is exceeded",
+            "TABLE_COL_OPTION": "fr_FR Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "fr_FR Application Error",
-        "INVALID_QUANTITY": "fr_FR Cannot add a quantity less than 1"
+        "INVALID_QUANTITY": "fr_FR Cannot add a quantity less than 1",
+        "SESSION_EXPIRATION":"fr_FR Session is expired, login again to proceed",
+        "INACCESSIBLE_ORDER":"fr_FR Order not found or you do not have access to this order",
+        "INACCESSIBLE_QUOTE":"fr_FR Quote not found or you do not have access to this quote"
     },
     "SUCCESS": {
         "TITLE": "fr_FR Success",
@@ -37,6 +45,8 @@
             "ITEM_ADDED_TOASTR_TITLE": "fr_FR Item Added"
         },
         "PROMOTION": {
+            "VALID_PROMOTION_TITLE": "fr_FR Promotion Applied",
+            "VALID_PROMOTION_MESSAGE": "fr_FR Promotion {{name}} is applied successfully",
             "REMOVED_TOASTR_MESSAGE": "fr_FR Promotion {{name}} has been removed.",
             "REMOVED_TOASTR_TITLE": "fr_FR Promotion Removed"
         },
@@ -311,7 +321,8 @@
         "ITEMIZED_OPTIONS": "fr_FR Itemized Options",
         "PRICE_NOT_AUTOUPDATED":"fr_FR * Prices shown in this page are not auto-updated.",
         "UPDATE_PRICE":"fr_FR Update Prices",
-        "PRICE_ERROR": "fr_FR Pricing has failed for your cart. Please retry."
+        "PRICE_ERROR": "fr_FR Pricing has failed for your cart. Please retry.",
+        "ADDITIONAL_INFORMATION":"fr_FR Additional Information"
     },
     "REVALIDATE_CART": {
         "REVALIDATION_REQUIRED": "fr_FR Revalidation required",
@@ -327,7 +338,8 @@
         "PRODUCTNAME": "fr_FR Product Name",
         "REVALIDATION_WARNING": "fr_FR Some items in your cart need to be validated",
         "VALIDATE_CART": "fr_FR Validate Cart",
-        "SUCCESSFULLY_REVALIDATED": "fr_FR Successfully revalidated"
+        "SUCCESSFULLY_REVALIDATED": "fr_FR Successfully revalidated",
+        "REVALIDATION_INFO":"fr_FR If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "fr_FR QUOTE SUMMARY",
@@ -593,7 +605,8 @@
         "APPLIED_PROMOTIONS": "fr_FR Applied Promotions",
         "TOTAL_PROMOTION_AMOUNT": "fr_FR Total Promotion Amount",
         "PROMOTION_APPLIEDTO": "fr_FR Promotions Applied To",
-        "APPLIED_PROMOTION": "fr_FR applied to the following items in the cart."
+        "APPLIED_PROMOTION": "fr_FR applied to the following items in the cart.",
+        "COUPON_CODE": "fr_FR Coupon Code"
     },
     "LOGIN": {
         "PLS_SIGNIN": "fr_FR Please sign in",
@@ -702,7 +715,9 @@
         "PRESENT": "fr_FR PRESENT",
         "PRESENT_ORDER": "fr_FR Present Order",
         "SEND_TO": "fr_FR Send Order To",
-        "MISSING_REQ_FIELDS": "fr_FR Some mandatory informations are missing in the order details. Please fill to proceed."
+        "SEND_QUOTE_TO": "fr_FR Send Quote To",
+        "MISSING_REQ_FIELDS": "fr_FR Some mandatory informations are missing in the order details. Please fill to proceed.",
+        "PRESENT_QUOTE":"fr_FR Present Quote"
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "fr_FR Must select asset(s) to perform batch actions.",

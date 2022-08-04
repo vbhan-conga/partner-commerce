@@ -24,11 +24,19 @@
             "ASSOCIATE_AND_APPLY": "An error ocurred getting the constraint rules for your cart."
         },
         "PROMOTION": {
-            "INVALID_TOASTR_MESSAGE": "Promotion {{name}} is not applied.",
-            "INVALID_TOASTR_TITLE": "Promotion Not Applied"
+            "PROMOTION_OR_COUPON_NOT_AVAILABLE": "Promotion {{name}} could not be applied.",
+            "INVALID_PROMOTION_TITLE": "Promotion Not Applied",
+            "INVALID_COUPON_TITLE": "Coupon Not Applied",
+            "COUPON_CODE_EXPIRED": "Coupon {{name}} is expired.",
+            "INACTIVE_COUPON_CODE": "Coupon {{name}} is not valid.",
+            "COUPON_LIMIT_EXCEEDED": "Coupon {{name}} usage limit is exceeded",
+            "TABLE_COL_OPTION": "Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "Application Error",
-        "INVALID_QUANTITY": "Cannot add a quantity less than 1"
+        "INVALID_QUANTITY": "Cannot add a quantity less than 1",
+        "SESSION_EXPIRATION": "Session is expired, login again to proceed",
+        "INACCESSIBLE_ORDER": "Order not found or you do not have access to this order",
+        "INACCESSIBLE_QUOTE": "Quote not found or you do not have access to this quote"
     },
     "SUCCESS": {
         "TITLE": "Success",
@@ -38,6 +46,8 @@
             "CONFIGURATION_UPDATED" : "{{productName}} configuration has been updated."
         },
         "PROMOTION": {
+            "VALID_PROMOTION_TITLE": "Promotion Applied",
+            "VALID_PROMOTION_MESSAGE": "Promotion {{name}} is applied successfully",
             "REMOVED_TOASTR_MESSAGE": "Promotion {{name}} has been removed.",
             "REMOVED_TOASTR_TITLE": "Promotion Removed"
         },
@@ -330,7 +340,8 @@
         "ITEMIZED_OPTIONS": "Itemized Options",
         "PRICE_NOT_AUTOUPDATED":"* Prices shown in this page are not auto-updated.",
         "UPDATE_PRICE":"Update Prices",
-        "PRICE_ERROR": "Pricing has failed for your cart. Please retry."
+        "PRICE_ERROR": "Pricing has failed for your cart. Please retry.",
+        "ADDITIONAL_INFORMATION": "Additional Information"
     },
     "REVALIDATE_CART": {
         "REVALIDATION_REQUIRED": "Revalidation required",
@@ -346,7 +357,8 @@
         "PRODUCTNAME": "Product Name",
         "REVALIDATION_WARNING": "Some items in your cart need to be validated",
         "VALIDATE_CART": "Validate Cart",
-        "SUCCESSFULLY_REVALIDATED": "Successfully revalidated"
+        "SUCCESSFULLY_REVALIDATED": "Successfully revalidated",
+        "REVALIDATION_INFO": "If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
@@ -617,7 +629,8 @@
         "APPLIED_PROMOTIONS": "Applied Promotions",
         "TOTAL_PROMOTION_AMOUNT": "Total Promotion Amount",
         "PROMOTION_APPLIEDTO": "Promotions Applied To",
-        "APPLIED_PROMOTION": "applied to the following items in the cart."
+        "APPLIED_PROMOTION": "applied to the following items in the cart.",
+        "COUPON_CODE": "Coupon Code"
     },
     "LOGIN": {
         "PLS_SIGNIN": "Please sign in",
@@ -683,9 +696,9 @@
         "FORGOT_PASSWORD": "Forgot Password",
         "ENTER_EMAIL": "Enter email",
         "PASSWORD_RESET": "Password Reset",
-        "PASSWORD_RESET_CONFIRM1": "We’ve sent you an email with a link to finish resetting your password.",
-        "PASSWORD_RESET_CONFIRM2": "Can’t find the email? Try checking your spam folder.",
-        "PASSWORD_RESET_CONFIRM3": "If you still can’t log in, try again or contact your Salesforce administrator.",
+        "PASSWORD_RESET_CONFIRM1": "We've sent you an email with a link to finish resetting your password.",
+        "PASSWORD_RESET_CONFIRM2": "Can't find the email? Try checking your spam folder.",
+        "PASSWORD_RESET_CONFIRM3": "If you still can't log in, try again or contact your Salesforce administrator.",
         "NEVER_SHARE_YOUR_EMAIL": "We'll never share your email with anyone else.",
         "GO_BACK": "Go Back",
         "RESET_PASSWORD": "Reset Password",
@@ -723,13 +736,16 @@
         "GENERATED_ORDER_NUMBER": "Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "VIEW YOUR ORDER",
         "GENERATE_ORDER": "Generate Order",
+        "GENERATE_QUOTE": "Generate Quote",
         "GENERATE": "Generate",
         "TEMPLATE": "Template",
         "FILE_FORMAT": "File Format",
         "PRESENT": "PRESENT",
         "PRESENT_ORDER": "Present Order",
         "SEND_TO": "Send Order To",
-        "MISSING_REQ_FIELDS": "Some mandatory informations are missing in the order details. Please fill to proceed."
+        "SEND_QUOTE_TO": "Send Quote To",
+        "MISSING_REQ_FIELDS": "Some mandatory informations are missing in the order details. Please fill to proceed.",
+        "PRESENT_QUOTE": "Present Quote"
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "Must select asset(s) to perform batch actions.",
