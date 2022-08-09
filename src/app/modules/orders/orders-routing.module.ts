@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { OrderListComponent } from './list/order-list.component';
 import { OrderDetailComponent } from './detail/order-detail.component';
 import { DashboardViewComponent } from '../dashboard/view/dashboard-view.component';
+import {PartnerDetailsGuard} from '@congacommerce/ecommerce';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   },
   {
     path: ':id',
-    component: OrderDetailComponent
+    component: OrderDetailComponent,
+    canActivate: [PartnerDetailsGuard],
   }
 ];
 

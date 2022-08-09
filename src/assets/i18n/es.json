@@ -33,7 +33,10 @@
             "TABLE_COL_OPTION": "es_MX Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "es_MX Application Error",
-        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1"
+        "INVALID_QUANTITY": "es_MX Cannot add a quantity less than 1",
+        "SESSION_EXPIRATION":"es_MX Session is expired, login again to proceed",
+        "INACCESSIBLE_ORDER":"es_MX Order not found or you do not have access to this order",
+        "INACCESSIBLE_QUOTE":"es_MX Quote not found or you do not have access to this quote"
     },
     "SUCCESS": {
         "TITLE": "es_MX Success",
@@ -50,9 +53,9 @@
         "CONFIGURATION_UPDATED": "es_MX Your configuration has been updated.",
         "QUOTE_UPDATED": "es_MX Quote Updated Successfully!",
         "QUOTE_UPDATE_TITLE": "es_MX Quote Update",
-        "GENERATED": "es_MX Your order document has been generated and can be viewed under the 'Attachments' tab.",
+        "GENERATED": "es_MX Your {{type}} document has been generated and can be viewed under the 'Attachments' tab.",
         "DOCUMENT_GENERATED_TITLE": "es_MX Document Generated",
-        "PRESENTED": "es_MX Your order document has been presented to {{primary_contact}} and email notification is sent out.",
+        "PRESENTED": "es_MX Your {{type}} document has been presented to {{primary_contact}} and email notification is sent out.",
         "DOCUMENT_PRESENTED_TITLE": "es_MX Document Presented",
         "FAVORITE": {
             "TITLE": "es_MX Favorite items added!",
@@ -60,6 +63,10 @@
             "UPDATE_FAVORITE": "es_MX Updated existing {{name}} Favorite",
             "ADD_FAVORITE_TO_CART": "es_MX Items from {{name}} were added to the cart."
         }
+    },
+    "INFO": {
+        "TITLE": "es_MX Info",
+        "GENERATE_INFO": "es_MX Your {{type}} document is being generated. You will get notified when its ready."
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "es_MX The asset termination has been added to your cart.",
@@ -362,7 +369,8 @@
         "PRODUCTNAME": "es_MX Product Name",
         "REVALIDATION_WARNING": "es_MX Some items in your cart need to be validated",
         "VALIDATE_CART": "es_MX Validate Cart",
-        "SUCCESSFULLY_REVALIDATED": "es_MX Successfully revalidated"
+        "SUCCESSFULLY_REVALIDATED": "es_MX Successfully revalidated",
+        "REVALIDATION_INFO":"es_MX If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "es_MX QUOTE SUMMARY",
@@ -733,13 +741,16 @@
         "GENERATED_ORDER_NUMBER": "es_MX Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "es_MX VIEW YOUR ORDER",
         "GENERATE_ORDER": "es_MX Generate Order",
+        "GENERATE_QUOTE": "es_MX Generate Quote",
         "GENERATE": "es_MX Generate",
         "TEMPLATE": "es_MX Template",
         "FILE_FORMAT": "es_MX File Format",
         "PRESENT": "es_MX PRESENT",
         "PRESENT_ORDER": "es_MX Present Order",
         "SEND_TO": "es_MX Send Order To",
-        "MISSING_REQ_FIELDS": "es_MX Some mandatory informations are missing in the order details. Please fill to proceed."
+        "SEND_QUOTE_TO": "es_MX Send Quote To",
+        "MISSING_REQ_FIELDS": "es_MX Some mandatory informations are missing in the order details. Please fill to proceed.",
+        "PRESENT_QUOTE":"Present Quote"
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "es_MX Must select asset(s) to perform batch actions.",

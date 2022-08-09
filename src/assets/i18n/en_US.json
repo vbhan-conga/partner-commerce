@@ -33,7 +33,10 @@
             "TABLE_COL_OPTION": "Option"
         },
         "APPLICATION_ERROR_TOASTR_TITLE": "Application Error",
-        "INVALID_QUANTITY": "Cannot add a quantity less than 1"
+        "INVALID_QUANTITY": "Cannot add a quantity less than 1",
+        "SESSION_EXPIRATION":"Session is expired, login again to proceed",
+        "INACCESSIBLE_ORDER":"Order not found or you do not have access to this order",
+        "INACCESSIBLE_QUOTE":"Quote not found or you do not have access to this quote"
     },
     "SUCCESS": {
         "TITLE": "Success",
@@ -50,9 +53,9 @@
         },
         "QUOTE_UPDATED": "Quote Updated Successfully!",
         "QUOTE_UPDATE_TITLE": "Quote Update",
-        "GENERATED": "Your order document has been generated and can be viewed under the 'Attachments' tab.",
+        "GENERATED": "Your {{type}} document has been generated and can be viewed under the 'Attachments' tab.",
         "DOCUMENT_GENERATED_TITLE": "Document Generated",
-        "PRESENTED": "Your order document has been presented to {{primary_contact}} and email notification is sent out.",
+        "PRESENTED": "Your {{type}} document has been presented to {{primary_contact}} and email notification is sent out.",
         "DOCUMENT_PRESENTED_TITLE": "Document Presented",
         "FAVORITE": {
             "TITLE": "Favorite items added!",
@@ -63,7 +66,7 @@
     },
     "INFO": {
         "TITLE": "Info",
-        "GENERATE_INFO": "Your order document is being generated. You will get notified when its ready."
+        "GENERATE_INFO": "Your {{type}} document is being generated. You will get notified when its ready."
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "The asset termination has been added to your cart.",
@@ -375,7 +378,8 @@
         "PRODUCTNAME": "Product Name",
         "REVALIDATION_WARNING": "Some items in your cart need to be validated",
         "VALIDATE_CART": "Validate Cart",
-        "SUCCESSFULLY_REVALIDATED": "Successfully revalidated"
+        "SUCCESSFULLY_REVALIDATED": "Successfully revalidated",
+        "REVALIDATION_INFO":"If you select an optional product, the entire bundle including other optional products too will be revalidated to maintain sanctity of the bundle product"
     },
     "CREATE_QUOTE": {
         "QUOTE_SUMMARY": "QUOTE SUMMARY",
@@ -754,13 +758,16 @@
         "GENERATED_ORDER_NUMBER": "Your Order Number Is: {{orderName}}",
         "VIEW_YOUR_ORDER": "VIEW YOUR ORDER",
         "GENERATE_ORDER": "Generate Order",
+        "GENERATE_QUOTE": "Generate Quote",
         "GENERATE": "Generate",
         "TEMPLATE": "Template",
         "FILE_FORMAT": "File Format",
         "PRESENT": "PRESENT",
         "PRESENT_ORDER": "Present Order",
         "SEND_TO": "Send Order To",
-        "MISSING_REQ_FIELDS": "Some mandatory informations are missing in the order details. Please fill to proceed."
+        "SEND_QUOTE_TO": "Send Quote To",
+        "MISSING_REQ_FIELDS": "Some mandatory informations are missing in the order details. Please fill to proceed.",
+        "PRESENT_QUOTE":"Present Quote"
     },
     "SERVICES": {
         "SELECTION_OF_ASSETS_MUST_TOOLTIP": "Must select asset(s) to perform batch actions.",

@@ -11,14 +11,19 @@
           <span class="badge badge-info ml-1">{{order?.Status}}</span>
         </span>
       </div>
-      <button type="button" class="btn btn-primary btn-raised ml-auto" [ladda]="finalizeLoader"
+      <button type="button" [ngClass]="quote?.Approval_Stage === 'Approved' || quote?.Approval_Stage === 'Generated' ?  'btn btn-outline-primary btn-link text-primary text-primary ml-auto ' :'btn btn-primary btn-raised ml-auto'" [ladda]="acceptLoader"
+        *ngIf="quote?.Approval_Stage === 'Approved' || quote?.Approval_Stage === 'Generated' || quote?.Approval_Stage === 'Presented'"
+        (click)="acceptQuote(quote?.Id, quote?.Primary_Contact?.Id)">{{'COMMON.ACCEPT_QUOTE'
+        |translate}}</button>
+      <apt-generate-document *ngIf="quote?.Approval_Stage === 'Draft' || quote?.Approval_Stage === 'Approved'" [record]="quote" [ngClass]="quote.Approval_Stage === 'Draft' ?  'pr-4 ml-auto ' :' pl-4 '" (onStatusUpdate)="onGenerateQuote()">
+      </apt-generate-document>
+      <button type="button" class="btn btn-primary btn-raised py-2" [ladda]="finalizeLoader"
         *ngIf="quote?.Approval_Stage === 'Draft'"
         (click)="finalizeQuote(quote?.Id)">{{'MY_ACCOUNT.QUOTE_DETAIL.FINALIZE'
         |translate}}</button>
-      <button type="button" class="btn btn-primary btn-raised ml-auto" [ladda]="acceptLoader"
-        *ngIf="quote?.Approval_Stage === 'Approved' || quote?.Approval_Stage === 'Generated' || quote?.Approval_Stage === 'Presented'"
-        (click)="acceptQuote(quote?.Id)">{{'COMMON.ACCEPT_QUOTE'
-        |translate}}</button>
+        <div class="align-items-stretch d-flex pl-4"  *ngIf="quote?.Approval_Stage === 'Generated'">
+          <apt-present-document [record]="quote"></apt-present-document>
+        </div>
     </div>
     <app-progress class="status-bar" *ngIf="quoteStatusMap[quote.Approval_Stage]" [steps]="quoteStatusSteps"
       [currentStep]="quoteStatusMap[quote.Approval_Stage]">
@@ -145,7 +150,7 @@
   </app-detail-section>
 
   <app-detail-section [title]="'DETAILS.ATTACHMENTS' | translate" class="mt-4">
-    <div class="card" *ngIf="attachmentList$ | async as attachmentList; else loading">
+    <div class="card" #attachmentSection *ngIf="attachmentList$ | async as attachmentList; else loading">
       <div class="card-body">
         <h5 class="py-2 text-uppercase">
           {{'DETAILS.ATTACHMENTS' | translate}}
@@ -199,7 +204,7 @@
                 <input id="browse" class="d-none p-5" type="file" (change)="fileChange($event)"
                   data-max-size="26214400" />
               </div>
-              <div class="mt-2" *ngIf="hasSizeError">
+              <div class="mt-2" *ngIf="hasSizeError && file != null">
                 <p class="text-danger">
                   {{'MY_ACCOUNT.QUOTE_DETAIL.ATTACHMENTS.FILE_SIZE_EXCEEDED_ERROR' | translate}}
                 </p>
