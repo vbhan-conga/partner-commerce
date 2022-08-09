@@ -15,6 +15,7 @@ svg {
   text {
     font-size: 20px;
     fill: white;
+    text-anchor: middle;
   }
   &.uncompletedState {
     text {

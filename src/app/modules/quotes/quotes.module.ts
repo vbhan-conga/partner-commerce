@@ -17,6 +17,7 @@ import {
   PriceSummaryModule,
   TableModule,
   ChartModule,
+  ButtonModule,
   DataFilterModule,
   OutputFieldModule
 } from '@congacommerce/elements';
@@ -40,6 +41,7 @@ import { RequestQuoteFormComponent } from './request-quote-form/request-quote-fo
     InputSelectModule,
     BreadcrumbModule,
     InputFieldModule,
+    ButtonModule,
     AddressModule,
     IconModule,
     DetailsModule,
@@ -53,7 +55,8 @@ import { RequestQuoteFormComponent } from './request-quote-form/request-quote-fo
     TableModule,
     ChartModule,
     DataFilterModule,
-    ComponentModule
+    ComponentModule,
+    ButtonModule
   ],
   declarations: [CreateQuoteComponent, QuoteDetailComponent, RequestQuoteFormComponent, QuoteListComponent]
 })

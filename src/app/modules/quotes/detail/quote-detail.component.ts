@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewEncapsulation, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, take, mergeMap, switchMap, startWith, tap } from 'rxjs/operators';
 import { get, set, compact, uniq, find, cloneDeep, sum, defaultTo } from 'lodash';
 import { Observable, of, BehaviorSubject, Subscription, combineLatest } from 'rxjs';
@@ -8,7 +8,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { ACondition, ApiService } from '@congacommerce/core';
 import {
   UserService, QuoteService, Quote, Order, OrderService, Note, NoteService, AttachmentService,
-  Attachment, ProductInformationService, ItemGroup, LineItemService, QuoteLineItemService, Account, AccountService
+  Attachment, ProductInformationService, ItemGroup, EmailService, LineItemService, QuoteLineItemService, Account, AccountService
 } from '@congacommerce/ecommerce';
 import { ExceptionService, LookupOptions, RevalidateCartService } from '@congacommerce/elements';
 @Component({
@@ -25,6 +25,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   attachmentList$: BehaviorSubject<Array<Attachment>> = new BehaviorSubject<Array<Attachment>>(null);
   noteList$: BehaviorSubject<Array<Note>> = new BehaviorSubject<Array<Note>>(null);
   order$: Observable<Order>;
+
+  @ViewChild('attachmentSection') attachmentSection: ElementRef;
 
   note: Note = new Note();
 
@@ -47,6 +49,8 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
   attachmentsLoader = false;
 
   finalizeLoader = false;
+
+  quoteGenerated: boolean = false;
 
   notesSubscription: Subscription;
 
@@ -87,6 +91,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     private exceptionService: ExceptionService,
     private modalService: BsModalService,
     private orderService: OrderService,
+    private emailService: EmailService,
     private attachmentService: AttachmentService,
     private productInformationService: ProductInformationService,
     private cdr: ChangeDetectorRef,
@@ -110,7 +115,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
       .pipe(
         filter(params => get(params, 'id') != null),
         map(params => get(params, 'id')),
-        mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy`, Quote)),
+        mergeMap(quoteId => this.apiService.get(`/quotes/${quoteId}?lookups=PriceListId,Primary_Contact,Account,CreatedBy&children=Attachments`, Quote)),
         switchMap((quote: Quote) => combineLatest([of(quote),
         // Using query instead of get(), as get is not returning list of accounts as expected.
         this.accountService.query({
@@ -189,7 +194,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     set(this.note, 'Id', null);
   }
 
-  acceptQuote(quoteId: string) {
+  acceptQuote(quoteId: string, primaryContactId: string) {
     this.acceptLoader = true;
     this.quoteService.acceptQuote(quoteId).pipe(take(1)).subscribe(
       res => {
@@ -201,6 +206,7 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
           };
           this.ngZone.run(() => {
             this.intimationModal = this.modalService.show(this.intimationTemplate, ngbModalOptions);
+            this.emailService.statusChangeNotification('CustomerQuoteEmailNotificationsTemplate', quoteId, primaryContactId).pipe(take(1)).subscribe();
           });
         }
       },
@@ -347,6 +353,11 @@ export class QuoteDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  onGenerateQuote() {
+    if (this.attachmentSection) this.attachmentSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    this.getQuote();
+    this.quoteGenerated = true;
+  }
   /**
    * @ignore
    */
