@@ -25,6 +25,7 @@ export const environment: Configuration = {
   skipPricing: true,
   skipRules: false,
   expandDepth: 7,
+  pricingMode: 'turbo',
   hashRouting: false,
   packageNamespace: 'Apttus_WebStore',
   // *** TODO: Replace with details of your Salesforce org ***
