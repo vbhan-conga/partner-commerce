@@ -24,8 +24,8 @@ export const environment: Configuration = {
   useIndexedDB: false,
   skipPricing: true,
   skipRules: false,
-  pricingMode: 'turbo',
   expandDepth: 7,
+  pricingMode: 'turbo',
   hashRouting: false,
   packageNamespace: 'Apttus_WebStore',
   // *** TODO: Replace with details of your Salesforce org ***

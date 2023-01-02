@@ -1,5 +1,6 @@
 {
     "ERROR": {
+        "RECORD_ERROR" : "fr_FR This record has pending errors",
         "OPTION_GROUP": {
             "ERROR": "fr_FR Option Group Errors",
             "MIN_OPTIONS": "fr_FR You must select at least {{value}} options.",
