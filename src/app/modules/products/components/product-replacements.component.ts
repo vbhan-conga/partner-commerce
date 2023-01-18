@@ -1,9 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { Product } from '@congacommerce/ecommerce';
 import { ConfigurationService } from '@congacommerce/core';
-/**
- * @ignore
- */
+
 @Component({
   selector: 'app-product-replacements',
   template: `

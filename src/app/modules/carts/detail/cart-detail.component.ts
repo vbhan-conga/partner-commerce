@@ -12,9 +12,7 @@ import { map as rmap, take } from 'rxjs/operators';
   styleUrls: ['./cart-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.Default
 })
-/**
- * Manage Cart component is used to show the list of cart line item(s)  and summary of the cart.
- */
+
 export class CartDetailComponent implements OnInit {
   @ViewChild('discardChangesTemplate') discardChangesTemplate: TemplateRef<any>;
 

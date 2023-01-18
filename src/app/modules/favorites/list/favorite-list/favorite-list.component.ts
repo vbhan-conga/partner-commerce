@@ -7,9 +7,6 @@ import { AFilter, ACondition } from '@congacommerce/core';
 import { Favorite, FavoriteService, User, UserService, CartItem } from '@congacommerce/ecommerce';
 import { TableOptions, TableAction, ExceptionService } from '@congacommerce/elements';
 
-/**
- * Favorite list component loads and shows all the favorite configurations for logged in user.
- */
 
 @Component({
   selector: 'app-favorite-list',

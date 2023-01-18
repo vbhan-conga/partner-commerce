@@ -1,9 +1,10 @@
+import { CartService, Cart, AccountService, OrderService, PriceListService, CategoryService } from '@congacommerce/ecommerce';
+import { ExceptionService } from '@congacommerce/elements';
+import { OutputFieldComponent } from '@congacommerce/elements';
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, take, map } from 'rxjs/operators';
-import { get } from 'lodash';
-import { CartService, Cart, AccountService, OrderService } from '@congacommerce/ecommerce';
-import { ExceptionService, OutputFieldComponent } from '@congacommerce/elements';
+import { first, get } from 'lodash';
 
 @Component({
   selector: 'app-action-bar',
@@ -22,7 +23,9 @@ export class ActionBarComponent implements OnInit {
     private cartService: CartService,
     private accountService: AccountService,
     private exceptionService: ExceptionService,
-    private orderService: OrderService)
+    private orderService: OrderService,
+    private priclistService: PriceListService,
+    private categoryService: CategoryService)
     { }
 
   ngOnInit() {

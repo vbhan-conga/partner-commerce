@@ -1,9 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { AFilter, ACondition } from '@congacommerce/core';
 import { AssetLineItem } from '@congacommerce/ecommerce';
-/**
- * Price type filter component is used to create an asset filter on the PriceType field.
- */
+
 @Component({
   selector: 'app-price-type-filter',
   template: `

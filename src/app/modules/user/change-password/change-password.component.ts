@@ -3,12 +3,6 @@ import { UserService } from '@congacommerce/ecommerce';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-/**
- * Change password component, takes new password and update with old
- * 
- * @example
- * <app-change-password></app-change-password>
- */
 
  /**
   * Prevents compile time type error checking from flagging the call as invalid.

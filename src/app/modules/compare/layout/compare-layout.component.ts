@@ -6,13 +6,6 @@ import { ProductService, Product,  Cart, CartService } from '@congacommerce/ecom
 import { ProductDrawerService, BatchSelectionService} from '@congacommerce/elements';
 import { Observable } from 'rxjs';
 
-
-/**
- * The compare layout component is a wrapper component for the product comparison component.
- * It is used to pass appropriate information to the product comparison component and will navigate to the home screen when there isn't sufficient data to compare.
- * @example
- * <app-compare-layout></app-compare-layout>
- */
 @Component({
   selector: 'app-compare-layout',
   templateUrl: './compare-layout.component.html',

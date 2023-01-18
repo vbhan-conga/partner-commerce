@@ -5,10 +5,6 @@ import { cloneDeep } from 'lodash';
 import { UserService, AccountService, User, Account } from '@congacommerce/ecommerce';
 import { ExceptionService } from '@congacommerce/elements';
 
-
-/**
- * Loads user and account specific settings.
- */
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',

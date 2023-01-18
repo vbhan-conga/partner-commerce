@@ -1,9 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ACondition, SimpleDate, AFilter } from '@congacommerce/core';
 import { AssetLineItem } from '@congacommerce/ecommerce';
-/**
- * Renewal filter component is used to create an asset filter on the period until renewal.
- */
+
 @Component({
   selector: 'app-renewal-filter',
   template: `

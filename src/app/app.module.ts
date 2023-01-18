@@ -45,3 +45,4 @@ registerLocaleData(localeIt, 'it-IT', localeItExtras);
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

@@ -2,9 +2,6 @@ import { Component, OnChanges, Input } from '@angular/core';
 import { Cart, CartItem } from '@congacommerce/ecommerce';
 import * as _ from 'lodash';
 
-/**
- * Cart Table Component displays the list of cart line items.
- */
 @Component({
   selector: 'app-cart-table',
   templateUrl: './cart-table.component.html',
