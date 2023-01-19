@@ -28,7 +28,7 @@ export const environment: Configuration = {
   pricingMode: 'turbo',
   hashRouting: false,
   packageNamespace: 'Apttus_WebStore',
-  // *** TODO: Replace with Salesforce environment variables ***
+  // *** TODO: Replace with details of your Salesforce org ***
   storefront: 'Storefront Name',
   organizationId: 'Salesforce Org Id',
   endpoint: 'Community Site Url'
