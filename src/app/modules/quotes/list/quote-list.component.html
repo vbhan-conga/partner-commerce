@@ -1,7 +1,7 @@
 <div class="row mb-3">
     <div class="col-12">
         <apt-data-filter [type]="type" *ngIf="filterList$ | async as filterList" [filterList]="filterList"
-        [customfilter]="customfilter"   (filterListChange)="handleFilterListChange($event)">
+        [customfilter]="customfilter" (filterListChange)="handleFilterListChange($event)">
         </apt-data-filter>
     </div>
 </div>
