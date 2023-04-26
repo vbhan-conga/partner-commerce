@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2202.0.0",
+  "version": "2301.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,9 +21,9 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
-    "@congacommerce/core": "^2202.1.6",
-    "@congacommerce/ecommerce": "^2202.1.6",
-    "@congacommerce/elements": "^2202.1.6",
+    "@congacommerce/core": "^2301.0.3",
+    "@congacommerce/ecommerce": "^2301.0.3",
+    "@congacommerce/elements": "^2301.0.3",
     "@fortawesome/fontawesome-free": "^5.12.0",
     "@ng-select/ng-option-highlight": "0.0.5",
     "@ng-select/ng-select": "^5.0.1",
