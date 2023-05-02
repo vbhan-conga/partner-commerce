@@ -24,12 +24,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import { ClassType } from 'class-transformer/ClassTransformer';
 
-/**
- * Asset list component is used to set the structure of the asset list page.
- *
- * @example
- * <app-asset-list></app-asset-list>
- */
 @Component({
   selector: 'app-asset-list',
   templateUrl: './asset-list.component.html',
@@ -545,7 +539,6 @@ export class AssetListComponent implements OnInit, OnDestroy {
     ];
   }
 }
-
 /** @ignore */
 interface AssetListView {
   tableOptions: TableOptions;

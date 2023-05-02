@@ -13,17 +13,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ConfigurationService, ACondition, APageInfo } from '@congacommerce/core';
 import { ExceptionService, PriceSummaryComponent, LookupOptions } from '@congacommerce/elements';
 
-/**
- * Checkout component, contains details such as
- *
- * Addresses (Billing/Shipping),
- * Payment Method (Card, PO),
- * Cart Summary (line items in current cart)
- *
- * Example Usage:
- * @example
- * <app-cart></app-cart>
- */
 @Component({
   selector: 'app-cart',
   templateUrl: './checkout.component.html',
@@ -284,7 +273,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.orderConfirmation = orderResponse;
         (this.paymentState === 'PAYNOW') ? this.requestForPayment(this.orderConfirmation) : this.onOrderConfirmed();
-
       },
         err => {
           this.exceptionService.showError(err);

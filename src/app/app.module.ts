@@ -13,7 +13,7 @@ import { ConfigureGuard } from './services/configure.guard';
 import { RouteGuard } from './services/route.guard';
 import { AboGuard } from './services/abo.guard';
 import { ConstraintRuleGuard } from './services/constraint-rule.guard';
-import { ProductDrawerModule} from '@congacommerce/elements';
+import { ProductDrawerModule } from '@congacommerce/elements';
 
 // Locale data
 import { registerLocaleData } from '@angular/common';

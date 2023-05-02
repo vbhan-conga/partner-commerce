@@ -24,9 +24,7 @@ import { ProductConfigurationComponent, ProductConfigurationSummaryComponent, Pr
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
-/**
- * Product Details Component is the details of the product for standalone and bundle products with attributes and options.
- */
+
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
   viewState$: BehaviorSubject<ProductDetailsState> = new BehaviorSubject<ProductDetailsState>(null);

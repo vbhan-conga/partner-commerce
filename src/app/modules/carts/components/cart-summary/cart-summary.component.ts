@@ -15,9 +15,6 @@ import { SummaryState } from '../../../checkout/component/summary.component';
   styleUrls: ['./cart-summary.component.scss']
 })
 
-/**
- * Cart Summary Component shows the sub total of the cart also allows to apply promotions if promotion is enabled in the storefront.
- */
 
 export class CartSummaryComponent implements OnInit, OnChanges {
   @Input() cart: Cart;

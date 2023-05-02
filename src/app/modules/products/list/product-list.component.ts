@@ -7,9 +7,6 @@ import { Observable, of, BehaviorSubject, Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { map as rmap, mergeMap } from 'rxjs/operators';
 
-/**
- * Product list component shows all the products in a list for user selection.
- */
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
