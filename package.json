@@ -1,6 +1,6 @@
 {
   "name": "apttus.ui.pcom.rc",
-  "version": "2302.0.0",
+  "version": "2303.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -64,6 +64,7 @@
     "@angular-devkit/build-angular": "~12.2.1",
     "@angular/cli": "~12.2.1",
     "@angular/compiler-cli": "~12.2.0",
+    "querystring": "^0.2.1",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~3.8.0",
@@ -74,7 +75,6 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "ng-packagr": "^12.1.1",
     "typescript": "~4.3.5",
-    "protractor": "^5.4.2",
-    "querystring": "^0.2.1"
+    "protractor": "^5.4.2"
   }
 }
