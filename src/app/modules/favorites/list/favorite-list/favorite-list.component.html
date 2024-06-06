@@ -9,7 +9,7 @@
   
   <!-- Table component rendering list of favorites with applicable actions and pagination -->
   <div class="card" *ngIf="(tableOptions$ | async) as tableOptions; else spinner">
-    <apt-table [type]="type" [options]="tableOptions"></apt-table>
+    <apt-table [type]="type" [options]="tableOptions" [popoverPlacement]="'right'"></apt-table>
   </div>
   
   <!-- Spinner dots while data is loading -->

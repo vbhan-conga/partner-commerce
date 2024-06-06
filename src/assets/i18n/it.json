@@ -39,7 +39,8 @@
         "CART": {
             "ITEM_ADDED_TOASTR_MESSAGE": "{{productName}} è stato aggiunto al carrello.",
             "ITEM_ADDED_TOASTR_TITLE": "Elemento Aggiunto",
-            "CONFIGURATION_UPDATED": "{{productName}} configurazione è stato aggiornato."
+            "CONFIGURATION_UPDATED": "{{productName}} configurazione è stato aggiornato.",
+            "PRODUCTS_ADDED": "it_IT Products added successfully"
         },
         "PROMOTION": {
             "VALID_PROMOTION_TITLE": "it_IT Promotion Applied",
@@ -62,7 +63,8 @@
     },
     "INFO": {
         "TITLE": "it_IT Info",
-        "GENERATE_INFO": "it_IT Your {{type}} document is being generated. You will get notified when its ready."
+        "GENERATE_INFO": "it_IT Your {{type}} document is being generated. You will get notified when its ready.",
+        "CART_IN_PROGRESS": "it_IT Some interactions with the cart are in progress..."
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "L'attività di terminazione è stato aggiunto al tuo carrello.",

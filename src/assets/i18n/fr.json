@@ -43,7 +43,8 @@
         "TITLE": "fr_FR Success",
         "CART": {
             "ITEM_ADDED_TOASTR_MESSAGE": "fr_FR {{productName}} was added to the cart.",
-            "ITEM_ADDED_TOASTR_TITLE": "fr_FR Item Added"
+            "ITEM_ADDED_TOASTR_TITLE": "fr_FR Item Added",
+            "PRODUCTS_ADDED": "fr_FR Products added successfully"
         },
         "PROMOTION": {
             "VALID_PROMOTION_TITLE": "fr_FR Promotion Applied",
@@ -67,7 +68,8 @@
     },
     "INFO": {
         "TITLE": "fr_FR Info",
-        "GENERATE_INFO": "fr_FR Your {{type}} document is being generated. You will get notified when its ready."
+        "GENERATE_INFO": "fr_FR Your {{type}} document is being generated. You will get notified when its ready.",
+        "CART_IN_PROGRESS": "fr_FR Some interactions with the cart are in progress..."
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "fr_FR The asset termination has been added to your cart.",

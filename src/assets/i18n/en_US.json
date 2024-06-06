@@ -44,7 +44,8 @@
         "CART": {
             "ITEM_ADDED_TOASTR_MESSAGE": "{{productName}} was added to the cart.",
             "ITEM_ADDED_TOASTR_TITLE": "Item Added",
-            "CONFIGURATION_UPDATED": "{{productName}} configuration has been updated."
+            "CONFIGURATION_UPDATED": "{{productName}} configuration has been updated.",
+            "PRODUCTS_ADDED": "Products added successfully"
         },
         "PROMOTION": {
             "VALID_PROMOTION_TITLE": "Promotion Applied",
@@ -67,7 +68,8 @@
     },
     "INFO": {
         "TITLE": "Info",
-        "GENERATE_INFO": "Your {{type}} document is being generated. You will get notified when its ready."
+        "GENERATE_INFO": "Your {{type}} document is being generated. You will get notified when its ready.",
+        "CART_IN_PROGRESS": "Some interactions with the cart are in progress..."
     },
     "ASSETS": {
         "TERMINATE_SUCCESS": "The asset termination has been added to your cart.",
